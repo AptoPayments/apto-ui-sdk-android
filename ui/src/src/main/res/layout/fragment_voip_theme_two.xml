@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="72dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
+    <ImageButton
+        android:id="@+id/bttn_finish_call"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:background="@drawable/finish_call_button"
+        android:src="@drawable/ic_finish_call"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/bttn_hide_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_36sdp"
+        android:layout_alignBottom="@id/bttn_finish_call"
+        android:layout_toStartOf="@id/bttn_finish_call"
+        android:text="@string/manage_card_get_pin_voip_hide"
+        android:textColor="@android:color/white"
+        android:padding="@dimen/_12sdp"
+        android:visibility="invisible"
+        tools:textColor="@android:color/black"
+        tools:visibility="visible"/>
+
+    <com.aptopayments.sdk.ui.views.AptoKeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bttn_finish_call"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:layout_centerHorizontal="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <RelativeLayout
+        android:id="@+id/ll_call_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bttn_finish_call"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:layout_centerHorizontal="true">
+        <LinearLayout
+            android:id="@+id/ll_mute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+            <com.aptopayments.sdk.ui.views.ToggleImageButton
+                android:id="@+id/bttn_mute_call"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:background="@drawable/call_action_button"
+                android:src="@drawable/call_mute_button"
+                tools:ignore="ContentDescription"
+                tools:background="@color/button_active" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/manage_card_get_pin_voip_mute"
+                android:textColor="@android:color/white"
+                tools:textColor="@color/coinbase_title_color"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/_40sdp"
+            android:layout_toStartOf="@id/ll_mute">
+            <com.aptopayments.sdk.ui.views.ToggleImageButton
+                android:id="@+id/bttn_call_speaker"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:background="@drawable/call_action_button"
+                android:src="@drawable/call_speaker_button"
+                tools:ignore="ContentDescription"
+                tools:background="@color/button_active" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/manage_card_get_pin_voip_speaker"
+                android:textColor="@android:color/white"
+                tools:textColor="@color/coinbase_title_color"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/ll_mute"
+            android:layout_marginStart="@dimen/_40sdp">
+            <ImageButton
+                android:id="@+id/bttn_show_keyboard"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_dialpad"
+                tools:ignore="ContentDescription"
+                tools:background="@color/button_active"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/manage_card_get_pin_voip_keypad"
+                android:textColor="@android:color/white"
+                tools:textColor="@color/coinbase_title_color"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

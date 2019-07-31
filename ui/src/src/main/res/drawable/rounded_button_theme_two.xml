@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Bottom 2dp Shadow -->
+    <item>
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/coinbase_title_color" />
+            <corners android:radius="12dp"/>
+            <gradient
+                android:angle="360"
+                android:startColor="@color/button_settings_background"
+                android:endColor="@color/coinbase_title_color"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <item android:bottom="3px" android:left="6px" android:right="0px" android:top="0px">
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/button_settings_background"/>
+            <padding
+                android:left="@dimen/_9sdp"
+                android:right="@dimen/_9sdp"
+                android:bottom="@dimen/_9sdp"
+                android:top="@dimen/_9sdp"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+</layer-list>

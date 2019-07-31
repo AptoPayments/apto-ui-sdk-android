@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/coinbase_title_color"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="13dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/iv_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:paddingLeft="-8dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:gravity="bottom"
+            tools:textColor="@android:color/white"
+            tools:textStyle="bold"
+            tools:text="Account Settings" />
+    </LinearLayout>
+</androidx.appcompat.widget.Toolbar>

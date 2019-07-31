@@ -1,0 +1,24 @@
+<com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_settings_section_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="@dimen/_4sdp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"/>
+
+</com.aptopayments.sdk.ui.views.SectionHeaderViewTwo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignTop="@id/ll_card_container"
+        android:layout_alignBottom="@id/ll_card_container">
+        <View
+            android:id="@+id/view_card_top_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <View
+            android:id="@+id/view_card_bottom_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_card_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+        <com.aptopayments.sdk.ui.views.CardView
+            android:id="@+id/cv_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:layout_marginEnd="@dimen/_18sdp"
+            android:background="@drawable/rounded_corners_white"
+            android:elevation="@dimen/_4sdp"
+            android:translationZ="@dimen/_4sdp"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/card_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ll_card_container"
+        android:layout_alignEnd="@+id/ll_card_container"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/ic_settings_white_24dp" />
+
+</RelativeLayout>

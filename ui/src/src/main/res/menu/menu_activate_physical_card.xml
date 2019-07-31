@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:enabled="true">
+
+    <item
+        android:id="@+id/menu_activate_physical_card"
+        android:title="@string/manage_card_activate_physical_card_top_bar_item_title"
+        android:enabled="true"
+        app:actionLayout="@layout/layout_menu_activate_physical_card"
+        app:showAsAction="always|withText" />
+</menu>

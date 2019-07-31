@@ -1,0 +1,156 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.Translucent" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="progressBarBlue" parent="AppTheme.Translucent">
+        <item name="colorAccent">@color/coinbase_title_color</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="actionButtonStyle">@style/AppTheme.Toolbar.ActionButton</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.ActionButton" parent="@style/Base.AppTheme.Toolbar.ActionButton">
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:padding">@dimen/llsdk_card_corner_radius</item>
+    </style>
+    <style name="Base.AppTheme.Toolbar.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="android:minWidth">50dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <style name="ThemeTwo.SectionTitle" parent="ThemeTwo">
+        <item name="android:textColor">@color/llsdk_secondary_text_color</item>
+        <item name="android:textSize">@dimen/llsdk_form_label</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+    </style>
+    <style name="ThemeTwo.FormField" parent="ThemeTwo">
+        <item name="android:textColor">@color/llsdk_primary_text_color</item>
+        <item name="android:textSize">@dimen/llsdk_form_field_theme_2</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+    </style>
+    <style name="ThemeTwo.Instructions" parent="ThemeTwo">
+        <item name="android:textColor">@color/llsdk_secondary_text_color</item>
+        <item name="android:textSize">@dimen/llsdk_instructions</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+    </style>
+    <style name="ThemeTwo.TextLink" parent="ThemeTwo">
+        <item name="android:textColor">@color/llsdk_primary_text_color</item>
+        <item name="android:textSize">@dimen/llsdk_form_text_link_theme_2</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+    </style>
+
+    <style name="BaseToolbarStyle">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:theme">@style/BaseToolbarTheme</item>
+        <item name="titleTextAppearance">@style/CustomTitleTextAppearance</item>
+    </style>
+
+    <style name="BaseToolbarTheme">
+        <item name="android:textColorPrimary">@color/colorTextSecondary</item>
+        <item name="android:textColorSecondary">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="CustomTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ThemeTwo" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/coinbase_title_color</item>
+    </style>
+
+    <style name="ThemeTwo.VerificationTextHeader" parent="ThemeTwo">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+    </style>
+
+    <style name="ThemeTwo.TextHeader" parent="ThemeTwo">
+        <item name="android:textSize">@dimen/text_size_large_hi_res</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+    </style>
+
+    <style name="ThemeTwo.VerificationInput" parent="ThemeTwo">
+        <item name="android:layout_marginLeft">@dimen/llsdk_brand_logo_height</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_card_number_margin</item>
+    </style>
+
+    <style name="ThemeTwo.TextInput" parent="ThemeTwo">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginTop">@dimen/llsdk_title_bottom_margin</item>
+    </style>
+
+    <style name="ThemeTwo.ContinueButton" parent="ThemeTwo">
+        <item name="android:layout_height">@dimen/llsdk_big_button_height</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
+        <item name="android:background">@drawable/rounded_corners_button</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/llsdk_big_button_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/llsdk_big_button_bottom_margin</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="ThemeTwo.BirthDate" parent="ThemeTwo">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="ThemeTwo.BirthDate.Input" parent="ThemeTwo.BirthDate">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ThemeTwo.BirthDate.Year" parent="ThemeTwo.BirthDate">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TransparentText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ThemeOne" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ThemeOne.ContinueButton" parent="ThemeOne">
+        <item name="android:layout_height">@dimen/llsdk_big_button_height</item>
+        <item name="android:layout_marginLeft">@dimen/llsdk_large_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_large_margin</item>
+        <item name="android:background">@drawable/rounded_small_corners</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginTop">@dimen/llsdk_big_button_top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/llsdk_big_button_bottom_margin</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+</resources>

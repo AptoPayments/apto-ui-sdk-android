@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/white">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_physical_activation_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_marginTop="@dimen/llsdk_phone_input_wrapper_height"
+        android:gravity="start"
+        android:text="@string/physical_card_activation_title" />
+
+    <TextView
+        android:id="@+id/tv_physical_activation_explanation"
+        style="@style/ThemeTwo.TextInput"
+        android:layout_below="@+id/tv_physical_activation_title"
+        android:layout_centerHorizontal="true"
+        android:lineSpacingExtra="3sp"
+        android:gravity="start"
+        android:text="@string/physical_card_activation_hint"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_physical_activation_explanation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.aptopayments.sdk.features.auth.inputphone.AptoPinView
+                android:id="@+id/apto_pin_view"
+                android:elevation="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/llsdk_medium_margin"
+                android:layout_marginBottom="@dimen/llsdk_medium_margin"
+                android:layout_marginLeft="@dimen/llsdk_medium_margin"
+                android:layout_marginStart="@dimen/llsdk_medium_margin"
+                android:layout_marginRight="@dimen/llsdk_medium_margin"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:paddingStart="@dimen/_85sdp"
+                android:paddingRight="@dimen/_85sdp"
+                android:paddingEnd="120dp"
+                android:paddingLeft="120dp"
+                android:paddingBottom="@dimen/_24sdp"
+                android:maxLength="6"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_larger"
+                android:digits="1234567890"
+                android:textIsSelectable="false"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:gravity="center_vertical"
+                android:background="@drawable/rounded_corners"
+                tools:text="******" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

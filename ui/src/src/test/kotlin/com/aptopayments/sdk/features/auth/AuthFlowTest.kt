@@ -1,0 +1,276 @@
+package com.aptopayments.sdk.features.auth
+
+import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.core.data.config.UITheme
+import com.aptopayments.core.data.geo.Country
+import com.aptopayments.core.data.user.*
+import com.aptopayments.core.repository.UserSessionRepository
+import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.core.data.TestDataProvider
+import com.aptopayments.sdk.core.di.fragment.FragmentFactory
+import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationContract
+import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
+import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
+import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
+import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
+import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
+import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockito_kotlin.verify
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Spy
+
+class AuthFlowTest : AndroidTest() {
+
+    private lateinit var sut: AuthFlow
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockPhoneDelegate: InputPhoneContract.Delegate
+    @Mock
+    private lateinit var mockEmailDelegate: InputEmailContract.Delegate
+    @Mock
+    private lateinit var mockBirthdayVerification: BirthdateVerificationContract.Delegate
+    @Mock
+    private lateinit var mockPhoneVerifyDelegate: PhoneVerificationContract.Delegate
+    @Mock
+    private lateinit var mockEmailVerifyDelegate: EmailVerificationContract.Delegate
+    @Mock
+    private lateinit var mockDataPoint: PhoneDataPoint
+    @Mock
+    private lateinit var countries: List<Country>
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Mock
+    private lateinit var mockUserSessionRepository: UserSessionRepository
+
+    @Before
+    override fun setUp() {
+        super.setUp()
+        UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+    }
+
+    @Test
+    fun `should use the factory to instantiate InputPhoneFragment as first fragment`() {
+
+        // Given
+        sut = AuthFlow(TestDataProvider.provideContextConfiguration(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        val tag = "InputPhoneFragment"
+        val fragmentPhoneInputDouble = AuthInputPhoneFragmentDouble(mockPhoneDelegate).apply { this.TAG = tag }
+        countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
+        given {
+            mockFragmentFactory.inputPhoneFragment(
+                    uiTheme = UITheme.THEME_1,
+                    allowedCountries = countries,
+                    tag = tag)
+        }.willReturn(fragmentPhoneInputDouble)
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.init {}
+
+        // Then
+        verify(mockFragmentFactory).inputPhoneFragment(
+                uiTheme = UITheme.THEME_1,
+                allowedCountries = countries,
+                tag = tag)
+    }
+
+    @Test
+    fun `on phone verification started to show phone verification fragment`() {
+
+        // Given
+        val tag = "PhoneVerificationFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfiguration(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        val fragmentPhoneVerificationDouble = AuthPhoneVerificationFragmentDouble(mockPhoneVerifyDelegate).apply { this.TAG = tag }
+        val verification = Verification("", "phone")
+        given {
+            mockFragmentFactory.phoneVerificationFragment(
+                    uiTheme = UITheme.THEME_1,
+                    verification = verification,
+                    tag = tag)
+        }.willReturn(fragmentPhoneVerificationDouble)
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onPhoneVerificationStarted(verification)
+
+        // Then
+        verify(mockFragmentFactory).phoneVerificationFragment(
+                uiTheme = UITheme.THEME_1,
+                verification = verification,
+                tag = tag)
+    }
+
+    @Test
+    fun `on email verification started to show email verification fragment`() {
+
+        // Given
+        val tag = "EmailVerificationFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        val fragmentEmailVerifyDouble = AuthVerifyEmailFragmentDouble(mockEmailVerifyDelegate).apply { this.TAG = tag }
+        val verification = Verification("", "phone")
+        given {
+            mockFragmentFactory.emailVerificationFragment(
+                    uiTheme = UITheme.THEME_1,
+                    verification = verification,
+                    tag = tag)
+        }.willReturn(fragmentEmailVerifyDouble)
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onEmailVerificationStarted(verification)
+
+        // Then
+        verify(mockFragmentFactory).emailVerificationFragment(
+                uiTheme = UITheme.THEME_1,
+                verification = verification,
+                tag = tag)
+    }
+
+    @Test
+    fun `on email verification passed to show phone input fragment based on output points to input phone fragment`() {
+
+        // Given
+        val tag = "InputPhoneFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
+        val fragmentPhoneInputDouble = AuthInputPhoneFragmentDouble(mockPhoneDelegate).apply { this.TAG = tag }
+        given {
+            mockFragmentFactory.inputPhoneFragment(
+                    uiTheme = UITheme.THEME_1,
+                    allowedCountries = countries,
+                    tag = tag)
+        }.willReturn(fragmentPhoneInputDouble)
+        mockDataPoint = PhoneDataPoint(verification = Verification("", "phone",
+                VerificationStatus.FAILED, "", Verification("", "phone")))
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onEmailVerificationPassed(mockDataPoint)
+
+        // Then
+        verify(mockFragmentFactory).inputPhoneFragment(
+                uiTheme = UITheme.THEME_1,
+                allowedCountries = countries,
+                tag = tag)
+    }
+
+    @Test
+    fun `on phone verification passed to show email input fragment based on output points to input email fragment`() {
+
+        // Given
+        val tag = "InputEmailFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
+        val fragmentEmailDouble = AuthInputEmailFragmentDouble(mockEmailDelegate).apply { this.TAG = tag }
+        given {
+            mockFragmentFactory.inputEmailFragment(
+                    uiTheme = UITheme.THEME_1,
+                    tag = tag)
+        }.willReturn(fragmentEmailDouble)
+        mockDataPoint = PhoneDataPoint(verification = Verification("", "email",
+                VerificationStatus.FAILED, "", Verification("", "email")))
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onPhoneVerificationPassed(mockDataPoint)
+
+        // Then
+        verify(mockFragmentFactory).inputEmailFragment(
+                uiTheme = UITheme.THEME_1,
+                tag = tag)
+    }
+
+    @Test
+    fun `on phone verification passed to show verify birthdate fragment based on output points to verify birthdate fragment`() {
+
+        // Given
+        val tag = "BirthdateVerificationFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
+        mockDataPoint = PhoneDataPoint(verification = Verification("", "phone",
+                VerificationStatus.FAILED, "", Verification("", "birthday")))
+        val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
+        given {
+            mockFragmentFactory.birthdateVerificationFragment(
+                    uiTheme = UITheme.THEME_1,
+                    primaryCredential = mockDataPoint,
+                    tag = tag)
+        }.willReturn(fragmentBirthdayDouble)
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onPhoneVerificationPassed(mockDataPoint)
+
+        // Then
+        verify(mockFragmentFactory).birthdateVerificationFragment(
+                uiTheme = UITheme.THEME_1,
+                primaryCredential = mockDataPoint,
+                tag = tag)
+    }
+
+    @Test
+    fun `on email verification passed to show verify birthdate fragment based on output points to verify birthdate fragment`() {
+
+        // Given
+        val tag = "BirthdateVerificationFragment"
+        sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
+        val mockDataPoints = DataPointList()
+        val mockCardProducts = User("", "", mockDataPoints)
+        mockUserSessionRepository = UserSessionRepository(context())
+        sut.userSessionRepository = mockUserSessionRepository
+        sut.analyticsManager = analyticsManager
+        countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
+        mockDataPoint = PhoneDataPoint(verification = Verification("", "email",
+                VerificationStatus.FAILED, "", Verification("", "birthday")))
+        val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
+        given {
+            mockFragmentFactory.birthdateVerificationFragment(
+                    uiTheme = UITheme.THEME_1,
+                    primaryCredential = mockDataPoint,
+                    tag = tag)
+        }.willReturn(fragmentBirthdayDouble)
+
+        // When
+        sut.fragmentFactory = mockFragmentFactory
+        sut.onEmailVerificationPassed(mockDataPoint)
+
+        // Then
+        verify(mockFragmentFactory).birthdateVerificationFragment(
+                uiTheme = UITheme.THEME_1,
+                primaryCredential = mockDataPoint,
+                tag = tag)
+    }
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Personal info -->
+    <!-- 10 phone number digits + 4 for formatting -->
+    <integer name="verification_digits">6</integer>
+
+    <!-- Address -->
+    <integer name="zip_code_length">10</integer>
+    <integer name="zip_code_length_validation">5</integer>
+
+    <!-- ID verificationResponse -->
+    <integer name="min_age">18</integer>
+
+    <integer name="phone_emoji">0x1F4F2</integer>
+
+</resources>

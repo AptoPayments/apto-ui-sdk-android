@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_coinbase_header"
+        style="@style/ThemeTwo.TextHeader"
+        android:text="@string/select_balance_store_login_title" />
+
+    <TextView
+        android:id="@+id/tv_coinbase_info"
+        android:lineSpacingExtra="3sp"
+        android:layout_marginTop="4sp"
+        android:layout_weight="1"
+        style="@style/ThemeTwo.TextInput"
+        android:text="@string/select_balance_store_login_explanation" />
+
+    <TextView
+        android:id="@+id/tv_submit_bttn"
+        style="@style/ThemeTwo.ContinueButton"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:text="@string/select_balance_store_login_call_to_action_title" />
+
+    <TextView
+        android:id="@+id/tv_new_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_20sdp"/>
+</LinearLayout>

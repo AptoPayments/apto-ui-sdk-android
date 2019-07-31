@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/white">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <RelativeLayout
+        android:id="@+id/rl_center_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_below="@+id/tb_llsdk_toolbar_layout"
+        android:layout_above="@+id/continue_button"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="@string/no_network_description"/>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="@string/no_network_description"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/continue_button"
+        style="@style/ThemeTwo.ContinueButton"
+        android:layout_above="@+id/tv_footer"
+        android:layout_alignParentBottom="false"
+        android:layout_alignWithParentIfMissing="true"/>
+
+    <TextView
+        android:id="@+id/tv_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="@dimen/llsdk_medium_margin"
+        android:layout_marginEnd="@dimen/llsdk_medium_margin"
+        android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/llsdk_form_text_link"
+        android:visibility="gone"
+        tools:text="Test footer" />
+
+</RelativeLayout>

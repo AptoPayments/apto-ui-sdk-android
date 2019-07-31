@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.aptopayments.sdk.ui.views.AptoWebView
+        android:id="@+id/wb_content_web"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+    <TextView
+        android:id="@+id/tv_content_text"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/llsdk_medium_margin"
+        android:layout_marginRight="@dimen/llsdk_medium_margin"
+        android:textSize="@dimen/llsdk_content_text_size"
+        android:lineSpacingMultiplier="@dimen/llsdk_content_line_spacing_multiplier"/>
+    <br.tiagohm.markdownview.MarkdownView
+        android:id="@+id/md_content_markdown"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/llsdk_medium_margin"
+        android:layout_marginRight="@dimen/llsdk_medium_margin"
+        android:textSize="@dimen/llsdk_content_text_size"/>
+    <com.aptopayments.sdk.ui.views.NativeContentView
+        android:id="@+id/vw_native_content"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+</RelativeLayout>

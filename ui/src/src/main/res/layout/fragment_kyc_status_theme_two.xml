@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:fitsSystemWindows="true"
+    android:focusable="true">
+
+    <!-- Dummy to get focus on start. -->
+    <RelativeLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_kyc_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_status_text"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="@dimen/llsdk_tiny_margin"
+            android:gravity="center_horizontal"
+            tools:text="Application status under review ⌛" />
+
+        <TextView
+            android:id="@+id/tv_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal"
+            tools:text="Thank you for your application. We are reviewing your information. We will be in touch via email momentarily." />
+
+        <TextView
+            android:id="@+id/refresh_button"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_above="@+id/tv_kyc_footer"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="64dp"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            tools:text="Refresh" />
+
+        <TextView
+            android:id="@+id/tv_kyc_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
+            android:gravity="center_horizontal"
+            tools:text="Have questions? Contact support" />
+    </RelativeLayout>
+</RelativeLayout>

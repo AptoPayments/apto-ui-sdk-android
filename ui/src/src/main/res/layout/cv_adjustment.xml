@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_adjustment_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_transfer_description"
+        android:layout_marginTop="@dimen/llsdk_theme_2_transaction_details_margin"
+        tools:text="From your crypto wallet"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/tv_transfer_amount"
+        android:layout_marginTop="@dimen/_6sdp"
+        tools:text="0.039 BTC"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_transfer_exchange_rate"
+        android:layout_marginTop="@dimen/_4sdp"
+        tools:text="1 BTC @ £ 2,600.00"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_transfer_fee"
+        android:layout_marginTop="@dimen/_4sdp"
+        tools:text="Fee = 0.001 BTC"/>
+</LinearLayout>

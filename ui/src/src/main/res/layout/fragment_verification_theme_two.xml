@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_verification_code_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_below="@+id/tb_llsdk_toolbar_layout" />
+
+    <TextView
+        android:id="@+id/tv_verification_code_header"
+        android:layout_below="@+id/tv_verification_code_title"
+        android:lineSpacingExtra="3sp"
+        android:layout_marginTop="4sp"
+        style="@style/ThemeTwo.TextInput" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_verification_code_header"
+        android:layout_marginTop="14sp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.aptopayments.sdk.features.auth.inputphone.AptoPinView
+                android:id="@+id/apto_pin_view"
+                android:elevation="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                android:layout_marginTop="@dimen/llsdk_medium_margin"
+                android:layout_marginLeft="@dimen/llsdk_medium_margin"
+                android:layout_marginStart="@dimen/llsdk_medium_margin"
+                android:layout_marginRight="@dimen/llsdk_medium_margin"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:paddingStart="@dimen/_85sdp"
+                android:paddingEnd="@dimen/_85sdp"
+                android:maxLength="6"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_larger"
+                android:digits="1234567890"
+                android:textIsSelectable="false"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:gravity="center_vertical"
+                android:background="@drawable/rounded_corners" />
+
+            <TextView
+                android:id="@+id/tv_expired_pin_label"
+                style="@style/ThemeTwo.Instructions"
+                android:layout_alignStart="@+id/apto_pin_view"
+                android:layout_alignTop="@+id/apto_pin_view"
+                android:layout_alignEnd="@+id/apto_pin_view"
+                android:layout_alignBottom="@+id/apto_pin_view"
+                android:layout_margin="0dp"
+                android:gravity="center_vertical" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/llsdk_marginTop_resend_label"
+                android:layout_below="@id/apto_pin_view"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_resend_label"
+                    style="@style/ThemeTwo.Instructions"
+                    android:padding="@dimen/_1sdp"
+                    android:gravity="start"/>
+
+                <TextView
+                    android:id="@+id/tv_resend_countdown_label"
+                    style="@style/ThemeTwo.Instructions"
+                    android:layout_below="@+id/tv_resend_label"
+                    android:padding="@dimen/_1sdp"
+                    android:gravity="start"/>
+
+                <TextView
+                    android:id="@+id/tv_resend_bttn"
+                    style="@style/ThemeTwo.TextLink"
+                    android:layout_below="@+id/tv_resend_label"
+                    android:padding="@dimen/_1sdp"
+                    android:gravity="start"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_disclaimer_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:text="@string/disclaimer_disclaimer_title" />
+
+    <com.aptopayments.sdk.ui.views.ContentPresenterView
+        android:id="@+id/vw_content_presenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_buttons_container"
+        android:layout_below="@id/tv_disclaimer_title" />
+
+    <LinearLayout
+        android:id="@+id/ll_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/tv_accept_disclaimer"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="@string/disclaimer_disclaimer_call_to_action_title" />
+        <TextView
+            android:id="@+id/tv_reject_disclaimer"
+            style="@style/ThemeTwo.TextLink"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
+            android:text="@string/disclaimer_disclaimer_cancel_action_button" />
+    </LinearLayout>
+
+</RelativeLayout>

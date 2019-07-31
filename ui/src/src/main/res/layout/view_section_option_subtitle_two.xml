@@ -1,0 +1,49 @@
+<com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contact_support_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_64sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:id="@+id/tv_option_subtitle_title"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/contact_support_title_two"/>
+
+            <TextView
+                android:id="@+id/tv_option_subtitle_description"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/tv_option_subtitle_title"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_option_subtitle_icon"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_row_arrow_white"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vw_option_bottom_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"/>
+
+</com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo>

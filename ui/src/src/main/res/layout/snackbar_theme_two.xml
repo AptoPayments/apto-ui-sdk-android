@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_snackbar_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingTop="18dp">
+
+    <TextView
+        android:id="@+id/tv_snackbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/llsdk_big_button_top_margin"
+        android:paddingRight="@dimen/llsdk_big_button_top_margin" />
+
+    <TextView
+        android:id="@+id/tv_snackbar_text"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingLeft="@dimen/llsdk_big_button_top_margin"
+        android:paddingRight="@dimen/llsdk_big_button_top_margin" />
+</LinearLayout>

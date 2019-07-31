@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/tb_llsdk_custom_toolbar"
+        layout="@layout/include_custom_toolbar_two" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginStart="@dimen/_14sdp"
+        android:layout_marginLeft="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_105sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_app_settings_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tv_app_settings_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.60"
+                android:padding="@dimen/_4sdp"
+                tools:text="App settings" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
+
+            <RelativeLayout
+                android:id="@+id/rl_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_13sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_notifications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Notifications"
+                        tools:textColor="@color/coinbase_title_color" />
+
+                    <TextView
+                        android:id="@+id/tv_notifications_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Your push and email notification preferences" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_notifications_icon"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_27sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="@dimen/_17sdp"
+                    android:paddingLeft="@dimen/_17sdp"
+                    android:src="@drawable/ic_row_arrow_white"
+                    tools:drawableTint="@color/coinbase_title_color"
+                    tools:tint="@color/coinbase_title_color" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tv_support_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.60"
+            android:padding="@dimen/_4sdp"
+            tools:text="Support" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_contact_support"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:layout_marginBottom="@dimen/_13sdp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_contact_support"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Help &amp; info"
+                    tools:textColor="@color/coinbase_title_color" />
+
+                <TextView
+                    android:id="@+id/tv_contact_support_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Speak to our customer care team" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_help_center_icon"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/_17sdp"
+                android:paddingLeft="@dimen/_17sdp"
+                android:src="@drawable/ic_row_arrow_white"
+                tools:drawableTint="@color/coinbase_title_color"
+                tools:tint="@color/coinbase_title_color" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp">
+
+            <TextView
+                android:id="@+id/tv_sign_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="16dp"
+                tools:text="Log out"
+                tools:drawableTint="@color/coinbase_title_color" />
+
+            <ImageView
+                android:id="@+id/iv_sign_out_icon"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/_17sdp"
+                android:paddingLeft="@dimen/_17sdp"
+                android:src="@drawable/ic_row_arrow_white"
+                tools:drawableTint="@color/coinbase_title_color"
+                tools:tint="@color/coinbase_title_color" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

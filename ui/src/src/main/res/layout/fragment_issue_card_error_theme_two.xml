@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:fitsSystemWindows="true"
+    android:gravity="center"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:id="@+id/rl_issue_card_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_primary_cta"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_error_asset"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_marginRight="74dp"
+            android:layout_marginLeft="74dp"
+            android:layout_marginTop="24dp"/>
+
+        <TextView
+            android:id="@+id/tv_issue_card_error_title"
+            android:layout_below="@+id/iv_error_asset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="@dimen/llsdk_tiny_margin"
+            android:gravity="center_horizontal"
+            tools:text="Add more funds" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_below="@+id/tv_issue_card_error_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal"
+            tools:text="To get your card, you need at least £5 worth of crypto in your BTC, BCH, ETH or LTC wallets on Coinbase. \n\n  Add your funds, then try again." />
+
+        <TextView
+            android:id="@+id/tv_secondary_cta"
+            android:layout_below="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            tools:text="https://www.coinbase.com/buy" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_primary_cta"
+        style="@style/ThemeTwo.ContinueButton"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        tools:text="Try again" />
+
+</RelativeLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generic -->
+    <attr name="llsdk_toolbarPopupTheme" format="reference" />
+    <declare-styleable name="toggle_image_button">
+        <attr name="android:checked" />
+    </declare-styleable>
+</resources>

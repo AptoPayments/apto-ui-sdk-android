@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_phone_header"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_below="@+id/tb_llsdk_toolbar_layout" />
+
+    <TextView
+        android:id="@+id/tv_phone_label"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_below="@id/tv_phone_header"
+        android:layout_marginTop="4sp"
+        android:lineSpacingExtra="3sp"
+        android:textSize="@dimen/text_size_large" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_phone_label">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/phone_in"
+                style="@style/ThemeTwo.TextInput"
+                android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                android:layout_marginBottom="@dimen/_24sdp"
+                android:background="@drawable/rounded_corners"
+                android:elevation="2dp">
+
+                <com.hbb20.CountryCodePicker xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/country_code_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="9dp"
+                    app:ccp_autoDetectCountry="false"
+                    app:ccp_clickable="true"
+                    app:ccp_showNameCode="false" />
+
+                <include layout="@layout/include_vertical_separator" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/llsdk_title_bottom_margin"
+                        android:background="@android:color/transparent"
+                        android:inputType="phone"
+                        android:maxLines="1"
+                        android:textColor="@color/coinbase_title_color"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/text_size_large" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/continue_button"
+        style="@style/ThemeTwo.ContinueButton" />
+
+</RelativeLayout>

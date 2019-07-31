@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:enabled="true">
+
+    <item
+        android:id="@+id/menu_update_personal_details"
+        android:enabled="true"
+        android:title="@string/select_balance_store_oauth_confirm_refresh_title"
+        app:actionLayout="@layout/layout_menu_update_personal_details"
+        app:showAsAction="always|withText" />
+</menu>

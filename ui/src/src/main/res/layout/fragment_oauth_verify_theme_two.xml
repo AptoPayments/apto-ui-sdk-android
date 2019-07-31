@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tb_llsdk_toolbar_layout"
+            android:layout_marginTop="4sp"
+            android:layout_above="@+id/tv_submit_bttn">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_personal_information_header"
+                style="@style/ThemeTwo.TextHeader"
+                android:text="@string/select_balance_store_oauth_confirm_title" />
+
+            <TextView
+                android:id="@+id/tv_personal_information_description"
+                android:lineSpacingExtra="3sp"
+                style="@style/ThemeTwo.TextInput"
+                android:text="@string/select_balance_store_oauth_confirm_explanation" />
+
+            <TextView
+                android:id="@+id/tv_first_name_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_first_name"/>
+
+            <TextView
+                android:id="@+id/tv_first_name"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:singleLine="true"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_last_name_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_last_name"/>
+
+            <TextView
+                android:id="@+id/tv_last_name"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:singleLine="true"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_email_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_email"/>
+
+            <TextView
+                android:id="@+id/tv_email"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:singleLine="true"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_address_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_address"/>
+
+            <TextView
+                android:id="@+id/tv_address"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_phone_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_phone_number"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_date_of_birth_label"
+                style="@style/ThemeTwo.SectionTitle"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_birth_date"/>
+
+            <TextView
+                android:id="@+id/tv_date_of_birth"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_id_document"
+                style="@style/ThemeTwo.FormField"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_delivery_address_instructions"
+                style="@style/ThemeTwo.Instructions"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_footer"/>
+
+            <TextView
+                android:id="@+id/tv_delivery_address_text_link"
+                style="@style/ThemeTwo.TextLink"
+                android:layout_marginBottom="8dp"
+                android:text="@string/select_balance_store_oauth_confirm_footer_link"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_submit_bttn"
+        style="@style/ThemeTwo.ContinueButton"
+        android:layout_alignParentBottom="true"
+        android:text="@string/select_balance_store_oauth_confirm_call_to_action_title" />
+
+</RelativeLayout>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <include
+        android:id="@+id/tb_llsdk_custom_toolbar"
+        layout="@layout/include_custom_toolbar_two" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tb_llsdk_custom_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginEnd="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/settings_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/view_section_header_two"
+                    android:id="@+id/rl_settings" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_get_pin" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_set_pin" />
+
+                <include layout="@layout/view_section_switch_two"
+                    android:id="@+id/rl_card_info" />
+
+                <include layout="@layout/view_section_switch_two"
+                    android:id="@+id/rl_lock_card" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transactions_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <include layout="@layout/view_section_header_two"
+                    android:id="@+id/rl_transactions" />
+
+                <include layout="@layout/view_section_switch_two"
+                    android:id="@+id/rl_detailed_card_activity" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/help_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/view_section_header_two"
+                    android:id="@+id/rl_help" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_ivr_support" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_contact_support" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_report_stolen_card" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_faq" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/legal_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/view_section_header_two"
+                    android:id="@+id/rl_legal" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_cardholder_agreement" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_privacy_policy" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_terms_of_service" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

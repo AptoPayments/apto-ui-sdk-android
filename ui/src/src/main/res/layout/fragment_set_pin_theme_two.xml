@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_set_pin_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_marginTop="@dimen/llsdk_phone_input_wrapper_height" />
+
+    <TextView
+        android:id="@+id/tv_set_pin_explanation"
+        style="@style/ThemeTwo.TextInput"
+        android:layout_below="@+id/tv_set_pin_title"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_set_pin_explanation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.aptopayments.sdk.features.auth.inputphone.AptoPinView
+                android:id="@+id/pin_view"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginStart="@dimen/llsdk_medium_margin"
+                android:layout_marginLeft="@dimen/llsdk_medium_margin"
+                android:layout_marginTop="@dimen/llsdk_medium_margin"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:layout_marginRight="@dimen/llsdk_medium_margin"
+                android:layout_marginBottom="@dimen/llsdk_medium_margin"
+                android:background="@drawable/rounded_corners"
+                android:digits="1234567890"
+                android:elevation="2dp"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:maxLength="4"
+                android:paddingStart="@dimen/_85sdp"
+                android:paddingEnd="@dimen/_85sdp"
+                android:paddingBottom="@dimen/_24sdp"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/text_size_larger" />
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

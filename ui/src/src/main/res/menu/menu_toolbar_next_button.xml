@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:enabled="true">
+
+    <item
+        android:id="@+id/menu_toolbar_next_button"
+        android:enabled="false"
+        android:title="@string/toolbar_next_button_label"
+        app:actionLayout="@layout/layout_menu_next_button"
+        app:showAsAction="always|withText" />
+</menu>

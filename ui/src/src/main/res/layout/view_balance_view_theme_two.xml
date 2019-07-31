@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/llsdk_theme_two_side_margin"
+    android:layout_marginEnd="@dimen/llsdk_theme_two_side_margin"
+    android:paddingTop="@dimen/_4sdp"
+    android:paddingBottom="@dimen/_4sdp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/manage_card_balance_total_balance"/>
+    <TextView
+        android:id="@+id/tv_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/tv_title"
+        android:layout_below="@id/tv_title"
+        tools:textSize="@dimen/_26sdp"
+        tools:text="€ 18.10"/>
+    <TextView
+        android:id="@+id/tv_balance_native"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_balance"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_alignBottom="@id/tv_balance"
+        android:layout_marginBottom="@dimen/_2sdp"
+        tools:text="= BTC 18.10"/>
+    <ImageView
+        android:id="@+id/iv_refresh"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:scaleType="fitXY"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_toEndOf="@id/tv_balance_native"
+        android:layout_alignBottom="@id/tv_balance_native" />
+</RelativeLayout>

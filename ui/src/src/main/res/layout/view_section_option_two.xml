@@ -1,0 +1,28 @@
+<com.aptopayments.sdk.ui.views.SectionOptionViewTwo
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_get_pin"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_64sdp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_row_arrow_white"/>
+
+    <View
+        android:id="@+id/vw_option_bottom_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"/>
+
+</com.aptopayments.sdk.ui.views.SectionOptionViewTwo>

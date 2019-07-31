@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <TextView
+        android:id="@+id/tv_country_selector_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_below="@+id/tb_llsdk_toolbar_layout"
+        tools:text="Country of residence 🏠"/>
+
+    <TextView
+        android:id="@+id/tv_country_selector_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:layout_below="@id/tv_country_selector_header"
+        tools:text="Select your country of tax residence." />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_select_country"
+        android:layout_below="@+id/tv_country_selector_description">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_country_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_5sdp" />
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/tv_select_country"
+        style="@style/ThemeTwo.ContinueButton"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        tools:text="Select country" />
+</RelativeLayout>

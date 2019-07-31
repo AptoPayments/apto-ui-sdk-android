@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tb_llsdk_toolbar_layout_internal"
+    android:stateListAnimator="@null"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_llsdk_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/llsdk_toolbar_height"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/AppTheme.Toolbar"
+        app:popupTheme="?attr/llsdk_toolbarPopupTheme" />
+
+</com.google.android.material.appbar.AppBarLayout>

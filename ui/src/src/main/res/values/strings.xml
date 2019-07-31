@@ -1,0 +1,635 @@
+<resources>
+    <string name="app_name">Coinbase UK</string>
+
+    <string name="action_refresh">Refresh</string>
+
+    <string name="failure_network_connection">No Network Connection.</string>
+    <string name="failure_server_error">Server Error</string>
+
+    <!-- Generic -->
+    <string name="user_data_menu_info">Info &amp; terms</string>
+    <string name="toast_api_error" formatted="false">Error: %s</string>
+    <string name="banner_error_title">Error</string>
+    <string name="error_something_went_wrong">Something went wrong.</string>
+    <string name="ellipsis">…</string>
+
+    <!-- Toolbar -->
+    <string name="toolbar_next_button_label">Next</string>
+    <string name="toolbar_confirm_button_label">Confirm</string>
+    <string name="toolbar_get_physical_card">Get your physical card!</string>
+    <string name="manage_card_activate_physical_card_top_bar_item_title">Enable physical card!</string>
+    <string name="toolbar_account_settings_title">Account settings</string>
+    <string name="toolbar_stats_chart_title">Stats chart</string>
+    <string name="select_balance_store_oauth_confirm_refresh_title">Updated your personal details?</string>
+
+    <!-- Personal Information -->
+    <string name="personal_info_label">Personal Info</string>
+    <string name="personal_info_first_name_hint">First name</string>
+    <string name="personal_info_first_name_error">Please enter your first name.</string>
+    <string name="personal_info_last_name_hint">Last name</string>
+    <string name="personal_info_last_name_error">Please enter your last name.</string>
+    <string name="personal_info_email_hint">Email</string>
+    <string name="personal_info_email_error">Please enter a valid email address.</string>
+    <string name="personal_info_email_not_available">I don\'t have an email</string>
+
+    <!-- Phone -->
+    <string name="auth_input_phone_title">Let’s get you verified 📲</string>
+    <string name="auth_input_phone_explanation">To keep your card secure, we need to send a unique code to your phone number to verify its really you. Please enter your number below.</string>
+    <string name="auth_input_phone_hint">phone number</string>
+    <string name="auth_input_phone_call_to_action">Continue</string>
+    <string name="auth_input_phone_error_can_not_send_sms">Looks like we can\'t send you a code, as you\'ve already requested to stop receiving SMS messages from us. Chat to our team for more help.</string>
+    <string name="auth_input_phone_error_invalid_phone_number">Looks like the number you\'ve entered isn\'t a valid mobile number. Check it\'s been entered correctly and isn\'t a landline number.</string>
+    <string name="auth_input_phone_error_unreachable_phone_number">Looks like we can\'t send you your code as the number you\'ve provided isn\'t currently reachable by SMS. Please try again.</string>
+    <string name="auth_input_phone_error_invalid_called_phone_number">Looks like the phone number you\'ve entered isn\'t valid. Please try again.</string>
+
+    <!-- Email -->
+    <string name="auth_input_email_title">Email address</string>
+    <string name="auth_input_email_explanation">Enter your email address</string>
+    <string name="auth_input_email_hint">emailaddress@example.com</string>
+    <string name="auth_input_email_footer">emailaddress@example.com</string>
+
+    <!-- VerificationEntity Theme Two -->
+    <string name="auth_verify_phone_title">Let’s get you verified 📲</string>
+    <string name="auth_verify_phone_explanation">Enter the 6-digit code that we\'ve just sent to your phone.</string>
+    <string name="auth_verify_phone_footer">Having problems entering your code?</string>
+    <string name="auth_verify_phone_resend_button_title">Tap here to re-send</string>
+    <string name="auth_verify_phone_error_wrong_code_title">Error</string>
+    <string name="auth_verify_phone_error_wrong_code_message">Looks like that code isn\'t valid. Please double-check the one we sent to you, or tap here to request a new one.</string>
+    <string name="auth_verify_phone_resent_wait_text">Resend your code if it doesn\'t arrive in &lt;&lt;WAIT_TIME&gt;&gt;</string>
+    <string name="auth_verify_phone_expired_pin_text">Code expired, too many attempts.\nPlease request a new code via SMS</string>
+
+    <!-- Email -->
+    <string name="email_title">Account details</string>
+    <string name="email_error">Invalid email</string>
+    <string name="email_label">Enter your email address</string>
+    <string name="email_hint">emailaddress@example.com</string>
+
+    <!-- Birthdate Verification -->
+    <string name="auth_verify_birthdate_title">Second step credential</string>
+    <string name="auth_verify_birthdate_explanation">Enter your birthdate below to verify your account.</string>
+    <string name="auth_verify_birthdate_call_to_action_title">Continue</string>
+    <string name="auth_verify_birthdate_error_wrong_code_title">Error</string>
+    <string name="auth_verify_birthdate_error_wrong_code_message">This birth date is incorrect</string>
+    <string name="birthdate_hint_dd">DD</string>
+    <string name="birthdate_hint_mm">MM</string>
+    <string name="birthdate_hint_yyyy">YYYY</string>
+
+    <!-- Phone Verification -->
+    <string name="phone_verification_label">Verify phone number</string>
+    <string name="auth_verify_phone_resent_message">A new code has been sent to your phone</string>
+    <string name="phone_verification_code_hint">Enter the code that was sent to your phone</string>
+    <string name="verification_code_hint">Enter the code that was sent to</string>
+    <string name="verification_button_resend"><u>Re-send code</u></string>
+
+    <!-- Verification Email -->
+    <string name="auth_verify_email_title">Verify email address</string>
+    <string name="auth_verify_email_explanation">Enter the code that was sent to</string>
+    <string name="auth_verify_email_resend_button_title">Re-send code</string>
+    <string name="auth_verify_email_footer">Having problems entering your code?</string>
+    <string name="auth_verify_email_expired_pin_text">Code expired, too many attempts.\nPlease request a new code via your email address</string>
+    <string name="auth_verify_email_resent_message">A new code has been sent to your email address</string>
+    <string name="auth_verify_email_error_wrong_code_title">Error</string>
+    <string name="auth_verify_email_error_wrong_code_message">Looks like that code isn\'t valid. Please double-check the one we sent to you, or tap here to request a new one.</string>
+    <string name="auth_verify_email_resent_wait_text">Resend your code if it doesn\'t arrive in &lt;&lt;WAIT_TIME&gt;&gt;</string>
+
+    <!-- Email Verification Entity -->
+    <string name="email_verification_title">Security check</string>
+    <string name="email_verification_code_hint">Enter the code that was sent to your email</string>
+    <string name="email_verification_code_hint_theme_2">Enter the 6-digit code we\'ve just sent to your email</string>
+    <string name="email_verification_resent">A new code has been sent to your email</string>
+
+    <!-- Select Country -->
+    <string name="select_card_product_select_country_title">Country of residence 🏠</string>
+    <string name="select_card_product_select_country_explanation">Select your country of tax residence.</string>
+    <string name="select_card_product_select_country_call_to_action">Select country</string>
+
+    <!-- Physical Card Activation (Non blocking) -->
+    <string name="manage_card_activate_physical_card_overlay_title">Enable your physical card</string>
+    <string name="manage_card_activate_physical_card_overlay_message">Received your physical Shift Card? Nice! Tap here to enable it.</string>
+    <string name="manage_card_activate_physical_card_overlay_call_to_action_title">Enable now</string>
+
+    <!-- Physical Card Activation Success -->
+    <string name="manage_card_get_pin_nue_title">Congratulations!</string>
+    <string name="manage_card_get_pin_nue_explanation">Your physical Shift Card has been enabled. We\'ve set a random PIN code for your card.</string>
+    <string name="manage_card_get_pin_nue_call_to_action_title">Get my PIN</string>
+    <string name="manage_card_get_pin_nue_footer">PIN is obtained via phone call and charge may be applied by your mobile network operator.</string>
+
+    <!-- Transaction details -->
+    <string name="transaction_details_adjustment_capture_text">Capture</string>
+    <string name="transaction_details_adjustment_refund_text">Refund</string>
+    <string name="transaction_details_adjustment_hold_text">Hold</string>
+    <string name="transaction_details_adjustment_release_text">Release</string>
+    <string name="transaction_details_adjustment_other_text">Other</string>
+    <string name="transaction_details_details_device_type_ecommerce">eCommerce</string>
+    <string name="transaction_details_details_device_type_pos">POS</string>
+    <string name="transaction_details_details_device_type_international">INT.</string>
+    <string name="transaction_details_details_device_type_emv">EMV</string>
+    <string name="transaction_details_details_transaction_type_atm_withdrawal">ATM Withdrawal</string>
+    <string name="transaction_details_details_transaction_type_pending">Pending</string>
+    <string name="transaction_details_details_transaction_type_reversal">Reversal</string>
+    <string name="transaction_details_details_transaction_type_purchase">Purchase</string>
+    <string name="transaction_details_details_transaction_type_pin_purchase">PIN Purchase</string>
+    <string name="transaction_details_details_transaction_type_refund">Refund</string>
+    <string name="transaction_details_details_transaction_type_decline">Decline</string>
+    <string name="transaction_details_details_transaction_type_balance_inquiry">Balance Inquiry</string>
+    <string name="transaction_details_details_transaction_type_credit">Credit</string>
+    <string name="transaction_details_details_transaction_type_other">Other</string>
+    <string name="transaction_details_details_transaction_class_atm_withdrawal">ATM Withdrawal</string>
+    <string name="transaction_details_details_transaction_class_authorised">Authorised</string>
+    <string name="transaction_details_details_transaction_class_pending">Pending</string>
+    <string name="transaction_details_details_transaction_class_declined">Declined</string>
+    <string name="transaction_details_details_transaction_class_reversed">Reversed</string>
+    <string name="transaction_details_basic_info_declined_transaction_banner_title">Declined transaction</string>
+    <string name="transaction_details_details_decline_default">This transaction was declined. Please get in contact with our team if you need assistance.</string>
+    <string name="transaction_details_details_decline_nsf">Insufficient funds</string>
+    <string name="transaction_details_details_decline_bad_pin">Wrong PIN</string>
+    <string name="transaction_details_details_decline_06">Error</string>
+    <string name="transaction_details_details_decline_42">International transaction not allowed</string>
+    <string name="transaction_details_details_decline_70">Invalid transaction. Contact customer support</string>
+    <string name="transaction_details_details_decline_60">Below withdrawal amount limit</string>
+    <string name="transaction_details_details_decline_61">Exceeds withdrawal amount limit</string>
+    <string name="transaction_details_details_decline_65">Exceeds withdrawal frequency limit</string>
+    <string name="transaction_details_details_decline_75">Allowed number of PIN tries exceeded</string>
+    <string name="transaction_details_details_decline_bad_cvv_or_exp">Wrong CVC or Expiration date</string>
+    <string name="transaction_details_details_decline_bad_cvv">Wrong CVV</string>
+    <string name="transaction_details_details_decline_pre_active">Physical card is not active yet</string>
+    <string name="transaction_details_basic_info_transaction_status_pending">Pending</string>
+    <string name="transaction_details_basic_info_transaction_status_declined">Declined</string>
+    <string name="transaction_details_basic_info_transaction_status_complete">Complete</string>
+    <string name="transaction_details_basic_info_transaction_status_other">Other</string>
+    <string name="transaction_details_basic_info_category_plane_mcc">Travel and Holidays</string>
+    <string name="transaction_details_basic_info_category_car_mcc">Transport</string>
+    <string name="transaction_details_basic_info_category_glass_mcc">Eating places and Restaurants</string>
+    <string name="transaction_details_basic_info_category_finance_mcc">ATM</string>
+    <string name="transaction_details_basic_info_category_food_mcc">Eating places and Restaurants</string>
+    <string name="transaction_details_basic_info_category_gas_mcc">Gas Station</string>
+    <string name="transaction_details_basic_info_category_bed_mcc">Hotel</string>
+    <string name="transaction_details_basic_info_category_medical_mcc">Medicine</string>
+    <string name="transaction_details_basic_info_category_camera_mcc">Electronics</string>
+    <string name="transaction_details_basic_info_category_card_mcc">ATM</string>
+    <string name="transaction_details_basic_info_category_cart_mcc">Grocery Stores</string>
+    <string name="transaction_details_basic_info_category_road_mcc">Travel and Holidays</string>
+    <string name="transaction_details_basic_info_category_other_mcc">Other</string>
+    <string name="transaction_details_basic_info_category_unavailable">Unavailable</string>
+
+    <!-- Address -->
+    <string name="address_title">Where do you live?</string>
+    <string name="address_label">Your residential address</string>
+    <string name="address_error">Invalid address</string>
+    <string name="address_autocomplete_hint">your current address</string>
+    <string name="address_housing_type_header">Residence</string>
+    <string name="address_housing_type_hint">Select a housing type&#8230;</string>
+    <string name="address_housing_type_error">Please select a valid housing type.</string>
+    <string name="geocoding_google_maps_api_key">AIzaSyBQuKFxmTO8gmxBwnXZlgG3TJY50KpbS-0</string>
+    <string name="geocoding_google_maps_api_url">https://maps.googleapis.com/maps/api/place/details/json</string>
+    <string name="google_places_autocomplete_api_url">https://maps.googleapis.com/maps/api/place/autocomplete/json</string>
+    <string name="google_places_autocomplete_api_key">AIzaSyAj21pmvNCyCzFqYq2D3nL4FwYPCzpHwRA</string>
+
+    <!-- Apartment -->
+    <string name="apartment_title">Contact information</string>
+    <string name="address_apartment_number_hint">apartment, unit, floor, etc.</string>
+
+    <!-- ID VerificationEntity -->
+    <string name="id_verification_citizenship_label">Citizenship</string>
+    <string name="id_verification_document_type_label">Type of document</string>
+    <string name="id_verification_title">Personal Info</string>
+    <string name="id_verification_next_button_get_offers">GET OFFERS</string>
+    <string name="id_verification_update_profile_title">Update Profile</string>
+    <string name="id_verification_update_profile_button">UPDATE PROFILE</string>
+    <string name="id_verification_birthday_error">You must be 18 years or older.</string>
+    <string name="id_verification_document_number_label">Document number</string>
+    <string name="id_verification_document_number_hint">the document number</string>
+    <string name="id_verification_document_number_error">Please enter a valid number.</string>
+    <string name="id_verification_disclaimer">Your information is private and secure.</string>
+    <string name="id_verification_ssn_itin_not_available">I don\'t have an SSN/ITIN</string>
+
+    <!-- PII Confirmation Screen -->
+    <string name="select_balance_store_oauth_confirm_title">Welcome to your Card!</string>
+    <string name="select_balance_store_oauth_confirm_explanation">These are the personal details you\'ve saved securely on your account. Tap below to confirm they\'re correct.</string>
+    <string name="select_balance_store_oauth_confirm_call_to_action_title">Confirm</string>
+    <string name="select_balance_store_oauth_confirm_first_name">First Name</string>
+    <string name="select_balance_store_oauth_confirm_last_name">Last Name</string>
+    <string name="select_balance_store_oauth_confirm_email">Email address</string>
+    <string name="select_balance_store_oauth_confirm_address">Address</string>
+    <string name="select_balance_store_oauth_confirm_phone_number">Phone number</string>
+    <string name="select_balance_store_oauth_confirm_birth_date">Date of birth</string>
+    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?</string>
+    <string name="select_balance_store_oauth_confirm_footer_link">To make changes, go to the settings section in your account and update your information</string>
+    <string name="select_balance_store_oauth_confirm_address_title">Confirm</string>
+    <string name="select_balance_store_oauth_confirm_address_confirmation_start">Your card will be sent to address:</string>
+    <string name="select_balance_store_oauth_confirm_address_confirmation_end">is that correct?</string>
+    <string name="select_balance_store_oauth_confirm_address_ok_button">Confirm</string>
+    <string name="select_balance_store_oauth_confirm_address_cancel_button">Cancel</string>
+    <string name="select_balance_store_login_new_user_title">&lt;a href=\'https://www.coinbase.com/signup\'&gt;Not a Coinbase user? Tap here.&lt;/a&gt;</string>
+    <string name="select_balance_store_oauth_confirm_updated_pii_message_message">Looks like you’ve updated your personal details in your account.</string>
+
+    <!-- Disclaimers -->
+    <string name="disclaimer_accept">Accept</string>
+    <string name="disclaimer_cancel">Cancel</string>
+    <string name="disclaimer_error">Error loading disclaimer</string>
+    <string name="disclaimer_alert_title">Disclosure</string>
+    <string name="disclaimer_alert_message">Are you sure you do not want to agree to the Disclosure?</string>
+    <string name="disclaimer_alert_confirm">CONFIRM</string>
+    <string name="disclaimer_alert_cancel">CANCEL</string>
+
+    <!-- Disclaimer Theme 2 -->
+    <string name="disclaimer_disclaimer_call_to_action_title">I agree</string>
+    <string name="disclaimer_disclaimer_cancel_action_button">I do not agree to the Cardholder agreement</string>
+    <string name="disclaimer_disclaimer_title">Your Cardholder agreement</string>
+    <string name="disclaimer_disclaimer_cancel_action_title">Cardholder agreement</string>
+    <string name="disclaimer_disclaimer_cancel_action_message">Are you sure you do not want to agree to the Cardholder agreement?</string>
+    <string name="disclaimer_disclaimer_cancel_action_ok_button">Confirm</string>
+    <string name="disclaimer_disclaimer_cancel_action_cancel_button">Cancel</string>
+
+    <!-- Action Not Supported -->
+    <string name="action_not_supported_error">The received workflow action is currently not supported.</string>
+
+    <!-- Show Generic Message -->
+    <string name="show_generic_message_title"> </string>
+
+    <!-- Issue Card Legal Content-->
+    <string name="issue_card_legal_content_title">Legal</string>
+    <string name="issue_card_legal_content_cta">REQUEST CARD</string>
+
+    <!-- Pending Application Selector -->
+    <string name="select_pending_application_list_title">Open Applications</string>
+    <string name="select_pending_application_list_label">Would you like to continue with an open application?</string>
+    <string name="new_application_button">NEW APPLICATION</string>
+
+    <!-- Custodian Selector Theme 2-->
+    <string name="select_balance_store_login_title">Connect your account</string>
+    <string name="select_balance_store_login_explanation">Spend your cryptocurrency held on your account across 44 million locations worldwide.</string>
+    <string name="select_balance_store_login_call_to_action_title">Connect your account</string>
+
+    <!-- Errors -->
+    <string name="session_expired_error">User session has expired. Please sign in with your credentials.</string>
+    <string name="no_camera_permission_error">Unable to scan card if camera permissions are not granted!</string>
+    <string name="phone_dialer_error">Phone calls are disabled in this phone, please enable them before continuing.</string>
+
+    <!-- fingerprint dialog -->
+    <string name="fingerprint_description">Use your fingerprint for fast, secure access to your card.\nConfirm fingerprint to continue.</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="fingerprint_title">Use fingerprint?</string>
+
+    <!-- card welcome screen -->
+    <string name="card_welcome_title">Already received your card? Activate it now!</string>
+    <string name="card_welcome_address_label">Shipping address</string>
+    <string name="card_welcome_button">ACTIVATE CARD</string>
+    <string name="card_welcome_disclaimer">Have questions?&lt;br /&gt;Please contact %s</string>
+
+    <!-- get pin screen -->
+    <string name="get_pin_title">Congratulations!</string>
+    <string name="get_pin_subtitle">Your physical Shift Card has been enabled. We\'ve set a random PIN code for your card.</string>
+    <string name="get_pin_button">GET MY PIN</string>
+    <string name="get_pin_disclaimer">PIN is obtained via phone call and charges may be applied by your mobile network operator.</string>
+
+    <!-- physical card activation screen -->
+    <string name="physical_card_activation_title">Enable your physical card</string>
+    <string name="physical_card_activation_hint">Enable your card by entering the activation code that came attached with your physical card.</string>
+
+    <!-- card management screen -->
+    <string name="card_management_title">Card</string>
+    <string name="manage_card_balance_total_balance">CURRENT BALANCE</string>
+    <string name="manage_card_balance_invalid_balance_title">Unavailable</string>
+    <string name="manage_card_number_placeholder">****</string>
+    <string name="manage_card_expiry_date_placeholder">**/**</string>
+    <string name="manage_card_cvv_placeholder">***</string>
+    <string name="card_management_card_balance">Current balance</string>
+    <string name="card_management_card_spendable_balance">Spendable today</string>
+    <string name="card_management_primary_button">Tap to manage card</string>
+    <string name="card_management_primary_button_full">Tap to manage card or tap on the number to copy to clipboard</string>
+    <string name="card_management_secondary_button">ACTIVATE VIRTUAL CARD</string>
+    <string name="card_activated">Card activated</string>
+    <string name="card_enabled">Card enabled</string>
+    <string name="card_disabled">Card disabled</string>
+    <string name="card_management_pin_changed">PIN changed correctly</string>
+    <string name="card_management_number_copied">Card number copied to clipboard</string>
+    <string name="card_management_no_transactions">You have no transactions yet.\nStart now!</string>
+    <string name="manage_card_no_transactions">You\'ve not made any transactions yet.\nGet started now.</string>
+    <string name="card_management_enable_card_label">Enable physical card!</string>
+    <string name="card_management_get_physical_card">Get your physical card</string>
+    <string name="card_management_physical_card_action_text">Want us to send you your debit card? Tap here.</string>
+
+    <!-- card settings -->
+    <string name="card_settings_title">Card settings</string>
+    <string name="switch_enable_card">Suspend Card</string>
+    <string name="enable_card_description">Temporarily block all card usage</string>
+    <string name="switch_show_card_info">Card Details</string>
+    <string name="show_card_info_description">Show account number, exp. date, and CVV</string>
+    <string name="save_to_android_pay_label">Add Card</string>
+    <string name="contact_support_label">Report Lost or Stolen Card</string>
+    <string name="contact_support_description">Close your card and request a replacement</string>
+    <string name="contact_support_alert_title">Report Lost or Stolen Card</string>
+    <string name="contact_support_alert_message">Just as a heads up, once you confirm your card is lost or stolen, it\'ll instantly be locked so no one can use it.</string>
+    <string name="legal_label">Legal</string>
+    <string name="cardholder_agreement_label">Cardholder Agreement</string>
+    <string name="cardholder_agreement_description">Terms and Conditions of the Card</string>
+    <string name="terms_and_conditions_label">Terms and conditions</string>
+    <string name="terms_and_conditions_description">User agreement</string>
+    <string name="privacy_policy_label">Privacy policy</string>
+    <string name="privacy_policy_description">Information we collect</string>
+    <string name="change_pin_label">Change your PIN</string>
+    <string name="change_pin_description">Create a new four-digit code</string>
+    <string name="get_pin_label">Get my PIN</string>
+    <string name="get_pin_description">Retrieve your PIN via our automated system</string>
+    <string name="funding_sources_label">Funding Sources</string>
+    <string name="settings_label">Settings</string>
+    <string name="support_label">Help and Support</string>
+    <string name="add_funding_source">Add funding source</string>
+    <string name="card_settings_no_funding_sources">You have no Funding sources linked with your card.</string>
+    <string name="card_settings_title_two">Settings</string>
+    <string name="card_info_title">Card info</string>
+    <string name="show_card_number_description">Show card number and CVV</string>
+    <string name="disable_card_description">Disable card from being used</string>
+    <string name="get_help_title_two">Get help</string>
+    <string name="contact_support_title_two">Contact support</string>
+    <string name="customer_support_description_two">Call or email our support team</string>
+    <string name="report_lost_or_stolen_title">Report lost or stolen card</string>
+    <string name="report_lost_or_stolen_card_description">Freeze your card and order a replacement</string>
+    <string name="legal_header">Legal</string>
+    <string name="privacy_policy_description_two">Read our privacy policy</string>
+    <string name="card_settings_help_subject">Support needed</string>
+    <string name="card_settings_transactions_title">Transactions</string>
+    <string name="card_settings_transactions_detailed_card_activity_title">Detailed card activity</string>
+    <string name="card_settings_transactions_detailed_card_activity_description">Show all activity: declines, balance inquiries, etc.</string>
+
+    <!-- card management enable/disable dialog -->
+    <string name="enable_card_message">You are activating your card. Are you sure?</string>
+    <string name="disable_card_message">You are suspending your card. Are you sure?</string>
+    <string name="card_settings_dialog_title">Lock card</string>
+
+    <!-- Card view -->
+    <string name="card_cvv_label">CVV</string>
+    <string name="card_expiration_date_label">EXP</string>
+    <string name="card_disabled_label">CARD NOT ENABLED</string>
+
+    <!-- Account management screen -->
+    <string name="account_settings_settings_title">Account settings</string>
+    <string name="account_settings_logout_confirm_logout_title">Log out</string>
+    <string name="account_settings_app_settings_title">App settings</string>
+    <string name="account_settings_notification_preferences_title">Notifications</string>
+    <string name="account_settings_notification_preferences_description">Your push and email notification preferences</string>
+    <string name="account_management_contact_support">Help center</string>
+    <string name="account_management_contact_support_description">Contact Customer Support</string>
+    <string name="account_management_faq">FAQs</string>
+    <string name="account_management_faq_description">Some answers to your questions</string>
+    <string name="account_settings_logout_confirm_logout_message">Are you sure you want to log out?</string>
+    <string name="account_settings_logout_confirm_logout_ok_button">CONFIRM</string>
+    <string name="account_settings_logout_confirm_logout_cancel_button">CANCEL</string>
+
+    <!-- Notification preferences screen -->
+    <string name="notification_preferences_title">Notifications</string>
+    <string name="notification_preferences_send_push_email_title">SEND VIA PUSH OR EMAIL</string>
+    <string name="notification_preferences_send_push_sms_title">SEND VIA PUSH OR SMS</string>
+    <string name="notification_preferences_card_activity_title">Card activity</string>
+    <string name="notification_preferences_card_activity_description">Handy notifications to help you see what you’re spending</string>
+    <string name="notification_preferences_card_activity_payment_successful_title">Successful Transactions</string>
+    <string name="notification_preferences_card_activity_payment_declined_title">Declined Transactions</string>
+    <string name="notification_preferences_card_activity_atm_withdrawal_title">ATM Withdrawals</string>
+    <string name="notification_preferences_card_activity_incoming_transfer_title">Incoming transfer</string>
+    <string name="notification_preferences_card_status_title">Card status</string>
+    <string name="notification_preferences_card_status_description">Notifications about your Card</string>
+    <string name="notification_preferences_legal_title">Legal</string>
+    <string name="notification_preferences_legal_description">Updates regarding privacy and cardholder agreements, etc.</string>
+
+    <!-- KYC Status screen -->
+    <string name="manage_card_kyc_title">Application Status</string>
+    <string name="manage_card_kyc_state_resubmit_details">Thank you for your application.\nWe are reviewing your information.\nWe will be in touch via email momentarily.</string>
+    <string name="manage_card_kyc_state_upload_file">Thank you for your application.\nWe are reviewing your information.\nWe will be in touch via email momentarily.</string>
+    <string name="manage_card_kyc_state_under_review">Thank you for your application.\nWe are reviewing your information.\nWe will be in touch via email momentarily.</string>
+    <string name="manage_card_kyc_state_passed">Your application has been approved.\nTap the Refresh button to continue to your card</string>
+    <string name="manage_card_kyc_state_rejected">Your application has been rejected.</string>
+    <string name="manage_card_kyc_state_temporary_error">Thank you for your application.\nWe are reviewing your information.\nWe will be in touch via email momentarily.</string>
+    <string name="manage_card_kyc_call_to_action_title">Refresh</string>
+    <string name="manage_card_kyc_footer">Have questions? Please contact &lt;a href="mailto:support@shiftpayments.com">Customer Support&lt;/a></string>
+    <string name="account_management_funding_source_added">Funding source added</string>
+
+    <!-- Manage Card screen -->
+    <string name="manage_card_card_view_copy_pan_text">Copied to clipboard</string>
+
+    <!-- Transaction details screen -->
+    <string name="transaction_details_address">Address</string>
+    <string name="transaction_details_amount">Amount</string>
+    <string name="transaction_details_currency">Currency</string>
+    <string name="transaction_details_details_transaction_type_title">Transaction Type</string>
+    <string name="transaction_details_basic_info_transaction_status_title">Transaction Status</string>
+    <string name="transaction_details_basic_info_funding_source_title">Crypto wallet</string>
+    <string name="transaction_details_location">Location</string>
+    <string name="transaction_details_details_category_title">Category</string>
+    <string name="transaction_details_basic_info_transaction_date_title">Transaction date</string>
+    <string name="transaction_details_id">ID</string>
+    <string name="transaction_details_shift_id">Transaction ID</string>
+    <string name="transaction_details_details_title">Details</string>
+    <string name="transaction_details_adjustment_transfer_from_text">From your crypto wallet</string>
+    <string name="transaction_details_adjustment_transfer_to_text">To your crypto wallet</string>
+    <string name="transaction_details_adjustment_fee_title">Fee = </string>
+    <string name="transaction_details_adjustment_amount_title">Amount = </string>
+    <string name="transaction_details_exchange_rate">Exchange Rate</string>
+    <string name="transaction_details_merchant_unavailable">Unavailable</string>
+    <string name="transaction_details_details_device_type_title">Device Type</string>
+
+    <!-- No internet connection screen -->
+    <string name="no_network_title">No network</string>
+    <string name="no_network_description">You need to be connected to the internet to use the app</string>
+    <string name="no_network_reconnect_title">Trying to connect</string>
+
+    <!-- System maintenance screen -->
+    <string name="system_maintenance_header">Error</string>
+    <string name="system_maintenance_body">We’re currently undergoing system maintenance. Please check back later</string>
+    <string name="system_maintenance_button">TRY AGAIN</string>
+
+    <!-- Issue card error screen -->
+    <string name="issue_card_error_header">Error</string>
+    <string name="issue_card_error_body">There was an error while issuing your card</string>
+    <string name="issue_card_error_button">TRY AGAIN</string>
+    <string name="issue_card_issue_card_error_insufficient_funds_title">Add more funds</string>
+    <string name="issue_card_issue_card_error_insufficient_funds_description">You don\'t have enough balance to issue the card. \n\nAdd your funds, then try again.</string>
+    <string name="issue_card_issue_card_error_insufficient_funds_primary_cta">Try again</string>
+    <string name="issue_card_issue_card_error_insufficient_funds_secondary_cta"></string>
+    <string name="issue_card_issue_card_generic_error_title">Error</string>
+    <string name="issue_card_issue_card_generic_error_description">There was an error while issuing your card. Please try again.</string>
+    <string name="issue_card_issue_card_generic_error_primary_cta">Try again</string>
+    <string name="issue_card_issue_card_generic_error_secondary_cta"></string>
+
+    <!-- Invalid funding source banner -->
+    <string name="no_funding_source_title">Funding sources not found</string>
+    <string name="no_funding_source_body">Your card will be disabled until you add a new funding source!</string>
+    <string name="no_funding_source_accept">Add it now</string>
+    <string name="invalid_funding_source_title">Invalid funding source</string>
+    <string name="invalid_funding_source_body">Your current funding source is not valid. Please select or add a different one!</string>
+    <string name="invalid_funding_source_accept">Select now</string>
+    <string name="invalid_funding_source_cancel">Cancel</string>
+    <string name="manage_card_funding_source_selector_empty_case_message">Looks like you currently have no crypto wallet\nlinked with your card.</string>
+    <string name="manage_card_funding_source_selector_empty_case_call_to_action">Add funding source</string>
+    <string name="card_settings_add_funding_source_button_title">Add funding source</string>
+
+    <!-- Enable physical card banner -->
+    <string name="enable_physical_card_title">Enable your physical card</string>
+    <string name="enable_physical_card_body">Received your physical Shift Card? Nice! Tap here to enable it.</string>
+    <string name="enable_physical_card_accept">Enable now</string>
+    <string name="funding_source_loading_text">Loading crypto wallet</string>
+    <string name="account_settings_help_title">Support</string>
+    <string name="account_settings_help_contact_support_title"><![CDATA[Help & info]]></string>
+    <string name="account_settings_help_contact_support_description">Speak to our customer care team</string>
+    <string name="account_settings_logout_title">Log out</string>
+
+    <!-- FundingSources -->
+    <string name="new_funding_source_selected_message">Congrats!\n\nNew crypto wallet selected</string>
+    <string name="invalid_funding_source_message">Select a funding source\n\nJust as a heads up, your card is disabled until you tap on the card to select a new funding source</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="manage_card_funding_source_selector_title">Select Funding source</string>
+
+    <!-- MailTo -->
+    <string name="help_mail_subject">Support needed</string>
+    <string name="help_mail_body"> </string>
+
+    <!-- Telephony error -->
+    <string name="error_telephony_disabled">Telephony is disabled on this device. Please make sure your SIM is valid and cellular network is available.</string>
+
+    <!-- Card Settings -->
+    <string name="card_settings_settings_title">Card settings</string>
+    <string name="card_settings_settings_settings_title">Card settings</string>
+    <string name="card_settings_settings_get_pin_title">Get PIN</string>
+    <string name="card_settings_settings_get_pin_description">Obtain the PIN code of your card</string>
+    <string name="card_settings_settings_set_pin_title">Set PIN</string>
+    <string name="card_settings_settings_set_pin_description">Set a new PIN code for your card</string>
+    <string name="card_settings_settings_card_details_title">Card Details</string>
+    <string name="card_settings_settings_card_details_description">Show account number, exp.date, and CVV</string>
+    <string name="card_settings_settings_lock_card_title">Suspend Card</string>
+    <string name="card_settings_settings_lock_card_description">Temporarily block all card usage</string>
+    <string name="card_settings_help_title">Help and Support</string>
+    <string name="card_settings_help_ivr_support_title">Get help</string>
+    <string name="card_settings_help_ivr_support_description">Call for customer support</string>
+    <string name="card_settings_help_contact_support_title">Contact Support</string>
+    <string name="card_settings_help_contact_support_description">Email our Customer Support team</string>
+    <string name="card_settings_help_report_lost_card_title">Report Lost or Stolen Card</string>
+    <string name="card_settings_help_report_lost_card_description">Close your card and request a replacement</string>
+    <string name="card_settings_legal_faq_title">FAQ</string>
+    <string name="card_settings_legal_faq_description">Some answers to your questions</string>
+    <string name="card_settings_legal_title">Legal</string>
+    <string name="card_settings_legal_cardholder_agreement_title">Cardholder agreement</string>
+    <string name="card_settings_legal_cardholder_agreement_description">Read our cardholder agreement</string>
+    <string name="card_settings_legal_privacy_policy_title">Privacy policy</string>
+    <string name="card_settings_legal_privacy_policy_description">Read our privacy policy</string>
+    <string name="card_settings_legal_terms_of_service_title">Terms and conditions</string>
+    <string name="card_settings_legal_terms_of_service_description">Read our terms and conditions</string>
+    <string name="card_settings_settings_confirm_lock_card_title">Confirm</string>
+    <string name="card_settings_settings_confirm_lock_card_message">Do you want to suspend your card?</string>
+    <string name="card_settings_settings_confirm_lock_card_ok_button">Suspend</string>
+    <string name="card_settings_settings_confirm_lock_card_cancel_button">Cancel</string>
+    <string name="card_settings_settings_confirm_unlock_card_title">Confirm</string>
+    <string name="card_settings_settings_confirm_unlock_card_message">Do you want to enable your card?</string>
+    <string name="card_settings_settings_confirm_unlock_card_ok_button">Enable</string>
+    <string name="card_settings_settings_confirm_unlock_card_cancel_button">Cancel</string>
+    <string name="card_settings_settings_confirm_report_lost_card_title">Report Lost or Stolen card</string>
+    <string name="card_settings_settings_confirm_report_lost_card_message">Just as a heads up, once you confirm your card is lost or stolen, it\'ll instantly be locked so no one can use it.</string>
+    <string name="card_settings_settings_confirm_report_lost_card_ok_button">Ok</string>
+    <string name="card_settings_settings_confirm_report_lost_card_cancel_button">Cancel</string>
+    <string name="email_lost_card_subject">Lost Card</string>
+    <string name="card_settings_show_card_data_biometrics_title">Fingerprint Authentication</string>
+    <string name="card_settings_show_card_data_biometrics_description">Please verify your fingerprint to proceed.</string>
+
+    <!--Monthly stats-->
+    <string name="stats_monthly_spending_title">Stats for &lt;&lt;YEAR&gt;&gt;</string>
+    <string name="stats_monthly_spending_graph_title">Total Spent</string>
+    <string name="stats_monthly_spending_list_title">Categories</string>
+    <string name="stats_monthly_spending_list_empty_case">You\'ve not made any transactions.</string>
+    <string name="stats_monthly_spending_graph_default_currency">USD</string>
+
+    <!--Biometrics-->
+    <string name="biometrics_available"/>
+    <string name="biometrics_no_fingerprint_supported_in_android_sdk">This version of Android doesn\'t support Biometric Authentication.</string>
+    <string name="biometrics_no_fingerprint_supported_in_device">Your device doesn\'t support Biometric Authentication.</string>
+    <string name="biometrics_fingerprint_permission_revoked">Please enable the fingerprint permission in your device\'s Settings.</string>
+    <string name="biometrics_fingerprint_not_configured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings.</string>
+    <string name="biometrics_lock_screen_security_disabled">Please enable lockscreen security in your device\'s Settings</string>
+    <string name="biometrics_fingerprint_authentication_failed">Fingerprint verification failed.</string>
+
+    <!--Maintenance-->
+    <string name="maintenance_description">We\'re currently undergoing system maintenance. Please check back later!</string>
+    <string name="maintenance_retry_title">Try again</string>
+
+    <!--Friendly error messages-->
+    <string name="error_transport_invalid_session">For your security, your session has timed out due to inactivity.</string>
+    <string name="error_transport_session_expired">User session has expired. Please sign in with your credentials.</string>
+    <string name="error_transport_empty_session">For your security, your session has timed out due to inactivity.</string>
+    <string name="error_transport_login_error_invalid_credentials">Error. Please re-enter your credentials.</string>
+    <string name="error_transport_login_error_unverified_datapoints">Error. Please verify your login information.</string>
+    <string name="error_transport_shift_card_activate_error">Oops! There was a problem activating your card.</string>
+    <string name="error_transport_shift_card_enable_error">Oops! There was a problem enabling your card.</string>
+    <string name="error_transport_shift_card_disable_error">Oops! There was a problem disabling your card.</string>
+    <string name="error_transport_primary_funding_source_not_found">Error reading card\'s balance</string>
+    <string name="error_transport_physical_card_activation_not_supported">Your card can not be enabled, please contact with Customer Support.</string>
+    <string name="error_transport_wrong_physical_card_activation_code">The activation code that you entered is invalid, please try it again or contact with Customer Support.</string>
+    <string name="error_transport_too_many_physical_card_activation_attempts">You have exceeded the number of attempts allowed, please contact with Customer Support.</string>
+    <string name="error_transport_physical_card_already_activated">Your card is already enabled, please pull to refresh the information or contact with Customer Support.</string>
+    <string name="issue_card_issue_card_error_required_phone">Phone number required.</string>
+    <string name="issue_card_issue_card_error_invalid_phone">Invalid phone number.</string>
+    <string name="issue_card_issue_card_error_not_allowed_phone">Phone number not allowed.</string>
+    <string name="issue_card_issue_card_error_signup_not_allowed">Card can\'t be issued.</string>
+    <string name="issue_card_issue_card_error_required_first_name">First name required.</string>
+    <string name="issue_card_issue_card_error_invalid_first_name">Invalid first name.</string>
+    <string name="issue_card_issue_card_error_required_last_name">Last name required.</string>
+    <string name="issue_card_issue_card_error_invalid_last_name">Invalid last name.</string>
+    <string name="issue_card_issue_card_error_invalid_email">Invalid email address.</string>
+    <string name="issue_card_issue_card_error_not_allowed_email">Email address not allowed.</string>
+    <string name="issue_card_issue_card_error_required_dob">Date of Birth required</string>
+    <string name="issue_card_issue_card_error_dob_too_young">You must be at least 18 years old to apply for a card.</string>
+    <string name="issue_card_issue_card_error_invalid_id_document">ID Document invalid.</string>
+    <string name="issue_card_issue_card_error_invalid_address">Invalid address.</string>
+    <string name="issue_card_issue_card_error_invalid_postal_code">Invalid postal code.</string>
+    <string name="issue_card_issue_card_error_invalid_locality">Invalid City.</string>
+    <string name="issue_card_issue_card_error_invalid_region">Invalid State.</string>
+    <string name="issue_card_issue_card_error_invalid_country">Invalid Country.</string>
+    <string name="issue_card_issue_card_error_invalid_dob">Invalid date of birth.</string>
+    <string name="issue_card_issue_card_error_card_already_issued">Card is already issued.</string>
+    <string name="issue_card_issue_card_error_token_revoked">Please, sign in again</string>
+    <string name="error_transport_undefined">Something went wrong.</string>
+
+    <!--Select Balance Store error messages-->
+    <string name="select_balance_store_login_error_title">Connection Error</string>
+    <string name="select_balance_store_login_error_wrong_country_message">Country not supported</string>
+    <string name="select_balance_store_login_error_wrong_region_message">Region not supported</string>
+    <string name="select_balance_store_login_error_unverified_address_message">Address not verified</string>
+    <string name="select_balance_store_login_error_unsupported_currency_message">Currency not supported</string>
+    <string name="select_balance_store_login_error_cant_capture_funds_message">Cannot retrieve the balance</string>
+    <string name="select_balance_store_login_error_insufficient_funds_message">Insufficient balance</string>
+    <string name="select_balance_store_login_error_balance_not_found_message">Balance not found</string>
+    <string name="select_balance_store_login_error_access_token_invalid_message">Invalid Access Credentials</string>
+    <string name="select_balance_store_login_error_scopes_required_message">Scopes Required</string>
+    <string name="select_balance_store_login_error_missing_legal_name_message">"We were unable to retrieve your name from your account</string>
+    <string name="select_balance_store_login_error_missing_birthdate_message">We were unable to retrieve your date of birth from your account</string>
+    <string name="select_balance_store_login_error_wrong_birthdate_message">The date of birth retrieved from your account was invalid</string>
+    <string name="select_balance_store_login_error_missing_address_message">We were unable to retrieve your address from your account</string>
+    <string name="select_balance_store_login_error_missing_email_message">We were unable to retrieve your email address from your account</string>
+    <string name="select_balance_store_login_error_wrong_email_message">The email address retrieved from your account was invalid</string>
+    <string name="select_balance_store_login_error_unknown_message">An error occurred, please try again or contact support (Error: ERROR_CODE)</string>
+    <string name="select_balance_store_login_error_ok_button">Ok</string>
+    <string name="select_balance_store_login_error_email_sends_disabled_message">You\'ve disabled the ability to send funds to an email address.</string>
+    <string name="select_balance_store_login_error_insufficient_application_limit_message">To continue, you must increase the authorised amount of funds accesibles per day.</string>
+
+    <!--Waitlist-->
+    <string name="wait_list_wait_list_title">You\'re on top of the waitlist!</string>
+    <string name="wait_list_wait_list_description_main">Very soon you\'ll be able to spend your crypto anywhere, using your contactless card.</string>
+    <string name="wait_list_wait_list_description_secondary">We\'ll be in touch the moment the card launches.</string>
+
+    <!--Set PIN-->
+    <string name="manage_card_set_pin_title">Set your PIN 🔑</string>
+    <string name="manage_card_set_pin_explanation">Choose a unique, four digit PIN code for your card.</string>
+    <string name="manage_card_confirm_pin_title">Confirm your PIN 🔒</string>
+    <string name="manage_card_confirm_pin_explanation">Please re-enter your PIN code to confirm it.</string>
+    <string name="manage_card_confirm_pin_error_wrong_code_title">Error</string>
+    <string name="manage_card_confirm_pin_error_wrong_code_message">Looks like your PIN didn\'t match. Please re-enter and try again.</string>
+    <string name="manage_card_confirm_pin_pin_created_title">Congrats!</string>
+    <string name="manage_card_confirm_pin_pin_created_message">You\'ve successfully created your PIN. Your physical card is now ready to use.</string>
+    <string name="manage_card_confirm_pin_pin_updated_title">Congrats!</string>
+    <string name="manage_card_confirm_pin_pin_updated_message">You\'ve successfully changed your PIN.</string>
+
+    <!--VoIP-->
+    <string name="manage_card_get_pin_voip_title">Card Help</string>
+    <string name="manage_card_get_pin_voip_message">Calling..</string>
+    <string name="manage_card_get_pin_voip_speaker">speaker</string>
+    <string name="manage_card_get_pin_voip_mute">mute</string>
+    <string name="manage_card_get_pin_voip_keypad">keypad</string>
+    <string name="manage_card_get_pin_voip_hide">hide</string>
+</resources>

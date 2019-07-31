@@ -1,0 +1,192 @@
+package com.aptopayments.sdk.features.card.fundingsources
+
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.view.Window
+import androidx.annotation.VisibleForTesting
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.core.data.fundingsources.Balance
+import com.aptopayments.core.extension.localized
+import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.platform.BaseDialogFragment
+import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.core.ui.State
+import com.aptopayments.sdk.utils.MessageBanner
+import kotlinx.android.synthetic.main.fragment_funding_sources_dialog.*
+import java.lang.reflect.Modifier
+
+private const val ACCOUNT_ID_KEY = "ACCOUNT_ID"
+private const val SELECTED_BALANCE_ID_KEY = "SELECTED_BALANCE_ID"
+
+@VisibleForTesting(otherwise = Modifier.PROTECTED)
+internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), FundingSourceContract.View, FundingSourceAdapter.Delegate {
+
+    override var delegate: FundingSourceContract.Delegate? = null
+
+    private lateinit var mViewModel: FundingSourcesViewModel
+    private lateinit var mRecyclerView: RecyclerView
+    private var mAccountId: String = ""
+    private var mSelectedBalanceID: String? = ""
+
+    override fun layoutId(): Int = R.layout.fragment_funding_sources_dialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appComponent.inject(this)
+        mAccountId = arguments!![ACCOUNT_ID_KEY] as String
+        mSelectedBalanceID = arguments?.getString(SELECTED_BALANCE_ID_KEY)
+    }
+
+    override fun onDestroyView() {
+        mRecyclerView.adapter = null
+        super.onDestroyView()
+    }
+
+    override fun setUpUI() {
+        setupTheme()
+        setupTexts()
+        setupRecyclerView()
+    }
+
+    override fun setUpViewModel() {
+        mViewModel = viewModel(viewModelFactory) {
+            observe(fundingSourceListItems, ::handleBalanceList)
+            observe(state, ::updateProgressState)
+            failure(failure) {
+                handleFailure(it)
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        positionDialog(dialog!!.window!!)
+        mViewModel.viewReady(mAccountId, mSelectedBalanceID)
+    }
+
+    private fun positionDialog(window: Window) {
+        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window.setGravity(Gravity.BOTTOM)
+        window.attributes.y = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+    }
+
+    private fun handleBalanceList(balanceList: List<FundingSourceListItem>?) {
+        balanceList?.let { list ->
+            if (list.isEmpty()) {
+                hideResultsView()
+                showNoFundingSourcesMessage()
+            } else {
+                showResultsView()
+                hideNoFundingSourcesMessage()
+            }
+        }
+    }
+
+    private fun updateProgressState(state: State?) {
+        if (state == State.IN_PROGRESS) showLoading() else hideLoading()
+    }
+
+    private fun showLoading() {
+        progress_holder.show()
+        hideResultsView()
+    }
+
+    private fun hideLoading() {
+        progress_holder.remove()
+        showResultsView()
+    }
+
+    private fun showNoFundingSourcesMessage() {
+        refresh_button.hide()
+        no_funding_sources_holder.show()
+    }
+
+    private fun hideNoFundingSourcesMessage() {
+        refresh_button.show()
+        no_funding_sources_holder.hide()
+    }
+
+    private fun hideResultsView() {
+        mRecyclerView.hide()
+    }
+
+    private fun showResultsView() {
+        mRecyclerView.show()
+    }
+
+    override fun setUpListeners() {
+        refresh_button.setOnClickListener {
+            mViewModel.fetchData(mAccountId, refresh = true) {}
+        }
+        add_funding_source_button.setOnClickListener {
+            delegate?.onAddFundingSource(mSelectedBalanceID)
+        }
+    }
+
+    private fun setupTheme() {
+        with (themeManager()) {
+            customizeHighlightTitleLabel(tv_dialog_title)
+            customizeEmptyCase(tv_no_funding_sources)
+            customizeSubmitButton(add_funding_source_button)
+        }
+        refresh_button.setColorFilter(UIConfig.uiPrimaryColor)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupTexts() {
+        context?.let {
+            tv_dialog_title.text = "manage_card.funding_source_selector.title".localized(it)
+            add_funding_source_button.text = "manage_card.funding_source_selector.empty_case.call_to_action".localized(it)
+            tv_no_funding_sources.text = "manage_card_funding_source_selector_empty_case_message".localized(it)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        context?.let { context ->
+            val fundingSourceAdapter = FundingSourceAdapter(this, mViewModel)
+            fundingSourceAdapter.delegate = this
+            val scroller = dialogView.findViewById<NestedScrollView>(R.id.nested_scrollbar)
+            mRecyclerView = scroller.findViewById(R.id.funding_source_recycler)
+            mRecyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+                layoutParams.height = (resources.displayMetrics.heightPixels * 0.4).toInt()
+                adapter = fundingSourceAdapter
+            }
+        }
+    }
+
+    override fun onFundingSourceTapped(balance: Balance) {
+        mViewModel.setCardFundingSource(mAccountId, balance.id) {
+            delegate?.onFundingSourceSelected(onFinish = {
+                activity?.let {
+                    notify(resources.getString(R.string.new_funding_source_selected_message), MessageBanner.MessageType.HEADS_UP)
+                }
+            })
+        }
+    }
+
+    override fun onAddFundingSourceTapped() {
+        delegate?.onAddFundingSource(mSelectedBalanceID)
+    }
+
+    override fun viewLoaded() {
+        mViewModel.viewLoaded()
+    }
+
+    companion object {
+        fun newInstance(cardID: String, selectedBalanceID: String?) = FundingSourceDialogFragmentThemeTwo().apply {
+            arguments = Bundle().apply {
+                putString(ACCOUNT_ID_KEY, cardID)
+                putString(SELECTED_BALANCE_ID_KEY, selectedBalanceID)
+            }
+        }
+    }
+}
