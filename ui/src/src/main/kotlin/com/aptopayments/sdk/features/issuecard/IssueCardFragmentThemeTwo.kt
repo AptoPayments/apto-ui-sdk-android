@@ -9,15 +9,15 @@ import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_APPLICATION_ID = "application_id"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
-internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.View
-{
+internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.View {
 
-    private lateinit var viewModel: IssueCardViewModel
+    private val viewModel: IssueCardViewModel by viewModel()
     override var delegate: IssueCardContract.Delegate? = null
     private lateinit var cardApplicationId: String
 
@@ -25,17 +25,14 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         cardApplicationId = arguments!![CARD_APPLICATION_ID] as String
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(card, ::onCardIssuedSucceeded)
             observe(issueCardErrorCode, ::onIssueCardFailed)
-            failure(failure) {
-                handleFailure(it)
-            }
+            failure(failure) { handleFailure(it) }
         }
     }
 

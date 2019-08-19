@@ -23,7 +23,6 @@ internal class NewCardFlow (
     private var cardApplication: CardApplication? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         AptoPlatform.applyToCard(CardProduct(id = cardProductId)) { startCardApplicationResult ->
             startCardApplicationResult.either({ onInitComplete(Either.Left(it)) }) { cardApplication ->
                 this.cardApplication = cardApplication

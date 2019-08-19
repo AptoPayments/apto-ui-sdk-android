@@ -11,6 +11,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 
 class OAuthVerifyFlowTest: AndroidTest() {
@@ -22,11 +24,15 @@ class OAuthVerifyFlowTest: AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+            })
+        }
     }
 
     @Test
     fun `should use the factory to instantiate OAuthVerifyFragmentInterface as first fragment`() {
-
         // Given
         val tag = "OAuthVerifyFragment"
         val fragmentDouble = OAuthVerifyFragmentDouble(mockDelegate).apply { this.TAG = tag }
@@ -43,7 +49,6 @@ class OAuthVerifyFlowTest: AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
 
         // Then
@@ -54,5 +59,4 @@ class OAuthVerifyFlowTest: AndroidTest() {
                 tokenId = oAuthAttempt.tokenId,
                 tag = tag)
     }
-
 }

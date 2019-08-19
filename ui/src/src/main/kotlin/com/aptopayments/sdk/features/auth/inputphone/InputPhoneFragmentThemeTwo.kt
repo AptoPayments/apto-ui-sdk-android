@@ -23,6 +23,7 @@ import com.aptopayments.sdk.utils.disableCountryPicker
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_phone_input_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
 
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
@@ -33,7 +34,7 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     override var delegate: InputPhoneContract.Delegate? = null
     private lateinit var validator: ValidInputListener
     private lateinit var aptoPhoneNumberWatcher: AptoPhoneNumberWatcher
-    private lateinit var viewModel: InputPhoneViewModel
+    private val viewModel: InputPhoneViewModel by viewModel()
     private lateinit var allowedCountriesList: List<Country>
 
     override fun layoutId() = R.layout.fragment_phone_input_theme_two
@@ -41,7 +42,6 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }
 
@@ -55,12 +55,9 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
         applyFontsAndColors()
         configureInputPhoneView()
         setupToolBar()
-
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
@@ -91,13 +88,11 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
         disableCountryPicker(allowedCountriesList.size == 1, country_code_picker)
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+    )
 
     override fun setupListeners() {
         super.setupListeners()
@@ -127,21 +122,17 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(enableNextButton, ::updateButtonState)
             observe(state, ::updateProgressState)
             observe(verificationData, ::updateVerificationState)
-            failure(failure) {
-                handleFailure(it)
-            }
+            failure(failure) { handleFailure(it) }
         }
     }
 
-    private fun updatePhoneNumberWatcher(countryCode: String?) {
-        countryCode?.let {
-            aptoPhoneNumberWatcher.countryCode = countryCode
-            et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
-        }
+    private fun updatePhoneNumberWatcher(countryCode: String?) = countryCode?.let {
+        aptoPhoneNumberWatcher.countryCode = countryCode
+        et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
     }
 
     private fun updateVerificationState(verification: Verification?) {
@@ -173,11 +164,10 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     }
 
     companion object {
-        fun newInstance(allowedCountriesList: List<Country>): InputPhoneFragmentThemeTwo =
-                InputPhoneFragmentThemeTwo().apply {
-                    val allowedCountries = listOrDefault(allowedCountriesList)
-                    this.arguments = Bundle().apply { putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountries as Serializable) }
-                }
+        fun newInstance(allowedCountriesList: List<Country>) = InputPhoneFragmentThemeTwo().apply {
+            val allowedCountries = listOrDefault(allowedCountriesList)
+            this.arguments = Bundle().apply { putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountries as Serializable) }
+        }
 
         private fun listOrDefault(allowedCountriesList: List<Country>): List<Country> {
             return if (allowedCountriesList.isNotEmpty()) allowedCountriesList else {

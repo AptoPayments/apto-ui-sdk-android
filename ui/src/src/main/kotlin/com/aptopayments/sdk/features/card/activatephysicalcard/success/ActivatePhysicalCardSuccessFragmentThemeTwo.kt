@@ -12,13 +12,17 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.remove
+import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card_success_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
@@ -26,7 +30,7 @@ private const val CARD_KEY = "CARD"
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), ActivatePhysicalCardSuccessContract.View {
 
-    private lateinit var mViewModel: ActivatePhysicalCardSuccessViewModel
+    private val viewModel: ActivatePhysicalCardSuccessViewModel by viewModel()
     private lateinit var card: Card
     override var delegate: ActivatePhysicalCardSuccessContract.Delegate? = null
 
@@ -38,11 +42,9 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(getPINFinished) { delegate?.getPinFinished() }
-            failure(failure) {
-                handleFailure(it)
-            }
+            failure(failure) { handleFailure(it) }
         }
     }
 
@@ -62,7 +64,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
 
     override fun onResume() {
         super.onResume()
-        mViewModel.viewResumed()
+        viewModel.viewResumed()
     }
 
     override fun onPresented() {
@@ -77,13 +79,11 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        context?.let {
-            tv_title.text = "manage_card.get_pin_nue.title".localized(it)
-            tv_description.text = "manage_card.get_pin_nue.explanation".localized(it)
-            continue_button.text = "manage_card.get_pin_nue.call_to_action.title".localized(it)
-            tv_footer.text = "manage_card.get_pin_nue.footer".localized(it)
-        }
+    private fun setupTexts() = context?.let {
+        tv_title.text = "manage_card.get_pin_nue.title".localized(it)
+        tv_description.text = "manage_card.get_pin_nue.explanation".localized(it)
+        continue_button.text = "manage_card.get_pin_nue.call_to_action.title".localized(it)
+        tv_footer.text = "manage_card.get_pin_nue.footer".localized(it)
     }
 
     private fun setupTheme() {
@@ -97,13 +97,11 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
         }
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Close(null)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Close(null)
+    )
 
     override fun setupListeners() {
         super.setupListeners()
@@ -116,7 +114,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
                     when (it) {
                         is FeatureType.Voip -> delegate?.onGetPinViaVoipClicked()
                         is FeatureType.Ivr -> activity?.let { activity ->
-                            mViewModel.getPinTapped(from = activity, phoneNumber = it.ivrPhone)
+                            viewModel.getPinTapped(from = activity, phoneNumber = it.ivrPhone)
                         }
                         is FeatureType.Api -> TODO() // Not supported yet
                         is FeatureType.Unknown -> activity?.let { activity ->
@@ -137,7 +135,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
         else tv_footer.remove()
     }
 
-    override fun viewLoaded() = mViewModel.viewLoaded()
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance(card: Card) = ActivatePhysicalCardSuccessFragmentThemeTwo().apply {

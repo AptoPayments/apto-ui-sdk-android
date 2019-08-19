@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.auth.verification
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
@@ -9,16 +10,13 @@ import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
 import com.aptopayments.sdk.utils.CountDown
-import javax.inject.Inject
 
 const val COUNTDOWN_TIME = 45
 
-internal class VerificationViewModel @Inject constructor(
+internal class VerificationViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel()
-{
+) : BaseViewModel() {
     var verification: MutableLiveData<Verification> = MutableLiveData()
     var pinEntryState: MutableLiveData<PINEntryState> = MutableLiveData()
     var resendButtonState: MutableLiveData<ResendButtonState> = MutableLiveData()

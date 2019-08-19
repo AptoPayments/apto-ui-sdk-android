@@ -1,16 +1,15 @@
 package com.aptopayments.sdk.features.oauth.verify
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.oauth.OAuthUserDataUpdate
 import com.aptopayments.core.data.user.*
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
-import javax.inject.Inject
 
-internal class OAuthVerifyViewModel @Inject constructor(
+internal class OAuthVerifyViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

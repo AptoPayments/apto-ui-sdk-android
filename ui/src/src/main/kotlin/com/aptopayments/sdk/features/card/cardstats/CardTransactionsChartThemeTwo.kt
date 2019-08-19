@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.card.cardstats
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
@@ -7,12 +8,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aptopayments.core.data.card.Money
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.stats.CategorySpending
-import com.aptopayments.core.data.stats.PieChartElement
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.MCC.Icon
 import com.aptopayments.core.extension.localized
@@ -28,14 +27,17 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_transactions_chart_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
+
+private var dataLoaded = false
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
         OnChartValueSelectedListener, CategoryListAdapter.Delegate {
 
-    private lateinit var viewModel: CardMonthlyStatsViewModel
+    private val viewModel: CardMonthlyStatsViewModel by viewModel()
     private lateinit var pieChart: AptoPieChart
     private lateinit var cardID: String
     private lateinit var date: LocalDate
@@ -49,7 +51,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     override fun layoutId(): Int = R.layout.fragment_transactions_chart_theme_two
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             failure(failure) { handleFailure(it) }
             observe(monthlySpendingMap) { updateChartData(it) }
         }
@@ -66,10 +68,11 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         super.onStart()
         if (date == LocalDate.MAX) return
         totalSpent = 0.0
-        showLoading()
+        if (!dataLoaded) showLoading()
         context?.let {
             viewModel.getMonthlySpending(it, cardID, date.monthToString(), date.yearToString()) {
-                hideLoading()
+                if (!dataLoaded) hideLoading()
+                dataLoaded = true
                 showViews()
             }
         }
@@ -100,6 +103,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         super.onViewCreated(view, savedInstanceState)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
         context?.let {
             tv_center_text_title.text = "stats.monthly_spending.graph.title".localized(it)
@@ -137,6 +141,11 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
                 drawPieChartEntries(calculatePieChartEntries(spendingList))
                 spendingList.first().spending?.currency
             }
+            val categorySpendingArrayList = ArrayList<CategoryListItem>()
+            spendingList.forEach { categorySpending ->
+                categorySpendingArrayList.add(CategoryListItem(categorySpending, false))
+            }
+            categoryListAdapter.categorySpendingList = categorySpendingArrayList
             tv_center_text_amount.text = Money(amount = totalSpent, currency = currency).toString()
         } ?: tv_no_transactions.show()
     }
@@ -205,6 +214,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         for (i in 0 until dataSet.colors.size) resetPieChartEntryColor(i)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onValueSelected(entry: Entry?, highlight: Highlight?) {
         if(entry == null || highlight == null || entry.data == null) return
         for (i in 0 until dataSet.colors.size) {
@@ -246,7 +256,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     private fun setupCategoryListRecyclerView() {
         context?.let { context ->
-            categoryListAdapter = CategoryListAdapter(this as LifecycleOwner, viewModel, date)
+            categoryListAdapter = CategoryListAdapter()
             categoryListAdapter.delegate = this
             rv_categories.apply {
                 layoutManager = LinearLayoutManager(context)

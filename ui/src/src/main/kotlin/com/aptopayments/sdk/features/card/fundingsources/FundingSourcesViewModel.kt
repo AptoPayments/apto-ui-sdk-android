@@ -1,15 +1,14 @@
 package com.aptopayments.sdk.features.card.fundingsources
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
-import javax.inject.Inject
 
-internal class FundingSourcesViewModel @Inject constructor(
+internal class FundingSourcesViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

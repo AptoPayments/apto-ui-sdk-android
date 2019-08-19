@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.card.waitlist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
@@ -10,11 +11,11 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
 import kotlinx.android.synthetic.main.fragment_content_presenter_theme_two.vw_content_presenter
 import kotlinx.android.synthetic.main.fragment_waitlist_theme_two.*
 import kotlinx.android.synthetic.main.view_native_content.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_ID_PARAMETER_KEY = "card_id"
@@ -23,7 +24,7 @@ private const val CARD_PRODUCT_PARAMETER_KEY = "card_product"
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View {
 
-    private lateinit var viewModel: WaitlistViewModel
+    private val viewModel: WaitlistViewModel by viewModel()
     private lateinit var cardId: String
     private lateinit var cardProduct: CardProduct
     override var delegate: WaitlistContract.Delegate? = null
@@ -47,7 +48,7 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(card) { handleCard(it) }
         }
     }
@@ -58,12 +59,11 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
         view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
     }
 
-    private fun setupTexts() {
-        context?.let {
-            tv_native_content_title.text = "wait_list.wait_list.title".localized(it)
-            tv_native_content_description_main.text = "wait_list.wait_list.description.main".localized(it)
-            tv_native_content_description_secondary.text = "wait_list.wait_list.description.secondary".localized(it)
-        }
+    @SuppressLint("SetTextI18n")
+    private fun setupTexts() = context?.let {
+        tv_native_content_title.text = "wait_list.wait_list.title".localized(it)
+        tv_native_content_description_main.text = "wait_list.wait_list.description.main".localized(it)
+        tv_native_content_description_secondary.text = "wait_list.wait_list.description.secondary".localized(it)
     }
 
     private fun showWaitlist() {

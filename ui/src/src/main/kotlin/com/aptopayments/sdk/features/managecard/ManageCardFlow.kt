@@ -13,7 +13,6 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatformProtocol
-import com.aptopayments.core.repository.UserSessionRepository
 import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
@@ -32,8 +31,8 @@ import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContra
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.SendEmailUtil
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val MANAGE_CARD_TAG = "ManageCardFragment"
 private const val TRANSACTION_DETAILS_TAG = "TransactionDetailsFragment"
@@ -53,8 +52,7 @@ internal class ManageCardFlow (
         ContentPresenterContract.Delegate, BiometricDialogContract.Delegate,
         TransactionDetailsContract.Delegate, WaitlistContract.Delegate {
 
-    @Inject lateinit var aptoPlatformProtocol: AptoPlatformProtocol
-    @Inject lateinit var userSessionRepository: UserSessionRepository
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     val manageCardFragment: ManageCardContract.View?
         get() = fragmentWithTag(MANAGE_CARD_TAG) as? ManageCardContract.View
@@ -64,7 +62,6 @@ internal class ManageCardFlow (
     private var onBiometricsAuthCancel: (() -> Unit)? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
             result.either({ onInitComplete(Either.Left(it)) }, { card ->
                 when(card.kycStatus) {
@@ -153,9 +150,7 @@ internal class ManageCardFlow (
     //
     // Funding Sources
     //
-    override fun onFundingSourceTapped(selectedBalanceID: String?) {
-        showFundingSourcesDialog(selectedBalanceID)
-    }
+    override fun onFundingSourceTapped(selectedBalanceID: String?) = showFundingSourcesDialog(selectedBalanceID)
 
     override fun onAddFundingSource(selectedBalanceID: String?) {
         popDialogFragmentWithTag(FUNDING_SOURCE_DIALOG_TAG)

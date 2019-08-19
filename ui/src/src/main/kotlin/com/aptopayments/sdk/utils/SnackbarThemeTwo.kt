@@ -9,15 +9,16 @@ import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 
 class SnackbarThemeTwo private constructor(
         parent: ViewGroup, content: View, contentViewCallback: ContentViewCallback
-): BaseTransientBottomBar<SnackbarThemeTwo>(parent, content, contentViewCallback) {
+) : BaseTransientBottomBar<SnackbarThemeTwo>(parent, content, contentViewCallback) {
 
-    private lateinit var title: TextView
-    private lateinit var message: TextView
+    private lateinit var titleTextView: TextView
+    private lateinit var messageTextView: TextView
     private lateinit var background: LinearLayout
 
     init {
@@ -25,12 +26,13 @@ class SnackbarThemeTwo private constructor(
         setupUI()
     }
 
-    fun setTitle(title: String) {
-        this.title.text = title
+    fun setTitle(title: String?) {
+        if (title != null) titleTextView.text = title
+        else titleTextView.remove()
     }
 
     fun setMessage(message: String) {
-        this.message.text = message
+        messageTextView.text = message
     }
 
     fun setBackgroundColor(backgroundColor: Int) {
@@ -38,15 +40,15 @@ class SnackbarThemeTwo private constructor(
     }
 
     private fun findAllViews(content: View) {
-        title = content.findViewById(R.id.tv_snackbar_title)
-        message = content.findViewById(R.id.tv_snackbar_text)
+        titleTextView = content.findViewById(R.id.tv_snackbar_title)
+        messageTextView = content.findViewById(R.id.tv_snackbar_text)
         background = content.findViewById(R.id.ll_snackbar_wrapper)
     }
 
     private fun setupUI() {
         with(themeManager()) {
-            customizeBannerTitle(title)
-            customizeBannerMessage(message)
+            customizeBannerTitle(titleTextView)
+            customizeBannerMessage(messageTextView)
         }
     }
 

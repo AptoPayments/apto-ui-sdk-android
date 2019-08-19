@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:text="@string/manage_card_no_transactions"
+        android:text="@string/manage_card_transaction_list_empty_case_title"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/_120sdp"
         android:visibility="invisible"/>

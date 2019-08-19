@@ -12,8 +12,8 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import org.json.JSONObject
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val COUNTRY_SELECTOR_TAG = "CountrySelectorFragment"
 
@@ -23,14 +23,13 @@ internal class CardProductSelectorFlow (
         val onFinish: (cardProductId: String) -> Unit
 ) : Flow(), CountrySelectorContract.Delegate {
 
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
-    @Inject lateinit var aptoPlatformProtocol: AptoPlatformProtocol
+    val analyticsManager: AnalyticsServiceContract by inject()
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     var countryCardProductMap: HashMap<String, ArrayList<String>?> = HashMap()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         aptoPlatformProtocol.fetchCardProducts { result ->
             result.either({ onInitComplete(Either.Left(it)) }, { cardProductList ->
                 when {

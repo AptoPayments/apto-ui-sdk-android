@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.oauth
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.oauth.OAuthAttempt
-import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -19,16 +18,15 @@ private const val WEB_BROWSER_TAG = "WebBrowserFragment"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthFlow(
-        var allowedBalanceType: AllowedBalanceType,
+        val config: OAuthConfig,
         var onBack: (Unit) -> Unit,
         var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow(), OAuthConnectContract.Delegate, WebBrowserContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.oauthConnectFragment(
                 uiTheme = UIConfig.uiTheme,
-                allowedBalanceType = allowedBalanceType,
+                config = config,
                 tag = OAUTH_CONNECT_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
@@ -47,9 +45,7 @@ internal class OAuthFlow(
     //
     // OAuthConnect
     //
-    override fun onBackFromOAuthConnect() {
-        onBack(Unit)
-    }
+    override fun onBackFromOAuthConnect() = onBack(Unit)
 
     override fun show(url: String) {
         val fragment = fragmentFactory.webBrowserFragment(url = url, tag = WEB_BROWSER_TAG)
@@ -57,9 +53,7 @@ internal class OAuthFlow(
         push(fragment = fragment as BaseFragment)
     }
 
-    override fun onOAuthSuccess(oauthAttempt: OAuthAttempt) {
-        onFinish(oauthAttempt)
-    }
+    override fun onOAuthSuccess(oauthAttempt: OAuthAttempt) = onFinish(oauthAttempt)
 
     //
     // WebBrowserContract handling
@@ -70,7 +64,5 @@ internal class OAuthFlow(
         (startFragment() as? OAuthConnectContract.View)?.reloadStatus()
     }
 
-    override fun shouldStopLoadingAndClose(url: String): Boolean {
-        return url.startsWith(OAUTH_FINISHED_URL, ignoreCase = true)
-    }
+    override fun shouldStopLoadingAndClose(url: String) = url.startsWith(OAUTH_FINISHED_URL, ignoreCase = true)
 }

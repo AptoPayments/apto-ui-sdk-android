@@ -11,6 +11,7 @@ import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.data.workflowaction.BalanceType
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import org.mockito.Mockito
 import java.net.URL
 
@@ -50,8 +51,12 @@ class TestDataProvider {
                 textPrimaryColor = 0,
                 textSecondaryColor = 0,
                 textTertiaryColor = 0,
-                textTopBarColor = 0,
+                textTopBarPrimaryColor = 0,
+                textTopBarSecondaryColor = 0,
                 textLinkColor = 0,
+                textLinkUnderlined = true,
+                textButtonColor = 0,
+                buttonCornerRadius = 0f,
                 uiPrimaryColor = 0,
                 uiSecondaryColor = 0,
                 uiTertiaryColor = 0,
@@ -60,6 +65,11 @@ class TestDataProvider {
                 uiNavigationPrimaryColor = 0,
                 uiNavigationSecondaryColor = 0,
                 textMessageColor = 0,
+                badgeBackgroundPositiveColor = 0,
+                badgeBackgroundNegativeColor = 0,
+                showToastTitle = true,
+                transactionDetailsCollapsable = true,
+                disclaimerBackgroundColor = 0,
                 uiStatusBarStyle = UIStatusBarStyle.LIGHT,
                 logoUrl = "",
                 uiTheme = UITheme.THEME_1
@@ -81,8 +91,12 @@ class TestDataProvider {
                                 textPrimaryColor = 0,
                                 textSecondaryColor = 0,
                                 textTertiaryColor = 0,
-                                textTopBarColor = 0,
+                                textTopBarPrimaryColor = 0,
+                                textTopBarSecondaryColor = 0,
                                 textLinkColor = 0,
+                                textLinkUnderlined = true,
+                                textButtonColor = 0,
+                                buttonCornerRadius = 0f,
                                 uiPrimaryColor = 0,
                                 uiSecondaryColor = 0,
                                 uiTertiaryColor = 0,
@@ -91,6 +105,11 @@ class TestDataProvider {
                                 uiNavigationPrimaryColor = 0,
                                 uiNavigationSecondaryColor = 0,
                                 textMessageColor = 0,
+                                badgeBackgroundPositiveColor = 0,
+                                badgeBackgroundNegativeColor = 0,
+                                showToastTitle = true,
+                                transactionDetailsCollapsable = true,
+                                disclaimerBackgroundColor = 0,
                                 uiStatusBarStyle = UIStatusBarStyle.LIGHT,
                                 logoUrl = "",
                                 uiTheme = UITheme.THEME_1
@@ -101,6 +120,14 @@ class TestDataProvider {
                         trackerAccessToken = "",
                         isTrackerActive = false,
                         authCredential = AuthCredential.EMAIL)
+        )
+
+        fun provideOauthConfig() = OAuthConfig(
+                title = "title",
+                explanation = "explanation",
+                callToAction = "callToAction",
+                newUserAction = "newUserAction",
+                allowedBalanceType = provideAllowedBalanceType()
         )
 
         fun provideAllowedBalanceType() = AllowedBalanceType(

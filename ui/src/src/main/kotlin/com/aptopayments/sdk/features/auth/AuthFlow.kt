@@ -11,7 +11,6 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.UserSessionRepository
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
@@ -21,8 +20,9 @@ import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val INPUT_PHONE_TAG = "InputPhoneFragment"
 private const val PHONE_VERIFICATION_TAG = "PhoneVerificationFragment"
@@ -30,27 +30,21 @@ private const val EMAIL_VERIFICATION_TAG = "EmailVerificationFragment"
 private const val BIRTHDATE_VERIFICATION_TAG = "BirthdateVerificationFragment"
 private const val INPUT_EMAIL_TAG = "InputEmailFragment"
 
+private val AUTH_TYPE_EMAIL = "email"
+private val AUTH_TYPE_PHONE = "phone"
+
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AuthFlow (
         val contextConfiguration: ContextConfiguration,
         var onBack: (Unit) -> Unit,
         var onFinish: (userToken: String) -> Unit
-) : Flow(),
-        InputPhoneContract.Delegate,
-        InputEmailContract.Delegate,
-        PhoneVerificationContract.Delegate,
-        EmailVerificationContract.Delegate,
-        BirthdateVerificationContract.Delegate {
+) : Flow(), InputPhoneContract.Delegate, InputEmailContract.Delegate, PhoneVerificationContract.Delegate,
+        EmailVerificationContract.Delegate, BirthdateVerificationContract.Delegate, KoinComponent {
 
-    @Inject lateinit var userSessionRepository: UserSessionRepository
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
-
+    val analyticsManager: AnalyticsServiceContract by inject()
     private var primaryVerification: Verification? = null
-    private val AUTH_TYPE_EMAIL = "email"
-    private val AUTH_TYPE_PHONE = "phone"
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         when (contextConfiguration.projectConfiguration.authCredential) {
             AuthCredential.PHONE -> {
                 val fragment = fragmentFactory.inputPhoneFragment(
@@ -213,7 +207,6 @@ internal class AuthFlow (
             hideLoading()
             result.either(::handleFailure) { user ->
                 analyticsManager.createUser(user.userId)
-                userSessionRepository.userToken = user.token
                 onFinish(user.token)
             }
         }
@@ -225,7 +218,6 @@ internal class AuthFlow (
             hideLoading()
             result.either(::handleFailure) { user ->
                 analyticsManager.loginUser(user.userId)
-                userSessionRepository.userToken = user.token
                 onFinish(user.token)
             }
         }

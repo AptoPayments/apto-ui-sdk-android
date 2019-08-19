@@ -10,6 +10,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 
 class VoipFlowTest : AndroidTest() {
@@ -24,6 +26,11 @@ class VoipFlowTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+            })
+        }
         sut = VoipFlow(cardId = cardId, onBack = {}, onFinish = {}, action = mockAction)
     }
 
@@ -36,7 +43,6 @@ class VoipFlowTest : AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
 
         // Then

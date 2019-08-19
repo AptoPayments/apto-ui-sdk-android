@@ -11,9 +11,8 @@ import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
-internal class NotificationPreferencesViewModel @Inject constructor() : BaseViewModel() {
+internal class NotificationPreferencesViewModel : BaseViewModel() {
 
     var secondaryChannel: MutableLiveData<NotificationChannel> = MutableLiveData()
     var notificationPreferencesList: MutableLiveData<List<NotificationPreferenceLineItem>> = MutableLiveData()

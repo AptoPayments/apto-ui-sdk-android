@@ -9,11 +9,11 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.remove
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import kotlinx.android.synthetic.main.fragment_disclaimer_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CONTENT_KEY = "CONTENT"
@@ -22,7 +22,7 @@ private const val CONTENT_KEY = "CONTENT"
 internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.View,
         ContentPresenterContract.ViewActions {
     private lateinit var content: Content
-    private lateinit var viewModel: DisclaimerViewModel
+    private val viewModel: DisclaimerViewModel by viewModel()
 
     override var delegate: DisclaimerContract.Delegate? = null
 
@@ -34,7 +34,6 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {}
     }
 
     override fun setupUI() {
@@ -56,7 +55,7 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
     }
 
     private fun setUpTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
+        view?.setBackgroundColor(UIConfig.disclaimerBackgroundColor)
         with(themeManager()) {
             customizeLargeTitleLabel(tv_disclaimer_title)
             customizeSubmitButton(tv_accept_disclaimer)
@@ -65,12 +64,10 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
     }
 
     @SuppressLint("SetTextI18n")
-    private fun localizeStrings() {
-        context?.let {
-            tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized(it)
-            tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized(it)
-            tv_disclaimer_title.text = "disclaimer_disclaimer_title".localized(it)
-        }
+    private fun localizeStrings() = context?.let {
+        tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized(it)
+        tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized(it)
+        tv_disclaimer_title.text = "disclaimer_disclaimer_title".localized(it)
     }
 
     override fun setupListeners() {
@@ -102,9 +99,7 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
         tv_accept_disclaimer.isEnabled = true
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance(content: Content) = DisclaimerFragmentThemeTwo().apply {

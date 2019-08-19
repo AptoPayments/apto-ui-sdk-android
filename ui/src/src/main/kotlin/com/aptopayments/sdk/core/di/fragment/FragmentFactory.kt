@@ -41,6 +41,7 @@ import com.aptopayments.sdk.features.kyc.KycStatusContract
 import com.aptopayments.sdk.features.maintenance.MaintenanceContract
 import com.aptopayments.sdk.features.managecard.ManageCardContract
 import com.aptopayments.sdk.features.nonetwork.NoNetworkContract
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
@@ -101,7 +102,7 @@ internal interface FragmentFactory {
     ): DisclaimerContract.View
     fun oauthConnectFragment(
             uiTheme: UITheme,
-            allowedBalanceType: AllowedBalanceType,
+            config: OAuthConfig,
             tag: String
     ): OAuthConnectContract.View
     fun contentPresenterFragment(

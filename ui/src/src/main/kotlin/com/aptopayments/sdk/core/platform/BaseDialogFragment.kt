@@ -8,27 +8,19 @@ import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.UserSessionRepository
-import com.aptopayments.sdk.core.di.ApplicationComponent
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.utils.MessageBanner
+import org.koin.android.ext.android.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val TAG_KEY = "APTO_TAG_KEY"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal abstract class BaseDialogFragment : DialogFragment() {
 
-    val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
-        AptoPlatform.applicationComponent
-    }
-
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject lateinit var userSessionRepository: UserSessionRepository
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     lateinit var TAG: String
 
     abstract fun layoutId(): Int
@@ -46,7 +38,7 @@ internal abstract class BaseDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = LayoutInflater.from(activity!!).inflate(layoutId(), null)
         if (savedInstanceState != null) {
-            TAG = savedInstanceState.getString(TAG_KEY)
+            TAG = savedInstanceState.getString(TAG_KEY)!!
         }
         return AlertDialog.Builder(activity!!).setView(dialogView).create()
     }
@@ -75,7 +67,7 @@ internal abstract class BaseDialogFragment : DialogFragment() {
                 context?.let { notify("failure_server_error".localized(it)) }
             }
             is Failure.UserSessionExpired -> {
-                userSessionRepository.clearUserSession()
+                aptoPlatformProtocol.logout()
                 context?.let { notify("session_expired_error".localized(it)) }
             }
         }

@@ -13,7 +13,6 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -22,6 +21,7 @@ import com.aptopayments.sdk.utils.ValidInputListener
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val PIN_CHARACTERS = 6
@@ -30,7 +30,7 @@ private const val CARD_KEY = "CARD"
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePhysicalCardContract.View {
 
-    private lateinit var mViewModel: ActivatePhysicalCardViewModel
+    private val viewModel: ActivatePhysicalCardViewModel by viewModel()
     private lateinit var card: Card
     override var delegate: ActivatePhysicalCardContract.Delegate? = null
 
@@ -42,10 +42,8 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
-            failure(failure) {
-                handleFailure(it)
-            }
+        viewModel.apply {
+            failure(failure) { handleFailure(it) }
         }
     }
 
@@ -67,11 +65,9 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        context?.let {
-            tv_physical_activation_title.text = "manage_card.activate_physical_card_overlay.title".localized(it)
-            tv_physical_activation_explanation.text = "manage_card.activate_physical_card_overlay.message".localized(it)
-        }
+    private fun setupTexts() = context?.let {
+        tv_physical_activation_title.text = "manage_card.activate_physical_card_overlay.title".localized(it)
+        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_overlay.message".localized(it)
     }
 
     private fun setupTheme() {
@@ -83,13 +79,11 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
         }
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+    )
 
     override fun setupListeners() {
         super.setupListeners()
@@ -107,7 +101,7 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     private fun activateCard() {
         hideKeyboard()
         showLoading()
-        mViewModel.activatePhysicalCard(card.accountID, apto_pin_view.text.toString()) { result ->
+        viewModel.activatePhysicalCard(card.accountID, apto_pin_view.text.toString()) { result ->
             hideLoading()
             when (result?.result) {
                 ActivatePhysicalCardResultType.ACTIVATED -> delegate?.onPhysicalCardActivated()
@@ -116,19 +110,15 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
         }
     }
 
-    private fun showError(result: ActivatePhysicalCardResult) {
-        result.errorCode?.toInt().let { errorCode ->
-            context?.let { context ->
-                val title = "banner_error_title".localized(context)
-                val message = Failure.ServerError(errorCode).errorMessage(context)
-                notify(title = title, message = message)
-            }
+    private fun showError(result: ActivatePhysicalCardResult) = result.errorCode?.toInt().let { errorCode ->
+        context?.let { context ->
+            val title = "banner_error_title".localized(context)
+            val message = Failure.ServerError(errorCode).errorMessage(context)
+            notify(title = title, message = message)
         }
     }
 
-    override fun viewLoaded() {
-        mViewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance(card: Card) = ActivatePhysicalCardFragmentThemeTwo().apply {

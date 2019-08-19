@@ -10,6 +10,7 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragmentThemeTwo
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
 import kotlin.test.assertEquals
 
 class FragmentFactoryTest : AndroidTest() {
@@ -19,6 +20,7 @@ class FragmentFactoryTest : AndroidTest() {
     @Before
     override fun setUp() {
         super.setUp()
+        startKoin {}
         sut = FragmentFactoryImpl()
     }
 

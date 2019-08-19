@@ -8,21 +8,19 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
-import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.di.ApplicationComponent
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.core.extension.inTransaction
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.BaseFragment
-import com.aptopayments.sdk.core.platform.applicationComponent
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.ViewUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.lang.ref.WeakReference
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal interface FlowPresentable {
@@ -34,10 +32,9 @@ internal interface FlowPresentable {
 }
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
-internal abstract class Flow : FlowPresentable {
+internal abstract class Flow : FlowPresentable, KoinComponent {
 
-    @Inject
-    lateinit var fragmentFactory: FragmentFactory
+    val fragmentFactory: FragmentFactory by inject()
 
     private var fragmentContainer: Int = 0
     private var activity: AppCompatActivity? = null
@@ -105,7 +102,7 @@ internal abstract class Flow : FlowPresentable {
 
     override fun removeFromStack(animated: Boolean) {
         childItems.forEach { it.removeFromStack(animated) }
-        childItems.filter { it is FragmentWrapper }.forEach { childItem ->
+        childItems.filterIsInstance<FragmentWrapper>().forEach { childItem ->
             childItem.lastFragment()?.let {
                 fragmentManager?.inTransaction {
                     if (animated) setTransition(TRANSIT_FRAGMENT_CLOSE)
@@ -230,11 +227,6 @@ internal abstract class Flow : FlowPresentable {
         if (fragmentContainer != 0) return fragmentContainer
         parentFlow.get()?.let { return it.fragmentContainer() }
         return 0
-    }
-
-    @VisibleForTesting(otherwise = Modifier.PROTECTED)
-    internal val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        AptoPlatform.applicationComponent
     }
 
     private fun updateChildFragmentManager(manager: FragmentManager?) {

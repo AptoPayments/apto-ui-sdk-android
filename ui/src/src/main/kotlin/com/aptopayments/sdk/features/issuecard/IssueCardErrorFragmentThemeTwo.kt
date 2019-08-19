@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.issuecard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.RelativeLayout
@@ -15,6 +16,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
 import kotlinx.android.synthetic.main.fragment_issue_card_error_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val ERROR_CODE_KEY = "ERROR_CODE"
@@ -25,18 +27,16 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     override fun layoutId() = R.layout.fragment_issue_card_error_theme_two
     private var errorAsset: String? = null
     private var errorCode: Int? = null
-    private lateinit var viewModel: IssueCardViewModel
+    private val viewModel: IssueCardViewModel by viewModel()
     override var delegate: IssueCardErrorContract.Delegate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         errorCode = arguments?.getInt(ERROR_CODE_KEY)
         errorAsset = arguments?.getString(ERROR_ASSET_KEY)
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {}
     }
 
     override fun setupUI() {
@@ -56,7 +56,10 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
         with (themeManager()) {
             customizeLargeTitleLabel(tv_issue_card_error_title)
             customizeRegularTextLabel(tv_description)
-            customizeFormTextLink(tv_secondary_cta)
+            context?.let { context ->
+                val title = "issue_card.issue_card.error_insufficient_funds.secondary_cta".localized(context)
+                customizeHtml(tv_secondary_cta, StringUtils.parseHtmlLinks(title))
+            }
             customizeSubmitButton(tv_primary_cta)
         }
         tv_secondary_cta.movementMethod = LinkMovementMethod.getInstance()
@@ -70,25 +73,21 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
         }
     }
 
-    private fun showInsufficientFundsError() {
-        context?.let {
-            showOrRemoveErrorAsset()
-            tv_issue_card_error_title.text = "issue_card.issue_card.error_insufficient_funds.title".localized(it)
-            tv_description.text = "issue_card.issue_card.error_insufficient_funds.description".localized(it)
-            val title = "issue_card.issue_card.error_insufficient_funds.secondary_cta".localized(it)
-            tv_secondary_cta.text = StringUtils.parseHtmlLinks(title)
-            tv_primary_cta.text = "issue_card.issue_card.error_insufficient_funds.primary_cta".localized(it)
-        }
+    @SuppressLint("SetTextI18n")
+    private fun showInsufficientFundsError() = context?.let {
+        showOrRemoveErrorAsset()
+        tv_issue_card_error_title.text = "issue_card.issue_card.error_insufficient_funds.title".localized(it)
+        tv_description.text = "issue_card.issue_card.error_insufficient_funds.description".localized(it)
+        tv_primary_cta.text = "issue_card.issue_card.error_insufficient_funds.primary_cta".localized(it)
     }
 
-    private fun showGenericError() {
-        context?.let {
-            showOrRemoveErrorAsset()
-            tv_issue_card_error_title.text = "issue_card.issue_card.generic_error.title".localized(it)
-            tv_description.text = "issue_card.issue_card.generic_error.description".localized(it)
-            tv_secondary_cta.remove()
-            tv_primary_cta.text = "issue_card.issue_card.generic_error.primary_cta".localized(it)
-        }
+    @SuppressLint("SetTextI18n")
+    private fun showGenericError() = context?.let {
+        showOrRemoveErrorAsset()
+        tv_issue_card_error_title.text = "issue_card.issue_card.generic_error.title".localized(it)
+        tv_description.text = "issue_card.issue_card.generic_error.description".localized(it)
+        tv_secondary_cta.remove()
+        tv_primary_cta.text = "issue_card.issue_card.generic_error.primary_cta".localized(it)
     }
 
     private fun showOrRemoveErrorAsset() {
@@ -101,9 +100,7 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
         }
     }
 
-    override fun viewLoaded() {
-        viewModel.trackErrorCode(errorCode)
-    }
+    override fun viewLoaded() = viewModel.trackErrorCode(errorCode)
 
     companion object {
         fun newInstance(errorCode: Int?, errorAsset: String?) = IssueCardErrorFragmentThemeTwo().apply {

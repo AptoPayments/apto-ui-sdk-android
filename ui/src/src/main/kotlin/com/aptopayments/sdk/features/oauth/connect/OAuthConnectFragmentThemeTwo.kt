@@ -13,31 +13,44 @@ import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_connect_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 import java.net.URL
 
+private const val TITLE_KEY = "TITLE"
+private const val EXPLANATION_KEY = "EXPLANATION"
+private const val CALL_TO_ACTION_KEY = "CALL_TO_ACTION"
+private const val NEW_USER_ACTION_KEY = "NEW_USER_ACTION"
 private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_connect_theme_two
-    private lateinit var viewModel: OAuthConnectViewModel
+    private val viewModel: OAuthConnectViewModel by viewModel()
     override var delegate: OAuthConnectContract.Delegate? = null
-    var allowedBalanceType: AllowedBalanceType? = null
+    private lateinit var title: String
+    private lateinit var explanation: String
+    private lateinit var callToAction: String
+    private lateinit var newUserAction: String
+    private lateinit var allowedBalanceType: AllowedBalanceType
     private var oauthAttempt: OAuthAttempt? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        title = arguments!![TITLE_KEY] as String
+        explanation = arguments!![EXPLANATION_KEY] as String
+        callToAction = arguments!![CALL_TO_ACTION_KEY] as String
+        newUserAction = arguments!![NEW_USER_ACTION_KEY] as String
         allowedBalanceType = arguments!![ALLOWED_BALANCE_TYPE_KEY] as AllowedBalanceType
     }
 
@@ -47,10 +60,8 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
-            failure(failure) {
-                handleFailure(it)
-            }
+        viewModel.apply {
+            failure(failure) { handleFailure(it) }
         }
     }
 
@@ -69,9 +80,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         reloadStatus()
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     override fun setupListeners() {
         super.setupListeners()
@@ -88,23 +97,17 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         }
     }
 
-    private fun setupToolbar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
-    }
+    private fun setupToolbar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+    )
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        context?.let {
-            tv_coinbase_header.text = "select_balance_store.login.title".localized(it)
-            tv_coinbase_info.text = "select_balance_store.login.explanation".localized(it)
-            tv_submit_bttn.text = "select_balance_store.login.call_to_action.title".localized(it)
-            val title = "select_balance_store_login_new_user_title".localized(it)
-            tv_new_user.text = StringUtils.parseHtmlLinks(title)
-        }
+    private fun setupTexts() = context?.let {
+        tv_coinbase_header.text = title.localized(it)
+        tv_coinbase_info.text = explanation.localized(it)
+        tv_submit_bttn.text = callToAction.localized(it)
     }
 
     private fun setupTheme() {
@@ -114,7 +117,9 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
             customizeLargeTitleLabel(tv_coinbase_header)
             customizeRegularTextLabel(tv_coinbase_info)
             customizeSubmitButton(tv_submit_bttn)
-            customizeFormTextLink(tv_new_user)
+            context?.let { context ->
+                customizeHtml(tv_new_user, StringUtils.parseHtmlLinks(newUserAction.localized(context)))
+            }
         }
         tv_new_user.movementMethod = LinkMovementMethod.getInstance()
     }
@@ -142,8 +147,14 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     companion object {
-        fun newInstance(allowedBalanceType: AllowedBalanceType) = OAuthConnectFragmentThemeTwo().apply {
-            this.arguments = Bundle().apply { putSerializable(ALLOWED_BALANCE_TYPE_KEY, allowedBalanceType) }
+        fun newInstance(config: OAuthConfig) = OAuthConnectFragmentThemeTwo().apply {
+            this.arguments = Bundle().apply {
+                putSerializable(TITLE_KEY, config.title)
+                putSerializable(EXPLANATION_KEY, config.explanation)
+                putSerializable(CALL_TO_ACTION_KEY, config.callToAction)
+                putSerializable(NEW_USER_ACTION_KEY, config.newUserAction)
+                putSerializable(ALLOWED_BALANCE_TYPE_KEY, config.allowedBalanceType)
+            }
         }
     }
 }

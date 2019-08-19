@@ -2,17 +2,16 @@ package com.aptopayments.sdk.features.voip
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
 import org.json.JSONObject
 import java.util.*
-import javax.inject.Inject
 import kotlin.concurrent.timer
 
-internal class VoipViewModel @Inject constructor(
+internal class VoipViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract,
         private val voipHandler: VoipContract.Handler
 ) : BaseViewModel() {

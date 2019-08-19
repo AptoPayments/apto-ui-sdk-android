@@ -1,6 +1,9 @@
 package com.aptopayments.sdk.core.platform.theme
 
 import android.content.Context
+import android.text.Spannable
+import android.text.Spanned
+import android.text.style.CharacterStyle
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Switch
@@ -27,6 +30,7 @@ interface ThemeManager {
     fun customizeFooterLabel(textView: TextView)
     fun customizeErrorLabel(textView: TextView)
     fun customizeFormTextLink(textView: TextView)
+    fun customizeHtml(textView: TextView, html: Spanned)
     fun customizeContentPlainText(textView: TextView)
     fun customizeContentPlainInvertedText(textView: TextView)
     fun customizeMainItem(textView: TextView)
@@ -37,7 +41,7 @@ interface ThemeManager {
     fun customizeSectionOptionDescription(textView: TextView)
     fun customizeSectionOptionIcon(imageView: ImageView)
     fun customizeSwitch(switch: Switch)
-    fun customizeStarredSectionTitle(textView: TextView, @ColorInt textColor: Int = UIConfig.textTopBarColor)
+    fun customizeStarredSectionTitle(textView: TextView, @ColorInt textColor: Int = UIConfig.textTopBarSecondaryColor)
     fun customizeAmountBig(textView: TextView)
     fun customizeAmountMedium(textView: TextView)
     fun customizeAmountSmall(textView: TextView)
@@ -55,9 +59,13 @@ interface ThemeManager {
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
 }
 
-fun themeManager(): ThemeManager {
+internal fun themeManager(): ThemeManager {
     return when (UIConfig.uiTheme) {
         UITheme.THEME_1 -> ThemeOneManager
         UITheme.THEME_2 -> ThemeTwoManager
     }
+}
+
+internal fun applyStyle(style: CharacterStyle, spannable: Spannable, start: Int, end: Int) {
+    spannable.setSpan(style, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 }

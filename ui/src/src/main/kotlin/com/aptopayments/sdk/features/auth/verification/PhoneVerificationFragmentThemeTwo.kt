@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.auth.verification
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -24,6 +23,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.i18n.phonenumbers.NumberParseException
 import kotlinx.android.synthetic.main.fragment_verification_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val VERIFICATION_BUNDLE = "verificationBundle"
@@ -33,7 +33,7 @@ private const val PIN_CHARACTERS = 6
 internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerificationContract.View {
 
     override var delegate: PhoneVerificationContract.Delegate? = null
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var mViewModel: VerificationViewModel
+    @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: VerificationViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var verification: Verification
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var phoneNumber: String
 
@@ -41,7 +41,6 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         phoneNumber = verification.verificationDataPoint!!
     }
@@ -53,11 +52,11 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     }
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
             observe(resendButtonState, ::handleResendButtonState)
             failure(failure) { handleFailure(it) } }
-        mViewModel.verification.postValue(verification)
+        viewModel.verification.postValue(verification)
     }
 
     override fun setupUI() {
@@ -65,9 +64,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
         setupToolBar()
     }
 
-    override fun viewLoaded() {
-        mViewModel.viewLoaded(DataPoint.Type.PHONE)
-    }
+    override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.PHONE)
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
@@ -79,25 +76,22 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
             tv_expired_pin_label.text = "auth.verify_phone.expired_pin.text".localized(it)
         }
         view!!.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        tv_resend_bttn.paintFlags = tv_resend_bttn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         with(themeManager()){
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_verification_code_title)
             customizeFormLabel(tv_verification_code_header)
-            customizeFooterLabel(tv_resend_bttn)
+            customizeFormTextLink(tv_resend_bttn)
             customizeFooterLabel(tv_resend_label)
             customizeFooterLabel(tv_resend_countdown_label)
             customizeErrorLabel(tv_expired_pin_label)
         }
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+    )
 
     override fun setupListeners() {
         super.setupListeners()
@@ -113,7 +107,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     private fun resendVerification() {
         showLoading()
         hideKeyboard()
-        mViewModel.restartVerification {
+        viewModel.restartVerification {
             hideLoading()
             context?.let { context ->
                 notify("auth.verify_phone.resent.message".localized(context), MessageBanner.MessageType.HEADS_UP)
@@ -125,7 +119,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     private fun finishVerification() {
         showLoading()
         hideKeyboard()
-        mViewModel.finishVerification(apto_pin_view.text.toString()) { result ->
+        viewModel.finishVerification(apto_pin_view.text.toString()) { result ->
             hideLoading()
             result.either(::handleFailure) { verification ->
                 when (verification.status) {
@@ -170,7 +164,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     private fun handleResendButtonState(newState: ResendButtonState?) {
         newState?.let { state ->
-            when(state) {
+            when (state) {
                 is ResendButtonState.Enabled -> {
                     tv_resend_bttn.show()
                     tv_resend_countdown_label.hide()

@@ -10,6 +10,7 @@ import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -22,6 +23,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
@@ -48,9 +51,13 @@ class ManageCardFlowTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+                single<AptoPlatformProtocol> { mockAptoPlatform }
+            })
+        }
         sut = ManageCardFlow(cardId = cardId, contextConfiguration = mockConfig, onClose = {})
-        sut.fragmentFactory = mockFragmentFactory
-        sut.aptoPlatformProtocol = mockAptoPlatform
     }
 
     @Test

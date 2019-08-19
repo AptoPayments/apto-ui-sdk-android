@@ -8,9 +8,11 @@ import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.cardproductselector.countryselector.CountrySelectorFragmentDouble
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
@@ -20,6 +22,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Spy
@@ -39,20 +43,25 @@ class CardProductSelectorFlowTest: AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+                single<AnalyticsServiceContract> { analyticsManager }
+                single<AptoPlatformProtocol> { mockAptoPlatform }
+            })
+        }
         val mockCardProducts = ArrayList<CardProductSummary>()
         mockCardProducts.add(mock())
         mockCardProducts.add(mock())
         sut = CardProductSelectorFlow(onBack = {}, onFinish = {})
         Mockito.`when`(mockAptoPlatform.fetchCardProducts(TestDataProvider.anyObject())).thenAnswer { invocation ->
-            (invocation.arguments[0] as (Either<Failure, List<CardProductSummary>>)->Unit).invoke(Either.Right(mockCardProducts))
+            (invocation.arguments[0] as (Either<Failure, List<CardProductSummary>>) -> Unit)
+                    .invoke(Either.Right(mockCardProducts))
         }
-        sut.analyticsManager = analyticsManager
-        sut.aptoPlatformProtocol = mockAptoPlatform
     }
 
     @Test
     fun `should use the factory to instantiate CountrySelectorFragment as first fragment`() {
-
         // Given
         val tag = "CountrySelectorFragment"
         val fragmentDouble = CountrySelectorFragmentDouble(mockDelegate).apply { this.TAG = tag }
@@ -64,7 +73,6 @@ class CardProductSelectorFlowTest: AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
 
         // Then

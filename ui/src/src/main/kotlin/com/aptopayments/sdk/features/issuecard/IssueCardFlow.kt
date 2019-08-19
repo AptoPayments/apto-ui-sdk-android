@@ -28,7 +28,6 @@ internal class IssueCardFlow (
         get() = fragmentWithTag(ISSUE_CARD_TAG) as? IssueCardContract.View
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.issueCardFragment(
                 uiTheme = UIConfig.uiTheme,
                 cardApplicationId = cardApplicationId,
@@ -62,9 +61,7 @@ internal class IssueCardFlow (
         issueCardFragment?.issueCard()
     }
 
-    override fun onCardIssuedFailed(errorCode: Int?) {
-        presentIssueCardError(errorCode)
-    }
+    override fun onCardIssuedFailed(errorCode: Int?) = presentIssueCardError(errorCode)
 
     override fun onCardIssuedSucceeded(card: Card) {
         onFinish(card.accountID)

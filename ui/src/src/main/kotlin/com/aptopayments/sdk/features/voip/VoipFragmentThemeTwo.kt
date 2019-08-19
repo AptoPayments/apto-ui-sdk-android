@@ -19,6 +19,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.fragment_voip_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_ID_KEY = "CARD_ID"
@@ -28,13 +29,12 @@ private const val ACTION_KEY = "ACTION"
 internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, KeyboardView.OnKeyboardActionListener {
 
     override var delegate: VoipContract.Delegate? = null
-    private lateinit var viewModel: VoipViewModel
+    private val viewModel: VoipViewModel by viewModel()
     private lateinit var cardId: String
     private lateinit var action: Action
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         cardId = arguments!![CARD_ID_KEY] as String
         action = arguments!![ACTION_KEY] as Action
     }
@@ -66,7 +66,7 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
     override fun layoutId(): Int = R.layout.fragment_voip_theme_two
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observeNullable(callState) { callStateChanged(it) }
             observeNullable(elapsedTime) { updateElapsedTime(it) }
             failure(failure) { handleFailure(it) }

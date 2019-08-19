@@ -2,22 +2,21 @@ package com.aptopayments.sdk.features.card.transactionlist
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
+import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.repository.transaction.TransactionListFilters
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.sdk.features.managecard.TransactionListItem
-import com.aptopayments.core.repository.transaction.TransactionListFilters
 import org.threeten.bp.LocalDate
 import java.text.SimpleDateFormat
-import javax.inject.Inject
 
 private const val ROWS_TO_RETRIEVE = 20
 
-internal class TransactionListViewModel @Inject constructor(
+internal class TransactionListViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
     private var lastTransactionId: String? = null

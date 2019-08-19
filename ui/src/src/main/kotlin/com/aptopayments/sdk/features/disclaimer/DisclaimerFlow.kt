@@ -8,13 +8,13 @@ import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationShow
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.UserSessionRepository
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import org.json.JSONObject
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val DISCLAIMER_TAG = "DisclaimerFragment"
 
@@ -26,14 +26,12 @@ internal class DisclaimerFlow (
         private var cardApplicationId: String,
         var onBack: (Unit) -> Unit,
         var onAccept: (Unit) -> Unit
-) : Flow(), DisclaimerContract.Delegate
-{
+) : Flow(), DisclaimerContract.Delegate {
 
-    @Inject lateinit var userSessionRepository: UserSessionRepository
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+    val analyticsManager: AnalyticsServiceContract by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val content = actionConfiguration.content
         val fragment = fragmentFactory.disclaimerFragment(
                 UIConfig.uiTheme,
@@ -65,7 +63,7 @@ internal class DisclaimerFlow (
         analyticsManager.track(Event.DisclaimerReject,  JSONObject().put("action_id", workflowAction.actionId))
         AptoPlatform.cancelCardApplication(cardApplicationId) { result ->
             result.either(::handleFailure) {
-                userSessionRepository.clearUserSession()
+                aptoPlatformProtocol.logout()
                 onBack(Unit)
             }
         }

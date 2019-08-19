@@ -17,7 +17,6 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -26,20 +25,16 @@ import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_input_theme_one.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
 internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.View {
 
     override var delegate: InputEmailContract.Delegate? = null
-    private lateinit var viewModel: InputEmailViewModel
+    private val viewModel: InputEmailViewModel by viewModel()
     private var menu: Menu? = null
 
     override fun layoutId() = R.layout.fragment_email_input_theme_one
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        appComponent.inject(this)
-    }
 
     override fun onPresented() {
         delegate?.configureStatusBar()
@@ -57,13 +52,11 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
         }
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     private fun applyFontsAndColors() {
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarColor)
+        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeFormLabel(tv_email_label)
@@ -75,7 +68,7 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
                 title = context?.let { "auth_input_email_title".localized(it) },
-                backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.iconTertiaryColor)
+                backButtonMode = BaseActivity.BackButtonMode.Back(null)
         )
         context?.let { styleMenuItem(it) }
     }
@@ -99,18 +92,20 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
         nextButtonEnabled?.let {
             val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
             menu?.findItem(R.id.menu_toolbar_next_button)?.isEnabled = it
-            if (it) { tvNext.setTextColor(UIConfig.textTopBarColor) } else { tvNext.setTextColor(UIConfig.disabledTextTopBarColor) }
+            if (it) {
+                tvNext.setTextColor(UIConfig.textTopBarPrimaryColor)
+            } else {
+                tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun styleMenuItem(context: Context) {
-        tb_llsdk_toolbar.post {
-            val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
-            themeManager().customizeMenuItem(tvNext)
-            tvNext.text = "toolbar_next_button_label".localized(context)
-            tvNext.setTextColor(UIConfig.disabledTextTopBarColor)
-        }
+    private fun styleMenuItem(context: Context) = tb_llsdk_toolbar.post {
+        val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
+        themeManager().customizeMenuItem(tvNext)
+        tvNext.text = "toolbar_next_button_label".localized(context)
+        tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,7 +125,7 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(enableNextButton, ::updateNextButtonState)
             observe(state, ::updateProgressState)
             observe(verificationData, ::updateVerificationState)

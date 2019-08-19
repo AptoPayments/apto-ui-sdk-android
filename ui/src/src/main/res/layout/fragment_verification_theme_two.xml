@@ -85,7 +85,10 @@
 
                 <TextView
                     android:id="@+id/tv_resend_bttn"
-                    style="@style/ThemeTwo.TextLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/llsdk_medium_margin"
+                    android:layout_marginRight="@dimen/llsdk_medium_margin"
                     android:layout_below="@+id/tv_resend_label"
                     android:padding="@dimen/_1sdp"
                     android:gravity="start"/>

@@ -12,8 +12,8 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val OAUTH_VERIFY_TAG = "OAuthVerifyFragment"
 
@@ -26,12 +26,11 @@ internal class OAuthVerifyFlow(
         val onError: (Failure.ServerError) -> Unit
 ) : Flow(), OAuthVerifyContract.Delegate {
 
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
+    val analyticsManager: AnalyticsServiceContract by inject()
     private val oAuthVerifyFragment: OAuthVerifyContract.View?
         get() = fragmentWithTag(OAUTH_VERIFY_TAG) as? OAuthVerifyContract.View
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         oauthAttempt.userData?.let {
             val fragment = fragmentFactory.oauthVerifyFragment(
                     uiTheme = UIConfig.uiTheme,

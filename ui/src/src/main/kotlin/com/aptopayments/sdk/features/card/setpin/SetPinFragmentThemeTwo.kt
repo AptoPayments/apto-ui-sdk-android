@@ -8,7 +8,6 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -17,6 +16,7 @@ import com.aptopayments.sdk.utils.ValidInputListener
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_set_pin_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val PIN_CHARACTERS = 4
@@ -24,16 +24,14 @@ private const val PIN_CHARACTERS = 4
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
 
-    private lateinit var mViewModel: SetPinViewModel
+    private val viewModel: SetPinViewModel by viewModel()
     override var delegate: SetPinContract.Delegate? = null
 
     override fun layoutId(): Int = R.layout.fragment_set_pin_theme_two
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
-            failure(failure) {
-                handleFailure(it)
-            }
+        viewModel.apply {
+            failure(failure) { handleFailure(it) }
         }
     }
 
@@ -72,13 +70,10 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         }
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Close(null)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Close(null))
 
     override fun setupListeners() {
         super.setupListeners()
@@ -97,5 +92,5 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         delegate?.onCloseFromSetPin()
     }
 
-    override fun viewLoaded() = mViewModel.viewLoaded()
+    override fun viewLoaded() = viewModel.viewLoaded()
 }

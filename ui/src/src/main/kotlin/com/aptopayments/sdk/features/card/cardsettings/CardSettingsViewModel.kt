@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.card.cardsettings
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.CardDetails
@@ -11,11 +12,9 @@ import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
 import com.aptopayments.sdk.utils.PhoneDialer
-import javax.inject.Inject
 
-internal class CardSettingsViewModel @Inject constructor(
+internal class CardSettingsViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

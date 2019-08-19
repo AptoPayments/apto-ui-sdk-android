@@ -8,10 +8,8 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import javax.inject.Inject
 
-internal class InputEmailViewModel
-@Inject constructor(
+internal class InputEmailViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

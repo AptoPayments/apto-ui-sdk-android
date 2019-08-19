@@ -22,7 +22,6 @@ internal class CardStatsFlow (
 ) : Flow(), CardMonthlyStatsContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.cardMonthlyStatsFragment(
                 uiTheme = UIConfig.uiTheme,
                 cardId = cardId,
@@ -38,9 +37,7 @@ internal class CardStatsFlow (
         }
     }
 
-    override fun onBackFromCardMonthlyStats() {
-        onBack()
-    }
+    override fun onBackFromCardMonthlyStats() = onBack()
 
     override fun onCategorySelected(mcc: MCC, startDate: LocalDate, endDate: LocalDate) {
         val config = TransactionListConfig(startDate, endDate, mcc)

@@ -35,6 +35,7 @@ import com.aptopayments.sdk.utils.MessageBanner
 import kotlinx.android.synthetic.main.fragment_manage_card_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import kotlinx.android.synthetic.main.include_transaction_list_header.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 import java.util.*
 
@@ -46,7 +47,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
     override var delegate: ManageCardContract.Delegate? = null
     private lateinit var cardId: String
-    private lateinit var viewModel: ManageCardViewModel
+    private val viewModel: ManageCardViewModel by viewModel()
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var menu: Menu? = null
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
@@ -84,15 +85,17 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         (this.menu?.findItem(R.id.menu_card_stats))?.isVisible = AptoPlatform.cardOptions.showStatsButton()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun tintMenuItems(context: Context) {
+        val tintColor = UIConfig.textTopBarSecondaryColor
         val accountSettingsIcon = ContextCompat.getDrawable(context, R.drawable.ic_account_settings)
-        accountSettingsIcon?.setTint(UIConfig.textTopBarColor)
+        accountSettingsIcon?.setTint(tintColor)
         tb_llsdk_toolbar.menu.findItem(R.id.menu_account_settings)?.icon = accountSettingsIcon
         val statsChartIcon = ContextCompat.getDrawable(context, R.drawable.ic_chart)
-        statsChartIcon?.setTint(UIConfig.textTopBarColor)
+        statsChartIcon?.setTint(tintColor)
         tb_llsdk_toolbar.menu.findItem(R.id.menu_card_stats)?.icon = statsChartIcon
         val activateCardIcon = ContextCompat.getDrawable(context, R.drawable.ic_activate_physical_card)
-        activateCardIcon?.setTint(UIConfig.textTopBarColor)
+        activateCardIcon?.setTint(tintColor)
         tb_llsdk_toolbar.menu.findItem(R.id.menu_activate_physical_card)?.icon = activateCardIcon
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_activate_physical_card)?.let {
@@ -121,16 +124,16 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(orderedStatus) { refreshMenuOptions() }
             observeTwo(transactions, transactionsInfoRetrieved) {
-                transactions, transactionInfoRetrieved -> handleEmptyCase(transactions, transactionInfoRetrieved)}
+                transactions, transactionInfoRetrieved -> handleEmptyCase(transactions, transactionInfoRetrieved)
+            }
             observeNullable(fundingSource, ::handleBalance)
             observeNullable(cardStyle) { it?.balanceSelectorAsset?.let { url ->
-                bv_balance_view.setSelectBalanceIcon(url) } }
-            failure(failure) {
-                handleFailure(it)
+                bv_balance_view.setSelectBalanceIcon(url) }
             }
+            failure(failure) { handleFailure(it) }
         }
     }
 
@@ -200,8 +203,8 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         }
     }
 
-    private fun showCardSettings() {
-        viewModel.card.value?.let { delegate?.onCardSettingsTapped(it, viewModel.cardInfoVisible.value == true) }
+    private fun showCardSettings() = viewModel.card.value?.let {
+        delegate?.onCardSettingsTapped(it, viewModel.cardInfoVisible.value == true)
     }
 
     override fun onTransactionTapped(transaction: Transaction) {
@@ -226,7 +229,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             customizeEmptyCase(tv_no_transactions)
         }
         context?.let {
-            tv_no_transactions.text = "manage_card_no_transactions".localized(it)
+            tv_no_transactions.text = "manage_card.transaction_list.empty_case.title".localized(it)
         }
     }
 
@@ -249,37 +252,31 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         })
     }
 
-    private fun animateBackground(offsetPercent: Float) {
-        view_card_top_background?.let {
-            val layoutParams = it.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 1.0f - offsetPercent
-            it.layoutParams = layoutParams
-        }
+    private fun animateBackground(offsetPercent: Float) = view_card_top_background?.let {
+        val layoutParams = it.layoutParams as LinearLayout.LayoutParams
+        layoutParams.weight = 1.0f - offsetPercent
+        it.layoutParams = layoutParams
     }
 
-    private fun setupRecyclerView() {
-        context?.let { context ->
-            transactionListAdapter = TransactionListAdapter(context as LifecycleOwner, viewModel)
-            val linearLayoutManager = LinearLayoutManager(context)
-            scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                    viewModel.getMoreTransactions(cardId) { newTransactionCount ->
-                        if (newTransactionCount > 0) transactionListAdapter.notifyDataSetChanged()
-                    }
+    private fun setupRecyclerView() = context?.let { context ->
+        transactionListAdapter = TransactionListAdapter(context as LifecycleOwner, viewModel)
+        val linearLayoutManager = LinearLayoutManager(context)
+        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.getMoreTransactions(cardId) { newTransactionCount ->
+                    if (newTransactionCount > 0) transactionListAdapter.notifyDataSetChanged()
                 }
             }
-            transactionListAdapter.delegate = this
-            transactions_recycler_view.apply {
-                layoutManager = linearLayoutManager
-                addOnScrollListener(scrollListener!!)
-                adapter = transactionListAdapter
-            }
+        }
+        transactionListAdapter.delegate = this
+        transactions_recycler_view.apply {
+            layoutManager = linearLayoutManager
+            addOnScrollListener(scrollListener!!)
+            adapter = transactionListAdapter
         }
     }
 
-    private fun setupSwipeToRefresh() {
-        swipe_refresh_container.setOnRefreshListener(this)
-    }
+    private fun setupSwipeToRefresh() = swipe_refresh_container.setOnRefreshListener(this)
 
     // Refresh listener
     override fun onRefresh() {
@@ -305,13 +302,9 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         }
     }
 
-    override fun refreshCardData() {
-        viewModel.refreshCard(cardId = cardId)
-    }
+    override fun refreshCardData() = viewModel.refreshCard(cardId = cardId)
 
-    override fun refreshBalance() {
-        viewModel.refreshBalance(cardId = cardId)
-    }
+    override fun refreshBalance() = viewModel.refreshBalance(cardId = cardId)
 
     override fun refreshTransactions() {
         showLoading()
@@ -320,13 +313,11 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         }
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
-        fun newInstance(cardId: String): ManageCardFragmentThemeTwo {
-            return ManageCardFragmentThemeTwo().apply { arguments = Bundle().apply { putString(CARD_ID_KEY, cardId) } }
+        fun newInstance(cardId: String) = ManageCardFragmentThemeTwo().apply {
+            arguments = Bundle().apply { putString(CARD_ID_KEY, cardId) }
         }
     }
 }

@@ -9,6 +9,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 
 class IssueCardFlowTest : AndroidTest() {
@@ -21,6 +23,11 @@ class IssueCardFlowTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+            })
+        }
     }
 
     @Test
@@ -43,7 +50,6 @@ class IssueCardFlowTest : AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
 
         // Then
@@ -84,7 +90,6 @@ class IssueCardFlowTest : AndroidTest() {
         }.willReturn(issueCardErrorFragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
         issueCardFragmentDouble.delegate?.onCardIssuedFailed(3)
 

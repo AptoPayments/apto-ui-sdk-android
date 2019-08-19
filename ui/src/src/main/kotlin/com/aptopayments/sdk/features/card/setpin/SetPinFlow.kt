@@ -21,7 +21,6 @@ internal class SetPinFlow (
 ) : Flow(), SetPinContract.Delegate, ConfirmPinContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.setPinFragment(
                 uiTheme = UIConfig.uiTheme,
                 tag = SET_PIN_TAG)

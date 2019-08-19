@@ -9,13 +9,13 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.platform.BaseActivity.BackButtonMode.Back
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.managecard.EndlessRecyclerViewScrollListener
 import com.aptopayments.sdk.features.managecard.TransactionListItem
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import kotlinx.android.synthetic.main.transaction_list_fragment_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
@@ -27,7 +27,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     override var delegate: TransactionListContract.Delegate? = null
     override fun layoutId(): Int = R.layout.transaction_list_fragment_theme_two
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var viewModel: TransactionListViewModel
+    @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: TransactionListViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var cardId: String
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var config: TransactionListConfig
     private lateinit var transactionListAdapter: TransactionListAdapter
@@ -40,13 +40,15 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(transactionListItems, ::handleTransactionList)
         }
     }
 
     private fun handleTransactionList(transactionList: List<TransactionListItem>?) {
-        transactionList?.let { transactionListAdapter.transactionListItems = it }
+        transactionList?.let {
+            transactionListAdapter.transactionListItems = it
+        }
     }
 
     override fun setupUI() {
@@ -62,27 +64,25 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
                 title = title,
-                backButtonMode = BaseActivity.BackButtonMode.Back(title = null, color = UIConfig.textTopBarColor)
+                backButtonMode = Back(title = null, color = UIConfig.textTopBarSecondaryColor)
         )
     }
 
-    private fun setupRecyclerView() {
-        context?.let { context ->
-            transactionListAdapter = TransactionListAdapter(ArrayList())
-            val linearLayoutManager = LinearLayoutManager(context)
-            scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                    viewModel.fetchMoreTransaction(cardId, config.startDate, config.endDate, config.mcc) { count ->
-                        if (count > 0) transactionListAdapter.notifyDataSetChanged()
-                    }
+    private fun setupRecyclerView() = context?.let { context ->
+        transactionListAdapter = TransactionListAdapter(ArrayList())
+        val linearLayoutManager = LinearLayoutManager(context)
+        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.fetchMoreTransaction(cardId, config.startDate, config.endDate, config.mcc) { count ->
+                    if (count > 0) transactionListAdapter.notifyDataSetChanged()
                 }
             }
-            transactionListAdapter.delegate = this
-            transactions_recycler_view.apply {
-                layoutManager = linearLayoutManager
-                addOnScrollListener(scrollListener!!)
-                adapter = transactionListAdapter
-            }
+        }
+        transactionListAdapter.delegate = this
+        transactions_recycler_view.apply {
+            layoutManager = linearLayoutManager
+            addOnScrollListener(scrollListener!!)
+            adapter = transactionListAdapter
         }
     }
 
@@ -90,20 +90,14 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
         delegate?.onTransactionTapped(transaction)
     }
 
-    private fun setupSwipeToRefresh() {
-        swipe_refresh_container.setOnRefreshListener(this)
+    private fun setupSwipeToRefresh() = swipe_refresh_container.setOnRefreshListener(this)
+
+    override fun onRefresh() = viewModel.fetchTransaction(cardId, config.startDate, config.endDate, config.mcc) {
+        scrollListener?.resetState()
+        swipe_refresh_container?.isRefreshing = false
     }
 
-    override fun onRefresh() {
-        viewModel.fetchTransaction(cardId, config.startDate, config.endDate, config.mcc) {
-            scrollListener?.resetState()
-            swipe_refresh_container?.isRefreshing = false
-        }
-    }
-
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     override fun onPresented() {
         super.onPresented()

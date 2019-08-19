@@ -9,6 +9,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 
 class SetPinFlowTest : AndroidTest() {
@@ -22,6 +24,11 @@ class SetPinFlowTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+            })
+        }
         sut = SetPinFlow(cardId = "TEST_CARD_ID", onBack = {}, onFinish = {})
     }
 
@@ -34,7 +41,6 @@ class SetPinFlowTest : AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.init {}
 
         // Then
@@ -51,7 +57,6 @@ class SetPinFlowTest : AndroidTest() {
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
         sut.setPinFinished(pin)
 
         // Then

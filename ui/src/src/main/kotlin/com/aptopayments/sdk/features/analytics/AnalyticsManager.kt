@@ -1,14 +1,12 @@
 package com.aptopayments.sdk.features.analytics
+
 import android.app.Application
 import com.aptopayments.core.analytics.Event
 import org.json.JSONObject
-import javax.inject.Inject
 
-internal class AnalyticsManager @Inject constructor(
-        mContext: Application
-) : AnalyticsServiceContract {
+internal class AnalyticsManager constructor(context: Application) : AnalyticsServiceContract {
 
-    private var service = MixpanelAnalyticsService(mContext)
+    private var service = MixpanelAnalyticsService(context)
 
     override fun initialize(accessToken: String) {
         service.initialize(accessToken)
@@ -28,9 +26,5 @@ internal class AnalyticsManager @Inject constructor(
 
     override fun logoutUser() {
         service.logoutUser()
-    }
-
-    companion object {
-        val instance = AnalyticsManager
     }
 }

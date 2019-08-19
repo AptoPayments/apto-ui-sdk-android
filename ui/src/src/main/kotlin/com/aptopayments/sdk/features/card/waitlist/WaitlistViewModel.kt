@@ -1,15 +1,13 @@
 package com.aptopayments.sdk.features.card.waitlist
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
-import javax.inject.Inject
 
-internal class WaitlistViewModel
-@Inject constructor(
+internal class WaitlistViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

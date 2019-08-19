@@ -20,10 +20,8 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
-internal class ManageCardViewModel
-@Inject constructor(
+internal class ManageCardViewModel constructor(
         private val getTransactionsQueue: FetchTransactionsTaskQueue,
         private var analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {

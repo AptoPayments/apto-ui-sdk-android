@@ -2,8 +2,8 @@ package com.aptopayments.sdk.features.card.activatephysicalcard
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.functional.Either
@@ -26,13 +26,9 @@ internal class ActivatePhysicalCardFlow (
         var onBack: (Unit) -> Unit,
         var onFinish: (Unit) -> Unit,
         var onPhysicalCardActivated: (Unit) -> Unit
-) : Flow(),
-        ActivatePhysicalCardContract.Delegate,
-        ActivatePhysicalCardSuccessContract.Delegate
-{
+) : Flow(), ActivatePhysicalCardContract.Delegate, ActivatePhysicalCardSuccessContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.activatePhysicalCardFragment(
                 uiTheme = UIConfig.uiTheme,
                 card = card,

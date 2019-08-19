@@ -17,7 +17,6 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -28,6 +27,7 @@ import com.aptopayments.sdk.utils.disableCountryPicker
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_phone_input_theme_one.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
 
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
@@ -38,7 +38,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     override var delegate: InputPhoneContract.Delegate? = null
     private lateinit var validator: ValidInputListener
     private lateinit var aptoPhoneNumberWatcher: AptoPhoneNumberWatcher
-    private lateinit var viewModel: InputPhoneViewModel
+    private val viewModel: InputPhoneViewModel by viewModel()
     private lateinit var allowedCountriesList: List<Country>
     private var menu: Menu? = null
 
@@ -47,7 +47,6 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }
 
@@ -63,9 +62,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
         configureInputPhoneView()
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
@@ -74,7 +71,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
             tv_phone_label.text = "auth_input_phone_explanation".localized(it)
         }
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarColor)
+        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeFormLabel(tv_phone_label)
@@ -96,7 +93,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
                 title = context?.let { "auth_input_phone_title".localized(it) },
-                backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.iconTertiaryColor)
+                backButtonMode = BaseActivity.BackButtonMode.Back(null)
         )
         context?.let { styleMenuItem(it) }
     }
@@ -120,18 +117,20 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
         nextButtonEnabled?.let {
             val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
             menu?.findItem(R.id.menu_toolbar_next_button)?.isEnabled = it
-            if (it) { tvNext.setTextColor(UIConfig.textTopBarColor) } else { tvNext.setTextColor(UIConfig.disabledTextTopBarColor) }
+            if (it) {
+                tvNext.setTextColor(UIConfig.textTopBarPrimaryColor)
+            } else {
+                tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun styleMenuItem(context: Context) {
-        tb_llsdk_toolbar.post {
-            val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
-            themeManager().customizeMenuItem(tvNext)
-            tvNext.text = "toolbar_next_button_label".localized(context)
-            tvNext.setTextColor(UIConfig.disabledTextTopBarColor)
-        }
+    private fun styleMenuItem(context: Context) = tb_llsdk_toolbar.post {
+        val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
+        themeManager().customizeMenuItem(tvNext)
+        tvNext.text = "toolbar_next_button_label".localized(context)
+        tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -151,21 +150,17 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     }
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(enableNextButton, ::updateButtonState)
             observe(state, ::updateProgressState)
             observe(verificationData, ::updateVerificationState)
-            failure(failure) {
-                handleFailure(it)
-            }
+            failure(failure) { handleFailure(it) }
         }
     }
 
-    private fun updatePhoneNumberWatcher(countryCode: String?) {
-        countryCode?.let {
-            aptoPhoneNumberWatcher.countryCode = countryCode
-            et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
-        }
+    private fun updatePhoneNumberWatcher(countryCode: String?) = countryCode?.let {
+        aptoPhoneNumberWatcher.countryCode = countryCode
+        et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
     }
 
     private fun updateVerificationState(verification: Verification?) {
@@ -197,11 +192,10 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     }
 
     companion object {
-        fun newInstance(allowedCountriesList: List<Country>): InputPhoneFragmentThemeOne =
-                InputPhoneFragmentThemeOne().apply {
-                    val allowedCountries = listOrDefault(allowedCountriesList)
-                    this.arguments = Bundle().apply { putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountries as Serializable) }
-                }
+        fun newInstance(allowedCountriesList: List<Country>) = InputPhoneFragmentThemeOne().apply {
+            val allowedCountries = listOrDefault(allowedCountriesList)
+            this.arguments = Bundle().apply { putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountries as Serializable) }
+        }
 
         private fun listOrDefault(allowedCountriesList: List<Country>): List<Country> {
             return if (allowedCountriesList.isNotEmpty()) allowedCountriesList else {

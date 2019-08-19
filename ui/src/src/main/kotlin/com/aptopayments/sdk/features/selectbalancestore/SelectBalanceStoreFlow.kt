@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.selectbalancestore
 
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.SelectBalanceStoreResult
 import com.aptopayments.core.data.oauth.OAuthAttempt
@@ -14,10 +15,11 @@ import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.OAuthFlow
 import com.aptopayments.sdk.features.oauth.OAuthVerifyFlow
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class SelectBalanceStoreFlow (
@@ -27,12 +29,11 @@ internal class SelectBalanceStoreFlow (
         var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow() {
 
-    @Inject lateinit var aptoPlatformProtocol: AptoPlatformProtocol
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+    val analyticsManager: AnalyticsServiceContract by inject()
     private lateinit var verifyFlow: OAuthVerifyFlow
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         actionConfiguration.allowedBalanceTypes?.firstOrNull()?.let { allowedBalanceType ->
             initOAuthFlow(allowedBalanceType = allowedBalanceType) { initResult ->
                 initResult.either({onInitComplete}) { flow ->
@@ -54,16 +55,14 @@ internal class SelectBalanceStoreFlow (
         else handleFailure(failure)
     }
 
-    private fun showRevokedTokenDialog(error: Failure.ServerError) {
-        rootActivity()?.let { context ->
-            confirm(title = "select_balance_store.login.error.title".localized(context),
-                    text = error.errorMessage(context),
-                    confirm = "select_balance_store.login.error.ok_button".localized(context),
-                    cancel = "",
-                    onConfirm = { },
-                    onCancel = { }
-            )
-        }
+    private fun showRevokedTokenDialog(error: Failure.ServerError) = rootActivity()?.let { context ->
+        confirm(title = "select_balance_store.login.error.title".localized(context),
+                text = error.errorMessage(context),
+                confirm = "select_balance_store.login.error.ok_button".localized(context),
+                cancel = "",
+                onConfirm = { },
+                onCancel = { }
+        )
     }
 
     //
@@ -71,8 +70,15 @@ internal class SelectBalanceStoreFlow (
     //
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun initOAuthFlow(allowedBalanceType: AllowedBalanceType, onComplete: (Either<Failure, Flow>) -> Unit) {
+        val config = OAuthConfig(
+                title = "select_balance_store.login.title",
+                explanation = "select_balance_store.login.explanation",
+                callToAction = "select_balance_store.login.call_to_action.title",
+                newUserAction = "select_balance_store.login.new_user.title",
+                allowedBalanceType = allowedBalanceType
+        )
         val flow = OAuthFlow(
-                allowedBalanceType = allowedBalanceType,
+                config = config,
                 onBack = { onBack(Unit) },
                 onFinish = { oauthAttempt -> verifyOAuthData(allowedBalanceType, oauthAttempt, onComplete) }
         )
@@ -83,7 +89,8 @@ internal class SelectBalanceStoreFlow (
         }
     }
 
-    private fun verifyOAuthData(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt, onComplete: (Either<Failure, Flow>) -> Unit) {
+    private fun verifyOAuthData(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt,
+                                onComplete: (Either<Failure, Flow>) -> Unit) {
         verifyFlow = OAuthVerifyFlow(
                 allowedBalanceType = allowedBalanceType,
                 oauthAttempt = oauthAttempt,
@@ -148,7 +155,7 @@ internal class SelectBalanceStoreFlow (
                     else -> {
                         analyticsManager.track(selectBalanceStoreResult.errorEvent())
                         rootActivity()?.let { context ->
-                            notify(selectBalanceStoreResult.errorTitle(context), selectBalanceStoreResult.errorMessage(context))
+                            notify(errorTitle(context), selectBalanceStoreResult.errorMessage(context))
                         }
                         Unit
                     }
@@ -156,4 +163,6 @@ internal class SelectBalanceStoreFlow (
             }
         }
     }
+
+    private fun errorTitle(context: Context) = "select_balance_store.login.error.title".localized(context)
 }

@@ -3,6 +3,12 @@ package com.aptopayments.sdk.core.platform.theme
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.Window
 import android.widget.ImageView
@@ -57,7 +63,7 @@ internal object ThemeOneManager: ThemeManager {
         textView.apply {
             typeface = Typeface.DEFAULT
             setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
-            setTextColor(UIConfig.textTopBarColor)
+            setTextColor(UIConfig.textButtonColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         }
     }
@@ -88,14 +94,32 @@ internal object ThemeOneManager: ThemeManager {
             setTextColor(UIConfig.textSecondaryColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
             setLinkTextColor(UIConfig.textSecondaryColor)
-            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            if (UIConfig.underlineLinks) paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        }
+    }
+
+    override fun customizeHtml(textView: TextView, html: Spanned) {
+        textView.apply {
+            typeface = Typeface.DEFAULT
+            setTextColor(UIConfig.textPrimaryColor)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        }
+        val spannable = SpannableStringBuilder(html)
+        spannable.getSpans(0, spannable.length, URLSpan::class.java).forEach {
+            val start = spannable.getSpanStart(it)
+            val end = spannable.getSpanEnd(it)
+            applyStyle(ForegroundColorSpan(UIConfig.textLinkColor), spannable, start, end)
+            applyStyle(StyleSpan(Typeface.BOLD), spannable, start, end)
+            if (UIConfig.underlineLinks) applyStyle(UnderlineSpan(), spannable, start, end)
         }
     }
 
     override fun customizeContentPlainText(textView: TextView) {
-        textView.typeface = Typeface.DEFAULT
-        textView.textSize = 13f
-        textView.setTextColor(UIConfig.textTertiaryColor)
+        textView.apply {
+            typeface = Typeface.DEFAULT
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+            setTextColor(UIConfig.textTertiaryColor)
+        }
     }
 
     override fun customizeContentPlainInvertedText(textView: TextView) {
@@ -226,7 +250,7 @@ internal object ThemeOneManager: ThemeManager {
         textView.apply {
             setTypeface(textView.typeface, Typeface.BOLD)
             setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
-            setTextColor(UIConfig.textTopBarColor)
+            setTextColor(UIConfig.textTopBarPrimaryColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
         }
     }

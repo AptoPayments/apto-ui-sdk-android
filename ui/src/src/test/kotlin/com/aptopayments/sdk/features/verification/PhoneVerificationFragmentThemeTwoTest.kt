@@ -12,6 +12,9 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.Mockito
 import kotlin.test.assertEquals
@@ -26,8 +29,12 @@ class PhoneVerificationFragmentThemeTwoTest : AndroidTest() {
     @Before
     override fun setUp() {
         super.setUp()
+        startKoin {
+            modules(module {
+                viewModel { viewModel }
+            })
+        }
         sut = PhoneVerificationFragmentThemeTwo.newInstance(verification)
-        sut.mViewModel = viewModel
         sut.verification = verification
     }
 

@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.auth.inputphone
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
@@ -8,16 +9,13 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class InputPhoneViewModel
-@Inject constructor(
+internal class InputPhoneViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext

@@ -11,6 +11,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import kotlin.test.assertEquals
@@ -29,13 +31,17 @@ class TransactionListFlowTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single{ mockFragmentFactory }
+            })
+        }
     }
 
     @Test
     fun `sut initialized with THEME2 instantiate fragment from the factory`() {
         // Given
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
-        sut.fragmentFactory = mockFragmentFactory
         UIConfig.uiTheme = THEME_2
         val fragmentTestDouble = transactionListFragmentTestDouble()
         given {
@@ -67,7 +73,6 @@ class TransactionListFlowTest : AndroidTest() {
     fun `on transaction tapped with THEME2 instantiate fragment from the factory`() {
         // Given
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
-        sut.fragmentFactory = mockFragmentFactory
         UIConfig.uiTheme = THEME_2
         val transaction = mock(Transaction::class.java)
         val fragmentTestDouble = transactionDetailsFragmentTestDouble()

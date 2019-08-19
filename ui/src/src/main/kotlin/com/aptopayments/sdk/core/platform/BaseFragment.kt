@@ -1,4 +1,3 @@
-
 package com.aptopayments.sdk.core.platform
 
 import android.os.Bundle
@@ -8,41 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.UserSessionRepository
-import com.aptopayments.sdk.core.di.ApplicationComponent
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.ViewUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val TAG_KEY = "APTO_TAG_KEY"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
-internal abstract class BaseFragment : Fragment(), FlowPresentable {
+internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponent {
 
     abstract fun layoutId(): Int
 
-    @VisibleForTesting(otherwise = Modifier.PROTECTED)
-    val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
-        AptoPlatform.applicationComponent
-    }
-
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject lateinit var userSessionRepository: UserSessionRepository
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     lateinit var TAG: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
 
         if (savedInstanceState != null) {
-            TAG = savedInstanceState.getString(TAG_KEY)
+            TAG = savedInstanceState.getString(TAG_KEY)!!
         }
     }
 
@@ -97,13 +88,14 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable {
 
     internal fun firstTimeCreated(savedInstanceState: Bundle?) = savedInstanceState == null
 
-    internal fun notify(message: String, type: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) =
+    internal fun notify(message: String, type: MessageBanner.MessageType = ERROR) =
             notify(title = null, message = message, type = type)
 
-    internal fun notify(title: String?, message: String, type: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) =
+    internal fun notify(title: String?, message: String, type: MessageBanner.MessageType = ERROR) =
             activity?.let { MessageBanner(it).showBanner(title = title, message = message, messageType = type) }
 
-    protected fun confirm(title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit, onCancel: (Unit) -> Unit) {
+    protected fun confirm(title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit,
+                          onCancel: (Unit) -> Unit) {
         activity?.let {
             val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(it,
                     confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
@@ -117,7 +109,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable {
                 context?.let { notify("failure_server_error".localized(it)) }
             }
             is Failure.UserSessionExpired -> {
-                userSessionRepository.clearUserSession()
+                aptoPlatformProtocol.logout()
                 context?.let { notify("session_expired_error".localized(it)) }
             }
         }

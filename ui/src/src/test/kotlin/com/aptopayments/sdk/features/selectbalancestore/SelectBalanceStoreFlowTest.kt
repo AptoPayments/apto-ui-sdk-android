@@ -7,13 +7,17 @@ import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationSele
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -34,15 +38,18 @@ class SelectBalanceStoreFlowTest : UnitTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
-
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+                single<AnalyticsServiceContract> { analyticsManager }
+                single<AptoPlatformProtocol> { mockAptoPlatform }
+            })
+        }
         val testAllowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val testAllowedBalanceTypeList = listOf(testAllowedBalanceType)
         val mockActionConfig = WorkflowActionConfigurationSelectBalanceStore(testAllowedBalanceTypeList)
         sut = SelectBalanceStoreFlow(actionConfiguration = mockActionConfig,
                 cardApplicationId = cardApplicationId, onBack = {}, onFinish = {})
-        sut.fragmentFactory = mockFragmentFactory
-        sut.analyticsManager = analyticsManager
-        sut.aptoPlatformProtocol = mockAptoPlatform
     }
 
     @Test
@@ -75,5 +82,4 @@ class SelectBalanceStoreFlowTest : UnitTest() {
         assertTrue(analyticsManager.trackCalled)
         assertEquals(analyticsManager.lastEvent, Event.SelectBalanceStoreOauthConfirmIdentityNotVerified)
     }
-
 }

@@ -11,6 +11,8 @@ import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.Mock
 
 class OAuthFlowTest: AndroidTest() {
@@ -22,32 +24,33 @@ class OAuthFlowTest: AndroidTest() {
     override fun setUp() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
+        startKoin {
+            modules(module {
+                single { mockFragmentFactory }
+            })
+        }
     }
 
     @Test
     fun `should use the factory to instantiate OAuthConnectFragmentInterface as first fragment`() {
-
         // Given
         val tag = "OAuthConnectFragment"
         val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = tag }
-        val allowedBalanceType = TestDataProvider.provideAllowedBalanceType()
-        val sut = OAuthFlow(allowedBalanceType = allowedBalanceType, onBack = {}, onFinish = {})
+        val config = TestDataProvider.provideOauthConfig()
+        val sut = OAuthFlow(config = config, onBack = {}, onFinish = {})
         given { mockFragmentFactory.oauthConnectFragment(
                 uiTheme = UITheme.THEME_1,
-                allowedBalanceType = allowedBalanceType,
+                config = config,
                 tag = tag)
         }.willReturn(fragmentDouble)
 
         // When
-        sut.fragmentFactory = mockFragmentFactory
-        sut.allowedBalanceType = allowedBalanceType
         sut.init {}
 
         // Then
         verify(mockFragmentFactory).oauthConnectFragment(
                 uiTheme = UITheme.THEME_1,
-                allowedBalanceType = allowedBalanceType,
+                config = config,
                 tag = tag)
     }
-
 }

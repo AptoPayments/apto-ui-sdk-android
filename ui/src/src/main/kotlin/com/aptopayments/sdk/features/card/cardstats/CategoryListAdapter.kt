@@ -22,32 +22,18 @@ import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import org.threeten.bp.LocalDate
 
-internal class CategoryListAdapter(
-        lifecycleOwner: LifecycleOwner,
-        viewModel: CardMonthlyStatsViewModel,
-        date: LocalDate
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    init {
-        lifecycleOwner.observeNullable(viewModel.monthlySpendingMap) { monthlySpendingMap ->
-            val spending = monthlySpendingMap?.get(Pair(date.monthToString(), date.yearToString()))
-            spending?.let {
-                val categorySpendingArrayList = ArrayList<CategoryListItem>()
-                it.forEach { categorySpending ->
-                    categorySpendingArrayList.add(CategoryListItem(categorySpending, false))
-                }
-                categorySpendingList = categorySpendingArrayList
-                notifyDataSetChanged()
-            }
-        }
-    }
+internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Delegate {
         fun onCategoryTapped(categorySpending: CategorySpending)
     }
 
     var delegate: Delegate? = null
-    private var categorySpendingList: List<CategoryListItem>? = null
+    var categorySpendingList: List<CategoryListItem>? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

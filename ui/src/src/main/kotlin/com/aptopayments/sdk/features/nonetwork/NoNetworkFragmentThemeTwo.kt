@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.nonetwork
 
+import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
@@ -8,15 +9,15 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.core.network.ApiCatalog
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.ui.StatusBarUtil
 import com.aptopayments.sdk.utils.FontsUtil
 import kotlinx.android.synthetic.main.fragment_no_network_theme_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.inject
 import java.lang.reflect.Modifier
 import java.net.URI
 import java.util.*
-import javax.inject.Inject
 import kotlin.concurrent.scheduleAtFixedRate
 
 const val DELAY = 5000L
@@ -28,17 +29,15 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
 
     override fun layoutId() = R.layout.fragment_no_network_theme_two
 
-    @Inject lateinit var networkHandler: NetworkHandler
-    private lateinit var viewModel: NoNetworkViewModel
+    private val networkHandler: NetworkHandler by inject()
+    private val viewModel: NoNetworkViewModel by viewModel()
     private var timer = Timer()
 
     override fun setupViewModel() {
-        viewModel = viewModel(viewModelFactory) {}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         hideLoading()
     }
 
@@ -56,6 +55,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         super.onStop()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setupUI() {
         context?.let {
             tv_description_text.text = "no_network.description".localized(it)
@@ -63,7 +63,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         }
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
         view!!.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tv_description_text.setTextColor(UIConfig.textTopBarColor)
+        tv_description_text.setTextColor(UIConfig.textTopBarSecondaryColor)
         tv_loading_text.setTextColor(UIConfig.textTertiaryColor)
         pb_progress.indeterminateDrawable.setColorFilter(UIConfig.textTertiaryColor, PorterDuff.Mode.SRC_IN)
 
@@ -73,9 +73,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         }
     }
 
-    override fun viewLoaded() {
-        viewModel.viewLoaded()
-    }
+    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance() = NoNetworkFragmentThemeTwo()

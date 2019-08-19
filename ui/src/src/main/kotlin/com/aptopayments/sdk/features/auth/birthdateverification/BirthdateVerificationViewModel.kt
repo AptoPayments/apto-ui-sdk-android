@@ -8,9 +8,8 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import java.util.*
-import javax.inject.Inject
 
-internal class BirthdateVerificationViewModel @Inject constructor(
+internal class BirthdateVerificationViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel()
 {

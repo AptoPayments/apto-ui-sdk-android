@@ -8,9 +8,8 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.PhoneDialer
-import javax.inject.Inject
 
-internal class ActivatePhysicalCardSuccessViewModel @Inject constructor(
+internal class ActivatePhysicalCardSuccessViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), PhoneDialer.Delegate {
 

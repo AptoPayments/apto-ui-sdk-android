@@ -22,7 +22,6 @@ internal class TransactionListFlow(
         private val onBack: () -> Unit
 ) : Flow(), TransactionListContract.Delegate, TransactionDetailsContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.transactionListFragment(UIConfig.uiTheme, cardId, config, TRANSACTION_LIST_TAG)
         fragment.delegate = this
         setStartElement(fragment as FlowPresentable)

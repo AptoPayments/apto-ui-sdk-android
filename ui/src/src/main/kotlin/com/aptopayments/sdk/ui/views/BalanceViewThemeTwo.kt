@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.ui.views
 
 import android.animation.ArgbEvaluator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
@@ -26,6 +27,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         setupUI()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupUI() {
         context?.let { tv_title.text = "manage_card_balance_total_balance".localized(it) }
         setupTheme()
@@ -63,7 +65,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun applyAlphaToTitle(fraction: Float) =
-            tv_title.setTextColor(ArgbEvaluator().evaluate(fraction, UIConfig.textTopBarColor, Color.TRANSPARENT) as Int)
+            tv_title.setTextColor(
+                    ArgbEvaluator().evaluate(fraction, UIConfig.textTopBarSecondaryColor, Color.TRANSPARENT) as Int)
 
     private fun applyAlphaToButton(fraction: Float) {
         iv_refresh.imageAlpha = ArgbEvaluator().evaluate(fraction, 255, 0) as Int

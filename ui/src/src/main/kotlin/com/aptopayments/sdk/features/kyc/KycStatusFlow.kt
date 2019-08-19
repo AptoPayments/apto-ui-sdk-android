@@ -19,7 +19,6 @@ internal class KycStatusFlow(
 ) : Flow(), KycStatusContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         // We can assume that the card has a kyc status here.
         val fragment = fragmentFactory.kycStatusFragment(
                 uiTheme = UIConfig.uiTheme,

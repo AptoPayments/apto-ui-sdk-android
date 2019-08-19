@@ -104,8 +104,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     sealed class BackButtonMode {
-        class Back(val title: String?, @ColorInt val color: Int = UIConfig.uiSecondaryColor) : BackButtonMode()
-        class Close(val title: String?, @ColorInt val color: Int = UIConfig.uiSecondaryColor) : BackButtonMode()
+        class Back(val title: String?, @ColorInt val color: Int = UIConfig.textTopBarPrimaryColor) : BackButtonMode()
+        class Close(val title: String?, @ColorInt val color: Int = UIConfig.textTopBarPrimaryColor) : BackButtonMode()
         object None : BackButtonMode()
     }
 

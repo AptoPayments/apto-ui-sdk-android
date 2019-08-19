@@ -9,7 +9,7 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.UserSessionRepository
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -17,25 +17,25 @@ import com.aptopayments.sdk.features.auth.AuthFlow
 import com.aptopayments.sdk.features.managecard.ManageCardFlow
 import com.aptopayments.sdk.features.newcard.NewCardFlow
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.lang.reflect.Modifier
-import javax.inject.Inject
 
 private const val NO_NETWORK_TAG = "NoNetworkFragment"
 private const val MAINTENANCE_TAG = "MaintenanceFragment"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
-internal class CardFlow : Flow() {
+internal class CardFlow : Flow(), KoinComponent {
 
-    @Inject lateinit var userSessionRepository: UserSessionRepository
-    @Inject lateinit var networkHandler: NetworkHandler
-    @Inject lateinit var analyticsManager: AnalyticsServiceContract
+    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+    private val networkHandler: NetworkHandler by inject()
+    val analyticsManager: AnalyticsServiceContract by inject()
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
     private var maintenanceFragmentShown = false
     private var initialized = false
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         subscribeToNetworkAvailabilityEvent()
         subscribeToMaintenanceModeEvent()
         if (networkHandler.isConnected != true) {
@@ -58,15 +58,15 @@ internal class CardFlow : Flow() {
 
     private fun initialFlow(onInitComplete: (Either<Failure, Flow>) -> Unit) {
         AptoPlatform.fetchContextConfiguration(false) { result ->
-            result.either({ onInitComplete(Either.Left(it)) }, {
-                this.contextConfiguration = it
+            result.either({ onInitComplete(Either.Left(it)) }, { configuration ->
+                this.contextConfiguration = configuration
                 val trackerAccessToken = contextConfiguration.projectConfiguration.trackerAccessToken
                 if (contextConfiguration.projectConfiguration.isTrackerActive == true) {
-                    trackerAccessToken?.let {
-                        if (it.isNotEmpty()) analyticsManager.initialize(it)
+                    trackerAccessToken?.let { token ->
+                        if (token.isNotEmpty()) analyticsManager.initialize(token)
                     }
                 }
-                if (!userSessionRepository.userSession.isValid()) {
+                if (!aptoPlatformProtocol.userTokenPresent()) {
                     initAuthFlow (onInitComplete)
                 } else {
                     initNewOrExistingCardFlow { initResult ->
@@ -162,13 +162,13 @@ internal class CardFlow : Flow() {
     }
 
     override fun detachFromActivity() {
-        userSessionRepository.unsubscribeSessionInvalidListener(this)
+        aptoPlatformProtocol.unsubscribeSessionInvalidListener(this)
         networkHandler.unsubscribeNetworkReachabilityListener(this)
         super.detachFromActivity()
     }
 
     private fun subscribeToSessionInvalidEvent() {
-        userSessionRepository.subscribeSessionInvalidListener(this) {
+        aptoPlatformProtocol.subscribeSessionInvalidListener(this) {
             initAuthFlow { initResult ->
                 initResult.either(::handleFailure) { flow ->
                     clearChildElements()
@@ -201,29 +201,24 @@ internal class CardFlow : Flow() {
         }
     }
 
-    private fun subscribeToMaintenanceModeEvent() {
-        networkHandler.subscribeMaintenanceListener(this) { available ->
-            if (!available && !maintenanceFragmentShown) {
-                val fragment = fragmentFactory.maintenanceFragment(UIConfig.uiTheme, MAINTENANCE_TAG)
-                push(fragment as BaseFragment)
-                maintenanceFragmentShown = true
-            }
-            else if (available && maintenanceFragmentShown) {
-                popFragment()
-                maintenanceFragmentShown = false
-            }
+    private fun subscribeToMaintenanceModeEvent() = networkHandler.subscribeMaintenanceListener(this) { available ->
+        if (!available && !maintenanceFragmentShown) {
+            val fragment = fragmentFactory.maintenanceFragment(UIConfig.uiTheme, MAINTENANCE_TAG)
+            push(fragment as BaseFragment)
+            maintenanceFragmentShown = true
+        } else if (available && maintenanceFragmentShown) {
+            popFragment()
+            maintenanceFragmentShown = false
         }
     }
 
     //
     // Manage Card Flow
     //
-    private fun showManageCardFlow(cardId: String) {
-        initManageCardFlow(cardId = cardId) { initResult ->
-            initResult.either({::handleFailure}) { flow ->
-                clearChildElements()
-                push(flow = flow)
-            }
+    private fun showManageCardFlow(cardId: String) = initManageCardFlow(cardId = cardId) { initResult ->
+        initResult.either({ ::handleFailure }) { flow ->
+            clearChildElements()
+            push(flow = flow)
         }
     }
 

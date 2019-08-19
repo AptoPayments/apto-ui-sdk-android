@@ -13,13 +13,16 @@ import com.aptopayments.core.data.stats.MonthlySpending
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.monthToString
+import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_card_monthly_stats.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
@@ -29,7 +32,7 @@ private const val CARD_ID_KEY = "CARD_ID"
 internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlyStatsContract.View,
         CardTransactionsChartPagerAdapter.Delegate {
 
-    private lateinit var mViewModel: CardMonthlyStatsViewModel
+    private val viewModel: CardMonthlyStatsViewModel by viewModel()
     private lateinit var cardId: String
     private lateinit var pagerAdapter: CardTransactionsChartPagerAdapter
     private lateinit var dateList: ArrayList<LocalDate>
@@ -45,12 +48,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
-            observe(monthlySpending) { updateTabs(it) }
-            failure(failure) {
-                handleFailure(it)
-            }
-        }
+        viewModel.apply { failure(failure) { handleFailure(it) } }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -100,12 +98,13 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarColor)
+        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarSecondaryColor)
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
-                title = context?.let { "stats.monthly_spending.title".localized(it).replace("<<YEAR>>", LocalDate.now().yearToString()) },
-                backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.iconTertiaryColor)
+                title = context?.let { "stats.monthly_spending.title".localized(it)
+                        .replace("<<YEAR>>", LocalDate.now().yearToString()) },
+                backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
         )
     }
 
@@ -114,35 +113,41 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     override fun onDestroy() {
-        mViewModel.invalidateCache()
+        viewModel.invalidateCache()
         super.onDestroy()
     }
 
     private fun addPreviousMonthTab() {
         tabAdded = true
         val currentDate = dateList[0]
-        dateList.removeAt(2)
-        dateList.add(0, dateList[0].minusMonths(1))
-        context?.let { mViewModel.getMonthlySpending(it, cardId, currentDate.monthToString(), currentDate.yearToString()) }
-        pagerAdapter.notifyDataSetChanged()
-        selectCurrentTab()
+        context?.let { context ->
+            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
+                dateList.removeAt(2)
+                dateList.add(0, dateList[0].minusMonths(1))
+                pagerAdapter.notifyDataSetChanged()
+                selectCurrentTab()
+                updateTabs(it)
+            }
+        }
     }
 
     private fun addNextMonthTab() {
         tabAdded = true
         val currentDate = dateList[2]
-        dateList.removeAt(0)
-        dateList.add(2, dateList[1].plusMonths(1))
-        context?.let { mViewModel.getMonthlySpending(it, cardId, currentDate.monthToString(), currentDate.yearToString()) }
-        pagerAdapter.notifyDataSetChanged()
-        selectCurrentTab()
+        context?.let { context ->
+            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
+                dateList.removeAt(0)
+                dateList.add(2, dateList[1].plusMonths(1))
+                pagerAdapter.notifyDataSetChanged()
+                selectCurrentTab()
+                updateTabs(it)
+            }
+        }
     }
 
-    private fun selectCurrentTab() {
-        viewPager.post {
-            viewPager.currentItem = 1
-            tabAdded = false
-        }
+    private fun selectCurrentTab() = viewPager.post {
+        viewPager.currentItem = 1
+        tabAdded = false
     }
 
     private fun enableTab(index: Int) {
@@ -155,17 +160,15 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         pagerAdapter.notifyDataSetChanged()
     }
 
-    private fun updateTabs(monthlySpending: MonthlySpending?) {
-        monthlySpending?.let {
-            if (it.prevSpendingExists) enableTab(0)
-            else disableTab(0)
-            if (it.nextSpendingExists) enableTab(2)
-            else disableTab(2)
-        }
+    private fun updateTabs(monthlySpending: MonthlySpending?) = monthlySpending?.let {
+        if (it.prevSpendingExists) enableTab(0)
+        else disableTab(0)
+        if (it.nextSpendingExists) enableTab(2)
+        else disableTab(2)
     }
 
     override fun viewLoaded() {
-        mViewModel.viewLoaded()
+        viewModel.viewLoaded()
         pagerAdapter = CardTransactionsChartPagerAdapter(childFragmentManager, cardId, dateList)
         viewPager.adapter = pagerAdapter
         pagerAdapter.delegate = this

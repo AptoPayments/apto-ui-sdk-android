@@ -1,16 +1,14 @@
 package com.aptopayments.sdk.features.issuecard
 
 import androidx.lifecycle.MutableLiveData
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.core.analytics.Event
-import javax.inject.Inject
 
-internal class IssueCardViewModel
-@Inject constructor(
+internal class IssueCardViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

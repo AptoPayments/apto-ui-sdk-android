@@ -2,12 +2,14 @@ package com.aptopayments.sdk.features.addbalance
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.SelectBalanceStoreResult
+import com.aptopayments.core.data.card.SelectBalanceStoreResult.Type.INVALID
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.flow.Flow
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.OAuthFlow
 import java.lang.reflect.Modifier
 
@@ -20,7 +22,6 @@ internal class AddBalanceFlow (
 ) : Flow() {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         allowedBalanceTypes.firstOrNull()?.let { allowedBalanceType ->
             initOAuthFlow(allowedBalanceType = allowedBalanceType) { initResult ->
                 initResult.either({onInitComplete}) { flow ->
@@ -37,8 +38,15 @@ internal class AddBalanceFlow (
     // OAuth flow
     //
     private fun initOAuthFlow(allowedBalanceType: AllowedBalanceType, onComplete: (Either<Failure, Flow>) -> Unit) {
+        val config = OAuthConfig(
+                title = "external_oauth.login.title",
+                explanation = "external_oauth.login.explanation",
+                callToAction = "external_oauth.login.call_to_action.title",
+                newUserAction = "external_oauth.login.new_user.title",
+                allowedBalanceType = allowedBalanceType
+        )
         val flow = OAuthFlow(
-                allowedBalanceType = allowedBalanceType,
+                config = config,
                 onBack = { onBack(Unit) },
                 onFinish = { oauthAttempt ->
                     val fundingSourceType = "custodian_wallet"
@@ -68,12 +76,36 @@ internal class AddBalanceFlow (
         when (failure) {
             is Failure.ServerError -> {
                 rootActivity()?.let {
-                    notify(SelectBalanceStoreResult.errorMessage(failure.errorCode, it))
+                    val result = SelectBalanceStoreResult(INVALID, failure.errorCode, errorMessageKeys)
+                    notify(result.errorMessage(it))
                 }
             }
             else -> handleFailure(failure)
         }
     }
+
+    private val errorMessageKeys: List<String>
+        get() = listOf(
+                "external_auth.login.error_wrong_country.message",
+                "external_auth.login.error_wrong_region.message",
+                "external_auth.login.error_unverified_address.message",
+                "external_auth.login.error_unsupported_currency.message",
+                "external_auth.login.error_cant_capture_funds.message",
+                "external_auth.login.error_insufficient_funds.message",
+                "external_auth.login.error_balance_not_found.message",
+                "external_auth.login.error_access_token_invalid.message",
+                "external_auth.login.error_scopes_required.message",
+                "external_auth.login.error_missing_legal_name.message",
+                "external_auth.login.error_missing_birthdate.message",
+                "external_auth.login.error_wrong_birthdate.message",
+                "external_auth.login.error_missing_address.message",
+                "external_auth.login.error_missing_email.message",
+                "external_auth.login.error_wrong_email.message",
+                "external_auth.login.error_email_sends_disabled.message",
+                "external_auth.login.error_insufficient_application_limit.message",
+                "external_auth.login.error_identity_not_verified.message",
+                "external_auth.login.error_unknown.message"
+        )
 }
 
 internal class AddBalanceInitFailure : Failure.FeatureFailure()

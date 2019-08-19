@@ -260,6 +260,10 @@
     <string name="select_balance_store_login_title">Connect your account</string>
     <string name="select_balance_store_login_explanation">Spend your cryptocurrency held on your account across 44 million locations worldwide.</string>
     <string name="select_balance_store_login_call_to_action_title">Connect your account</string>
+    <string name="external_oauth_login_title">Connect your account</string>
+    <string name="external_oauth_login_explanation">Spend your cryptocurrency held on your account across 44 million locations worldwide.</string>
+    <string name="external_oauth_login_call_to_action_title">Connect your account</string>
+    <string name="external_oauth_login_new_user_title">&lt;a href=\'https://www.coinbase.com/signup\'&gt;Not a Coinbase user? Tap here.&lt;/a&gt;</string>
 
     <!-- Errors -->
     <string name="session_expired_error">User session has expired. Please sign in with your credentials.</string>
@@ -305,7 +309,7 @@
     <string name="card_management_pin_changed">PIN changed correctly</string>
     <string name="card_management_number_copied">Card number copied to clipboard</string>
     <string name="card_management_no_transactions">You have no transactions yet.\nStart now!</string>
-    <string name="manage_card_no_transactions">You\'ve not made any transactions yet.\nGet started now.</string>
+    <string name="manage_card_transaction_list_empty_case_title">You\'ve not made any transactions yet.\nGet started now.</string>
     <string name="card_management_enable_card_label">Enable physical card!</string>
     <string name="card_management_get_physical_card">Get your physical card</string>
     <string name="card_management_physical_card_action_text">Want us to send you your debit card? Tap here.</string>

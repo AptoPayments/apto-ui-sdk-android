@@ -21,7 +21,8 @@ class MessageBanner(val activity: FragmentActivity) {
         showBanner(activity.getString(textResId), messageType, duration)
     }
 
-    fun showBanner(message: String, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG, title: String? = null) {
+    fun showBanner(message: String, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG,
+                   title: String? = null) {
         if (activity.isFinishing) {
             return
         }
@@ -32,9 +33,11 @@ class MessageBanner(val activity: FragmentActivity) {
             MessageType.HEADS_UP -> UIConfig.uiPrimaryColor
         }
 
-        val rootView = (activity.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0) as ViewGroup
+        val rootView = (activity.findViewById<View>(android.R.id.content) as ViewGroup)
+                .getChildAt(0) as ViewGroup
         val customSnackbar = SnackbarThemeTwo.make(rootView, duration)
-        title?.let { customSnackbar.setTitle(it) }
+        val customTitle = if (UIConfig.showToastTitle) title else null
+        customSnackbar.setTitle(customTitle)
         customSnackbar.setMessage(message)
         customSnackbar.setBackgroundColor(backgroundColor)
         customSnackbar.show()

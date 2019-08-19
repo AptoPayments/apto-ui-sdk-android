@@ -17,10 +17,8 @@ internal class VoipFlow (
         val action: Action,
         val onBack: (Unit) -> Unit,
         val onFinish: (Unit) -> Unit
-) : Flow(), VoipContract.Delegate
-{
+) : Flow(), VoipContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        appComponent.inject(this)
         val fragment = fragmentFactory.getVoipFragment(
                 uiTheme = UIConfig.uiTheme,
                 cardId = cardId,

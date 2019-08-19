@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.core.di.fragment
 
+import android.annotation.SuppressLint
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.cardproduct.CardProduct
@@ -68,6 +69,7 @@ import com.aptopayments.sdk.features.managecard.ManageCardContract
 import com.aptopayments.sdk.features.managecard.ManageCardFragmentThemeTwo
 import com.aptopayments.sdk.features.nonetwork.NoNetworkContract
 import com.aptopayments.sdk.features.nonetwork.NoNetworkFragmentThemeTwo
+import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentThemeTwo
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
@@ -81,11 +83,9 @@ import com.aptopayments.sdk.features.voip.VoipFragmentThemeTwo
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserFragment
 import org.threeten.bp.LocalDate
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class FragmentFactoryImpl @Inject constructor() : FragmentFactory {
+@SuppressLint("VisibleForTests")
+internal class FragmentFactoryImpl constructor() : FragmentFactory {
 
     override fun countrySelectorFragment(
             uiTheme: UITheme,
@@ -149,12 +149,12 @@ internal class FragmentFactoryImpl @Inject constructor() : FragmentFactory {
 
     override fun oauthConnectFragment(
             uiTheme: UITheme,
-            allowedBalanceType: AllowedBalanceType,
+            config: OAuthConfig,
             tag: String
     ): OAuthConnectContract.View {
         return when (uiTheme) {
             THEME_2 -> {
-                return OAuthConnectFragmentThemeTwo.newInstance(allowedBalanceType).apply {
+                return OAuthConnectFragmentThemeTwo.newInstance(config).apply {
                     this.TAG = tag
                 }
             }

@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.auth.verification
 
 import android.annotation.SuppressLint
-import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -12,7 +11,10 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.hide
+import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -20,6 +22,7 @@ import com.aptopayments.sdk.utils.MessageBanner
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_verification_theme_one.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val VERIFICATION_BUNDLE = "verificationBundle"
@@ -27,7 +30,7 @@ private const val VERIFICATION_BUNDLE = "verificationBundle"
 internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerificationContract.View {
 
     override var delegate: EmailVerificationContract.Delegate? = null
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var mViewModel: VerificationViewModel
+    @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: VerificationViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var verification: Verification
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var emailAddress: String
 
@@ -35,7 +38,6 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         emailAddress = verification.verificationDataPoint!!
     }
@@ -47,12 +49,12 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
     }
 
     override fun setupViewModel() {
-        mViewModel = viewModel(viewModelFactory) {
+        viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
             observe(resendButtonState, ::handleResendButtonState)
             failure(failure) { handleFailure(it) }
         }
-        mViewModel.verification.postValue(verification)
+        viewModel.verification.postValue(verification)
     }
 
     override fun setupUI() {
@@ -61,9 +63,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
         setupTexts()
     }
 
-    override fun viewLoaded() {
-        mViewModel.viewLoaded(DataPoint.Type.EMAIL)
-    }
+    override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.EMAIL)
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
@@ -78,7 +78,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     private fun applyFontsAndColors() {
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarColor)
+        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeFormLabel(tv_verification_code_title)
@@ -87,18 +87,13 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
             customizeFormFieldSmall(tv_expired_pin_label)
             customizeFormFieldSmall(tv_resend_countdown_label)
         }
-        tv_resend_btn.paintFlags = tv_resend_btn.paintFlags or UNDERLINE_TEXT_FLAG
     }
 
-    private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = activity?.let { "auth_verify_email_title".localized(it) },
-                backButtonMode = BaseActivity.BackButtonMode.Close(
-                        null,
-                        UIConfig.iconTertiaryColor)
-        )
-    }
+    private fun setupToolBar() = delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = activity?.let { "auth_verify_email_title".localized(it) },
+            backButtonMode = BaseActivity.BackButtonMode.Close(null, UIConfig.iconTertiaryColor)
+    )
 
     override fun setupListeners() {
         super.setupListeners()
@@ -111,7 +106,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
     private fun resendVerification() {
         showLoading()
         hideKeyboard()
-        mViewModel.restartVerification {
+        viewModel.restartVerification {
             hideLoading()
             context?.let { context ->
                 notify("auth_verify_email_resent_message".localized(context), MessageBanner.MessageType.HEADS_UP)
@@ -121,7 +116,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     private fun finishVerification() {
         showLoading()
-        mViewModel.finishVerification(apto_pin_view.pinResults) { result ->
+        viewModel.finishVerification(apto_pin_view.pinResults) { result ->
             hideLoading()
             hideKeyboard()
             result.either(::handleFailure) { verification ->
@@ -166,7 +161,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     private fun handleResendButtonState(newState: ResendButtonState?) {
         newState?.let { state ->
-            when(state) {
+            when (state) {
                 is ResendButtonState.Enabled -> {
                     tv_resend_btn.show()
                     tv_resend_countdown_label.hide()
