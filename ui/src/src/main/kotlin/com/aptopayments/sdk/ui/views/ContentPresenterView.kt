@@ -80,6 +80,7 @@ class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, Apt
         vw_native_content.show()
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun showWebPage(url: String) {
         wb_content_web.show()
         tv_content_text.remove()
@@ -89,6 +90,7 @@ class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, Apt
                 if (progress == 100) delegate?.onContentLoaded()
             }
         }
+        wb_content_web.settings.javaScriptEnabled = true
         wb_content_web.delegate = this
         wb_content_web.loadUrl(url)
     }

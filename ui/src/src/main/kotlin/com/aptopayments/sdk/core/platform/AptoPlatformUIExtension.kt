@@ -11,9 +11,7 @@ import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.utils.FontsUtil
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.loadKoinModules
-import org.koin.core.context.startKoin
 import java.lang.ref.WeakReference
 
 private var _cardFlow: WeakReference<CardFlow>? = null
@@ -24,7 +22,7 @@ internal val AptoPlatform.cardFlow: WeakReference<CardFlow>?
 
 @SuppressLint("VisibleForTests")
 fun AptoPlatform.startCardFlow(from: Activity, cardOptions: CardOptions = CardOptions(), onSuccess: ((Unit) -> Unit)?, onError: ((Failure) -> Unit)?) {
-    loadKoinModules(listOf(applicationModule, viewModelModule))
+    KoinLoader.instance.loadModules()
 
     this.cardOptions = cardOptions
     with(cardOptions.fontOptions) {
@@ -48,5 +46,18 @@ fun AptoPlatform.startCardFlow(from: Activity, cardOptions: CardOptions = CardOp
             onSuccess?.invoke(Unit)
             Unit
         }
+    }
+}
+
+private class KoinLoader private constructor() {
+    fun loadModules() {
+        if (modulesLoaded) return
+        modulesLoaded = true
+        loadKoinModules(listOf(applicationModule, viewModelModule))
+    }
+
+    companion object {
+        private var modulesLoaded = false
+        val instance = KoinLoader()
     }
 }

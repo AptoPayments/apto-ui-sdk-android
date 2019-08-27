@@ -154,7 +154,10 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
 
     override fun onFundingSourceTapped(balance: Balance) = viewModel.setCardFundingSource(mAccountId, balance.id) {
         delegate?.onFundingSourceSelected(onFinish = {
-            activity?.let { notify(resources.getString(R.string.new_funding_source_selected_message), MessageBanner.MessageType.HEADS_UP) }
+            if (it) {
+                notify(resources.getString(R.string.new_funding_source_selected_message),
+                        MessageBanner.MessageType.HEADS_UP)
+            }
         })
     }
 

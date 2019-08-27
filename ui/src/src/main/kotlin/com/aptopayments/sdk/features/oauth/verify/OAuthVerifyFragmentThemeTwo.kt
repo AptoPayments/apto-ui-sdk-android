@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.oauth.verify
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -19,6 +20,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_verify_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -132,8 +134,6 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         tv_address_label.text = "select_balance_store_oauth_confirm_address".localized(it)
         tv_phone_label.text = "select_balance_store_oauth_confirm_phone_number".localized(it)
         tv_date_of_birth_label.text = "select_balance_store_oauth_confirm_birth_date".localized(it)
-        tv_delivery_address_instructions.text = "select_balance_store_oauth_confirm_footer".localized(it)
-        tv_delivery_address_text_link.text = "select_balance_store_oauth_confirm_footer_link".localized(it)
         tv_submit_bttn.text = "select_balance_store_oauth_confirm_call_to_action_title".localized(it)
     }
 
@@ -159,7 +159,12 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
             customizeFormLabel(tv_phone)
             customizeSectionHeader(tv_date_of_birth_label)
             customizeFormLabel(tv_date_of_birth)
+            context?.let {
+                val title = "select_balance_store_oauth_confirm_footer".localized(it)
+                customizeHtml(tv_delivery_address_instructions, StringUtils.parseHtmlLinks(title))
+            }
         }
+        tv_delivery_address_instructions.movementMethod = LinkMovementMethod.getInstance()
     }
 
     @SuppressLint("SetTextI18n")

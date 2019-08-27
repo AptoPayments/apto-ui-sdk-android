@@ -213,8 +213,7 @@
     <string name="select_balance_store_oauth_confirm_address">Address</string>
     <string name="select_balance_store_oauth_confirm_phone_number">Phone number</string>
     <string name="select_balance_store_oauth_confirm_birth_date">Date of birth</string>
-    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?</string>
-    <string name="select_balance_store_oauth_confirm_footer_link">To make changes, go to the settings section in your account and update your information</string>
+    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.coinbase.com/settings\'&gt;To make changes, go to the settings section in your Coinbase account and update your information&lt;/a&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_title">Confirm</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_start">Your card will be sent to address:</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_end">is that correct?</string>

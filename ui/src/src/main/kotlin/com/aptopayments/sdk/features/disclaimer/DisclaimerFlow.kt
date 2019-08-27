@@ -7,7 +7,6 @@ import com.aptopayments.core.data.workflowaction.WorkflowAction
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationShowDisclaimer
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
-import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
@@ -28,8 +27,8 @@ internal class DisclaimerFlow (
         var onAccept: (Unit) -> Unit
 ) : Flow(), DisclaimerContract.Delegate {
 
-    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
-    val analyticsManager: AnalyticsServiceContract by inject()
+    private val aptoPlatform: AptoPlatformProtocol by inject()
+    private val analyticsManager: AnalyticsServiceContract by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val content = actionConfiguration.content
@@ -51,7 +50,7 @@ internal class DisclaimerFlow (
     override fun onDisclaimerAccepted() {
         analyticsManager.track(Event.DisclaimerAccept, JSONObject().put("action_id", workflowAction.actionId))
         showLoading()
-        AptoPlatform.acceptDisclaimer(workflowObjectId, workflowAction) { result ->
+        aptoPlatform.acceptDisclaimer(workflowObjectId, workflowAction) { result ->
             hideLoading()
             result.either(::handleFailure) {
                 onAccept(Unit)
@@ -61,9 +60,9 @@ internal class DisclaimerFlow (
 
     override fun onDisclaimerRejected() {
         analyticsManager.track(Event.DisclaimerReject,  JSONObject().put("action_id", workflowAction.actionId))
-        AptoPlatform.cancelCardApplication(cardApplicationId) { result ->
+        aptoPlatform.cancelCardApplication(cardApplicationId) { result ->
             result.either(::handleFailure) {
-                aptoPlatformProtocol.logout()
+                aptoPlatform.logout()
                 onBack(Unit)
             }
         }

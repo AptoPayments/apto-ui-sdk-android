@@ -50,9 +50,9 @@ internal class FundingSourcesViewModel constructor(
         }
     }
 
-    fun setCardFundingSource(cardID: String, fundingSourceID: String, onComplete: () -> Unit) {
+    fun setCardFundingSource(cardID: String, fundingSourceID: String, onComplete: (succeed: Boolean) -> Unit) {
         state.postValue(State.IN_PROGRESS)
-        AptoPlatform.setCardFundingSource(cardID, fundingSourceID) { result  ->
+        AptoPlatform.setCardFundingSource(fundingSourceID, cardID) { result  ->
             result.either(::handleFailure) {
                 selectedFundingSourceId.postValue(fundingSourceID)
                 fundingSourceListItems.value?.mapNotNull {
@@ -65,7 +65,7 @@ internal class FundingSourcesViewModel constructor(
                 }
                 state.postValue(State.COMPLETED)
             }
-            onComplete()
+            onComplete(result.isRight)
         }
     }
 
@@ -78,7 +78,5 @@ internal class FundingSourcesViewModel constructor(
         return list
     }
 
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardFundingSourceSelector)
-    }
+    fun viewLoaded() = analyticsManager.track(Event.ManageCardFundingSourceSelector)
 }
