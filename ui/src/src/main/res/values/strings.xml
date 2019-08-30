@@ -104,9 +104,8 @@
     <string name="select_card_product_select_country_call_to_action">Select country</string>
 
     <!-- Physical Card Activation (Non blocking) -->
-    <string name="manage_card_activate_physical_card_overlay_title">Enable your physical card</string>
-    <string name="manage_card_activate_physical_card_overlay_message">Received your physical Shift Card? Nice! Tap here to enable it.</string>
-    <string name="manage_card_activate_physical_card_overlay_call_to_action_title">Enable now</string>
+    <string name="manage_card_activate_physical_card_code_title">Enable your physical card</string>
+    <string name="manage_card_activate_physical_card_code_message">Enable your card by entering the activation code that came attached with your physical card.</string>
 
     <!-- Physical Card Activation Success -->
     <string name="manage_card_get_pin_nue_title">Congratulations!</string>
@@ -470,17 +469,17 @@
     <string name="enable_physical_card_title">Enable your physical card</string>
     <string name="enable_physical_card_body">Received your physical Shift Card? Nice! Tap here to enable it.</string>
     <string name="enable_physical_card_accept">Enable now</string>
-    <string name="funding_source_loading_text">Loading crypto wallet</string>
     <string name="account_settings_help_title">Support</string>
     <string name="account_settings_help_contact_support_title"><![CDATA[Help & info]]></string>
     <string name="account_settings_help_contact_support_description">Speak to our customer care team</string>
     <string name="account_settings_logout_title">Log out</string>
 
     <!-- FundingSources -->
-    <string name="new_funding_source_selected_message">Congrats!\n\nNew crypto wallet selected</string>
     <string name="invalid_funding_source_message">Select a funding source\n\nJust as a heads up, your card is disabled until you tap on the card to select a new funding source</string>
     <string name="unavailable">Unavailable</string>
     <string name="manage_card_funding_source_selector_title">Select Funding source</string>
+    <string name="manage_card_funding_source_selector_success_title">Congrats!</string>
+    <string name="manage_card_funding_source_selector_success_message">New crypto wallet selected</string>
 
     <!-- MailTo -->
     <string name="help_mail_subject">Support needed</string>

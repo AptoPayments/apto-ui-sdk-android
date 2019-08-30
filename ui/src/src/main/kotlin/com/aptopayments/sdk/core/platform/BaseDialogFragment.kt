@@ -12,6 +12,7 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import org.koin.android.ext.android.inject
 import java.lang.reflect.Modifier
 
@@ -73,6 +74,6 @@ internal abstract class BaseDialogFragment : DialogFragment() {
         }
     }
 
-    internal fun notify(message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) =
-            activity?.let { MessageBanner(it).showBanner(message, messageType) }
+    internal fun notify(message: String, messageType: MessageBanner.MessageType = ERROR, title: String? = null) =
+            activity?.let { MessageBanner(it).showBanner(message = message, messageType = messageType, title = title) }
 }

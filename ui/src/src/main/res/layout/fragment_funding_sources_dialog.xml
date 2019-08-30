@@ -115,16 +115,5 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="@dimen/llsdk_medium_margin"
             android:progressTint="@color/button_active" />
-
-        <TextView
-            android:id="@+id/loading_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress_bar"
-            android:gravity="center"
-            android:padding="@dimen/_7sdp"
-            android:text="@string/funding_source_loading_text"
-            android:textColor="@color/empty_case_text"
-            android:textSize="@dimen/text_size_medium" />
     </RelativeLayout>
 </RelativeLayout>

@@ -82,7 +82,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun set(balance: Money?, nativeBalance: Money?) {
         tv_balance.text = balance?.toString() ?: invalidBalanceString()
-        tv_balance_native.text = nativeBalance?.let { "≈ $it" } ?: ""
+        if (balance?.currency != nativeBalance?.currency) {
+            tv_balance_native.text = nativeBalance?.let { "≈ $it" } ?: ""
+        } else {
+            tv_balance_native.text = ""
+        }
     }
 
     private fun invalidBalanceString(): String {

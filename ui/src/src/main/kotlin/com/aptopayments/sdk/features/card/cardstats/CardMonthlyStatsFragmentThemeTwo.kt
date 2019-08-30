@@ -22,7 +22,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_card_monthly_stats.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
@@ -32,7 +32,7 @@ private const val CARD_ID_KEY = "CARD_ID"
 internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlyStatsContract.View,
         CardTransactionsChartPagerAdapter.Delegate {
 
-    private val viewModel: CardMonthlyStatsViewModel by viewModel()
+    private val viewModel: CardMonthlyStatsViewModel by sharedViewModel()
     private lateinit var cardId: String
     private lateinit var pagerAdapter: CardTransactionsChartPagerAdapter
     private lateinit var dateList: ArrayList<LocalDate>
@@ -161,10 +161,8 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     private fun updateTabs(monthlySpending: MonthlySpending?) = monthlySpending?.let {
-        if (it.prevSpendingExists) enableTab(0)
-        else disableTab(0)
-        if (it.nextSpendingExists) enableTab(2)
-        else disableTab(2)
+        if (it.prevSpendingExists) enableTab(0) else disableTab(0)
+        if (it.nextSpendingExists) enableTab(2) else disableTab(2)
     }
 
     override fun viewLoaded() {
@@ -173,8 +171,18 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         viewPager.adapter = pagerAdapter
         pagerAdapter.delegate = this
         tabLayout.setupWithViewPager(viewPager)
+        disableTab(0)
         disableTab(2)
         viewPager.setCurrentItem(1, false)
+        tabAdded = false
+        val currentDate = dateList[1]
+        context?.let { context ->
+            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
+                dateList[0] = dateList[1].minusMonths(1)
+                updateTabs(it)
+                pagerAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onCategorySelected(mcc: MCC, startDate: LocalDate, endDate: LocalDate) {

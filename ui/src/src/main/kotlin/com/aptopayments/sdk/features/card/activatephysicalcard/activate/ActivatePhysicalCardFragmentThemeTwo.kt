@@ -66,8 +66,8 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() = context?.let {
-        tv_physical_activation_title.text = "manage_card.activate_physical_card_overlay.title".localized(it)
-        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_overlay.message".localized(it)
+        tv_physical_activation_title.text = "manage_card.activate_physical_card_code.title".localized(it)
+        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_code.message".localized(it)
     }
 
     private fun setupTheme() {

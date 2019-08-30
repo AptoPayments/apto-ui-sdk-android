@@ -27,7 +27,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_transactions_chart_theme_two.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
@@ -37,7 +37,7 @@ private var dataLoaded = false
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
         OnChartValueSelectedListener, CategoryListAdapter.Delegate {
 
-    private val viewModel: CardMonthlyStatsViewModel by viewModel()
+    private val viewModel: CardMonthlyStatsViewModel by sharedViewModel()
     private lateinit var pieChart: AptoPieChart
     private lateinit var cardID: String
     private lateinit var date: LocalDate
