@@ -218,7 +218,7 @@
     <string name="select_balance_store_oauth_confirm_address_confirmation_end">is that correct?</string>
     <string name="select_balance_store_oauth_confirm_address_ok_button">Confirm</string>
     <string name="select_balance_store_oauth_confirm_address_cancel_button">Cancel</string>
-    <string name="select_balance_store_login_new_user_title">&lt;a href=\'https://www.coinbase.com/signup\'&gt;Not a Coinbase user? Tap here.&lt;/a&gt;</string>
+    <string name="select_balance_store_login_new_user_title">&lt;a href=\'https://www.aptopayments.com\'&gt;Don\'t have an account? Tap here.&lt;/a&gt;</string>
     <string name="select_balance_store_oauth_confirm_updated_pii_message_message">Looks like you’ve updated your personal details in your account.</string>
 
     <!-- Disclaimers -->
@@ -261,7 +261,7 @@
     <string name="external_oauth_login_title">Connect your account</string>
     <string name="external_oauth_login_explanation">Spend your cryptocurrency held on your account across 44 million locations worldwide.</string>
     <string name="external_oauth_login_call_to_action_title">Connect your account</string>
-    <string name="external_oauth_login_new_user_title">&lt;a href=\'https://www.coinbase.com/signup\'&gt;Not a Coinbase user? Tap here.&lt;/a&gt;</string>
+    <string name="external_oauth_login_new_user_title">&lt;a href=\'https://www.aptopayments.com\'&gt;Don\'t have an account? Tap here.&lt;/a&gt;</string>
 
     <!-- Errors -->
     <string name="session_expired_error">User session has expired. Please sign in with your credentials.</string>
