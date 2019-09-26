@@ -108,11 +108,9 @@ internal class SelectBalanceStoreFlow (
     private fun confirmAddressIfNeeded(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt) {
         (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)?.firstOrNull() as? AddressDataPoint)?.let { address ->
             rootActivity()?.let { context ->
-                var message = "select_balance_store.oauth_confirm.address.confirmation_start".localized(context)
-                val separator = "\n\n"
-                message += separator + address.toStringRepresentation() + separator
-                message += "select_balance_store.oauth_confirm.address.confirmation_end".localized(context)
-                confirm(title = "select_balance_store.oauth_confirm.address.title".localized(context),
+                val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized(context)
+                        .replace("<<ADDRESS>>", address.toStringRepresentation())
+                confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(context),
                         text = message,
                         confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(context),
                         cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(context),

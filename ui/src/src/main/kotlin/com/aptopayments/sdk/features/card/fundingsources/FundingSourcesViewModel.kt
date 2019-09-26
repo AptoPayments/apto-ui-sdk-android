@@ -74,7 +74,9 @@ internal class FundingSourcesViewModel constructor(
         fundingSources.forEach { balance ->
             list.add(FundingSourceListItem.FundingSourceRow(balance, balance.id == selected))
         }
-        list.add(FundingSourceListItem.AddFundingSourceButton)
+        if (!AptoPlatform.cardOptions.hideFundingSourcesReconnectButton()) {
+            list.add(FundingSourceListItem.AddFundingSourceButton)
+        }
         return list
     }
 

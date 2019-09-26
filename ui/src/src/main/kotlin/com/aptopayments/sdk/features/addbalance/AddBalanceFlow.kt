@@ -43,7 +43,8 @@ internal class AddBalanceFlow (
                 explanation = "external_oauth.login.explanation",
                 callToAction = "external_oauth.login.call_to_action.title",
                 newUserAction = "external_oauth.login.new_user.title",
-                allowedBalanceType = allowedBalanceType
+                allowedBalanceType = allowedBalanceType,
+                errorMessageKeys = oauthErrorMessageKeys
         )
         val flow = OAuthFlow(
                 config = config,
@@ -105,6 +106,17 @@ internal class AddBalanceFlow (
                 "external_auth.login.error_insufficient_application_limit.message",
                 "external_auth.login.error_identity_not_verified.message",
                 "external_auth.login.error_unknown.message"
+        )
+    private val oauthErrorMessageKeys: List<String>
+        get() = listOf(
+                "external_auth.login.error_oauth_invalid_request.message",
+                "external_auth.login.error_oauth_unauthorised_client.message",
+                "external_auth.login.error_oauth_access_denied.message",
+                "external_auth.login.error_oauth_unsupported_response_type.message",
+                "external_auth.login.error_oauth_invalid_scope.message",
+                "external_auth.login.error_oauth_server_error.message",
+                "external_auth.login.error_oauth_temporarily_unavailable.message",
+                "external_auth.login.error_oauth_unknown.message"
         )
 }
 

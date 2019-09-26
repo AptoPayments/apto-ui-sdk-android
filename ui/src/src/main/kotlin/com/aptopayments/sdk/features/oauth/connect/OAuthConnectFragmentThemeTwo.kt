@@ -8,7 +8,8 @@ import android.view.MenuInflater
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.oauth.OAuthAttempt
-import com.aptopayments.core.data.oauth.OAuthAttemptStatus
+import com.aptopayments.core.data.oauth.OAuthAttemptStatus.FAILED
+import com.aptopayments.core.data.oauth.OAuthAttemptStatus.PASSED
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
@@ -17,6 +18,7 @@ import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.oauth.OAuthConfig
+import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_connect_theme_two.*
@@ -30,6 +32,7 @@ private const val EXPLANATION_KEY = "EXPLANATION"
 private const val CALL_TO_ACTION_KEY = "CALL_TO_ACTION"
 private const val NEW_USER_ACTION_KEY = "NEW_USER_ACTION"
 private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
+private const val ERROR_MESSAGE_KEYS_KEY = "ERROR_MESSAGE_KEYS"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContract.View {
@@ -42,6 +45,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     private lateinit var callToAction: String
     private lateinit var newUserAction: String
     private lateinit var allowedBalanceType: AllowedBalanceType
+    private var errorMessageKeys: List<String>? = null
     private var oauthAttempt: OAuthAttempt? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +56,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         callToAction = arguments!![CALL_TO_ACTION_KEY] as String
         newUserAction = arguments!![NEW_USER_ACTION_KEY] as String
         allowedBalanceType = arguments!![ALLOWED_BALANCE_TYPE_KEY] as AllowedBalanceType
+        errorMessageKeys = arguments!![ERROR_MESSAGE_KEYS_KEY] as? List<String>
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -139,11 +144,19 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
             viewModel.checkOAuthAuthentication(it) { oauthAttempt ->
                 hideLoading()
                 this.oauthAttempt = oauthAttempt
-                if (oauthAttempt.status == OAuthAttemptStatus.PASSED) {
-                    delegate?.onOAuthSuccess(oauthAttempt)
+                when(oauthAttempt.status) {
+                    PASSED -> delegate?.onOAuthSuccess(oauthAttempt)
+                    FAILED -> { showOauthFailure(oauthAttempt) }
+                    else -> {}
                 }
             }
         }
+    }
+
+    private fun showOauthFailure(oauthAttempt: OAuthAttempt) {
+        if (oauthAttempt.status != FAILED) { return }
+        oauthAttempt.errorMessageKeys = errorMessageKeys
+        context?.let { notify(message = oauthAttempt.localizedErrorMessage(it), type = ERROR) }
     }
 
     companion object {
@@ -154,6 +167,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
                 putSerializable(CALL_TO_ACTION_KEY, config.callToAction)
                 putSerializable(NEW_USER_ACTION_KEY, config.newUserAction)
                 putSerializable(ALLOWED_BALANCE_TYPE_KEY, config.allowedBalanceType)
+                config.errorMessageKeys?.let { putStringArrayList(ERROR_MESSAGE_KEYS_KEY, ArrayList(it)) }
             }
         }
     }

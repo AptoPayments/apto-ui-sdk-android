@@ -213,9 +213,8 @@
     <string name="select_balance_store_oauth_confirm_phone_number">Phone number</string>
     <string name="select_balance_store_oauth_confirm_birth_date">Date of birth</string>
     <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.coinbase.com/settings\'&gt;To make changes, go to the settings section in your Coinbase account and update your information&lt;/a&gt;</string>
-    <string name="select_balance_store_oauth_confirm_address_title">Confirm</string>
-    <string name="select_balance_store_oauth_confirm_address_confirmation_start">Your card will be sent to address:</string>
-    <string name="select_balance_store_oauth_confirm_address_confirmation_end">is that correct?</string>
+    <string name="select_balance_store_oauth_confirm_address_confirmation_title">Get your physical card</string>
+    <string name="select_balance_store_oauth_confirm_address_confirmation_message">We\'ll send your physical card to the address below:\n\n&lt;&lt;ADDRESS&gt;&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_ok_button">Confirm</string>
     <string name="select_balance_store_oauth_confirm_address_cancel_button">Cancel</string>
     <string name="select_balance_store_login_new_user_title">&lt;a href=\'https://www.aptopayments.com\'&gt;Don\'t have an account? Tap here.&lt;/a&gt;</string>
@@ -609,6 +608,21 @@
     <string name="select_balance_store_login_error_ok_button">Ok</string>
     <string name="select_balance_store_login_error_email_sends_disabled_message">You\'ve disabled the ability to send funds to an email address.</string>
     <string name="select_balance_store_login_error_insufficient_application_limit_message">To continue, you must increase the authorised amount of funds accesibles per day.</string>
+    <string name="select_balance_store_login_error_oauth_invalid_request_message">Invalid request</string>
+    <string name="select_balance_store_login_error_oauth_unauthorised_client_message">Unauthorised client</string>
+    <string name="select_balance_store_login_error_oauth_access_denied_message">Access denied</string>
+    <string name="select_balance_store_login_error_oauth_unsupported_response_type_message">Unsupported response type</string>
+    <string name="select_balance_store_login_error_oauth_invalid_scope_message">Invalid scope</string>
+    <string name="select_balance_store_login_error_oauth_server_error_message">Server error</string>
+    <string name="select_balance_store_login_error_oauth_temporarily_unavailable_message">Temporarily unavailable</string>
+    <string name="select_balance_store_login_error_oauth_unknown_message">Unknown</string>
+    <string name="external_auth_login_error_oauth_unauthorised_client_message">Unauthorised client</string>
+    <string name="external_auth_login_error_oauth_access_denied_message">Access denied</string>
+    <string name="external_auth_login_error_oauth_unsupported_response_type_message">Unsupported response type</string>
+    <string name="external_auth_login_error_oauth_invalid_scope_message">Invalid scope</string>
+    <string name="external_auth_login_error_oauth_server_error_message">Server error</string>
+    <string name="external_auth_login_error_oauth_temporarily_unavailable_message">Temporarily unavailable</string>
+    <string name="external_auth_login_error_oauth_unknown_message">Unknown</string>
 
     <!--Waitlist-->
     <string name="wait_list_wait_list_title">You\'re on top of the waitlist!</string>
