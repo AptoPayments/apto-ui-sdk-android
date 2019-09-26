@@ -155,6 +155,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     private fun disableTab(index: Int) {
+        if (dateList[index] == LocalDate.MAX) return
         (tabLayout.getChildAt(0) as ViewGroup).getChildAt(index).isClickable = false
         dateList[index] = LocalDate.MAX
         pagerAdapter.notifyDataSetChanged()

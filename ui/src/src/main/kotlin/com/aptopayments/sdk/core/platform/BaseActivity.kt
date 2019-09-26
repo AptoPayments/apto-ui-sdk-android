@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.aptopayments.sdk.R
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.sdk.core.extension.isVisible
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -31,6 +32,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     internal fun showLoading() {
         isLoading = true
+        if (rl_loading_view.isVisible()) return
         val animation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         pb_progress.indeterminateDrawable.setColorFilter(UIConfig.uiPrimaryColor, PorterDuff.Mode.SRC_IN)
         rl_loading_view.show()
@@ -39,6 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     internal fun hideLoading() {
         isLoading = false
+        if (!rl_loading_view.isVisible()) return
         val animation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
         rl_loading_view.remove()
         rl_loading_view.startAnimation(animation)

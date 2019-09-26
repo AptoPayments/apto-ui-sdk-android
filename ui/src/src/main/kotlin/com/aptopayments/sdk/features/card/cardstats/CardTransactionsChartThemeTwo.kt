@@ -71,7 +71,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         if (!dataLoaded) showLoading()
         context?.let {
             viewModel.getMonthlySpending(it, cardID, date.monthToString(), date.yearToString()) {
-                if (!dataLoaded) hideLoading()
+                hideLoading()
                 dataLoaded = true
                 showViews()
             }
