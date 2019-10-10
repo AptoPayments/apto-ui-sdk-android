@@ -82,7 +82,10 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         super.onPrepareOptionsMenu(menu)
         (this.menu?.findItem(R.id.menu_activate_physical_card))?.isVisible =
                 (viewModel.orderedStatus.value == Card.OrderedStatus.ORDERED)
-        (this.menu?.findItem(R.id.menu_card_stats))?.isVisible = AptoPlatform.cardOptions.showStatsButton()
+        (this.menu?.findItem(R.id.menu_card_stats))?.isVisible =
+                AptoPlatform.cardOptions.showStatsButton()
+        (this.menu?.findItem(R.id.menu_account_settings))?.isVisible =
+                AptoPlatform.cardOptions.showAccountSettingsButton()
     }
 
     @SuppressLint("SetTextI18n")
