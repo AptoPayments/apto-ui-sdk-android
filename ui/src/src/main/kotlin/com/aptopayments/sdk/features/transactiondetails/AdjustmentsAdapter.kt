@@ -11,6 +11,7 @@ import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.data.transaction.TransactionAdjustment
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.core.extension.remove
+import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import java.text.NumberFormat
 
@@ -58,17 +59,26 @@ internal class AdjustmentsAdapter(
                 viewHolder.exchangeRate.text = String.format("1 %s @ %s %s", nativeAmount.currency,
                         currency, formatDouble(exchangeRate))
                 themeManager().customizeTimestamp(viewHolder.exchangeRate)
+                viewHolder.exchangeRate.show()
             } ?: viewHolder.exchangeRate.remove()
+            viewHolder.amount.show()
         } ?: viewHolder.amount.remove()
 
+        var feeText: String? = null
         adjustment.feeAmount?.let {
-            val feeAmount: String = if(mTransaction.transactionType.isCredit()) {
-                mTransaction.getAmountPrefix() + it.toAbsString()
-            } else {
-                it.toAbsString()
+            if ((it.amount ?: 0.0) != 0.0) {
+                val feeAmount: String = if(mTransaction.transactionType.isCredit()) {
+                    mTransaction.getAmountPrefix() + it.toAbsString()
+                } else {
+                    it.toAbsString()
+                }
+                feeText = String.format("%s %s", "transaction_details.adjustment.fee.title".localized(mContext), feeAmount)
             }
-            viewHolder.fee.text = String.format("%s %s", "transaction_details.adjustment.fee.title".localized(mContext), feeAmount)
+        }
+        feeText?.let {
+            viewHolder.fee.text = it
             themeManager().customizeTimestamp(viewHolder.fee)
+            viewHolder.fee.show()
         } ?: viewHolder.fee.remove()
     }
 
