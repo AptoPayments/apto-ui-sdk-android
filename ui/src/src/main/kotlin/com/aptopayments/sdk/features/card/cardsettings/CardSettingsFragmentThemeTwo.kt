@@ -156,16 +156,21 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         rl_contact_support.setOnClickListener { sendCustomerSupportEmail() }
         rl_report_stolen_card.setOnClickListener { reportLostOrStolenCard() }
         rl_ivr_support.setOnClickListener { callIvrSupport() }
+        rl_statement.setOnClickListener { onStatementPressed() }
     }
 
     private fun setupTheme() {
         themeManager().customizeToolbarTitle(tv_toolbar_title)
-        (rl_faq as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
+        (rl_statement as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         (rl_lock_card as SectionSwitchViewTwo).hideBottomSeparator()
         (rl_terms_of_service as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         if (AptoPlatform.cardOptions.showDetailedCardActivityOption()) {
             transactions_section.show()
             rl_detailed_card_activity.sw_tv_section_switch_switch.isChecked = getDetailedCardActivityPreference()
+        }
+        if (!AptoPlatform.cardOptions.showMonthlyStatementOption()) {
+            rl_statement.remove()
+            (rl_faq as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         }
     }
 
@@ -232,6 +237,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                 title = "card_settings.legal.terms_of_service.title".localized(it),
                 description = "card_settings.legal.terms_of_service.description".localized(it)
         )
+        (rl_statement as SectionOptionWithSubtitleViewTwo).set(
+            title = "card_settings.help.monthly_statements.title".localized(it),
+            description = "card_settings.help.monthly_statements.description".localized(it)
+        )
     }
 
     private fun setupToolBar() {
@@ -265,6 +274,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         card.features?.ivrSupport?.ivrPhone?.let { phoneNUmber ->
             viewModel.dial(phone = phoneNUmber, from = context)
         }
+    }
+
+    private fun onStatementPressed() {
+        delegate?.showStatement()
     }
 
     private fun lockUnlockCard(value: Boolean) {

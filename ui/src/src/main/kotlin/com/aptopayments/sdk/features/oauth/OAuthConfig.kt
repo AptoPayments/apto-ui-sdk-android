@@ -9,5 +9,6 @@ class OAuthConfig (
         val callToAction: String,
         val newUserAction: String,
         val allowedBalanceType: AllowedBalanceType,
+        val assetUrl: String?,
         val errorMessageKeys: List<String>? = null
 ) : Serializable

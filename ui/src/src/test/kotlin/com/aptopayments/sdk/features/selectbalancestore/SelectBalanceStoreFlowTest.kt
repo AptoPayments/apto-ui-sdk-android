@@ -47,7 +47,7 @@ class SelectBalanceStoreFlowTest : UnitTest() {
         }
         val testAllowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val testAllowedBalanceTypeList = listOf(testAllowedBalanceType)
-        val mockActionConfig = WorkflowActionConfigurationSelectBalanceStore(testAllowedBalanceTypeList)
+        val mockActionConfig = WorkflowActionConfigurationSelectBalanceStore(testAllowedBalanceTypeList, null)
         sut = SelectBalanceStoreFlow(actionConfiguration = mockActionConfig,
                 cardApplicationId = cardApplicationId, onBack = {}, onFinish = {})
     }
@@ -56,13 +56,15 @@ class SelectBalanceStoreFlowTest : UnitTest() {
     fun `should start the OAuth flow if config contains an allowed balance type`() {
         // Given
         val sutSpy = Mockito.spy(sut)
-        Mockito.doNothing().`when`(sutSpy).initOAuthFlow(TestDataProvider.anyObject(), TestDataProvider.anyObject())
+        Mockito.doNothing().`when`(sutSpy).initOAuthFlow(TestDataProvider.anyObject(), TestDataProvider.anyObject(),
+                TestDataProvider.anyObject())
 
         // When
         sutSpy.init {}
 
         // Then
-        verify(sutSpy).initOAuthFlow(TestDataProvider.anyObject(), TestDataProvider.anyObject())
+        verify(sutSpy).initOAuthFlow(TestDataProvider.anyObject(), TestDataProvider.anyObject(),
+                TestDataProvider.anyObject())
     }
 
     @Test

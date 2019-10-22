@@ -44,6 +44,7 @@ internal class AddBalanceFlow (
                 callToAction = "external_oauth.login.call_to_action.title",
                 newUserAction = "external_oauth.login.new_user.title",
                 allowedBalanceType = allowedBalanceType,
+                assetUrl = null,
                 errorMessageKeys = oauthErrorMessageKeys
         )
         val flow = OAuthFlow(

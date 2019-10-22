@@ -9,11 +9,16 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
 import com.aptopayments.sdk.utils.SendEmailUtil
 import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.*
+import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.rl_contact_support
+import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.tb_llsdk_custom_toolbar
+import kotlinx.android.synthetic.main.fragment_card_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
@@ -50,6 +55,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         rl_contact_support.setOnClickListener { sendCustomerSupportEmail() }
         rl_sign_out.setOnClickListener { showConfirmLogOutDialog() }
         rl_notifications.setOnClickListener { delegate?.showNotificationPreferences() }
+        statements_container.setOnClickListener { delegate?.onMonthlyStatementTapped() }
     }
 
     override fun onBackPressed() {
@@ -68,11 +74,22 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
                 customizeMainItem(tv_contact_support)
                 customizeTimestamp(tv_contact_support_description)
                 customizeMainItem(tv_sign_out)
+                customizeMainItem(statements_title)
+                customizeTimestamp(statements_description)
             }
         }
         iv_notifications_icon.setColorFilter(UIConfig.uiTertiaryColor)
         iv_help_center_icon.setColorFilter(UIConfig.uiTertiaryColor)
         iv_sign_out_icon.setColorFilter(UIConfig.uiTertiaryColor)
+        statements_icon.setColorFilter(UIConfig.uiTertiaryColor)
+        evaluateMonthlyStatementsRemoval()
+    }
+
+    private fun evaluateMonthlyStatementsRemoval() {
+        if (!AptoPlatform.cardOptions.showMonthlyStatementOption()) {
+            statements_container.remove()
+            statements_separator.remove()
+        }
     }
 
     private fun setupToolbar() {
@@ -90,6 +107,8 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         tv_contact_support.text = "account_settings.help.contact_support.title".localized(it)
         tv_contact_support_description.text = "account_settings.help.contact_support.description".localized(it)
         tv_sign_out.text = "account_settings.logout.title".localized(it)
+        statements_title.text = "card_settings.help.monthly_statements.title".localized(it)
+        statements_description.text = "card_settings.help.monthly_statements.description".localized(it)
     }
 
     private fun showConfirmLogOutDialog() = context?.let { context ->

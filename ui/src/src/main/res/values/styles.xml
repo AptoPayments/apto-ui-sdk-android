@@ -19,7 +19,7 @@
     </style>
 
     <style name="progressBarBlue" parent="AppTheme.Translucent">
-        <item name="colorAccent">@color/coinbase_title_color</item>
+        <item name="colorAccent">@color/title_color</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -80,7 +80,7 @@
     <style name="ThemeTwo" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/coinbase_title_color</item>
+        <item name="android:textColor">@color/title_color</item>
     </style>
 
     <style name="ThemeTwo.VerificationTextHeader" parent="ThemeTwo">

@@ -14,12 +14,14 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.MCC.Icon
+import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.data.transaction.iconResource
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.repository.StatementRepository
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -62,6 +64,20 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         setupTexts()
         setupChart()
         setupCategoryListRecyclerView()
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        monthly_statement_link.setOnClickListener { delegate?.onStatementTapped(date.monthValue, date.year) }
+    }
+
+    override fun handleFailure(failure: Failure?) {
+        hideLoading()
+        when (failure) {
+            is StatementRepository.StatementExpiredFailure -> notify(failure.message)
+            is StatementRepository.StatementDownloadFailure -> notify(failure.message)
+            else -> super.handleFailure(failure)
+        }
     }
 
     override fun onStart() {
@@ -94,13 +110,22 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             customizeStarredSectionTitle(tv_list_title, UIConfig.textSecondaryColor)
             customizeEmptyCase(tv_no_transactions)
             customizeSectionTitle(tv_center_text_difference)
+            customizeFormTextLink(monthly_statement_link)
         }
         tv_center_text_difference.setTextColor(UIConfig.textMessageColor)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pieChart = view.findViewById(R.id.chart)
+        configureMonthlyStatement()
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun configureMonthlyStatement() {
+        viewModel.hasMonthlyStatementToShow(date.monthValue, date.year) { hasStatement ->
+            monthly_statement_link?.invisibleIf(!hasStatement)
+            monthly_statement_separator?.invisibleIf(!hasStatement)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -109,6 +134,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             tv_center_text_title.text = "stats.monthly_spending.graph.title".localized(it)
             tv_no_transactions.text = "stats_monthly_spending_list_empty_case".localized(it)
             tv_list_title.text = "stats.monthly_spending.list.title".localized(it)
+            monthly_statement_link.text = "stats_monthly_spending_view_statement".localized(it)
         }
     }
 

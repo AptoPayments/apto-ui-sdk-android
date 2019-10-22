@@ -14,6 +14,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.AuthFlow
+import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.features.managecard.ManageCardFlow
 import com.aptopayments.sdk.features.newcard.NewCardFlow
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
@@ -30,6 +31,8 @@ internal class CardFlow : Flow(), KoinComponent {
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     private val networkHandler: NetworkHandler by inject()
     val analyticsManager: AnalyticsServiceContract by inject()
+    private val statementRepository: StatementRepository by inject()
+
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
     private var maintenanceFragmentShown = false
@@ -173,6 +176,7 @@ internal class CardFlow : Flow(), KoinComponent {
                 initResult.either(::handleFailure) { flow ->
                     clearChildElements()
                     popAllFragments(animated = true) { push(flow) }
+                    statementRepository.clearCache()
                 }
             }
         }

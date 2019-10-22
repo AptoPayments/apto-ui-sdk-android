@@ -17,6 +17,7 @@ import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
+import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationContract
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
@@ -47,6 +48,8 @@ import com.aptopayments.sdk.features.card.setpin.ConfirmPinContract
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinFragmentThemeTwo
 import com.aptopayments.sdk.features.card.setpin.SetPinContract
 import com.aptopayments.sdk.features.card.setpin.SetPinFragmentThemeTwo
+import com.aptopayments.sdk.features.card.statements.StatementListContract
+import com.aptopayments.sdk.features.card.statements.StatementListFragment
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListContract
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragmentThemeTwo
@@ -80,9 +83,12 @@ import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContra
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragmentThemeTwo
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.features.voip.VoipFragmentThemeTwo
+import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
+import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererFragment
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserFragment
 import org.threeten.bp.LocalDate
+import java.io.File
 
 @SuppressLint("VisibleForTests")
 internal class FragmentFactoryImpl constructor() : FragmentFactory {
@@ -489,6 +495,19 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
         return when(uiTheme) {
             THEME_2 -> VoipFragmentThemeTwo.newInstance(cardId, action).apply { this.TAG = tag }
             else -> VoipFragmentThemeTwo.newInstance(cardId, action)
+        }
+    }
+
+    override fun statementListFragment(uiTheme: UITheme, tag: String): StatementListContract.View =
+        configureTheme(uiTheme, StatementListFragment.newInstance(),tag) as StatementListFragment
+
+    override fun pdfRendererFragment(uiTheme: UITheme, title: String, file: File, tag: String): PdfRendererContract.View =
+        configureTheme(uiTheme, PdfRendererFragment.newInstance(title, file),tag) as PdfRendererFragment
+
+    private fun configureTheme(uiTheme: UITheme, fragment: BaseFragment, tag: String): BaseFragment {
+        return when (uiTheme) {
+            THEME_2 -> fragment.apply { this.TAG = tag }
+            else -> fragment
         }
     }
 }

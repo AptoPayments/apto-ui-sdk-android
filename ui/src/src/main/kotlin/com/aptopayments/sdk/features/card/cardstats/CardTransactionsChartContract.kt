@@ -7,6 +7,7 @@ interface CardTransactionsChartContract {
 
     interface Delegate {
         fun onCategorySelected(mcc: MCC, startDate: LocalDate, endDate: LocalDate)
+        fun onStatementTapped(month: Int, year: Int)
     }
 
     interface View {

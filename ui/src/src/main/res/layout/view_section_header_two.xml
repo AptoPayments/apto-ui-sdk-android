@@ -1,5 +1,6 @@
-<com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<com.aptopayments.sdk.ui.views.SectionHeaderViewTwo xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_settings_section_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,17 +9,18 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:padding="@dimen/_4sdp"/>
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_4sdp"
+        tools:text="Title" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorAccent" />
 
 </com.aptopayments.sdk.ui.views.SectionHeaderViewTwo>

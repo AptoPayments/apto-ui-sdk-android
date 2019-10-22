@@ -30,6 +30,7 @@ import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinContract
 import com.aptopayments.sdk.features.card.setpin.SetPinContract
+import com.aptopayments.sdk.features.card.statements.StatementListContract
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListContract
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
@@ -47,8 +48,10 @@ import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipContract
+import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
 import org.threeten.bp.LocalDate
+import java.io.File
 
 internal interface FragmentFactory {
 
@@ -221,4 +224,14 @@ internal interface FragmentFactory {
             action: Action,
             tag: String
     ): VoipContract.View
+
+    fun statementListFragment(
+        uiTheme: UITheme,
+        tag: String
+    ): StatementListContract.View
+
+    fun pdfRendererFragment(
+        uiTheme: UITheme,
+        title: String, file: File, tag: String
+    ): PdfRendererContract.View
 }

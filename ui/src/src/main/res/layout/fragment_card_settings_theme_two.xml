@@ -84,6 +84,9 @@
                 <include layout="@layout/view_section_option_subtitle_two"
                     android:id="@+id/rl_faq" />
 
+                <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_statement" />
+
             </LinearLayout>
 
             <LinearLayout

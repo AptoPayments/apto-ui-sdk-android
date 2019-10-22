@@ -14,6 +14,7 @@ import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -32,6 +33,7 @@ private const val EXPLANATION_KEY = "EXPLANATION"
 private const val CALL_TO_ACTION_KEY = "CALL_TO_ACTION"
 private const val NEW_USER_ACTION_KEY = "NEW_USER_ACTION"
 private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
+private const val ASSET_URL_KEY = "ASSET_URL"
 private const val ERROR_MESSAGE_KEYS_KEY = "ERROR_MESSAGE_KEYS"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
@@ -45,6 +47,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     private lateinit var callToAction: String
     private lateinit var newUserAction: String
     private lateinit var allowedBalanceType: AllowedBalanceType
+    private var assetUrl: String? = null
     private var errorMessageKeys: List<String>? = null
     private var oauthAttempt: OAuthAttempt? = null
 
@@ -56,6 +59,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         callToAction = arguments!![CALL_TO_ACTION_KEY] as String
         newUserAction = arguments!![NEW_USER_ACTION_KEY] as String
         allowedBalanceType = arguments!![ALLOWED_BALANCE_TYPE_KEY] as AllowedBalanceType
+        assetUrl = arguments!!.getString(ASSET_URL_KEY)
         errorMessageKeys = arguments!![ERROR_MESSAGE_KEYS_KEY] as? List<String>
     }
 
@@ -78,6 +82,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         setupTheme()
         setupToolbar()
         setupTexts()
+        setupImageView()
     }
 
     override fun onResume() {
@@ -113,6 +118,10 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         tv_coinbase_header.text = title.localized(it)
         tv_coinbase_info.text = explanation.localized(it)
         tv_submit_bttn.text = callToAction.localized(it)
+    }
+
+    private fun setupImageView() {
+        assetUrl?.let { image_view.loadFromUrl(it) }
     }
 
     private fun setupTheme() {
@@ -167,6 +176,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
                 putSerializable(CALL_TO_ACTION_KEY, config.callToAction)
                 putSerializable(NEW_USER_ACTION_KEY, config.newUserAction)
                 putSerializable(ALLOWED_BALANCE_TYPE_KEY, config.allowedBalanceType)
+                config.assetUrl?.let { putString(ASSET_URL_KEY, it) }
                 config.errorMessageKeys?.let { putStringArrayList(ERROR_MESSAGE_KEYS_KEY, ArrayList(it)) }
             }
         }

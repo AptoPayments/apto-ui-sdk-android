@@ -4,12 +4,12 @@
     <!-- Bottom 2dp Shadow -->
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="@color/coinbase_title_color" />
+            <solid android:color="@color/title_color" />
             <corners android:radius="12dp"/>
             <gradient
                 android:angle="360"
                 android:startColor="@color/button_settings_background"
-                android:endColor="@color/coinbase_title_color"
+                android:endColor="@color/title_color"
                 android:type="linear" />
         </shape>
     </item>

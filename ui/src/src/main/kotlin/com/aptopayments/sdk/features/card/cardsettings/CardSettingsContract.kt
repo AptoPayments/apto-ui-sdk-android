@@ -20,6 +20,7 @@ interface CardSettingsContract {
         fun onCardStateChanged()
         fun onSetPin()
         fun showVoip(action: Action)
+        fun showStatement()
     }
 
     interface View {

@@ -22,6 +22,7 @@ internal class CardTransactionsChartPagerAdapter(
 
     interface Delegate {
         fun onCategorySelected(mcc: MCC, startDate: LocalDate, endDate: LocalDate)
+        fun onStatementTapped(month: Int, year: Int)
     }
 
     val fragmentFactory: FragmentFactory by inject()
@@ -48,5 +49,9 @@ internal class CardTransactionsChartPagerAdapter(
 
     override fun onCategorySelected(mcc: MCC, startDate: LocalDate, endDate: LocalDate) {
         delegate?.onCategorySelected(mcc, startDate, endDate)
+    }
+
+    override fun onStatementTapped(month: Int, year: Int) {
+        delegate?.onStatementTapped(month, year)
     }
 }

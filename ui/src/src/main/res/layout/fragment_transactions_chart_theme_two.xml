@@ -9,7 +9,8 @@
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/ll_chart_text"
@@ -18,7 +19,8 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_center_text_title"
@@ -50,19 +52,42 @@
             android:paddingEnd="@dimen/_10sdp"
             android:paddingTop="@dimen/_1sdp"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/monthly_statement_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/chart"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorAccent"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/monthly_statement_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/monthly_statement_separator"
+        android:gravity="center_horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        tools:text="@string/stats_monthly_spending_view_statement"
+        android:visibility="invisible"/>
 
     <View
         android:id="@+id/transaction_list_top_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/chart"
+        android:layout_below="@+id/monthly_statement_link"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="32dp"
         android:background="@color/colorAccent"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_list_title"
@@ -73,6 +98,7 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="21dp"
         android:visibility="invisible"
+        tools:visibility="visible"
         tools:text="Categories"/>
 
     <View
@@ -83,14 +109,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_categories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/transaction_list_bottom_separator"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_no_transactions"
@@ -101,5 +129,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/_64sdp"
         android:layout_marginRight="@dimen/_64sdp"
-        android:layout_marginBottom="@dimen/_64sdp" />
+        android:layout_marginBottom="@dimen/_64sdp"
+        tools:text="There are no ..."
+        tools:visibility="visible" />
 </RelativeLayout>

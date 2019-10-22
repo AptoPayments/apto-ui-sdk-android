@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true"
@@ -29,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <View
                 android:layout_width="match_parent"
@@ -54,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_13sdp">
+                android:layout_marginBottom="@dimen/_13sdp"
+                android:background="?selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -68,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="Notifications"
-                        tools:textColor="@color/coinbase_title_color" />
+                        tools:textColor="@color/title_color" />
 
                     <TextView
                         android:id="@+id/tv_notifications_description"
@@ -87,8 +90,8 @@
                     android:paddingStart="@dimen/_17sdp"
                     android:paddingLeft="@dimen/_17sdp"
                     android:src="@drawable/ic_row_arrow_white"
-                    tools:drawableTint="@color/coinbase_title_color"
-                    tools:tint="@color/coinbase_title_color" />
+                    tools:drawableTint="@color/title_color"
+                    tools:tint="@color/title_color" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -115,7 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_13sdp"
-            android:layout_marginBottom="@dimen/_13sdp">
+            android:layout_marginBottom="@dimen/_13sdp"
+            android:background="?selectableItemBackground">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -129,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Help &amp; info"
-                    tools:textColor="@color/coinbase_title_color" />
+                    tools:textColor="@color/title_color" />
 
                 <TextView
                     android:id="@+id/tv_contact_support_description"
@@ -148,11 +152,58 @@
                 android:paddingStart="@dimen/_17sdp"
                 android:paddingLeft="@dimen/_17sdp"
                 android:src="@drawable/ic_row_arrow_white"
-                tools:drawableTint="@color/coinbase_title_color"
-                tools:tint="@color/coinbase_title_color" />
+                tools:drawableTint="@color/title_color"
+                tools:tint="@color/title_color" />
         </RelativeLayout>
 
         <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/statements_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:layout_marginBottom="@dimen/_13sdp"
+            android:paddingStart="16dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:id="@+id/statements_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Monthly Statements"
+                tools:textColor="@color/title_color" />
+
+            <TextView
+                android:id="@+id/statements_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/statements_title"
+                tools:text="Speak to our customer care team" />
+
+            <ImageView
+                android:id="@+id/statements_icon"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/_17sdp"
+                android:paddingLeft="@dimen/_17sdp"
+                android:src="@drawable/ic_row_arrow_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:drawableTint="@color/title_color"
+                tools:tint="@color/title_color" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/statements_separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorAccent" />
@@ -162,7 +213,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_12sdp">
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:background="?selectableItemBackground">
 
             <TextView
                 android:id="@+id/tv_sign_out"
@@ -170,8 +222,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="16dp"
-                tools:text="Log out"
-                tools:drawableTint="@color/coinbase_title_color" />
+                tools:drawableTint="@color/title_color"
+                tools:text="Log out" />
 
             <ImageView
                 android:id="@+id/iv_sign_out_icon"
@@ -183,8 +235,8 @@
                 android:paddingStart="@dimen/_17sdp"
                 android:paddingLeft="@dimen/_17sdp"
                 android:src="@drawable/ic_row_arrow_white"
-                tools:drawableTint="@color/coinbase_title_color"
-                tools:tint="@color/coinbase_title_color" />
+                tools:drawableTint="@color/title_color"
+                tools:tint="@color/title_color" />
         </RelativeLayout>
 
         <View

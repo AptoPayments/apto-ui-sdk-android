@@ -190,6 +190,14 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         delegate?.onCategorySelected(mcc, startDate, endDate)
     }
 
+    override fun onStatementTapped(month: Int, year: Int) {
+        showLoading()
+        viewModel.getMonthlyStatement(month, year) {
+            hideLoading()
+            delegate?.showMonthlyStatement(it)
+        }
+    }
+
     companion object {
         fun newInstance(cardId: String) = CardMonthlyStatsFragmentThemeTwo().apply {
             arguments = Bundle().apply { putString(CARD_ID_KEY, cardId) }

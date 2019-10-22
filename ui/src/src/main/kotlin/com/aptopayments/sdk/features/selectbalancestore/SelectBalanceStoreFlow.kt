@@ -35,7 +35,9 @@ internal class SelectBalanceStoreFlow (
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         actionConfiguration.allowedBalanceTypes?.firstOrNull()?.let { allowedBalanceType ->
-            initOAuthFlow(allowedBalanceType = allowedBalanceType) { initResult ->
+            initOAuthFlow(
+                    allowedBalanceType = allowedBalanceType,
+                    assetUrl = actionConfiguration.assetUrl) { initResult ->
                 initResult.either({onInitComplete}) { flow ->
                     setStartElement(element = flow)
                     onInitComplete(Either.Right(Unit))
@@ -69,12 +71,14 @@ internal class SelectBalanceStoreFlow (
     // OAuth flow
     //
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun initOAuthFlow(allowedBalanceType: AllowedBalanceType, onComplete: (Either<Failure, Flow>) -> Unit) {
+    fun initOAuthFlow(allowedBalanceType: AllowedBalanceType, assetUrl: String?,
+                      onComplete: (Either<Failure, Flow>) -> Unit) {
         val config = OAuthConfig(
                 title = "select_balance_store.login.title",
                 explanation = "select_balance_store.login.explanation",
                 callToAction = "select_balance_store.login.call_to_action.title",
                 newUserAction = "select_balance_store.login.new_user.title",
+                assetUrl = assetUrl,
                 allowedBalanceType = allowedBalanceType
         )
         val flow = OAuthFlow(

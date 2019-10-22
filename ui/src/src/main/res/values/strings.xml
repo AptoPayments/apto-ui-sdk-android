@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Coinbase UK</string>
+    <string name="app_name">CardApp</string>
 
     <string name="action_refresh">Refresh</string>
 
@@ -212,7 +212,7 @@
     <string name="select_balance_store_oauth_confirm_address">Address</string>
     <string name="select_balance_store_oauth_confirm_phone_number">Phone number</string>
     <string name="select_balance_store_oauth_confirm_birth_date">Date of birth</string>
-    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.coinbase.com/settings\'&gt;To make changes, go to the settings section in your Coinbase account and update your information&lt;/a&gt;</string>
+    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.aptopayments.com\'&gt;To make changes, go to the settings section in your Coinbase account and update your information&lt;/a&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_title">Get your physical card</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_message">We\'ll send your physical card to the address below:\n\n&lt;&lt;ADDRESS&gt;&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_ok_button">Confirm</string>
@@ -353,6 +353,8 @@
     <string name="card_settings_transactions_title">Transactions</string>
     <string name="card_settings_transactions_detailed_card_activity_title">Detailed card activity</string>
     <string name="card_settings_transactions_detailed_card_activity_description">Show all activity: declines, balance inquiries, etc.</string>
+    <string name="card_settings_help_monthly_statements_title">Monthly Statements</string>
+    <string name="card_settings_help_monthly_statements_description">Download transactions info into a PDF</string>
 
     <!-- card management enable/disable dialog -->
     <string name="enable_card_message">You are activating your card. Are you sure?</string>
@@ -535,6 +537,7 @@
     <string name="stats_monthly_spending_graph_title">Total Spent</string>
     <string name="stats_monthly_spending_list_title">Categories</string>
     <string name="stats_monthly_spending_list_empty_case">You\'ve not made any transactions.</string>
+    <string name="stats_monthly_spending_view_statement">View &amp; download monthly statement</string>
     <string name="stats_monthly_spending_graph_default_currency">USD</string>
 
     <!--Biometrics-->
@@ -648,4 +651,11 @@
     <string name="manage_card_get_pin_voip_mute">mute</string>
     <string name="manage_card_get_pin_voip_keypad">keypad</string>
     <string name="manage_card_get_pin_voip_hide">hide</string>
+
+    <!--Monthly Statements-->
+    <string name="monthly_statements_list_title">Monthly Statements</string>
+    <string name="monthly_statements_report_title">Statement &lt;&lt;MONTH&gt;&gt; &lt;&lt;YEAR&gt;&gt;</string>
+    <string name="monthly_statements_report_error_url_expired_message">For security reasons this file has expired, please request it again</string>
+    <string name="monthly_statements_list_empty_case_message">No stataments available yet</string>
+
 </resources>

@@ -24,6 +24,7 @@ import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardstats.CardStatsFlow
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.setpin.SetPinFlow
+import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.kyc.KycStatusFlow
@@ -351,6 +352,18 @@ internal class ManageCardFlow (
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }
         }
+    }
+
+    override fun showStatement() {
+        val flow = StatementListFlow(
+            onBack = { popAnimatedFlow() },
+            onFinish = { popAnimatedFlow() }
+        )
+        flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
+    }
+
+    private fun popAnimatedFlow(){
+        popFlow(true)
     }
 
     //

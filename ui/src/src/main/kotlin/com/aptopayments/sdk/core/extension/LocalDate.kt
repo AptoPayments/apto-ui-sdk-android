@@ -7,3 +7,5 @@ import java.util.*
 fun LocalDate.monthToString() = this.month.getDisplayName(TextStyle.FULL, Locale.US)
 
 fun LocalDate.yearToString() = this.year.toString()
+
+fun LocalDate.monthLocalized(): String = this.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()

@@ -129,7 +129,8 @@ class TestDataProvider {
                 explanation = "explanation",
                 callToAction = "callToAction",
                 newUserAction = "newUserAction",
-                allowedBalanceType = provideAllowedBalanceType()
+                allowedBalanceType = provideAllowedBalanceType(),
+                assetUrl = null
         )
 
         fun provideAllowedBalanceType() = AllowedBalanceType(

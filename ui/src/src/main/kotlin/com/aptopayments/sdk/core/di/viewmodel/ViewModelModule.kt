@@ -14,6 +14,9 @@ import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinViewModel
 import com.aptopayments.sdk.features.card.setpin.SetPinViewModel
+import com.aptopayments.sdk.repository.StatementRepository
+import com.aptopayments.sdk.repository.StatementRepositoryImpl
+import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
 import com.aptopayments.sdk.features.disclaimer.DisclaimerViewModel
@@ -26,8 +29,11 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewModel
 import com.aptopayments.sdk.features.voip.VoipViewModel
+import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import java.io.File
 
 val viewModelModule = module {
     viewModel { InputPhoneViewModel(analyticsManager = get()) }
@@ -44,9 +50,9 @@ val viewModelModule = module {
     viewModel { ActivatePhysicalCardSuccessViewModel(analyticsManager = get()) }
     viewModel { CardSettingsViewModel(analyticsManager = get()) }
     viewModel { TransactionDetailsViewModel(analyticsManager = get()) }
-    viewModel { CardMonthlyStatsViewModel(analyticsManager = get()) }
+    viewModel { CardMonthlyStatsViewModel(analyticsManager = get(), statementRepository = get()) }
     viewModel { NoNetworkViewModel(analyticsManager = get()) }
-    viewModel { MaintenanceViewModel(analyticsManager = get()) }
+    viewModel { MaintenanceViewModel( get()) }
     viewModel { AccountSettingsViewModel(analyticsManager = get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(analyticsManager = get()) }
@@ -56,4 +62,6 @@ val viewModelModule = module {
     viewModel { SetPinViewModel(analyticsManager = get()) }
     viewModel { ConfirmPinViewModel(analyticsManager = get()) }
     viewModel { VoipViewModel(analyticsManager = get(), voipHandler = get()) }
+    viewModel { StatementListViewModel(get(), get()) }
+    viewModel { (file : File) -> PdfRendererViewModel(file) }
 }

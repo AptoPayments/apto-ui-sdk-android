@@ -85,7 +85,7 @@
                         android:background="@android:color/transparent"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:textColor="@color/coinbase_title_color"
+                        android:textColor="@color/title_color"
                         android:textCursorDrawable="@null"
                         android:textSize="@dimen/text_size_large" />
                 </com.google.android.material.textfield.TextInputLayout>

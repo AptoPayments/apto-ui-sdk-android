@@ -18,11 +18,19 @@
 
     <TextView
         android:id="@+id/tv_coinbase_info"
-        android:lineSpacingExtra="3sp"
-        android:layout_marginTop="4sp"
-        android:layout_weight="1"
         style="@style/ThemeTwo.TextInput"
+        android:layout_marginTop="4sp"
+        android:lineSpacingExtra="3sp"
         android:text="@string/select_balance_store_login_explanation" />
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_16sdp"
+        android:layout_weight="3"
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/tv_submit_bttn"
@@ -34,6 +42,6 @@
         android:id="@+id/tv_new_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/_20sdp"/>
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:gravity="center_horizontal"/>
 </LinearLayout>

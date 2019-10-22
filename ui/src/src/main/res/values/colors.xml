@@ -58,16 +58,11 @@
     <color name="translucent_scrim_top">#80232325</color>
     <color name="translucent_scrim_center">#00232325</color>
 
-    <color name="coinbase_title_color">#FF202A36</color>
-    <color name="coinbase_label_color">#FF4A525C</color>
-
-    <!-- Coinbase Theme Colours -->
-    <color name="verification_background">#FFF2F3F4</color>
+    <!-- App Theme Colours -->
+    <color name="title_color">#FF202A36</color>
     <color name="button_inactive">#4D0667D0</color>
     <color name="button_active">#FF0667D0</color>
     <color name="button_settings_background">#FF1652F0</color>
-    <color name="status_bar_color_manage_card">#FF202020</color>
-    <color name="empty_case_text">#FF8F949A</color>
 
     <!--colors phone auth theme one-->
     <color name="progressbar_background">#FFE9E9E9</color>

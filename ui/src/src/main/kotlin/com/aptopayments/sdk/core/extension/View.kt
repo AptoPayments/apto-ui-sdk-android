@@ -30,6 +30,18 @@ fun View.hide() = show(View.INVISIBLE)
 
 fun View.remove() = show(View.GONE)
 
+fun View.invisibleIf(bool: Boolean) {
+    this.visibility = if (bool) View.INVISIBLE else View.VISIBLE
+}
+
+fun View.goneIf(bool: Boolean) {
+    this.visibility = if (bool) View.GONE else View.VISIBLE
+}
+
+fun View.visibleIf(bool: Boolean) {
+    this.visibility = if (bool) View.VISIBLE else View.GONE
+}
+
 private fun View.show(visibility: Int) { this.visibility = visibility }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View =

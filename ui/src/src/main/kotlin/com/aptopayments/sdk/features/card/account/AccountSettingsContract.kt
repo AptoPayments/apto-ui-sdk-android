@@ -10,6 +10,7 @@ interface AccountSettingsContract {
     interface Delegate: FragmentDelegate {
         fun showNotificationPreferences()
         fun onAccountSettingsClosed()
+        fun onMonthlyStatementTapped()
         fun onLogOut()
     }
 }

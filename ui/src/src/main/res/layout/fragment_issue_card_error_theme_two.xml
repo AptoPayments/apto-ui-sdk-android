@@ -46,7 +46,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:gravity="center_horizontal"
-            tools:text="To get your card, you need at least £5 worth of crypto in your BTC, BCH, ETH or LTC wallets on Coinbase. \n\n  Add your funds, then try again." />
+            tools:text="To get your card, you need at least £5 worth of crypto in your BTC, BCH, ETH or LTC wallets on Your Wallet. \n\n  Add your funds, then try again." />
 
         <TextView
             android:id="@+id/tv_secondary_cta"
@@ -59,7 +59,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
-            tools:text="https://www.coinbase.com/buy" />
+            tools:text="https://www.aptopayments.com/buy" />
 
     </RelativeLayout>
 

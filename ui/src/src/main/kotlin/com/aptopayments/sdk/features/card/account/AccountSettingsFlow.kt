@@ -11,6 +11,7 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
+import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.lang.reflect.Modifier
@@ -65,4 +66,12 @@ internal class AccountSettingsFlow(
     }
 
     override fun onBackFromNotificationsPreferences() = popFragment()
+
+    override fun onMonthlyStatementTapped() {
+        val flow = StatementListFlow(
+            onBack = { popFlow(true) },
+            onFinish = { popFlow(true) }
+        )
+        flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
+    }
 }
