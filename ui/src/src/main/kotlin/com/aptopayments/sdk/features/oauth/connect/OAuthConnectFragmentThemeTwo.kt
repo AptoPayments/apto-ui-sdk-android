@@ -54,6 +54,9 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun setUpArguments() {
         title = arguments!![TITLE_KEY] as String
         explanation = arguments!![EXPLANATION_KEY] as String
         callToAction = arguments!![CALL_TO_ACTION_KEY] as String

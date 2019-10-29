@@ -42,8 +42,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     private lateinit var tokenId: String
     private var menu: Menu? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         dataPoints = arguments!![DATA_POINTS_KEY] as DataPointList
         allowedBalanceType = arguments!![ALLOWED_BALANCE_TYPE_KEY] as AllowedBalanceType
         tokenId = arguments!![TOKEN_ID_KEY] as String

@@ -37,8 +37,7 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     override fun layoutId(): Int = R.layout.fragment_web_browser
     override fun setupViewModel() = Unit
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         url = arguments!![URL_KEY] as String
     }
 

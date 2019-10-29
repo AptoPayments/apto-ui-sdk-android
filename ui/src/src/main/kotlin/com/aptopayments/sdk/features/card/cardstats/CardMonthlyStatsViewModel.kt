@@ -50,12 +50,10 @@ internal class CardMonthlyStatsViewModel constructor(
     fun invalidateCache() = AptoPlatform.clearMonthlySpendingCache()
 
     fun hasMonthlyStatementToShow(month: Int, year: Int, onComplete: ((included: Boolean) -> Unit)) {
-        if (periodCache != null) {
-            completeStatementPeriodRequest(month, year, onComplete)
+        if (AptoPlatform.cardOptions.showMonthlyStatementOption()) {
+            checkIfHasStatementOnCacheOrNetwork(month, year, onComplete)
         } else {
-            AptoPlatform.fetchMonthlyStatementPeriod { result ->
-                result.either(::handleFailure) { period -> onStatementPeriodArrived(period, month, year, onComplete) }
-            }
+            onComplete(false)
         }
     }
 
@@ -63,10 +61,18 @@ internal class CardMonthlyStatsViewModel constructor(
         AptoPlatform.fetchMonthlyStatement(month, year) { result ->
             result.either(::handleFailure) {
                 viewModelScope.launch {
-                    statementRepository.download(it).either(::handleFailure) {
-                        onComplete(it)
-                    }
+                    statementRepository.download(it).either(::handleFailure) { onComplete(it) }
                 }
+            }
+        }
+    }
+
+    private fun checkIfHasStatementOnCacheOrNetwork(month: Int, year: Int, onComplete: (included: Boolean) -> Unit) {
+        if (periodCache != null) {
+            completeStatementPeriodRequest(month, year, onComplete)
+        } else {
+            AptoPlatform.fetchMonthlyStatementPeriod { result ->
+                result.either(::handleFailure) { period -> onStatementPeriodArrived(period, month, year, onComplete) }
             }
         }
     }

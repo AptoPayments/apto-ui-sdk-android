@@ -33,8 +33,7 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
     private lateinit var cardId: String
     private lateinit var action: Action
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_ID_KEY] as String
         action = arguments!![ACTION_KEY] as Action
     }

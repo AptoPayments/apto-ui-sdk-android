@@ -36,8 +36,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     override fun layoutId() = R.layout.fragment_email_verification_theme_one
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         emailAddress = verification.verificationDataPoint!!
     }

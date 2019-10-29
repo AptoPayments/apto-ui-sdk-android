@@ -23,8 +23,7 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
 
     override fun layoutId() = R.layout.fragment_issue_card_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardApplicationId = arguments!![CARD_APPLICATION_ID] as String
     }
 

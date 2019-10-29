@@ -40,8 +40,7 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     override fun layoutId() = R.layout.fragment_phone_input_theme_two
 
     @Suppress("UNCHECKED_CAST")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }
 

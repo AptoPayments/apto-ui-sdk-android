@@ -29,8 +29,7 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     private lateinit var cardId: String
     override var delegate: KycStatusContract.Delegate? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         kycStatus = arguments!![KYC_STATUS_PARAMETER_KEY] as KycStatus
         cardId = arguments!![CARD_ID_PARAMETER_KEY] as String
     }

@@ -55,8 +55,8 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {
-            is StatementRepository.StatementExpiredFailure -> notify(failure.message)
-            is StatementRepository.StatementDownloadFailure -> notify(failure.message)
+            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage(context))
+            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage(context))
             else -> super.handleFailure(failure)
         }
     }

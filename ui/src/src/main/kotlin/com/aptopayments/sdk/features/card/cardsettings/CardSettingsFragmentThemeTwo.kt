@@ -53,12 +53,14 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) cardDetailsShown = savedInstanceState.getBoolean(CARD_DETAILS_SHOWN_KEY)
+    }
+
+    override fun setUpArguments() {
         card = arguments!![CARD_KEY] as Card
         cardDetailsShown = arguments!![CARD_DETAILS_SHOWN_KEY] as Boolean
         cardProduct = arguments!![CARD_PRODUCT_KEY] as CardProduct
         projectConfiguration = arguments!![PROJECT_CONFIGURATION_KEY] as ProjectConfiguration
-
-        if (savedInstanceState != null) cardDetailsShown = savedInstanceState.getBoolean(CARD_DETAILS_SHOWN_KEY)
     }
 
     override fun onPresented() {

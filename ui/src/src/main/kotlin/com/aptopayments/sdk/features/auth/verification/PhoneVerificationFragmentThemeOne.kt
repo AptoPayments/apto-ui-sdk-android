@@ -38,8 +38,7 @@ internal class PhoneVerificationFragmentThemeOne : BaseFragment(), PhoneVerifica
 
     override fun layoutId() = R.layout.fragment_phone_verification_theme_one
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         phoneNumber = verification.verificationDataPoint!!
     }

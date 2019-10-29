@@ -28,8 +28,7 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
 
     override fun layoutId(): Int = R.layout.fragment_disclaimer_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         content = arguments!![CONTENT_KEY] as Content
     }
 

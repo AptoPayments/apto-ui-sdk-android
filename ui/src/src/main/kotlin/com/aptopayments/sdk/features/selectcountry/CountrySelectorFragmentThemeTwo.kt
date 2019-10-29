@@ -39,8 +39,7 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     override fun layoutId(): Int = R.layout.fragment_country_picker_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }
 

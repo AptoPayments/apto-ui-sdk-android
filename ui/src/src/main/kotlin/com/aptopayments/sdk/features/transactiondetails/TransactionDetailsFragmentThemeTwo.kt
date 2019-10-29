@@ -57,6 +57,9 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun setUpArguments() {
         transaction = arguments!![TRANSACTION_KEY] as Transaction
     }
 

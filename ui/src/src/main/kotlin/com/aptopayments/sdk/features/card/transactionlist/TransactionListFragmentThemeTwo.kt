@@ -33,8 +33,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_KEY] as String
         config = arguments!![CONFIG_KEY] as TransactionListConfig
     }

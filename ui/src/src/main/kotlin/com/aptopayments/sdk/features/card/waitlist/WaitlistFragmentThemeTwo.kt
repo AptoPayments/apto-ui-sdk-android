@@ -31,8 +31,7 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
 
     override fun layoutId(): Int = R.layout.fragment_waitlist_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_ID_PARAMETER_KEY] as String
         cardProduct = arguments!![CARD_PRODUCT_PARAMETER_KEY] as CardProduct
     }

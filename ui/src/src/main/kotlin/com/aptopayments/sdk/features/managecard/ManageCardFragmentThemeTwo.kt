@@ -52,16 +52,17 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     private var menu: Menu? = null
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
     private var mLastClickTime: Long = 0
+    private var clicksAllowed = true
 
     override fun layoutId(): Int = R.layout.fragment_manage_card_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_ID_KEY] as String
     }
 
     override fun onPresented() {
         super.onPresented()
+        clicksAllowed = true
         delegate?.configureSecondaryStatusBar()
     }
 
@@ -211,7 +212,10 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun onTransactionTapped(transaction: Transaction) {
-        delegate?.onTransactionTapped(transaction)
+        if (clicksAllowed) {
+            clicksAllowed = false
+            delegate?.onTransactionTapped(transaction)
+        }
     }
 
     override fun cardDetailsChanged(cardDetails: CardDetails?) {

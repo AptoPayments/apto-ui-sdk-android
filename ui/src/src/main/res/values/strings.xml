@@ -537,7 +537,7 @@
     <string name="stats_monthly_spending_graph_title">Total Spent</string>
     <string name="stats_monthly_spending_list_title">Categories</string>
     <string name="stats_monthly_spending_list_empty_case">You\'ve not made any transactions.</string>
-    <string name="stats_monthly_spending_view_statement">View &amp; download monthly statement</string>
+    <string name="stats_monthly_spending_view_statement">View monthly statement</string>
     <string name="stats_monthly_spending_graph_default_currency">USD</string>
 
     <!--Biometrics-->

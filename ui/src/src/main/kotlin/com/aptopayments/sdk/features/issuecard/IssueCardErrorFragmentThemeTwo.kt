@@ -30,8 +30,7 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     private val viewModel: IssueCardViewModel by viewModel()
     override var delegate: IssueCardErrorContract.Delegate? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         errorCode = arguments?.getInt(ERROR_CODE_KEY)
         errorAsset = arguments?.getString(ERROR_ASSET_KEY)
     }

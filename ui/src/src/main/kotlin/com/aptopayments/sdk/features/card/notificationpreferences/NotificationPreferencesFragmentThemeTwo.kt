@@ -35,8 +35,7 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
 
     override fun layoutId(): Int = R.layout.fragment_notification_preferences_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_ID_PARAMETER_KEY] as String
     }
 

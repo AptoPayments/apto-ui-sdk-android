@@ -26,8 +26,7 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
 
     override fun layoutId(): Int = R.layout.fragment_content_presenter_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         content = arguments!![CONTENT_KEY] as Content
         title = arguments!![TITLE_KEY] as String
     }

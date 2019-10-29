@@ -37,8 +37,7 @@ internal class BirthdateVerificationFragmentThemeTwo: BaseFragment(), BirthdateV
     private lateinit var primaryCredential: DataPoint
     override var delegate: BirthdateVerificationContract.Delegate? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         primaryCredential = arguments!![BIRTHDATE_VERIFICATION_BUNDLE] as DataPoint
     }
 

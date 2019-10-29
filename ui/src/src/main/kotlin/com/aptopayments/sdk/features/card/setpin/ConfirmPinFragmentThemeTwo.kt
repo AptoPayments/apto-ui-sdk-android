@@ -32,8 +32,7 @@ internal class ConfirmPinFragmentThemeTwo : BaseFragment(), ConfirmPinContract.V
 
     override fun layoutId(): Int = R.layout.fragment_set_pin_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         pin = arguments!![PIN_KEY] as String
     }
 

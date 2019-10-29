@@ -37,8 +37,7 @@ internal class PdfRendererFragment : BaseFragment(),
 
     override fun layoutId() = R.layout.fragment_pdf_renderer
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         file = arguments!![FILE_KEY] as File
         title = arguments!![TITLE_KEY] as String
     }
@@ -108,7 +107,7 @@ internal class PdfRendererFragment : BaseFragment(),
         delegate?.configureToolbar(
             tb_llsdk_toolbar,
             title,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+            backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
         )
     }
 

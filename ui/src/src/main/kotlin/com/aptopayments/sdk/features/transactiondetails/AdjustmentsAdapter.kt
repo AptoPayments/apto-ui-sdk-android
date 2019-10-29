@@ -39,11 +39,8 @@ internal class AdjustmentsAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val adjustment = mAdjustments[position]
         themeManager().customizeMainItem(viewHolder.description)
-        when {
-            adjustment.type == TransactionAdjustment.Type.REFUND -> viewHolder.description.text = "transaction_details_adjustment_transfer_to_text".localized(mContext)
-            adjustment.type == TransactionAdjustment.Type.CAPTURE -> viewHolder.description.text = "transaction_details_adjustment_transfer_from_text".localized(mContext)
-            else -> viewHolder.description.text = adjustment.fundingSourceName
-        }
+
+        setDescription(adjustment,viewHolder)
 
         adjustment.nativeAmount?.let { nativeAmount ->
             val amount: String = if(mTransaction.transactionType.isCredit()) {
@@ -80,6 +77,16 @@ internal class AdjustmentsAdapter(
             themeManager().customizeTimestamp(viewHolder.fee)
             viewHolder.fee.show()
         } ?: viewHolder.fee.remove()
+    }
+
+    private fun setDescription(adjustment: TransactionAdjustment, viewHolder: ViewHolder) {
+        val text = when (adjustment.type) {
+            TransactionAdjustment.Type.REFUND -> "transaction_details_adjustment_transfer_to_text".localized(mContext)
+            TransactionAdjustment.Type.CAPTURE -> "transaction_details_adjustment_transfer_from_text".localized(mContext)
+            else -> adjustment.fundingSourceName ?: ""
+        }
+        text.replace("%@", mTransaction.fundingSourceName ?: "", true)
+        viewHolder.description.text = text
     }
 
     override fun getItemCount(): Int {

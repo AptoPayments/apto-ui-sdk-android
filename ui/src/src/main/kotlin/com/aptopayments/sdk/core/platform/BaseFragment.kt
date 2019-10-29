@@ -31,10 +31,11 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setUpArguments()
         if (savedInstanceState != null) {
             TAG = savedInstanceState.getString(TAG_KEY)!!
         }
+        setupViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -44,7 +45,6 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewModel()
         setupUI()
         setupListeners()
         viewLoaded()
@@ -58,6 +58,8 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     abstract fun setupViewModel()
 
     abstract fun setupUI()
+
+    open fun setUpArguments() {}
 
     open fun setupListeners() {}
 

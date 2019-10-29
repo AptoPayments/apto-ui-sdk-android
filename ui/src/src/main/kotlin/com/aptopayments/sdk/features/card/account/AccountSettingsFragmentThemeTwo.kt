@@ -37,8 +37,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     override fun setupViewModel() {
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         contextConfiguration = arguments!![ACCOUNT_SETTINGS_BUNDLE] as ContextConfiguration
     }
 

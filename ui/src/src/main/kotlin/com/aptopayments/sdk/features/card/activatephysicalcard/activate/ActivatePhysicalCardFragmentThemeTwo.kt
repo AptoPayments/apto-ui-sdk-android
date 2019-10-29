@@ -36,8 +36,7 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
 
     override fun layoutId(): Int = R.layout.fragment_activate_physical_card_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         card = arguments!![CARD_KEY] as Card
     }
 

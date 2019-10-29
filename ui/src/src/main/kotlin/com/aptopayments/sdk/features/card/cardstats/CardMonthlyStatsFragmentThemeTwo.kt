@@ -42,8 +42,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
 
     override fun layoutId(): Int = R.layout.fragment_card_monthly_stats
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setUpArguments() {
         cardId = arguments!![CARD_ID_KEY] as String
     }
 
