@@ -184,7 +184,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         hideLoading()
         rootActivity()?.let {
             when (failure) {
-                is Failure.ServerError -> notify(failure.errorMessage(it))
+                is Failure.ServerError -> notify(failure.errorMessage())
             }
         }
     }
@@ -208,19 +208,18 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
 
     protected fun notify(title: String, message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) {
         rootActivity()?.let { activity ->
-            MessageBanner(activity).showBanner(title = title, message = message, messageType = messageType)
+            MessageBanner().showBanner(activity, title = title, message = message, messageType = messageType)
         }
     }
 
     protected fun notify(message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) {
         rootActivity()?.let { activity ->
-            MessageBanner(activity).showBanner(message, messageType)
+            MessageBanner().showBanner(activity, message, messageType)
         }
     }
 
     protected fun rootActivity(): AppCompatActivity? {
-        if (activity != null) return activity
-        return parentFlow.get()?.rootActivity()
+        return activity ?: parentFlow.get()?.rootActivity()
     }
 
     private fun fragmentContainer(): Int {

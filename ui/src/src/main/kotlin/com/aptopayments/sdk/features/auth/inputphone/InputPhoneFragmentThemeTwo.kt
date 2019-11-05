@@ -60,12 +60,11 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        context?.let {
-            tv_phone_header.text = "auth_input_phone_title".localized(it)
-            tv_phone_label.text = "auth_input_phone_explanation".localized(it)
-            continue_button.text = "auth_input_phone.call_to_action".localized(it)
-            et_phone.hint = "auth_input_phone_hint".localized(it)
-        }
+        tv_phone_header.text = "auth_input_phone_title".localized()
+        tv_phone_label.text = "auth_input_phone_explanation".localized()
+        continue_button.text = "auth_input_phone.call_to_action".localized()
+        et_phone.hint = "auth_input_phone_hint".localized()
+
         view?.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
 
         with(themeManager()) {

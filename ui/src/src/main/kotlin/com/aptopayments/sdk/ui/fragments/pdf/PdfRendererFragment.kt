@@ -8,18 +8,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.goneIf
-import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
-import com.aptopayments.sdk.ui.views.ZoomScrollListener
 import com.aptopayments.sdk.utils.FileSharer
 import kotlinx.android.synthetic.main.fragment_pdf_renderer.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.koin.core.parameter.parametersOf
 import java.io.File
 
 private const val FILE_KEY = "file"
@@ -29,7 +24,6 @@ internal class PdfRendererFragment : BaseFragment(),
     PdfRendererContract.View, KoinComponent {
 
     override var delegate: PdfRendererContract.Delegate? = null
-    private val viewModel: PdfRendererViewModel by viewModel { parametersOf(file) }
     private lateinit var file: File
     private lateinit var title: String
     private val fileSharer: FileSharer by inject()
@@ -42,20 +36,25 @@ internal class PdfRendererFragment : BaseFragment(),
         title = arguments!![TITLE_KEY] as String
     }
 
-    private val zoomScrollListener: ZoomScrollListener by lazy { ZoomScrollListener(context!!) }
-
     override fun setupViewModel() {
-        observeNotNullable(viewModel.pageBitmap) {
-            image.setImageBitmap(it)
-            zoomScrollListener.resetScale()
-        }
-        observeNotNullable(viewModel.previousEnabled) { previous.isEnabled = it }
-        observeNotNullable(viewModel.nextEnabled) { next.isEnabled = it }
-        observeNotNullable(viewModel.buttonsVisible) { buttonBar.goneIf(it) }
+
+    }
+
+    override fun viewLoaded() {
+        loadAndConfigurePdf()
+    }
+
+    private fun loadAndConfigurePdf() {
+        pdfView.fromFile(file)
+            .enableSwipe(true)
+            .swipeHorizontal(false)
+            .enableDoubletap(true)
+            .defaultPage(0)
+            .enableAntialiasing(true)
+            .load()
     }
 
     override fun setupUI() {
-        setClickListeners()
         setUpToolbar()
     }
 
@@ -85,12 +84,6 @@ internal class PdfRendererFragment : BaseFragment(),
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setClickListeners() {
-        previous.setOnClickListener { viewModel.showPrevious() }
-        next.setOnClickListener { viewModel.showNext() }
-        image.setOnTouchListener(zoomScrollListener)
     }
 
     private fun share(file: File) {

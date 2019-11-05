@@ -98,10 +98,10 @@ internal class BirthdateVerificationFragmentThemeTwo: BaseFragment(), BirthdateV
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_birthdate_title.text = "auth.verify_birthdate.title".localized(it)
-        tv_verification_code_header.text = "auth.verify_birthdate.explanation".localized(it)
-        continue_button.text = "auth.verify_birthdate.call_to_action.title".localized(it)
+    private fun setupTexts() {
+        tv_birthdate_title.text = "auth.verify_birthdate.title".localized()
+        tv_verification_code_header.text = "auth.verify_birthdate.explanation".localized()
+        continue_button.text = "auth.verify_birthdate.call_to_action.title".localized()
     }
 
     private fun setupTheme() {
@@ -136,10 +136,10 @@ internal class BirthdateVerificationFragmentThemeTwo: BaseFragment(), BirthdateV
             delegate?.onBirthdateVerificationPassed(primaryCredential.verification!!, verification)
         } else {
             hideLoading()
-            context?.let {
-                notify("auth.verify_birthdate.error_wrong_code.title".localized(it),
-                        "auth.verify_birthdate.error_wrong_code.message".localized(it))
-            }
+            notify(
+                "auth.verify_birthdate.error_wrong_code.title".localized(),
+                "auth.verify_birthdate.error_wrong_code.message".localized()
+            )
             et_birthday_day.text.clear()
             et_birthday_month.text.clear()
             et_birthday_year.text.clear()

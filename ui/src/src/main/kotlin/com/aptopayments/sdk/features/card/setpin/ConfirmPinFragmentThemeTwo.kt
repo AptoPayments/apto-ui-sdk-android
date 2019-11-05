@@ -62,10 +62,8 @@ internal class ConfirmPinFragmentThemeTwo : BaseFragment(), ConfirmPinContract.V
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        context?.let {
-            tv_set_pin_title.text = "manage_card.confirm_pin.title".localized(it)
-            tv_set_pin_explanation.text = "manage_card.confirm_pin.explanation".localized(it)
-        }
+        tv_set_pin_title.text = "manage_card.confirm_pin.title".localized()
+        tv_set_pin_explanation.text = "manage_card.confirm_pin.explanation".localized()
     }
 
     private fun setupTheme() {
@@ -106,10 +104,10 @@ internal class ConfirmPinFragmentThemeTwo : BaseFragment(), ConfirmPinContract.V
 
     private fun handleWrongPin() {
         onBackPressed()
-        context?.let {
-            notify("manage_card.confirm_pin.error_wrong_code.title".localized(it),
-                    "manage_card.confirm_pin.error_wrong_code.message".localized(it))
-        }
+        notify(
+            "manage_card.confirm_pin.error_wrong_code.title".localized(),
+            "manage_card.confirm_pin.error_wrong_code.message".localized()
+        )
     }
 
     override fun onBackPressed() {

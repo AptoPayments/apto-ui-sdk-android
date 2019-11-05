@@ -44,7 +44,7 @@ internal class ManageCardViewModel constructor(
     var expirationYear: MutableLiveData<Int?> = MutableLiveData()
     var transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
     var fundingSource: MutableLiveData<Balance?> = MutableLiveData()
-    var transactionListItems: MutableLiveData<List<TransactionListItem>?> = MutableLiveData()
+    var transactionListItems: MutableLiveData<List<TransactionListItem>> = MutableLiveData(listOf())
     var cardProduct: MutableLiveData<CardProduct> = MutableLiveData()
     var transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -147,16 +147,15 @@ internal class ManageCardViewModel constructor(
         cardNetwork.postValue(card.cardNetwork)
         state.postValue(card.state)
         orderedStatus.postValue(card.orderedStatus)
-        if (card.orderedStatus == Card.OrderedStatus.ORDERED && card.orderedStatus != orderedStatus.value) {
-            showPhysicalCardActivationMessage.postValue(true)
-        } else {
-            showPhysicalCardActivationMessage.postValue(false)
-        }
+
+        showPhysicalCardActivationMessage
+            .postValue(card.orderedStatus == Card.OrderedStatus.ORDERED && card.orderedStatus != orderedStatus.value)
+
         spendableToday.postValue(card.spendableAmount)
         nativeSpendableToday.postValue(card.nativeSpendableAmount)
         cardStyle.postValue(card.cardStyle)
         if (cardLoaded.value == false) cardLoaded.postValue(true)
-        if (transactionListItems.value == null) {
+        if (transactionListItems.value.isNullOrEmpty()) {
             val list = ArrayList<TransactionListItem>()
             list.add(TransactionListItem.HeaderView)
             transactionListItems.postValue(list)
@@ -179,9 +178,6 @@ internal class ManageCardViewModel constructor(
         cardInfoDataTimeout = Date().add(Calendar.MINUTE, 2)
     }
 
-    //
-    // Balance operations
-    //
     fun refreshBalance(cardId: String) {
         getCardBalance(cardId, refresh = true) {}
     }
@@ -195,9 +191,6 @@ internal class ManageCardViewModel constructor(
         }
     }
 
-    //
-    // Transaction operations
-    //
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun getTransactions(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
         getTransactionsQueue.loadTransactions(cardId, rowsPerPage, forceApiCall, clearCachedValue) { result ->
@@ -264,14 +257,13 @@ internal class ManageCardViewModel constructor(
     private fun updateTransactionItems(newTransactions: List<Transaction>, append: Boolean, clearCachedValue: Boolean) {
         if (clearCachedValue) processNewTransactions(newTransactions)
         else {
-            val currentTransactionItems: ArrayList<TransactionListItem> = transactionListItems.value as? ArrayList<TransactionListItem>
-                    ?: ArrayList()
+            val currentTransactionItems: ArrayList<TransactionListItem> = transactionListItems.value as ArrayList<TransactionListItem>
             mergeListItems(newTransactions, currentTransactionItems, append)
         }
     }
 
     private fun processNewTransactions(newTransactions: List<Transaction>) {
-        val transactionItemsArrayList: ArrayList<TransactionListItem> = ArrayList()
+        val transactionItemsArrayList: MutableList<TransactionListItem> = mutableListOf()
         transactionItemsArrayList.add(TransactionListItem.HeaderView)
         mergeListItems(newTransactions, transactionItemsArrayList, append = false)
     }
@@ -304,10 +296,10 @@ internal class ManageCardViewModel constructor(
     }
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun mergeListItems(newTransactions: List<Transaction>, currentTransactionItems: ArrayList<TransactionListItem>, append: Boolean) {
+    fun mergeListItems(newTransactions: List<Transaction>, currentTransactionItems: MutableList<TransactionListItem>, append: Boolean) {
         if (append) {
             val lastCurrentTransaction = currentTransactionItems.findLast {
-                it.itemType() == TransactionListItem.transactionRowViewType
+                it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
             } as TransactionListItem.TransactionRow
             val (currentMonth, currentYear) = lastCurrentTransaction.transaction.createdAt.getMonthYear()
             val (newTransactionMonth, newTransactionYear) = newTransactions.first().createdAt.getMonthYear()
@@ -324,7 +316,7 @@ internal class ManageCardViewModel constructor(
         }
 
         val mostRecentCurrentTransaction = (currentTransactionItems.find {
-            it.itemType() == TransactionListItem.transactionRowViewType
+            it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
         } as TransactionListItem.TransactionRow).transaction
         val oldestNewTransaction = newTransactions.last()
         val result: ArrayList<TransactionListItem> = ArrayList()
@@ -336,7 +328,7 @@ internal class ManageCardViewModel constructor(
         if (oldestNewTransaction.createdAt <= mostRecentCurrentTransaction.createdAt) {
             // Find the point where the new transactions overlap with the old ones
             val index = currentTransactionItems.indexOfFirst { transactionItem ->
-                transactionItem.itemType() == TransactionListItem.transactionRowViewType &&
+                transactionItem.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE &&
                         (transactionItem as TransactionListItem.TransactionRow).transaction.createdAt <= oldestNewTransaction.createdAt
             }
             if (index != -1) result.addAll(currentTransactionItems.subList(index, currentTransactionItems.size-1))

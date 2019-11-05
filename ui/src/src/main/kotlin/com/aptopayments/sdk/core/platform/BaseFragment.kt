@@ -94,7 +94,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
             notify(title = null, message = message, type = type)
 
     internal fun notify(title: String?, message: String, type: MessageBanner.MessageType = ERROR) =
-            activity?.let { MessageBanner(it).showBanner(title = title, message = message, messageType = type) }
+            activity?.let { MessageBanner().showBanner(it, title = title, message = message, messageType = type) }
 
     protected fun confirm(title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit,
                           onCancel: (Unit) -> Unit) {
@@ -108,11 +108,11 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     protected open fun handleFailure(failure: Failure?) {
         when (failure) {
             is Failure.ServerError -> {
-                context?.let { notify("failure_server_error".localized(it)) }
+                notify("failure_server_error".localized())
             }
             is Failure.UserSessionExpired -> {
                 aptoPlatformProtocol.logout()
-                context?.let { notify("session_expired_error".localized(it)) }
+                notify("session_expired_error".localized())
             }
         }
     }

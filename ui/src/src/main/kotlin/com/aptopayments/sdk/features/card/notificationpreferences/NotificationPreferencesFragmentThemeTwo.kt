@@ -118,16 +118,16 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_card_activity_title.text = "notification_preferences.card_activity.title".localized(it)
-        tv_card_activity_description.text = "notification_preferences.card_activity.description".localized(it)
-        tv_payment_successful.text = "notification_preferences.card_activity.payment_successful.title".localized(it)
-        tv_payment_declined.text = "notification_preferences.card_activity.payment_declined.title".localized(it)
-        tv_atm_withdrawal.text = "notification_preferences.card_activity.atm_withdrawal.title".localized(it)
-        tv_card_status_title.text = "notification_preferences.card_status.title".localized(it)
-        tv_card_status_description.text = "notification_preferences.card_status.description".localized(it)
-        tv_legal_title.text = "notification_preferences.legal.title".localized(it)
-        tv_legal_description.text = "notification_preferences.legal.description".localized(it)
+    private fun setupTexts() {
+        tv_card_activity_title.text = "notification_preferences.card_activity.title".localized()
+        tv_card_activity_description.text = "notification_preferences.card_activity.description".localized()
+        tv_payment_successful.text = "notification_preferences.card_activity.payment_successful.title".localized()
+        tv_payment_declined.text = "notification_preferences.card_activity.payment_declined.title".localized()
+        tv_atm_withdrawal.text = "notification_preferences.card_activity.atm_withdrawal.title".localized()
+        tv_card_status_title.text = "notification_preferences.card_status.title".localized()
+        tv_card_status_description.text = "notification_preferences.card_status.description".localized()
+        tv_legal_title.text = "notification_preferences.legal.title".localized()
+        tv_legal_description.text = "notification_preferences.legal.description".localized()
     }
 
     private fun setupTheme() {
@@ -198,15 +198,15 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setPushOrEmailHeader() = context?.let {
-        tv_notifications_header.text = "notification_preferences.send_push_email.title".localized(it)
+    private fun setPushOrEmailHeader() {
+        tv_notifications_header.text = "notification_preferences.send_push_email.title".localized()
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
         setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_mail)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setPushOrSmsHeader() = context?.let {
-        tv_notifications_header.text = "notification_preferences.send_push_sms.title".localized(it)
+    private fun setPushOrSmsHeader() {
+        tv_notifications_header.text = "notification_preferences.send_push_sms.title".localized()
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
         setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_sms)
     }
@@ -226,13 +226,11 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     private fun setupToolBar() {
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        context?.let {
-            delegate?.configureToolbar(
-                    toolbar = tb_llsdk_toolbar,
-                    title = "notification_preferences.title".localized(it),
-                    backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
-            )
-        }
+        delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = "notification_preferences.title".localized(),
+            backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
+        )
     }
 
     override fun onBackPressed() {

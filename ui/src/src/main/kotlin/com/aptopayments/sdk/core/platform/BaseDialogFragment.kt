@@ -65,15 +65,15 @@ internal abstract class BaseDialogFragment : DialogFragment() {
     protected fun handleFailure(failure: Failure?) {
         when (failure) {
             is Failure.ServerError -> {
-                context?.let { notify("failure_server_error".localized(it)) }
+                notify("failure_server_error".localized())
             }
             is Failure.UserSessionExpired -> {
                 aptoPlatformProtocol.logout()
-                context?.let { notify("session_expired_error".localized(it)) }
+                notify("session_expired_error".localized())
             }
         }
     }
 
     internal fun notify(message: String, messageType: MessageBanner.MessageType = ERROR, title: String? = null) =
-            activity?.let { MessageBanner(it).showBanner(message = message, messageType = messageType, title = title) }
+            activity?.let { MessageBanner().showBanner(it, message = message, messageType = messageType, title = title) }
 }

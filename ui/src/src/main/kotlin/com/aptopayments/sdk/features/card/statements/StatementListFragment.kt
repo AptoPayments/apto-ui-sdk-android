@@ -55,8 +55,8 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {
-            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage(context))
-            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage(context))
+            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage())
+            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage())
             else -> super.handleFailure(failure)
         }
     }
@@ -93,7 +93,7 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
         toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarSecondaryColor)
 
-        val title = context?.let { "monthly_statements.list.title".localized(it) }
+        val title = "monthly_statements.list.title".localized()
         val backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
         delegate?.configureToolbar(toolbar, title, backButtonMode)
     }
@@ -109,9 +109,7 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
     }
 
     private fun setUpTexts() {
-        context?.let {
-            statements_list_empty_message.text = "monthly_statements_list_empty_case_message".localized(it)
-        }
+        statements_list_empty_message.text = "monthly_statements_list_empty_case_message".localized()
     }
 
     private fun setUpTheme() {

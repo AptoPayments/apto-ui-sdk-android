@@ -76,8 +76,8 @@ internal class ActivatePhysicalCardFlow (
                 onFinish = {
                     popFlow(animated = true)
                     rootActivity()?.let {
-                        notify(title = "manage_card.confirm_pin.pin_created.title".localized(it),
-                                message = "manage_card.confirm_pin.pin_created.message".localized(it),
+                        notify(title = "manage_card.confirm_pin.pin_created.title".localized(),
+                                message = "manage_card.confirm_pin.pin_created.message".localized(),
                                 messageType = MessageBanner.MessageType.HEADS_UP)
                     }
                     onFinish(Unit)

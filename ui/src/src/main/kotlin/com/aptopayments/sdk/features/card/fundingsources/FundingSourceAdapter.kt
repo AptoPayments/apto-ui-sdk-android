@@ -118,7 +118,7 @@ internal class FundingSourceAdapter(
         @SuppressLint("SetTextI18n")
         private fun setupAsAddFundingSourceButton() {
             addFundingSourceButton = itemView.findViewById(R.id.add_funding_source_button)
-            addFundingSourceButton!!.text = "card_settings_add_funding_source_button_title".localized(itemView.context)
+            addFundingSourceButton!!.text = "card_settings_add_funding_source_button_title".localized()
             with(themeManager()) {
                 customizeSubmitButton(addFundingSourceButton!!)
             }

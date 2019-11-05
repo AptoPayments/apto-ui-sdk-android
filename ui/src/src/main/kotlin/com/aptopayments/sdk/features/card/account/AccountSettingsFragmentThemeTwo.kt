@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.card.account
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.Toolbar
@@ -11,14 +12,11 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
+import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
 import com.aptopayments.sdk.utils.SendEmailUtil
 import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.*
-import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.rl_contact_support
-import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.tb_llsdk_custom_toolbar
-import kotlinx.android.synthetic.main.fragment_card_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
@@ -94,35 +92,36 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     private fun setupToolbar() {
         val toolbar = tb_llsdk_custom_toolbar as Toolbar
         toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tv_toolbar_title.text = context?.let { "account_settings.settings.title".localized(it) }
+        iv_close_button.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+        tv_toolbar_title.text = "account_settings.settings.title".localized()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_app_settings_header.text = "account_settings.app_settings.title".localized(it)
-        tv_notifications.text = "account_settings.notification_preferences.title".localized(it)
-        tv_notifications_description.text = "account_settings.notification_preferences.description".localized(it)
-        tv_support_header.text = "account_settings.help.title".localized(it)
-        tv_contact_support.text = "account_settings.help.contact_support.title".localized(it)
-        tv_contact_support_description.text = "account_settings.help.contact_support.description".localized(it)
-        tv_sign_out.text = "account_settings.logout.title".localized(it)
-        statements_title.text = "card_settings.help.monthly_statements.title".localized(it)
-        statements_description.text = "card_settings.help.monthly_statements.description".localized(it)
+    private fun setupTexts() {
+        tv_app_settings_header.text = "account_settings.app_settings.title".localized()
+        tv_notifications.text = "account_settings.notification_preferences.title".localized()
+        tv_notifications_description.text = "account_settings.notification_preferences.description".localized()
+        tv_support_header.text = "account_settings.help.title".localized()
+        tv_contact_support.text = "account_settings.help.contact_support.title".localized()
+        tv_contact_support_description.text = "account_settings.help.contact_support.description".localized()
+        tv_sign_out.text = "account_settings.logout.title".localized()
+        statements_title.text = "card_settings.help.monthly_statements.title".localized()
+        statements_description.text = "card_settings.help.monthly_statements.description".localized()
     }
 
-    private fun showConfirmLogOutDialog() = context?.let { context ->
-        confirm(title = "account_settings.logout.confirm_logout.title".localized(context),
-                text = "account_settings.logout.confirm_logout.message".localized(context),
-                confirm = "account_settings.logout.confirm_logout.ok_button".localized(context),
-                cancel = "account_settings_logout_confirm_logout_cancel_button".localized(context),
+    private fun showConfirmLogOutDialog() {
+        confirm(title = "account_settings.logout.confirm_logout.title".localized(),
+                text = "account_settings.logout.confirm_logout.message".localized(),
+                confirm = "account_settings.logout.confirm_logout.ok_button".localized(),
+                cancel = "account_settings_logout_confirm_logout_cancel_button".localized(),
                 onConfirm = { delegate?.onLogOut() },
                 onCancel = { })
     }
 
     private fun sendCustomerSupportEmail() = contextConfiguration?.projectConfiguration?.supportEmailAddress?.let {
         activity?.let { activity ->
-            val subject = "help.mail.subject".localized(activity)
-            val body = "help.mail.body".localized(activity)
+            val subject = "help.mail.subject".localized()
+            val body = "help.mail.body".localized()
             SendEmailUtil(it, subject, body).execute(activity)
         }
     }

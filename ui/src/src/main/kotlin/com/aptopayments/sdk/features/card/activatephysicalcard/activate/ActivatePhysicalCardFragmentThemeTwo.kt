@@ -64,9 +64,9 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_physical_activation_title.text = "manage_card.activate_physical_card_code.title".localized(it)
-        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_code.message".localized(it)
+    private fun setupTexts() {
+        tv_physical_activation_title.text = "manage_card.activate_physical_card_code.title".localized()
+        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_code.message".localized()
     }
 
     private fun setupTheme() {
@@ -110,11 +110,9 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     private fun showError(result: ActivatePhysicalCardResult) = result.errorCode?.toInt().let { errorCode ->
-        context?.let { context ->
-            val title = "banner_error_title".localized(context)
-            val message = Failure.ServerError(errorCode).errorMessage(context)
-            notify(title = title, message = message)
-        }
+        val title = "banner_error_title".localized()
+        val message = Failure.ServerError(errorCode).errorMessage()
+        notify(title = title, message = message)
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

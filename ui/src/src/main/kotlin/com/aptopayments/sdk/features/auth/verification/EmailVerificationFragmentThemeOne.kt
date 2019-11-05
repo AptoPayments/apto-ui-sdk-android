@@ -66,12 +66,10 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        context?.let {
-            tv_verification_code_title.text = "auth.verify_email.explanation".localized(it)
-            tv_resend_label.text = "auth.verify_email.footer".localized(it)
-            tv_resend_btn.text = "auth.verify_email.resend_button.title".localized(it)
-            tv_expired_pin_label.text = "auth.verify_email.expired_pin.text".localized(it)
-        }
+        tv_verification_code_title.text = "auth.verify_email.explanation".localized()
+        tv_resend_label.text = "auth.verify_email.footer".localized()
+        tv_resend_btn.text = "auth.verify_email.resend_button.title".localized()
+        tv_expired_pin_label.text = "auth.verify_email.expired_pin.text".localized()
         tv_email_label.text = emailAddress
     }
 
@@ -90,7 +88,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     private fun setupToolBar() = delegate?.configureToolbar(
             toolbar = tb_llsdk_toolbar,
-            title = activity?.let { "auth_verify_email_title".localized(it) },
+            title = activity?.let { "auth_verify_email_title".localized() },
             backButtonMode = BaseActivity.BackButtonMode.Close(null, UIConfig.iconTertiaryColor)
     )
 
@@ -107,9 +105,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
         hideKeyboard()
         viewModel.restartVerification {
             hideLoading()
-            context?.let { context ->
-                notify("auth_verify_email_resent_message".localized(context), MessageBanner.MessageType.HEADS_UP)
-            }
+            notify("auth_verify_email_resent_message".localized(), MessageBanner.MessageType.HEADS_UP)
         }
     }
 
@@ -130,11 +126,13 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
                     }
                     VerificationStatus.FAILED, VerificationStatus.PENDING -> {
                         hideLoading()
-                        context?.let {
-                            notify("auth.verify_email.error_wrong_code.title".localized(it), "auth.verify_email.error_wrong_code.message".localized(it))
-                            apto_pin_view.clear()
-                            apto_pin_view.clearFocus()
-                        }
+                        notify(
+                            "auth.verify_email.error_wrong_code.title".localized(),
+                            "auth.verify_email.error_wrong_code.message".localized()
+                        )
+                        apto_pin_view.clear()
+                        apto_pin_view.clearFocus()
+
                         hideKeyboard()
                     }
                 }
@@ -166,11 +164,11 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
                     tv_resend_countdown_label.hide()
                 }
                 is ResendButtonState.Waiting -> {
-                    context?.let {
-                        val waitTimeDescription = state.pendingSeconds.stringFromTimeInterval()
-                        val newText = "auth.verify_email.resent_wait_text".localized(it).replace("<<WAIT_TIME>>", waitTimeDescription)
-                        tv_resend_countdown_label.text = newText
-                    }
+                    val waitTimeDescription = state.pendingSeconds.stringFromTimeInterval()
+                    val newText = "auth.verify_email.resent_wait_text".localized()
+                        .replace("<<WAIT_TIME>>", waitTimeDescription)
+                    tv_resend_countdown_label.text = newText
+
                     tv_resend_btn.hide()
                     tv_resend_countdown_label.show()
                 }

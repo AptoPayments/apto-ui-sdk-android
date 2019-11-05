@@ -1,15 +1,14 @@
 package com.aptopayments.sdk.features.transactiondetails
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.data.transaction.TransactionAdjustment
 import com.aptopayments.core.extension.localized
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -17,8 +16,7 @@ import java.text.NumberFormat
 
 internal class AdjustmentsAdapter(
         private var mTransaction: Transaction,
-        private var mAdjustments: List<TransactionAdjustment>,
-        private var mContext: Context
+        private var mAdjustments: List<TransactionAdjustment>
 ) : RecyclerView.Adapter<AdjustmentsAdapter.ViewHolder>() {
 
     // Provide a direct reference to each of the views within a data item
@@ -48,7 +46,7 @@ internal class AdjustmentsAdapter(
             } else {
                 nativeAmount.toAbsString()
             }
-            viewHolder.amount.text = String.format("%s %s", "transaction_details.adjustment.amount.title".localized(mContext), amount)
+            viewHolder.amount.text = String.format("%s %s", "transaction_details.adjustment.amount.title".localized(), amount)
             themeManager().customizeTimestamp(viewHolder.amount)
 
             adjustment.exchangeRate?.let { exchangeRate ->
@@ -69,7 +67,7 @@ internal class AdjustmentsAdapter(
                 } else {
                     it.toAbsString()
                 }
-                feeText = String.format("%s %s", "transaction_details.adjustment.fee.title".localized(mContext), feeAmount)
+                feeText = String.format("%s %s", "transaction_details.adjustment.fee.title".localized(), feeAmount)
             }
         }
         feeText?.let {
@@ -81,8 +79,8 @@ internal class AdjustmentsAdapter(
 
     private fun setDescription(adjustment: TransactionAdjustment, viewHolder: ViewHolder) {
         val text = when (adjustment.type) {
-            TransactionAdjustment.Type.REFUND -> "transaction_details_adjustment_transfer_to_text".localized(mContext)
-            TransactionAdjustment.Type.CAPTURE -> "transaction_details_adjustment_transfer_from_text".localized(mContext)
+            TransactionAdjustment.Type.REFUND -> "transaction_details_adjustment_transfer_to_text".localized()
+            TransactionAdjustment.Type.CAPTURE -> "transaction_details_adjustment_transfer_from_text".localized()
             else -> adjustment.fundingSourceName ?: ""
         }
         text.replace("%@", mTransaction.fundingSourceName ?: "", true)

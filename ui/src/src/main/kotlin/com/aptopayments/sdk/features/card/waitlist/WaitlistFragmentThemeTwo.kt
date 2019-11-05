@@ -59,10 +59,10 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_native_content_title.text = "wait_list.wait_list.title".localized(it)
-        tv_native_content_description_main.text = "wait_list.wait_list.description.main".localized(it)
-        tv_native_content_description_secondary.text = "wait_list.wait_list.description.secondary".localized(it)
+    private fun setupTexts() {
+        tv_native_content_title.text = "wait_list.wait_list.title".localized()
+        tv_native_content_description_main.text = "wait_list.wait_list.description.main".localized()
+        tv_native_content_description_secondary.text = "wait_list.wait_list.description.secondary".localized()
     }
 
     private fun showWaitlist() {

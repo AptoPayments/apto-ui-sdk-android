@@ -66,26 +66,24 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
     }
 
     @SuppressLint("SetTextI18n")
-    private fun localizeStrings() = context?.let {
-        tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized(it)
-        tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized(it)
-        tv_toolbar_title.text = "disclaimer_disclaimer_title".localized(it)
+    private fun localizeStrings() {
+        tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized()
+        tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized()
+        tv_toolbar_title.text = "disclaimer_disclaimer_title".localized()
     }
 
     override fun setupListeners() {
         super.setupListeners()
         tv_accept_disclaimer.setOnClickListener { delegate?.onDisclaimerAccepted() }
         tv_reject_disclaimer.setOnClickListener {
-            context?.let { context ->
-                confirm(
-                        title="disclaimer.disclaimer.cancel_action.title".localized(context),
-                        text = "disclaimer.disclaimer.cancel_action.message".localized(context),
-                        confirm = "disclaimer.disclaimer.cancel_action.ok_button".localized(context),
-                        cancel = "disclaimer.disclaimer.cancel_action.cancel_button".localized(context),
-                        onConfirm = { delegate?.onDisclaimerRejected() },
-                        onCancel = { }
-                )
-            }
+            confirm(
+                title = "disclaimer.disclaimer.cancel_action.title".localized(),
+                text = "disclaimer.disclaimer.cancel_action.message".localized(),
+                confirm = "disclaimer.disclaimer.cancel_action.ok_button".localized(),
+                cancel = "disclaimer.disclaimer.cancel_action.cancel_button".localized(),
+                onConfirm = { delegate?.onDisclaimerRejected() },
+                onCancel = { }
+            )
         }
     }
 

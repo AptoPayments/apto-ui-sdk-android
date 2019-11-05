@@ -52,7 +52,7 @@ internal class StatementRepositoryImpl(private val context: Context) :
 
     private fun getDownloadTitle(statement: MonthlyStatement): String {
         return "monthly_statements.report.title"
-            .localized(context)
+            .localized()
             .replace("<<MONTH>>", statement.getLocalDate().monthLocalized())
             .replace("<<YEAR>>", statement.year.toString())
     }

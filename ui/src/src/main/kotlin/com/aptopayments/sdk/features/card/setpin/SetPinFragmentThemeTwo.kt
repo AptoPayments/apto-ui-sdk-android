@@ -55,10 +55,8 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        context?.let {
-            tv_set_pin_title.text = "manage_card.set_pin.title".localized(it)
-            tv_set_pin_explanation.text = "manage_card.set_pin.explanation".localized(it)
-        }
+        tv_set_pin_title.text = "manage_card.set_pin.title".localized()
+        tv_set_pin_explanation.text = "manage_card.set_pin.explanation".localized()
     }
 
     private fun setupTheme() {

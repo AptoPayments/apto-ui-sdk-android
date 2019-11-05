@@ -29,7 +29,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     @SuppressLint("SetTextI18n")
     private fun setupUI() {
-        context?.let { tv_title.text = "manage_card_balance_total_balance".localized(it) }
+        tv_title.text = "manage_card_balance_total_balance".localized()
         setupTheme()
     }
 
@@ -90,6 +90,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun invalidBalanceString(): String {
-        return context?.let { "manage_card.balance.invalid_balance.title".localized(it) } ?: ""
+        return "manage_card.balance.invalid_balance.title".localized()
     }
 }

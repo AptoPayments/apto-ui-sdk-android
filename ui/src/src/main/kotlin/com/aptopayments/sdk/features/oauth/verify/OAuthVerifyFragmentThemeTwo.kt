@@ -124,16 +124,16 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     )
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_personal_information_header.text = "select_balance_store_oauth_confirm_title".localized(it)
-        tv_personal_information_description.text = "select_balance_store_oauth_confirm_explanation".localized(it)
-        tv_first_name_label.text = "select_balance_store_oauth_confirm_first_name".localized(it)
-        tv_last_name_label.text = "select_balance_store_oauth_confirm_last_name".localized(it)
-        tv_email_label.text = "select_balance_store_oauth_confirm_email".localized(it)
-        tv_address_label.text = "select_balance_store_oauth_confirm_address".localized(it)
-        tv_phone_label.text = "select_balance_store_oauth_confirm_phone_number".localized(it)
-        tv_date_of_birth_label.text = "select_balance_store_oauth_confirm_birth_date".localized(it)
-        tv_submit_bttn.text = "select_balance_store_oauth_confirm_call_to_action_title".localized(it)
+    private fun setupTexts() {
+        tv_personal_information_header.text = "select_balance_store_oauth_confirm_title".localized()
+        tv_personal_information_description.text = "select_balance_store_oauth_confirm_explanation".localized()
+        tv_first_name_label.text = "select_balance_store_oauth_confirm_first_name".localized()
+        tv_last_name_label.text = "select_balance_store_oauth_confirm_last_name".localized()
+        tv_email_label.text = "select_balance_store_oauth_confirm_email".localized()
+        tv_address_label.text = "select_balance_store_oauth_confirm_address".localized()
+        tv_phone_label.text = "select_balance_store_oauth_confirm_phone_number".localized()
+        tv_date_of_birth_label.text = "select_balance_store_oauth_confirm_birth_date".localized()
+        tv_submit_bttn.text = "select_balance_store_oauth_confirm_call_to_action_title".localized()
     }
 
     private fun setupTheme() {
@@ -158,10 +158,8 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
             customizeFormLabel(tv_phone)
             customizeSectionHeader(tv_date_of_birth_label)
             customizeFormLabel(tv_date_of_birth)
-            context?.let {
-                val title = "select_balance_store_oauth_confirm_footer".localized(it)
-                customizeHtml(tv_delivery_address_instructions, StringUtils.parseHtmlLinks(title))
-            }
+            val title = "select_balance_store_oauth_confirm_footer".localized()
+            customizeHtml(tv_delivery_address_instructions, StringUtils.parseHtmlLinks(title))
         }
         tv_delivery_address_instructions.movementMethod = LinkMovementMethod.getInstance()
     }
@@ -174,7 +172,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_update_personal_details)?.let {
                 themeManager().customizeMenuItem(it)
-                it.text = "select_balance_store_oauth_confirm_refresh_title".localized(context)
+                it.text = "select_balance_store_oauth_confirm_refresh_title".localized()
                 it.setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
                 it.setTextColor(UIConfig.textButtonColor)
             }

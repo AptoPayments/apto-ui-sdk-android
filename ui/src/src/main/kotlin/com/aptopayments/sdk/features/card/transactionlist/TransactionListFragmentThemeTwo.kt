@@ -59,7 +59,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     private fun setupToolbar() {
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        val title = context?.let { config.mcc.toString(it) }
+        val title = config.mcc.toString()
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
                 title = title,
@@ -67,7 +67,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
         )
     }
 
-    private fun setupRecyclerView() = context?.let { context ->
+    private fun setupRecyclerView() {
         transactionListAdapter = TransactionListAdapter(ArrayList())
         val linearLayoutManager = LinearLayoutManager(context)
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {

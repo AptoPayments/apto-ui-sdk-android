@@ -51,7 +51,7 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
                         viewModel.startCall(context, cardId, action)
                     }
                     else {
-                        delegate?.onVoipCallError("manage_card.get_pin_voip.no_microphone_permission.description".localized(context))
+                        delegate?.onVoipCallError("manage_card.get_pin_voip.no_microphone_permission.description".localized())
                     }
                 }
             }
@@ -111,8 +111,8 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
         context?.let {
             when (action) {
                 Action.LISTEN_PIN -> {
-                    tv_title.text = "manage_card.get_pin_voip.title".localized(it)
-                    tv_description.text = "manage_card.get_pin_voip.message".localized(it)
+                    tv_title.text = "manage_card.get_pin_voip.title".localized()
+                    tv_description.text = "manage_card.get_pin_voip.message".localized()
                 }
                 else -> {}
             }
@@ -146,19 +146,15 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
 
     @SuppressLint("SetTextI18n")
     private fun showNotInitiatedState() {
-        context?.let {
-            tv_title.text = "manage_card.get_pin_voip.title".localized(it)
-            tv_description.text = "manage_card.get_pin_voip.message".localized(it)
-        }
+        tv_title.text = "manage_card.get_pin_voip.title".localized()
+        tv_description.text = "manage_card.get_pin_voip.message".localized()
         updateCallActionButtonState(isCallEstablished = false)
     }
 
     @SuppressLint("SetTextI18n")
     private fun showRingingState() {
-        context?.let {
-            tv_title.text = "manage_card.get_pin_voip.title".localized(it)
-            tv_description.text = "manage_card.get_pin_voip.message".localized(it)
-        }
+        tv_title.text = "manage_card.get_pin_voip.title".localized()
+        tv_description.text = "manage_card.get_pin_voip.message".localized()
         updateCallActionButtonState(isCallEstablished = false)
     }
 

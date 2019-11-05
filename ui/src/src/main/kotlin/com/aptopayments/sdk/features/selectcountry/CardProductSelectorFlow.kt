@@ -68,19 +68,19 @@ internal class CardProductSelectorFlow (
 
     override fun getCountrySelectorTitle(): String {
         rootActivity()?.let {
-            return "select_card_product.select_country.title".localized(it)
+            return "select_card_product.select_country.title".localized()
         } ?: return ""
     }
 
     override fun getCountrySelectorDescription(): String {
         rootActivity()?.let {
-            return "select_card_product.select_country.explanation".localized(it)
+            return "select_card_product.select_country.explanation".localized()
         } ?: return ""
     }
 
     override fun getCountrySelectorCallToAction(): String {
         rootActivity()?.let {
-            return "select_card_product.select_country.call_to_action".localized(it)
+            return "select_card_product.select_country.call_to_action".localized()
         } ?: return ""
     }
 

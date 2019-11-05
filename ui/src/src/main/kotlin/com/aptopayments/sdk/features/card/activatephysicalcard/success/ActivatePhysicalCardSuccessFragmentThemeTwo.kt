@@ -55,7 +55,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     override fun handleFailure(failure: Failure?) {
         when (failure) {
             is NoTelephonyError -> {
-                context?.let { notify("error_telephony_disabled".localized(it)) }
+                notify("error_telephony_disabled".localized())
             }
             else -> super.handleFailure(failure)
         }
@@ -78,11 +78,11 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_title.text = "manage_card.get_pin_nue.title".localized(it)
-        tv_description.text = "manage_card.get_pin_nue.explanation".localized(it)
-        continue_button.text = "manage_card.get_pin_nue.call_to_action.title".localized(it)
-        tv_footer.text = "manage_card.get_pin_nue.footer".localized(it)
+    private fun setupTexts() {
+        tv_title.text = "manage_card.get_pin_nue.title".localized()
+        tv_description.text = "manage_card.get_pin_nue.explanation".localized()
+        continue_button.text = "manage_card.get_pin_nue.call_to_action.title".localized()
+        tv_footer.text = "manage_card.get_pin_nue.footer".localized()
     }
 
     private fun setupTheme() {
@@ -116,8 +116,8 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
                             viewModel.getPinTapped(from = activity, phoneNumber = it.ivrPhone)
                         }
                         is FeatureType.Api -> TODO() // Not supported yet
-                        is FeatureType.Unknown -> activity?.let { activity ->
-                            notify("failure_server_error".localized(activity))
+                        is FeatureType.Unknown -> activity?.let {
+                            notify("failure_server_error".localized())
                         }
                     }
                 }

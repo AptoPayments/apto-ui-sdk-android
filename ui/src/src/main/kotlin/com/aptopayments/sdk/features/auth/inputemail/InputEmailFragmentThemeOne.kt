@@ -1,8 +1,6 @@
 package com.aptopayments.sdk.features.auth.inputemail
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -46,10 +44,8 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
     override fun setupUI() {
         setupToolBar()
         applyFontsAndColors()
-        context?.let {
-            et_email.hint = "auth_input_email_hint".localized(it)
-            tv_email_label.text = "auth_input_email_explanation".localized(it)
-        }
+        et_email.hint = "auth_input_email_hint".localized()
+        tv_email_label.text = "auth_input_email_explanation".localized()
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()
@@ -67,10 +63,10 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
     private fun setupToolBar() {
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
-                title = context?.let { "auth_input_email_title".localized(it) },
+                title = "auth_input_email_title".localized(),
                 backButtonMode = BaseActivity.BackButtonMode.Back(null)
         )
-        context?.let { styleMenuItem(it) }
+        styleMenuItem()
     }
 
     override fun setupListeners() {
@@ -101,10 +97,10 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
     }
 
     @SuppressLint("SetTextI18n")
-    private fun styleMenuItem(context: Context) = tb_llsdk_toolbar.post {
+    private fun styleMenuItem() = tb_llsdk_toolbar.post {
         val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
         themeManager().customizeMenuItem(tvNext)
-        tvNext.text = "toolbar_next_button_label".localized(context)
+        tvNext.text = "toolbar_next_button_label".localized()
         tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
     }
 

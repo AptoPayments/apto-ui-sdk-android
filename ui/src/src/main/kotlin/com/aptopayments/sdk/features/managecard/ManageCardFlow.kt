@@ -335,8 +335,8 @@ internal class ManageCardFlow (
                 onFinish = {
                     popFlow(animated = true)
                     rootActivity()?.let {
-                        notify(title = "manage_card.confirm_pin.pin_updated.title".localized(it),
-                                message = "manage_card.confirm_pin.pin_updated.message".localized(it),
+                        notify(title = "manage_card.confirm_pin.pin_updated.title".localized(),
+                                message = "manage_card.confirm_pin.pin_updated.message".localized(),
                                 messageType = MessageBanner.MessageType.HEADS_UP)
                     }
                 }

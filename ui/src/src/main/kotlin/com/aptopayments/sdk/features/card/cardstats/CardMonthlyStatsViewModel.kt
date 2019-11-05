@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.cardstats
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.aptopayments.core.analytics.Event
@@ -23,13 +22,13 @@ internal class CardMonthlyStatsViewModel constructor(
     var monthlySpending: MutableLiveData<MonthlySpending> = MutableLiveData()
     var monthlySpendingMap: MutableLiveData<HashMap<Pair<String, String>, List<CategorySpending>>> = MutableLiveData()
 
-    fun getMonthlySpending(context: Context, cardId: String, month: String, year: String,
+    fun getMonthlySpending(cardId: String, month: String, year: String,
                            onComplete: ((monthlySpending: MonthlySpending) -> Unit)? = null) {
         AptoPlatform.cardMonthlySpending(cardId, month, year) { result ->
             val spendingMap = monthlySpendingMap.value ?: HashMap()
             result.either(::handleFailure) {
                 monthlySpending.postValue(it)
-                val sortedList = sortCategorySpending(context, it.spending)
+                val sortedList = sortCategorySpending(it.spending)
                 spendingMap[Pair(month, year)] = sortedList
                 monthlySpendingMap.postValue(spendingMap)
                 onComplete?.invoke(it)
@@ -38,11 +37,11 @@ internal class CardMonthlyStatsViewModel constructor(
         }
     }
 
-    private fun sortCategorySpending(context: Context, categorySpending: List<CategorySpending>) =
+    private fun sortCategorySpending(categorySpending: List<CategorySpending>) =
             categorySpending.sortedWith(compareBy {
                 val mcc = if (it.categoryId.isEmpty()) null
                 else MCC(name = it.categoryId, icon = MCC.Icon.valueOf(it.categoryId.toUpperCase()))
-                mcc?.toString(context)
+                mcc?.toString()
             })
 
     fun viewLoaded() = analyticsManager.track(Event.MonthlySpending)

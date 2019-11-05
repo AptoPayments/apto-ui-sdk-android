@@ -65,10 +65,8 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        context?.let {
-            et_phone.hint = "auth_input_phone_hint".localized(it)
-            tv_phone_label.text = "auth_input_phone_explanation".localized(it)
-        }
+        tv_phone_label.text = "auth_input_phone_explanation".localized()
+        et_phone.hint = "auth_input_phone_hint".localized()
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
@@ -91,7 +89,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     private fun setupToolBar() {
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
-                title = context?.let { "auth_input_phone_title".localized(it) },
+                title = "auth_input_phone_title".localized(),
                 backButtonMode = BaseActivity.BackButtonMode.Back(null)
         )
         context?.let { styleMenuItem(it) }
@@ -128,7 +126,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     private fun styleMenuItem(context: Context) = tb_llsdk_toolbar.post {
         val tvNext = tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_next)
         themeManager().customizeMenuItem(tvNext)
-        tvNext.text = "toolbar_next_button_label".localized(context)
+        tvNext.text = "toolbar_next_button_label".localized()
         tvNext.setTextColor(UIConfig.disabledTextTopBarPrimaryColor)
     }
 

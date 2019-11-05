@@ -57,10 +57,8 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
 
     @SuppressLint("SetTextI18n")
     override fun setupUI() {
-        context?.let {
-            tv_description_text.text = "no_network.description".localized(it)
-            tv_loading_text.text = "no_network.reconnect.title".localized(it)
-        }
+        tv_description_text.text = "no_network.description".localized()
+        tv_loading_text.text = "no_network.reconnect.title".localized()
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
         view!!.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tv_description_text.setTextColor(UIConfig.textTopBarSecondaryColor)

@@ -104,7 +104,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_activate_physical_card)?.let {
                 themeManager().customizeMenuItem(it)
-                it.text = "manage_card.activate_physical_card.top_bar_item.title".localized(context)
+                it.text = "manage_card.activate_physical_card.top_bar_item.title".localized()
             }
         }
     }
@@ -160,8 +160,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             val duration = FIVE_SECONDS
             if (Date().time - previousMessageShownAt < duration) return
             previousMessageShownAt = Date().time
-            activity?.let { MessageBanner(it).showBanner(R.string.invalid_funding_source_message,
-                    MessageBanner.MessageType.ERROR, duration) }
+            notify("invalid_funding_source_message".localized(), MessageBanner.MessageType.ERROR)
         }
         else {
             bv_balance_view.set(balance)
@@ -200,7 +199,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.let {
                 it.primaryClip = clipData
                 notify(
-                        message = "manage_card_card_view_copy_pan_text".localized(context),
+                        message = "manage_card_card_view_copy_pan_text".localized(),
                         type = MessageBanner.MessageType.SUCCESS
                 )
             }
@@ -235,9 +234,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         with (themeManager()) {
             customizeEmptyCase(tv_no_transactions)
         }
-        context?.let {
-            tv_no_transactions.text = "manage_card.transaction_list.empty_case.title".localized(it)
-        }
+        tv_no_transactions.text = "manage_card.transaction_list.empty_case.title".localized()
     }
 
     private fun setupToolbar() {

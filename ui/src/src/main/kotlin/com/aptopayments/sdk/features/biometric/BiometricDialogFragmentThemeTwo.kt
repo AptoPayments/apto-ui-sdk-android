@@ -114,7 +114,7 @@ internal class BiometricDialogFragmentThemeTwo : BaseDialogFragment(), Biometric
                     }
                 }
                 else {
-                    fingerprint_status.text = availability.toLocalizedDescription(context)
+                    fingerprint_status.text = availability.toLocalizedDescription()
                 }
             }
         }

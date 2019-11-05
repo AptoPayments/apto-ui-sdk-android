@@ -56,7 +56,7 @@ internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.icon.setBackgroundColorKeepShape(UIConfig.uiTertiaryColor)
             }
             viewHolder.icon.setImageDrawable(icon)
-            viewHolder.category.text = mcc.toString(viewHolder.category.context)
+            viewHolder.category.text = mcc.toString()
             viewHolder.amount.text = lineItem.categorySpending.spending?.toAbsString()
             viewHolder.row.setOnClickListener { delegate?.onCategoryTapped(lineItem.categorySpending)}
         }

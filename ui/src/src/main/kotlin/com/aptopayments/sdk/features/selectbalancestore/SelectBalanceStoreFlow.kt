@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.selectbalancestore
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.SelectBalanceStoreResult
 import com.aptopayments.core.data.oauth.OAuthAttempt
@@ -57,10 +56,10 @@ internal class SelectBalanceStoreFlow (
         else handleFailure(failure)
     }
 
-    private fun showRevokedTokenDialog(error: Failure.ServerError) = rootActivity()?.let { context ->
-        confirm(title = "select_balance_store.login.error.title".localized(context),
-                text = error.errorMessage(context),
-                confirm = "select_balance_store.login.error.ok_button".localized(context),
+    private fun showRevokedTokenDialog(error: Failure.ServerError) {
+        confirm(title = "select_balance_store.login.error.title".localized(),
+                text = error.errorMessage(),
+                confirm = "select_balance_store.login.error.ok_button".localized(),
                 cancel = "",
                 onConfirm = { },
                 onCancel = { }
@@ -112,12 +111,12 @@ internal class SelectBalanceStoreFlow (
     private fun confirmAddressIfNeeded(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt) {
         (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)?.firstOrNull() as? AddressDataPoint)?.let { address ->
             rootActivity()?.let { context ->
-                val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized(context)
+                val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized()
                         .replace("<<ADDRESS>>", address.toStringRepresentation())
-                confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(context),
+                confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
                         text = message,
-                        confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(context),
-                        cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(context),
+                        confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(),
+                        cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(),
                         onConfirm = { updateUserIfNeeded(allowedBalanceType, oauthAttempt) },
                         onCancel = { }
                 )
@@ -134,7 +133,7 @@ internal class SelectBalanceStoreFlow (
                     if (it.result == OAuthUserDataUpdateResult.VALID) selectBalanceStore(oauthAttempt)
                     else {
                         rootActivity()?.let { context ->
-                            notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized(context))
+                            notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized())
                         }
                         it.userData?.let { userData -> verifyFlow.showUpdatedUserData(userData) }
                         Unit
@@ -156,9 +155,10 @@ internal class SelectBalanceStoreFlow (
                     SelectBalanceStoreResult.Type.VALID -> onFinish(oauthAttempt)
                     else -> {
                         analyticsManager.track(selectBalanceStoreResult.errorEvent())
-                        rootActivity()?.let { context ->
-                            notify(errorTitle(context), selectBalanceStoreResult.errorMessage(context))
-                        }
+                        notify(
+                            "select_balance_store.login.error.title".localized(),
+                            selectBalanceStoreResult.errorMessage()
+                        )
                         Unit
                     }
                 }
@@ -166,5 +166,4 @@ internal class SelectBalanceStoreFlow (
         }
     }
 
-    private fun errorTitle(context: Context) = "select_balance_store.login.error.title".localized(context)
 }

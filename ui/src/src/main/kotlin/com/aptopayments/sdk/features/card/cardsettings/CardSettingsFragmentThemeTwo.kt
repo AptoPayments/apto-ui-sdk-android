@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.Switch
 import androidx.annotation.VisibleForTesting
@@ -177,77 +178,78 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_toolbar_title.text = "card_settings.settings.title".localized(it)
+    private fun setupTexts() {
+        tv_toolbar_title.text = "card_settings.settings.title".localized()
         (rl_settings as SectionHeaderViewTwo).set(
-                title = "card_settings.settings.settings.title".localized(it)
+                title = "card_settings.settings.settings.title".localized()
         )
         (rl_get_pin as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.settings.get_pin.title".localized(it),
-                description = "card_settings.settings.get_pin.description".localized(it)
+                title = "card_settings.settings.get_pin.title".localized(),
+                description = "card_settings.settings.get_pin.description".localized()
         )
         (rl_set_pin as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.settings.set_pin.title".localized(it),
-                description = "card_settings.settings.set_pin.description".localized(it)
+                title = "card_settings.settings.set_pin.title".localized(),
+                description = "card_settings.settings.set_pin.description".localized()
         )
         (rl_card_info as SectionSwitchViewTwo).set(
-                title = "card_settings.settings.card_details.title".localized(it),
-                description = "card_settings.settings.card_details.description".localized(it)
+                title = "card_settings.settings.card_details.title".localized(),
+                description = "card_settings.settings.card_details.description".localized()
         )
         (rl_lock_card as SectionSwitchViewTwo).set(
-                title = "card_settings.settings.lock_card.title".localized(it),
-                description = "card_settings.settings.lock_card.description".localized(it)
+                title = "card_settings.settings.lock_card.title".localized(),
+                description = "card_settings.settings.lock_card.description".localized()
         )
         (rl_transactions as SectionHeaderViewTwo).set(
-                title = "card_settings.transactions.title".localized(it)
+                title = "card_settings.transactions.title".localized()
         )
         (rl_detailed_card_activity as SectionSwitchViewTwo).set(
-                title = "card_settings.transactions.detailed_card_activity.title".localized(it),
-                description = "card_settings.transactions.detailed_card_activity.description".localized(it)
+                title = "card_settings.transactions.detailed_card_activity.title".localized(),
+                description = "card_settings.transactions.detailed_card_activity.description".localized()
         )
         (rl_help as SectionHeaderViewTwo).set(
-                title = "card_settings.help.title".localized(it)
+                title = "card_settings.help.title".localized()
         )
         (rl_ivr_support as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.ivr_support.title".localized(it),
-                description = "card_settings.help.ivr_support.description".localized(it)
+                title = "card_settings.help.ivr_support.title".localized(),
+                description = "card_settings.help.ivr_support.description".localized()
         )
         (rl_contact_support as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.contact_support.title".localized(it),
-                description = "card_settings.help.contact_support.description".localized(it)
+                title = "card_settings.help.contact_support.title".localized(),
+                description = "card_settings.help.contact_support.description".localized()
         )
         (rl_report_stolen_card as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.report_lost_card.title".localized(it),
-                description = "card_settings.help.report_lost_card.description".localized(it)
+                title = "card_settings.help.report_lost_card.title".localized(),
+                description = "card_settings.help.report_lost_card.description".localized()
         )
         (rl_faq as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.faq.title".localized(it),
-                description = "card_settings.legal.faq.description".localized(it)
+                title = "card_settings.legal.faq.title".localized(),
+                description = "card_settings.legal.faq.description".localized()
         )
         (rl_legal as SectionHeaderViewTwo).set(
-                title = "card_settings.legal.title".localized(it)
+                title = "card_settings.legal.title".localized()
         )
         (rl_cardholder_agreement as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.cardholder_agreement.title".localized(it),
-                description = "card_settings.legal.cardholder_agreement.description".localized(it)
+                title = "card_settings.legal.cardholder_agreement.title".localized(),
+                description = "card_settings.legal.cardholder_agreement.description".localized()
         )
         (rl_privacy_policy as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.privacy_policy.title".localized(it),
-                description = "card_settings.legal.privacy_policy.description".localized(it)
+                title = "card_settings.legal.privacy_policy.title".localized(),
+                description = "card_settings.legal.privacy_policy.description".localized()
         )
         (rl_terms_of_service as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.terms_of_service.title".localized(it),
-                description = "card_settings.legal.terms_of_service.description".localized(it)
+                title = "card_settings.legal.terms_of_service.title".localized(),
+                description = "card_settings.legal.terms_of_service.description".localized()
         )
         (rl_statement as SectionOptionWithSubtitleViewTwo).set(
-            title = "card_settings.help.monthly_statements.title".localized(it),
-            description = "card_settings.help.monthly_statements.description".localized(it)
+            title = "card_settings.help.monthly_statements.title".localized(),
+            description = "card_settings.help.monthly_statements.description".localized()
         )
     }
 
     private fun setupToolBar() {
         val toolbar = tb_llsdk_custom_toolbar as Toolbar
         toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
+        iv_close_button.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
     }
 
     override fun onBackPressed() {
@@ -283,38 +285,36 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     }
 
     private fun lockUnlockCard(value: Boolean) {
-        context?.let { context ->
-            if (value) {
-                confirm(
-                        title = "card_settings.settings.confirm_lock_card.title".localized(context),
-                        text = "card_settings.settings.confirm_lock_card.message".localized(context),
-                        confirm = "card_settings.settings.confirm_lock_card.ok_button".localized(context),
-                        cancel = "card_settings.settings.confirm_lock_card.cancel_button".localized(context),
-                        onConfirm = {
-                            showLoading()
-                            viewModel.lockCard {
-                                hideLoading()
-                                delegate?.onCardStateChanged()
-                            }
-                        },
-                        onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
-                )
-            } else {
-                confirm(
-                        title = "card_settings.settings.confirm_unlock_card.title".localized(context),
-                        text = "card_settings.settings.confirm_unlock_card.message".localized(context),
-                        confirm = "card_settings.settings.confirm_unlock_card.ok_button".localized(context),
-                        cancel = "card_settings.settings.confirm_unlock_card.cancel_button".localized(context),
-                        onConfirm = {
-                            showLoading()
-                            viewModel.unlockCard {
-                                hideLoading()
-                                delegate?.onCardStateChanged()
-                            }
-                        },
-                        onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
-                )
-            }
+        if (value) {
+            confirm(
+                title = "card_settings.settings.confirm_lock_card.title".localized(),
+                text = "card_settings.settings.confirm_lock_card.message".localized(),
+                confirm = "card_settings.settings.confirm_lock_card.ok_button".localized(),
+                cancel = "card_settings.settings.confirm_lock_card.cancel_button".localized(),
+                onConfirm = {
+                    showLoading()
+                    viewModel.lockCard {
+                        hideLoading()
+                        delegate?.onCardStateChanged()
+                    }
+                },
+                onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
+            )
+        } else {
+            confirm(
+                title = "card_settings.settings.confirm_unlock_card.title".localized(),
+                text = "card_settings.settings.confirm_unlock_card.message".localized(),
+                confirm = "card_settings.settings.confirm_unlock_card.ok_button".localized(),
+                cancel = "card_settings.settings.confirm_unlock_card.cancel_button".localized(),
+                onConfirm = {
+                    showLoading()
+                    viewModel.unlockCard {
+                        hideLoading()
+                        delegate?.onCardStateChanged()
+                    }
+                },
+                onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
+            )
         }
     }
 
@@ -327,8 +327,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                     AVAILABLE -> {
                         // Show the biometric authentication dialog here
                         delegate?.askForBiometricAuthentication(
-                                title = "card_settings.show_card_data.biometrics.title".localized(context),
-                                description = "card_settings.show_card_data.biometrics.description".localized(context),
+                                title = "card_settings.show_card_data.biometrics.title".localized(),
+                                description = "card_settings.show_card_data.biometrics.description".localized(),
                                 onAuthSuccess = {
                                     showLoading()
                                     viewModel.getCardDetails {
@@ -336,7 +336,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                                     }
                                 },
                                 onAuthFailure = {
-                                    notify("biometrics_fingerprint_authentication_failed".localized(context))
+                                    notify("biometrics_fingerprint_authentication_failed".localized())
                                     // We need to update the state of the switch after a small delay
                                     // otherwise the Switch ends in an inconsistent state. This might
                                     // be due to previous UI operation not finished yet or because the UI
@@ -351,7 +351,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                         )
                     }
                     FINGERPRINT_PERMISSION_REVOKED, FINGERPRINT_NOT_CONFIGURED, LOCK_SCREEN_SECURITY_DISABLED -> {
-                        notify(availability.toLocalizedDescription(context))
+                        notify(availability.toLocalizedDescription())
                         silentlyToggleSwitch(rl_card_info.sw_tv_section_switch_switch, ::showHideCardDetails)
                     }
                     NO_FINGERPRINT_SUPPORTED_IN_ANDROID_SDK, NO_FINGERPRINT_SUPPORTED_IN_DEVICE -> {
@@ -372,64 +372,64 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         switch.setOnCheckedChangeListener { _, value -> listener(value) }
     }
 
-    private fun onFaqPressed() = context?.let { context ->
+    private fun onFaqPressed() {
         viewModel.faq.value?.let { content ->
             delegate?.showContentPresenter(
                     content = content,
-                    title = "card_settings.legal.faq.title".localized(context)
+                    title = "card_settings.legal.faq.title".localized()
             )
         }
     }
 
-    private fun onCardholderAgreementPressed() = context?.let { context ->
+    private fun onCardholderAgreementPressed() {
         viewModel.cardholderAgreement.value?.let { content ->
             delegate?.showContentPresenter(
                     content = content,
-                    title = "card_settings.legal.cardholder_agreement.title".localized(context)
+                    title = "card_settings.legal.cardholder_agreement.title".localized()
             )
         }
     }
 
-    private fun onPrivacyPolicyPressed() = context?.let { context ->
+    private fun onPrivacyPolicyPressed() {
         viewModel.privacyPolicy.value?.let { content ->
             delegate?.showContentPresenter(
                     content = content,
-                    title = "card_settings.legal.privacy_policy.title".localized(context)
+                    title = "card_settings.legal.privacy_policy.title".localized()
             )
         }
     }
 
-    private fun onTermsAndConditionsPressed() = context?.let { context ->
+    private fun onTermsAndConditionsPressed() {
         viewModel.termsAndConditions.value?.let { content ->
             delegate?.showContentPresenter(
                     content = content,
-                    title = "card_settings.legal.terms_of_service.title".localized(context)
+                    title = "card_settings.legal.terms_of_service.title".localized()
             )
         }
     }
 
-    private fun sendCustomerSupportEmail() = context?.let { context ->
+    private fun sendCustomerSupportEmail() {
         projectConfiguration.supportEmailAddress?.let { recipientAddress ->
             delegate?.showMailComposer(
                     recipient = recipientAddress,
-                    subject = "help.mail.subject".localized(context),
-                    body = "help.mail.body".localized(context)
+                    subject = "help.mail.subject".localized(),
+                    body = "help.mail.body".localized()
             )
         }
     }
 
-    private fun reportLostOrStolenCard() = context?.let { context ->
+    private fun reportLostOrStolenCard() {
         confirm(
-                title = "card_settings.settings.confirm_report_lost_card.title".localized(context),
-                text = "card_settings.settings.confirm_report_lost_card.message".localized(context),
-                confirm = "card_settings.settings.confirm_report_lost_card.ok_button".localized(context),
-                cancel = "card_settings.settings.confirm_report_lost_card.cancel_button".localized(context),
+                title = "card_settings.settings.confirm_report_lost_card.title".localized(),
+                text = "card_settings.settings.confirm_report_lost_card.message".localized(),
+                confirm = "card_settings.settings.confirm_report_lost_card.ok_button".localized(),
+                cancel = "card_settings.settings.confirm_report_lost_card.cancel_button".localized(),
                 onConfirm = {
                     viewModel.lockCard { }
                     projectConfiguration.supportEmailAddress?.let { recipientAddress ->
                         delegate?.showMailComposer(
                                 recipient = recipientAddress,
-                                subject = "email_lost_card_subject".localized(context),
+                                subject = "email_lost_card_subject".localized(),
                                 body = null
                         )
                     }

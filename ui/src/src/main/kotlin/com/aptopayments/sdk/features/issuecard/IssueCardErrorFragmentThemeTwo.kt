@@ -55,10 +55,8 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
         with (themeManager()) {
             customizeLargeTitleLabel(tv_issue_card_error_title)
             customizeRegularTextLabel(tv_description)
-            context?.let { context ->
-                val title = "issue_card.issue_card.error_insufficient_funds.secondary_cta".localized(context)
-                customizeHtml(tv_secondary_cta, StringUtils.parseHtmlLinks(title))
-            }
+            val title = "issue_card.issue_card.error_insufficient_funds.secondary_cta".localized()
+            customizeHtml(tv_secondary_cta, StringUtils.parseHtmlLinks(title))
             customizeSubmitButton(tv_primary_cta)
         }
         tv_secondary_cta.movementMethod = LinkMovementMethod.getInstance()
@@ -73,20 +71,20 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showInsufficientFundsError() = context?.let {
+    private fun showInsufficientFundsError() {
         showOrRemoveErrorAsset()
-        tv_issue_card_error_title.text = "issue_card.issue_card.error_insufficient_funds.title".localized(it)
-        tv_description.text = "issue_card.issue_card.error_insufficient_funds.description".localized(it)
-        tv_primary_cta.text = "issue_card.issue_card.error_insufficient_funds.primary_cta".localized(it)
+        tv_issue_card_error_title.text = "issue_card.issue_card.error_insufficient_funds.title".localized()
+        tv_description.text = "issue_card.issue_card.error_insufficient_funds.description".localized()
+        tv_primary_cta.text = "issue_card.issue_card.error_insufficient_funds.primary_cta".localized()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showGenericError() = context?.let {
+    private fun showGenericError() {
         showOrRemoveErrorAsset()
-        tv_issue_card_error_title.text = "issue_card.issue_card.generic_error.title".localized(it)
-        tv_description.text = "issue_card.issue_card.generic_error.description".localized(it)
+        tv_issue_card_error_title.text = "issue_card.issue_card.generic_error.title".localized()
+        tv_description.text = "issue_card.issue_card.generic_error.description".localized()
         tv_secondary_cta.remove()
-        tv_primary_cta.text = "issue_card.issue_card.generic_error.primary_cta".localized(it)
+        tv_primary_cta.text = "issue_card.issue_card.generic_error.primary_cta".localized()
     }
 
     private fun showOrRemoveErrorAsset() {

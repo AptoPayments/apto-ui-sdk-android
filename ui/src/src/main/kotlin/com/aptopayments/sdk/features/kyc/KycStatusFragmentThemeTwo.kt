@@ -69,11 +69,11 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_kyc_title.text = "manage_card.kyc.title".localized(it)
-        tv_kyc_footer.text = StringUtils.parseHtmlLinks("manage_card_kyc_footer".localized(it))
+    private fun setupTexts() {
+        tv_kyc_title.text = "manage_card.kyc.title".localized()
+        tv_kyc_footer.text = StringUtils.parseHtmlLinks("manage_card_kyc_footer".localized())
         tv_kyc_footer.movementMethod = LinkMovementMethod.getInstance()
-        refresh_button.text = "manage_card.kyc.call_to_action.title".localized(it)
+        refresh_button.text = "manage_card.kyc.call_to_action.title".localized()
         updateKycLabel()
     }
 
@@ -89,16 +89,17 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateKycLabel() = context?.let {
-        when (kycStatus) {
-            KycStatus.REJECTED -> tv_status_text.text = "manage_card.kyc.state.rejected".localized(it)
-            KycStatus.RESUBMIT_DETAILS -> tv_status_text.text = "manage_card.kyc.state.resubmit_details".localized(it)
-            KycStatus.PASSED -> tv_status_text.text = "manage_card.kyc.state.passed".localized(it)
-            KycStatus.UPLOAD_FILE -> tv_status_text.text = "manage_card.kyc.state.upload_file".localized(it)
-            KycStatus.UNKNOWN -> tv_status_text.text = "manage_card.kyc.state.under_review".localized(it)
-            KycStatus.UNDER_REVIEW -> tv_status_text.text = "manage_card.kyc.state.under_review".localized(it)
-            KycStatus.TEMPORARY_ERROR -> tv_status_text.text = "manage_card.kyc.state.temporary_error".localized(it)
+    private fun updateKycLabel() {
+        val text = when (kycStatus) {
+            KycStatus.REJECTED -> "manage_card.kyc.state.rejected"
+            KycStatus.RESUBMIT_DETAILS -> "manage_card.kyc.state.resubmit_details"
+            KycStatus.PASSED -> "manage_card.kyc.state.passed"
+            KycStatus.UPLOAD_FILE -> "manage_card.kyc.state.upload_file"
+            KycStatus.UNKNOWN -> "manage_card.kyc.state.under_review"
+            KycStatus.UNDER_REVIEW -> "manage_card.kyc.state.under_review"
+            KycStatus.TEMPORARY_ERROR -> "manage_card.kyc.state.temporary_error"
         }
+        tv_status_text.text = text.localized()
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

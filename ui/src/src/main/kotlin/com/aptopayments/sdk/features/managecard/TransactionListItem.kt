@@ -8,16 +8,16 @@ sealed class TransactionListItem {
     class TransactionRow(val transaction: Transaction) : TransactionListItem()
 
     fun itemType(): Int {
-        return when(this) {
-            is HeaderView -> headerViewType
-            is SectionHeader -> sectionHeaderViewType
-            is TransactionRow -> transactionRowViewType
+        return when (this) {
+            is HeaderView -> HEADER_VIEW_TYPE
+            is SectionHeader -> SECTION_HEADER_VIEW_TYPE
+            is TransactionRow -> TRANSACTION_ROW_VIEW_TYPE
         }
     }
 
     companion object {
-        const val headerViewType = 0
-        const val sectionHeaderViewType = 1
-        const val transactionRowViewType = 2
+        const val HEADER_VIEW_TYPE = 0
+        const val SECTION_HEADER_VIEW_TYPE = 1
+        const val TRANSACTION_ROW_VIEW_TYPE = 2
     }
 }

@@ -46,9 +46,9 @@ internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_description_text.text = "maintenance.description".localized(it)
-        continue_button.text = "maintenance.retry.title".localized(it)
+    private fun setupTexts() {
+        tv_description_text.text = "maintenance.description".localized()
+        continue_button.text = "maintenance.retry.title".localized()
     }
 
     override fun setupListeners() = continue_button.setOnClickListener { networkHandler.checkMaintenanceMode() }

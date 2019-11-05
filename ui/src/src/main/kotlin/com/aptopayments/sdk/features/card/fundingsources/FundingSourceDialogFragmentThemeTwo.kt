@@ -134,13 +134,13 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_dialog_title.text = "manage_card.funding_source_selector.title".localized(it)
-        add_funding_source_button.text = "manage_card.funding_source_selector.empty_case.call_to_action".localized(it)
-        tv_no_funding_sources.text = "manage_card_funding_source_selector_empty_case_message".localized(it)
+    private fun setupTexts() {
+        tv_dialog_title.text = "manage_card.funding_source_selector.title".localized()
+        add_funding_source_button.text = "manage_card.funding_source_selector.empty_case.call_to_action".localized()
+        tv_no_funding_sources.text = "manage_card_funding_source_selector_empty_case_message".localized()
     }
 
-    private fun setupRecyclerView() = context?.let { context ->
+    private fun setupRecyclerView() {
         val fundingSourceAdapter = FundingSourceAdapter(this, viewModel)
         fundingSourceAdapter.delegate = this
         val scroller = dialogView.findViewById<NestedScrollView>(R.id.nested_scrollbar)
@@ -155,11 +155,11 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
     override fun onFundingSourceTapped(balance: Balance) = viewModel.setCardFundingSource(mAccountId, balance.id) {
         delegate?.onFundingSourceSelected(onFinish = {
             if (it) {
-                context?.let { context ->
-                    notify(message = "manage_card.funding_source_selector.success.message".localized(context),
-                            messageType = MessageBanner.MessageType.HEADS_UP,
-                            title = "manage_card.funding_source_selector.success.title".localized(context))
-                }
+                notify(
+                    message = "manage_card.funding_source_selector.success.message".localized(),
+                    messageType = MessageBanner.MessageType.HEADS_UP,
+                    title = "manage_card.funding_source_selector.success.title".localized()
+                )
             }
         })
     }

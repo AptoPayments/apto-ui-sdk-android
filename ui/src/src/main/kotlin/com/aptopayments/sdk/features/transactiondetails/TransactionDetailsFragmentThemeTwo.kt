@@ -235,7 +235,8 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         ll_header.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tv_title.text = transaction.transactionDescription
         tv_subtitle_left.text = transaction.getLocalAmountRepresentation()
-        if (transaction.getNativeBalanceRepresentation().isNotBlank()) {
+        if (transaction.getNativeBalanceRepresentation().isNotBlank()
+                && transaction.localAmount?.currency != transaction.nativeBalance?.currency) {
             tv_subtitle_right.text = String.format("≈ %s", transaction.getNativeBalanceRepresentation())
         }
     }
@@ -295,34 +296,39 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
             if (address.toStringRepresentation() != address.country?.name) tv_address.text = address.toStringRepresentation()
             else rl_address_holder.remove()
         } ?: rl_address_holder.remove()
-        tv_transaction_date_label.text = "transaction_details.basic_info.transaction_date.title".localized(it)
+        tv_transaction_date_label.text = "transaction_details.basic_info.transaction_date.title".localized()
         tv_transaction_description.text = transaction.createdAt.toTransactionDetailsFormat()
-        transaction.merchant?.mcc?.toString(it)?.let { category ->
-            tv_transaction_category_label.text = "transaction_details.details.category.title".localized(it)
+        transaction.merchant?.mcc?.toString()?.let { category ->
+            tv_transaction_category_label.text = "transaction_details.details.category.title".localized()
             tv_transaction_category.text = category
         } ?: rl_transaction_category_holder.remove()
-        tv_transaction_info_expandable_section_header.text = "transaction_details_details_title".localized(it)
+        tv_transaction_info_expandable_section_header.text = "transaction_details_details_title".localized()
         transaction.fundingSourceName?.let { name ->
-            tv_transaction_funding_source_name_label.text = "transaction_details.basic_info.funding_source.title".localized(it)
+            tv_transaction_funding_source_name_label.text = "transaction_details.basic_info.funding_source.title".localized()
             tv_transaction_funding_source_name.text = name
         } ?: rl_transaction_funding_source_name_holder.remove()
-        transaction.deviceType().toString(it)?.let { deviceType ->
-            tv_transaction_device_type_label.text = "transaction_details.details.device_type.title".localized(it)
+
+        val deviceType = transaction.deviceType().toString()
+        if (deviceType.isEmpty()) {
+            rl_device_type_holder.remove()
+        } else {
+            tv_transaction_device_type_label.text = "transaction_details.details.device_type.title".localized()
             tv_transaction_device_type.text = deviceType
-        } ?: rl_device_type_holder.remove()
-        tv_transaction_type_label.text = "transaction_details.details.transaction_type.title".localized(it)
-        tv_transaction_type.text = transaction.transactionType.toString(it)
-        tv_transaction_status_label.text = "transaction_details.basic_info.transaction_status.title".localized(it)
-        tv_transaction_status.text = transaction.state.toString(it)
-        tv_banner_title.text = "transaction_details.basic_info.declined_transaction_banner.title".localized(it)
-        tv_banner_description.text = transaction.declineCode?.toString(it)
+        }
+
+        tv_transaction_type_label.text = "transaction_details.details.transaction_type.title".localized()
+        tv_transaction_type.text = transaction.transactionType.toString()
+        tv_transaction_status_label.text = "transaction_details.basic_info.transaction_status.title".localized()
+        tv_transaction_status.text = transaction.state.toString()
+        tv_banner_title.text = "transaction_details.basic_info.declined_transaction_banner.title".localized()
+        tv_banner_description.text = transaction.declineCode?.toString()
     }
 
     private fun setupAdjustmentsAdapter() = transaction.adjustments?.let { adjustments ->
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         adjustments_recycler_view.layoutManager = linearLayoutManager
-        adjustments_recycler_view.adapter = context?.let { AdjustmentsAdapter(transaction, adjustments, it) }
+        adjustments_recycler_view.adapter = AdjustmentsAdapter(transaction, adjustments)
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

@@ -62,17 +62,18 @@ class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, Apt
     @SuppressLint("SetTextI18n")
     private fun showNativeContent(content: Content.Native) {
         vw_native_content.delegate = this
-        if(isSmallScreen(context)) {
+        if (isSmallScreen(context)) {
             vw_native_content.content = Content.Native(
-                    backgroundColor = content.backgroundColor,
-                    backgroundImage = content.backgroundImage,
-                    asset = null) }
-        else vw_native_content.content = content
-        context?.let {
-            tv_native_content_title.text = "disclaimer.native_content.title".localized(it)
-            tv_native_content_description_main.text = "disclaimer.native_content.description.main".localized(it)
-            tv_native_content_description_secondary.text = "disclaimer.native_content.description.secondary".localized(it)
+                backgroundColor = content.backgroundColor,
+                backgroundImage = content.backgroundImage,
+                asset = null
+            )
+        } else {
+            vw_native_content.content = content
         }
+        tv_native_content_title.text = "disclaimer.native_content.title".localized()
+        tv_native_content_description_main.text = "disclaimer.native_content.description.main".localized()
+        tv_native_content_description_secondary.text = "disclaimer.native_content.description.secondary".localized()
 
         wb_content_web.remove()
         tv_content_text.remove()

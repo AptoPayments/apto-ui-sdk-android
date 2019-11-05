@@ -29,8 +29,6 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewModel
 import com.aptopayments.sdk.features.voip.VoipViewModel
-import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererViewModel
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import java.io.File
@@ -63,5 +61,4 @@ val viewModelModule = module {
     viewModel { ConfirmPinViewModel(analyticsManager = get()) }
     viewModel { VoipViewModel(analyticsManager = get(), voipHandler = get()) }
     viewModel { StatementListViewModel(get(), get()) }
-    viewModel { (file : File) -> PdfRendererViewModel(file) }
 }

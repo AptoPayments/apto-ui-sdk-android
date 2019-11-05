@@ -39,8 +39,8 @@ internal class TransactionListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = when(viewType) {
-            TransactionListItem.sectionHeaderViewType -> inflater.inflate(R.layout.view_transaction_section_title, parent, false)
-            TransactionListItem.transactionRowViewType -> inflater.inflate(R.layout.view_transaction_row, parent, false)
+            TransactionListItem.SECTION_HEADER_VIEW_TYPE -> inflater.inflate(R.layout.view_transaction_section_title, parent, false)
+            TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> inflater.inflate(R.layout.view_transaction_row, parent, false)
             else -> throw IllegalArgumentException("Unexpected transaction view type")
         }
         return ViewHolder(view, viewType)
@@ -49,21 +49,21 @@ internal class TransactionListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ViewHolder)?.let { viewHolder ->
             when(viewHolder.itemViewType) {
-                TransactionListItem.sectionHeaderViewType -> customizeSectionTitle(viewHolder, position)
-                TransactionListItem.transactionRowViewType -> customizeTransactionRow(viewHolder, position)
+                TransactionListItem.SECTION_HEADER_VIEW_TYPE -> customizeSectionTitle(viewHolder, position)
+                TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> customizeTransactionRow(viewHolder, position)
                 else -> { throw IllegalArgumentException("Unexpected transaction view type") }
             }
         }
     }
 
     private fun customizeSectionTitle(viewHolder: ViewHolder, position: Int) {
-        (transactionListItems?.get(position) as? TransactionListItem.SectionHeader)?.let { listItem ->
+        (transactionListItems[position] as TransactionListItem.SectionHeader).let { listItem ->
             viewHolder.sectionTitleTextView?.text = listItem.title
         }
     }
 
     private fun customizeTransactionRow(viewHolder: ViewHolder, position: Int) {
-        (transactionListItems?.get(position) as? TransactionListItem.TransactionRow)?.let { listIem ->
+        (transactionListItems[position] as TransactionListItem.TransactionRow).let { listIem ->
             val transaction = listIem.transaction
             transaction.merchant?.mcc?.let {
                 viewHolder.mccIcon?.setImageResource(it.iconResource)
@@ -101,8 +101,8 @@ internal class TransactionListAdapter(
 
         init {
             when(viewType) {
-                TransactionListItem.sectionHeaderViewType -> setupSectionTitle()
-                TransactionListItem.transactionRowViewType -> setupAsTransactionRow()
+                TransactionListItem.SECTION_HEADER_VIEW_TYPE -> setupSectionTitle()
+                TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> setupAsTransactionRow()
             }
         }
 

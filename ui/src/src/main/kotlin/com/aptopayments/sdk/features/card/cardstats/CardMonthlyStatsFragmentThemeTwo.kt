@@ -83,7 +83,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
                 title?.let { themeManager().customizeSectionTitle(it) }
                 if (tabLayout.selectedTabPosition == 0 && !tabAdded) addPreviousMonthTab()
                 else if (tabLayout.selectedTabPosition == 2 && !tabAdded) addNextMonthTab()
-                tb_llsdk_toolbar.title = context?.let { "stats.monthly_spending.title".localized(it).replace("<<YEAR>>", dateList[1].year.toString()) }
+                tb_llsdk_toolbar.title = "stats.monthly_spending.title".localized().replace("<<YEAR>>", dateList[1].year.toString())
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -101,8 +101,8 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
-                title = context?.let { "stats.monthly_spending.title".localized(it)
-                        .replace("<<YEAR>>", LocalDate.now().yearToString()) },
+                title = "stats.monthly_spending.title".localized()
+                        .replace("<<YEAR>>", LocalDate.now().yearToString()),
                 backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
         )
     }
@@ -119,28 +119,25 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     private fun addPreviousMonthTab() {
         tabAdded = true
         val currentDate = dateList[0]
-        context?.let { context ->
-            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
-                dateList.removeAt(2)
-                dateList.add(0, dateList[0].minusMonths(1))
-                pagerAdapter.notifyDataSetChanged()
-                selectCurrentTab()
-                updateTabs(it)
-            }
+        viewModel.getMonthlySpending(cardId, currentDate.monthToString(), currentDate.yearToString()) {
+            dateList.removeAt(2)
+            dateList.add(0, dateList[0].minusMonths(1))
+            pagerAdapter.notifyDataSetChanged()
+            selectCurrentTab()
+            updateTabs(it)
         }
+
     }
 
     private fun addNextMonthTab() {
         tabAdded = true
         val currentDate = dateList[2]
-        context?.let { context ->
-            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
-                dateList.removeAt(0)
-                dateList.add(2, dateList[1].plusMonths(1))
-                pagerAdapter.notifyDataSetChanged()
-                selectCurrentTab()
-                updateTabs(it)
-            }
+        viewModel.getMonthlySpending(cardId, currentDate.monthToString(), currentDate.yearToString()) {
+            dateList.removeAt(0)
+            dateList.add(2, dateList[1].plusMonths(1))
+            pagerAdapter.notifyDataSetChanged()
+            selectCurrentTab()
+            updateTabs(it)
         }
     }
 
@@ -176,12 +173,10 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         viewPager.setCurrentItem(1, false)
         tabAdded = false
         val currentDate = dateList[1]
-        context?.let { context ->
-            viewModel.getMonthlySpending(context, cardId, currentDate.monthToString(), currentDate.yearToString()) {
-                dateList[0] = dateList[1].minusMonths(1)
-                updateTabs(it)
-                pagerAdapter.notifyDataSetChanged()
-            }
+        viewModel.getMonthlySpending(cardId, currentDate.monthToString(), currentDate.yearToString()) {
+            dateList[0] = dateList[1].minusMonths(1)
+            updateTabs(it)
+            pagerAdapter.notifyDataSetChanged()
         }
     }
 

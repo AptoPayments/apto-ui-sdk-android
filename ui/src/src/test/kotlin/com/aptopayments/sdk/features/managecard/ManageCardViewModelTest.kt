@@ -44,7 +44,7 @@ class ManageCardViewModelTest : AndroidTest() {
     fun `build items does not add section header when skipFirstHeader is true`() {
 
         // Given
-        val transactions: ArrayList<Transaction> = ArrayList()
+        val transactions: MutableList<Transaction> = mutableListOf()
         transactions.add(mockTransaction)
 
         // When
@@ -52,7 +52,7 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Then
         assert(result.size == 1)
-        assert(result.first().itemType() == TransactionListItem.transactionRowViewType)
+        assert(result.first().itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE)
         assert((result.first() as TransactionListItem.TransactionRow).transaction == mockTransaction)
     }
 
@@ -60,7 +60,7 @@ class ManageCardViewModelTest : AndroidTest() {
     fun `build items does adds section header when skipFirstHeader is false`() {
 
         // Given
-        val transactions: ArrayList<Transaction> = ArrayList()
+        val transactions: MutableList<Transaction> = mutableListOf()
         transactions.add(mockTransaction)
 
         // When
@@ -68,8 +68,8 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Then
         assert(result.size == 2)
-        assert(result.first().itemType() == TransactionListItem.sectionHeaderViewType)
-        assert(result[1].itemType() == TransactionListItem.transactionRowViewType)
+        assert(result.first().itemType() == TransactionListItem.SECTION_HEADER_VIEW_TYPE)
+        assert(result[1].itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE)
         assert((result[1] as TransactionListItem.TransactionRow).transaction == mockTransaction)
     }
 
@@ -85,10 +85,10 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(mockTransaction)
 
-        val currentTransactions: ArrayList<TransactionListItem> = ArrayList()
+        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
         currentTransactions.add(TransactionListItem.HeaderView)
         currentTransactions.add(TransactionListItem.SectionHeader(""))
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
@@ -109,14 +109,14 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MONTH, 1)
         `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
         newTransactions.add(newMockTransaction)
 
-        val currentTransactions: ArrayList<TransactionListItem> = ArrayList()
+        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
         currentTransactions.add(TransactionListItem.HeaderView)
         currentTransactions.add(TransactionListItem.SectionHeader(""))
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
@@ -138,14 +138,14 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.YEAR, 1)
         `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
         newTransactions.add(newMockTransaction)
 
-        val currentTransactions: ArrayList<TransactionListItem> = ArrayList()
+        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
         currentTransactions.add(TransactionListItem.HeaderView)
         currentTransactions.add(TransactionListItem.SectionHeader(""))
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
@@ -167,10 +167,10 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(mockTransaction)
 
-        val currentTransactions: ArrayList<TransactionListItem> = ArrayList()
+        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
         currentTransactions.add(TransactionListItem.HeaderView)
 
         // When
@@ -188,7 +188,7 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MONTH, 1)
@@ -196,7 +196,7 @@ class ManageCardViewModelTest : AndroidTest() {
         newTransactions.add(newMockTransaction)
         newTransactions.add(mockTransaction)
 
-        val currentTransactions: ArrayList<TransactionListItem> = ArrayList()
+        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
         currentTransactions.add(TransactionListItem.HeaderView)
         currentTransactions.add(TransactionListItem.SectionHeader(""))
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
@@ -219,7 +219,7 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactions.observeForever(transactionsObserver)
         sut.transactions.value = emptyList()
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
 
         // When
         val result = sut.updateTransactions(transactionList = newTransactions, append = false)
@@ -235,7 +235,7 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactions.observeForever(transactionsObserver)
         sut.transactions.value = emptyList()
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(mockTransaction)
 
         // When
@@ -252,7 +252,7 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactions.observeForever(transactionsObserver)
         sut.transactions.value = emptyList()
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(mockTransaction)
 
         // When
@@ -268,7 +268,7 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactions.observeForever(transactionsObserver)
-        val currentTransactions: ArrayList<Transaction> = ArrayList()
+        val currentTransactions: MutableList<Transaction> = mutableListOf()
         val currentMockTransaction: Transaction = mock(Transaction::class.java)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MONTH, 1)
@@ -276,7 +276,7 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(currentMockTransaction)
         currentTransactions.add(mockTransaction)
         sut.transactions.value = currentTransactions
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(mockTransaction)
 
         // When
@@ -293,14 +293,14 @@ class ManageCardViewModelTest : AndroidTest() {
 
         // Given
         sut.transactions.observeForever(transactionsObserver)
-        val currentTransactions: ArrayList<Transaction> = ArrayList()
+        val currentTransactions: MutableList<Transaction> = mutableListOf()
         currentTransactions.add(mockTransaction)
         val newMockTransaction: Transaction = mock(Transaction::class.java)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MONTH, 1)
         `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
         sut.transactions.value = currentTransactions
-        val newTransactions: ArrayList<Transaction> = ArrayList()
+        val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(newMockTransaction)
 
         // When

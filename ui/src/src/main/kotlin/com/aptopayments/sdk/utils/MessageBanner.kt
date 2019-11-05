@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import com.aptopayments.core.data.config.UIConfig
 import com.google.android.material.snackbar.Snackbar
 
-class MessageBanner(val activity: FragmentActivity) {
+class MessageBanner {
 
     enum class MessageType {
         ERROR,
@@ -14,14 +14,14 @@ class MessageBanner(val activity: FragmentActivity) {
         HEADS_UP
     }
 
-    fun showBanner(textResId: Int, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG) {
+    fun showBanner(activity: FragmentActivity, textResId: Int, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG) {
         if (activity.isFinishing) {
             return
         }
-        showBanner(activity.getString(textResId), messageType, duration)
+        showBanner(activity, activity.getString(textResId), messageType, duration)
     }
 
-    fun showBanner(message: String, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG,
+    fun showBanner(activity: FragmentActivity, message: String, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG,
                    title: String? = null) {
         if (activity.isFinishing) {
             return

@@ -74,8 +74,8 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {
-            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage(context))
-            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage(context))
+            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage())
+            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage())
             else -> super.handleFailure(failure)
         }
     }
@@ -85,12 +85,10 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         if (date == LocalDate.MAX) return
         totalSpent = 0.0
         if (!dataLoaded) showLoading()
-        context?.let {
-            viewModel.getMonthlySpending(it, cardID, date.monthToString(), date.yearToString()) {
-                hideLoading()
-                dataLoaded = true
-                showViews()
-            }
+        viewModel.getMonthlySpending(cardID, date.monthToString(), date.yearToString()) {
+            hideLoading()
+            dataLoaded = true
+            showViews()
         }
     }
 
@@ -130,12 +128,10 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        context?.let {
-            tv_center_text_title.text = "stats.monthly_spending.graph.title".localized(it)
-            tv_no_transactions.text = "stats_monthly_spending_list_empty_case".localized(it)
-            tv_list_title.text = "stats.monthly_spending.list.title".localized(it)
-            monthly_statement_link.text = "stats_monthly_spending_view_statement".localized(it)
-        }
+        tv_center_text_title.text = "stats.monthly_spending.graph.title".localized()
+        tv_no_transactions.text = "stats_monthly_spending_list_empty_case".localized()
+        tv_list_title.text = "stats.monthly_spending.list.title".localized()
+        monthly_statement_link.text = "stats_monthly_spending_view_statement".localized()
     }
 
     private fun setupChart() {
@@ -161,7 +157,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             currency = if (spendingList.isEmpty()) {
                 tv_no_transactions.show()
                 drawPieChartEntries(ArrayList())
-                context?.let { "stats.monthly_spending.graph.default_currency".localized(it) }
+                "stats.monthly_spending.graph.default_currency".localized()
             } else {
                 tv_no_transactions.remove()
                 drawPieChartEntries(calculatePieChartEntries(spendingList))
@@ -234,7 +230,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     }
 
     override fun onNothingSelected() {
-        tv_center_text_title.text = context?.let { "stats.monthly_spending.graph.title".localized(it) }
+        tv_center_text_title.text = "stats.monthly_spending.graph.title".localized()
         tv_center_text_difference.remove()
         tv_center_text_amount.text = Money(amount = totalSpent, currency = currency).toString()
         for (i in 0 until dataSet.colors.size) resetPieChartEntryColor(i)
@@ -251,7 +247,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         if (pieChartElement.mcc == null) notifyAdapterCategorySpendingSelected(groupedCategories)
         else notifyAdapterCategorySpendingSelected(arrayListOf(pieChartElement.categorySpending))
         entry.icon.setColorFilter(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
-        tv_center_text_title.text = context?.let { pieChartElement.mcc?.toString(it) ?: getString(R.string.ellipsis) }
+        tv_center_text_title.text = pieChartElement.mcc?.toString() ?: getString(R.string.ellipsis)
         tv_center_text_amount.text = pieChartElement.categorySpending.spending.toString()
         pieChartElement.categorySpending.difference?.let {
             tv_center_text_difference.show()

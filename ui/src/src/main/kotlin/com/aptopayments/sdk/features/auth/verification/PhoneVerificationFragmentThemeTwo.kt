@@ -67,13 +67,12 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        context?.let {
-            tv_verification_code_title.text = "auth.verify_phone.title".localized(it)
-            tv_verification_code_header.text = "auth.verify_phone.explanation".localized(it)
-            tv_resend_label.text = "auth.verify_phone.footer".localized(it)
-            tv_resend_bttn.text = "auth.verify_phone.resend_button.title".localized(it)
-            tv_expired_pin_label.text = "auth.verify_phone.expired_pin.text".localized(it)
-        }
+        tv_verification_code_title.text = "auth.verify_phone.title".localized()
+        tv_verification_code_header.text = "auth.verify_phone.explanation".localized()
+        tv_resend_label.text = "auth.verify_phone.footer".localized()
+        tv_resend_bttn.text = "auth.verify_phone.resend_button.title".localized()
+        tv_expired_pin_label.text = "auth.verify_phone.expired_pin.text".localized()
+
         view!!.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
         with(themeManager()){
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
@@ -108,9 +107,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
         hideKeyboard()
         viewModel.restartVerification {
             hideLoading()
-            context?.let { context ->
-                notify("auth.verify_phone.resent.message".localized(context), MessageBanner.MessageType.HEADS_UP)
-            }
+            notify("auth.verify_phone.resent.message".localized(), MessageBanner.MessageType.HEADS_UP)
             showKeyboard()
         }
     }
@@ -135,10 +132,11 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
                         }
                     }
                     VerificationStatus.FAILED, VerificationStatus.PENDING -> {
-                        context?.let {
-                            notify("auth.verify_phone.error_wrong_code.title".localized(it), "auth.verify_phone.error_wrong_code.message".localized(it))
-                            apto_pin_view.text?.clear()
-                        }
+                        notify(
+                            "auth.verify_phone.error_wrong_code.title".localized(),
+                            "auth.verify_phone.error_wrong_code.message".localized()
+                        )
+                        apto_pin_view.text?.clear()
                     }
                 }
                 Unit
@@ -169,11 +167,10 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
                     tv_resend_countdown_label.hide()
                 }
                 is ResendButtonState.Waiting -> {
-                    context?.let {
-                        val waitTimeDescription = state.pendingSeconds.stringFromTimeInterval()
-                        val newText = "auth.verify_phone.resent_wait_text".localized(it).replace("<<WAIT_TIME>>", waitTimeDescription)
-                        tv_resend_countdown_label.text = newText
-                    }
+                    val waitTimeDescription = state.pendingSeconds.stringFromTimeInterval()
+                    val newText =
+                        "auth.verify_phone.resent_wait_text".localized().replace("<<WAIT_TIME>>", waitTimeDescription)
+                    tv_resend_countdown_label.text = newText
                     tv_resend_bttn.hide()
                     tv_resend_countdown_label.show()
                 }

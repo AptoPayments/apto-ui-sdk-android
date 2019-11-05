@@ -117,10 +117,10 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     )
 
     @SuppressLint("SetTextI18n")
-    private fun setupTexts() = context?.let {
-        tv_coinbase_header.text = title.localized(it)
-        tv_coinbase_info.text = explanation.localized(it)
-        tv_submit_bttn.text = callToAction.localized(it)
+    private fun setupTexts() {
+        tv_coinbase_header.text = title.localized()
+        tv_coinbase_info.text = explanation.localized()
+        tv_submit_bttn.text = callToAction.localized()
     }
 
     private fun setupImageView() {
@@ -134,9 +134,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
             customizeLargeTitleLabel(tv_coinbase_header)
             customizeRegularTextLabel(tv_coinbase_info)
             customizeSubmitButton(tv_submit_bttn)
-            context?.let { context ->
-                customizeHtml(tv_new_user, StringUtils.parseHtmlLinks(newUserAction.localized(context)))
-            }
+            customizeHtml(tv_new_user, StringUtils.parseHtmlLinks(newUserAction.localized()))
         }
         tv_new_user.movementMethod = LinkMovementMethod.getInstance()
     }
@@ -168,7 +166,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     private fun showOauthFailure(oauthAttempt: OAuthAttempt) {
         if (oauthAttempt.status != FAILED) { return }
         oauthAttempt.errorMessageKeys = errorMessageKeys
-        context?.let { notify(message = oauthAttempt.localizedErrorMessage(it), type = ERROR) }
+        notify(message = oauthAttempt.localizedErrorMessage(), type = ERROR)
     }
 
     companion object {
