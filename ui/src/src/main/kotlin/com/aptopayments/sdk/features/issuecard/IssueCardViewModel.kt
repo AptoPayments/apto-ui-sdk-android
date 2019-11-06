@@ -9,7 +9,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class IssueCardViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     var card: MutableLiveData<Card> = MutableLiveData()
@@ -22,12 +22,12 @@ internal class IssueCardViewModel constructor(
     fun trackErrorCode(errorCode: Int?) {
         val error = Failure.ServerError(errorCode)
         when {
-            error.isErrorInsufficientFunds ->
-                analyticsManager.track(Event.IssueCardInsufficientFunds)
-            error.isErrorBalanceValidationsInsufficientApplicationLimit ->
-                analyticsManager.track(Event.IssueCardInsufficientApplicationLimit)
-            error.isErrorBalanceValidationsEmailSendsDisabled ->
-                analyticsManager.track(Event.IssueCardEmailSendsDisabled)
+            error.isErrorInsufficientFunds() ->
+                analyticsManager.track(Event.IssueCardInsufficientFunds, error.toJSonObject())
+            error.isErrorBalanceValidationsInsufficientApplicationLimit() ->
+                analyticsManager.track(Event.IssueCardInsufficientApplicationLimit, error.toJSonObject())
+            error.isErrorBalanceValidationsEmailSendsDisabled() ->
+                analyticsManager.track(Event.IssueCardEmailSendsDisabled, error.toJSonObject())
             else -> analyticsManager.track(Event.IssueCardUnknownError)
         }
     }
@@ -35,9 +35,7 @@ internal class IssueCardViewModel constructor(
     fun issueCard(cardApplicationId: String) {
         AptoPlatform.issueCard(cardApplicationId) { result ->
             result.either(
-                { failure ->
-                    if (failure is Failure.ServerError) issueCardErrorCode.postValue(failure.errorCode)
-                },
+                { failure -> if (failure is Failure.ServerError) issueCardErrorCode.postValue(failure.code) },
                 { card.postValue(it) }
             )
         }

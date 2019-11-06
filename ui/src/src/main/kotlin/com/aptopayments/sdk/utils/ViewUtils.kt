@@ -16,9 +16,11 @@ object ViewUtils {
         try {
             val activity = context as Activity
             activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-            if (activity.currentFocus != null && activity.currentFocus.windowToken != null) {
+            val windowToken = activity.currentFocus?.windowToken
+
+            windowToken?.let {
                 val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(activity.currentFocus.windowToken, 0)
+                inputMethodManager.hideSoftInputFromWindow(it, 0)
             }
         } catch (e: Exception) {
             e.printStackTrace()

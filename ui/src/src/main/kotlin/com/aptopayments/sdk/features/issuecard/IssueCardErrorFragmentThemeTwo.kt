@@ -11,7 +11,6 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.remove
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
@@ -63,7 +62,7 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     }
 
     private fun setupTexts() {
-        if (Failure.ServerError(errorCode).isErrorInsufficientFunds) {
+        if (Failure.ServerError(errorCode).isErrorInsufficientFunds()) {
             showInsufficientFundsError()
         } else {
             showGenericError()

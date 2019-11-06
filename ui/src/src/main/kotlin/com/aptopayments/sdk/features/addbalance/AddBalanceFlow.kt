@@ -77,7 +77,7 @@ internal class AddBalanceFlow (
     private fun handleAddBalanceFailure(failure: Failure) {
         when (failure) {
             is Failure.ServerError -> {
-                val result = SelectBalanceStoreResult(INVALID, failure.errorCode, errorMessageKeys)
+                val result = SelectBalanceStoreResult(INVALID, failure.code, errorMessageKeys)
                 notify(result.errorMessage())
             }
             else -> handleFailure(failure)

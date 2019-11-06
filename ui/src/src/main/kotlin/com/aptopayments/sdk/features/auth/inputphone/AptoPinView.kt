@@ -41,7 +41,7 @@ class AptoPinView @JvmOverloads constructor(
         var currentX = ((width - availableWidth) / 2f)
         val textLength = text?.length ?: 0
         for (i in 0 until textLength) {
-            canvas.drawText(text, i, i + 1, currentX - semiCharWidth, centerY - semiCharHeight, paint)
+            canvas.drawText(text.toString(), i, i + 1, currentX - semiCharWidth, centerY - semiCharHeight, paint)
             currentX += (charWidth * 2)
         }
         for (i in textLength until mNumChars) {
