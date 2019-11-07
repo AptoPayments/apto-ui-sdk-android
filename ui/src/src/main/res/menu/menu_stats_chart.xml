@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_card_stats"
-        app:actionLayout="@layout/layout_menu_stats_chart"
+        android:icon="@drawable/ic_chart"
         android:title="@string/toolbar_stats_chart_title"
+        app:actionLayout="@layout/layout_menu_stats_chart"
         app:showAsAction="always" />
 </menu>

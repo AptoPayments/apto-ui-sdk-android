@@ -39,6 +39,7 @@
         <item name="android:textColor">@color/llsdk_secondary_text_color</item>
         <item name="android:textSize">@dimen/llsdk_form_label</item>
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
     </style>
     <style name="ThemeTwo.FormField" parent="ThemeTwo">
         <item name="android:textColor">@color/llsdk_primary_text_color</item>

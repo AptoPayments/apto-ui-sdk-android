@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.oauth.verify
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.Menu
@@ -9,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-import androidx.core.content.ContextCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
@@ -76,6 +74,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         viewModel.apply {
             observe(firstName) { updateRow(tv_first_name_label, tv_first_name, it) }
             observe(lastName) { updateRow(tv_last_name_label, tv_last_name, it) }
+            observe(id) { updateRow(tv_id_document_label, tv_id_document, it) }
             observe(email) { updateRow(tv_email_label, tv_email, it) }
             observe(address) { updateRow(tv_address_label, tv_address, it) }
             observe(phone) { updateRow(tv_phone_label, tv_phone, it) }
@@ -91,8 +90,8 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     override fun viewLoaded() = viewModel.viewLoaded()
 
     private fun updateRow(title: TextView, content: TextView, value: String?) {
-        if (value != null) title.show() else title.remove()
-        if (value != null) content.show() else content.remove()
+        title.goneIf(value.isNullOrEmpty())
+        content.goneIf(value.isNullOrEmpty())
         content.text = value
     }
 
@@ -129,6 +128,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         tv_personal_information_description.text = "select_balance_store_oauth_confirm_explanation".localized()
         tv_first_name_label.text = "select_balance_store_oauth_confirm_first_name".localized()
         tv_last_name_label.text = "select_balance_store_oauth_confirm_last_name".localized()
+        tv_id_document_label.text = "select_balance_store_oauth_confirm_id_document".localized()
         tv_email_label.text = "select_balance_store_oauth_confirm_email".localized()
         tv_address_label.text = "select_balance_store_oauth_confirm_address".localized()
         tv_phone_label.text = "select_balance_store_oauth_confirm_phone_number".localized()
@@ -138,9 +138,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
 
     private fun setupTheme() {
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
-        context?.let {
-            styleMenuItem(it)
-        }
+        styleMenuItem()
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_personal_information_header)
@@ -165,10 +163,8 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     }
 
     @SuppressLint("SetTextI18n")
-    private fun styleMenuItem(context: Context) {
-        val refreshIcon = ContextCompat.getDrawable(context, R.drawable.ic_refresh_button)
-        refreshIcon?.setTint(UIConfig.uiPrimaryColor)
-        menu?.findItem(R.id.menu_update_personal_details)?.icon = refreshIcon
+    private fun styleMenuItem() {
+        themeManager().customizeMenuImage(menu?.findItem(R.id.menu_update_personal_details))
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_update_personal_details)?.let {
                 themeManager().customizeMenuItem(it)

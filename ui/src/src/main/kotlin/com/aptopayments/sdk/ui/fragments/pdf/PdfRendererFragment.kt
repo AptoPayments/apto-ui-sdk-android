@@ -5,11 +5,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
+import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.FileSharer
 import kotlinx.android.synthetic.main.fragment_pdf_renderer.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -69,10 +69,7 @@ internal class PdfRendererFragment : BaseFragment(),
 
     private fun tintMenuItem() {
         menu?.let {
-            val item = it.findItem(R.id.menu_pdf_share)
-            val icon = item.icon
-            DrawableCompat.setTint(icon, UIConfig.textTopBarSecondaryColor)
-            item.icon = icon
+            themeManager().customizeMenuImage(it.findItem(R.id.menu_pdf_share))
         }
     }
 

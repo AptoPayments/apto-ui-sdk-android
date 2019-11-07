@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -74,7 +73,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         setupMenuItem(menu, R.id.menu_card_stats)
         setupMenuItem(menu, R.id.menu_account_settings)
         setupMenuItem(menu, R.id.menu_activate_physical_card)
-        context?.let { tintMenuItems(it) }
+        tintMenuItems()
         if(this.menu == null) this.menu = menu
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -90,17 +89,11 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     @SuppressLint("SetTextI18n")
-    private fun tintMenuItems(context: Context) {
-        val tintColor = UIConfig.textTopBarSecondaryColor
-        val accountSettingsIcon = ContextCompat.getDrawable(context, R.drawable.ic_account_settings)
-        accountSettingsIcon?.setTint(tintColor)
-        tb_llsdk_toolbar.menu.findItem(R.id.menu_account_settings)?.icon = accountSettingsIcon
-        val statsChartIcon = ContextCompat.getDrawable(context, R.drawable.ic_chart)
-        statsChartIcon?.setTint(tintColor)
-        tb_llsdk_toolbar.menu.findItem(R.id.menu_card_stats)?.icon = statsChartIcon
-        val activateCardIcon = ContextCompat.getDrawable(context, R.drawable.ic_activate_physical_card)
-        activateCardIcon?.setTint(tintColor)
-        tb_llsdk_toolbar.menu.findItem(R.id.menu_activate_physical_card)?.icon = activateCardIcon
+    private fun tintMenuItems() {
+        themeManager().customizeMenuImage(tb_llsdk_toolbar.menu.findItem(R.id.menu_account_settings))
+        themeManager().customizeMenuImage(tb_llsdk_toolbar.menu.findItem(R.id.menu_card_stats))
+        themeManager().customizeMenuImage(tb_llsdk_toolbar.menu.findItem(R.id.menu_activate_physical_card))
+
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_activate_physical_card)?.let {
                 themeManager().customizeMenuItem(it)

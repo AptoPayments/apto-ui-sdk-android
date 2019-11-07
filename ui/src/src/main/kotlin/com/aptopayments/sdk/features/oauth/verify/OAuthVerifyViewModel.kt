@@ -13,17 +13,21 @@ internal class OAuthVerifyViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
-    var firstName: MutableLiveData<String> = MutableLiveData()
-    var lastName: MutableLiveData<String> = MutableLiveData()
-    var email: MutableLiveData<String> = MutableLiveData()
-    var phone: MutableLiveData<String> = MutableLiveData()
-    var address: MutableLiveData<String> = MutableLiveData()
-    var birthdate: MutableLiveData<String> = MutableLiveData()
+    val firstName: MutableLiveData<String> = MutableLiveData()
+    val lastName: MutableLiveData<String> = MutableLiveData()
+    val id: MutableLiveData<String> = MutableLiveData()
+    val email: MutableLiveData<String> = MutableLiveData()
+    val phone: MutableLiveData<String> = MutableLiveData()
+    val address: MutableLiveData<String> = MutableLiveData()
+    val birthdate: MutableLiveData<String> = MutableLiveData()
 
     fun setDataPoints(datapointList: DataPointList) {
         (datapointList.getUniqueDataPointOf(DataPoint.Type.NAME, null) as? NameDataPoint)?.let {
             firstName.value = it.firstName
             lastName.value = it.lastName
+        }
+        (datapointList.getUniqueDataPointOf(DataPoint.Type.ID_DOCUMENT, null) as? IdDocumentDataPoint)?.let {
+            id.value = it.value
         }
         (datapointList.getUniqueDataPointOf(DataPoint.Type.EMAIL, null) as? EmailDataPoint)?.let {
             email.value = it.email
