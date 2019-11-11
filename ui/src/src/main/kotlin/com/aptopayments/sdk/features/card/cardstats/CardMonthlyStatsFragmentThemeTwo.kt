@@ -22,7 +22,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_card_monthly_stats.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
@@ -32,7 +32,7 @@ private const val CARD_ID_KEY = "CARD_ID"
 internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlyStatsContract.View,
         CardTransactionsChartPagerAdapter.Delegate {
 
-    private val viewModel: CardMonthlyStatsViewModel by sharedViewModel()
+    private val viewModel: CardMonthlyStatsViewModel by viewModel()
     private lateinit var cardId: String
     private lateinit var pagerAdapter: CardTransactionsChartPagerAdapter
     private lateinit var dateList: ArrayList<LocalDate>

@@ -29,7 +29,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_transactions_chart_theme_two.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
@@ -39,7 +39,7 @@ private var dataLoaded = false
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
         OnChartValueSelectedListener, CategoryListAdapter.Delegate {
 
-    private val viewModel: CardMonthlyStatsViewModel by sharedViewModel()
+    private val viewModel: CardMonthlyStatsViewModel by viewModel()
     private lateinit var pieChart: AptoPieChart
     private lateinit var cardID: String
     private lateinit var date: LocalDate
@@ -57,6 +57,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             failure(failure) { handleFailure(it) }
             observe(monthlySpendingMap) { updateChartData(it) }
         }
+        configureMonthlyStatement()
     }
 
     override fun setupUI() {
@@ -99,6 +100,8 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         tv_list_title?.show()
         transaction_list_bottom_separator?.show()
         rv_categories?.show()
+        monthly_statement_link_container?.show()
+        transaction_list_top_separator?.show()
     }
 
     private fun setupTheme() {
@@ -115,14 +118,13 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pieChart = view.findViewById(R.id.chart)
-        configureMonthlyStatement()
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun configureMonthlyStatement() {
-        viewModel.hasMonthlyStatementToShow(date.monthValue, date.year) { hasStatement ->
+        viewModel.hasMonthlyStatementToShow(date) { hasStatement ->
             monthly_statement_link?.invisibleIf(!hasStatement)
-            monthly_statement_separator?.invisibleIf(!hasStatement)
+            monthly_statement_top_separator?.invisibleIf(!hasStatement)
         }
     }
 

@@ -13,21 +13,21 @@ import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.StatementRepository
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDate
 
 internal class CardMonthlyStatsViewModel constructor(
     private val analyticsManager: AnalyticsServiceContract,
     private val statementRepository: StatementRepository
 ) : BaseViewModel() {
-    private var periodCache: MonthlyStatementPeriod? = null
-    var monthlySpending: MutableLiveData<MonthlySpending> = MutableLiveData()
     var monthlySpendingMap: MutableLiveData<HashMap<Pair<String, String>, List<CategorySpending>>> = MutableLiveData()
 
-    fun getMonthlySpending(cardId: String, month: String, year: String,
-                           onComplete: ((monthlySpending: MonthlySpending) -> Unit)? = null) {
+    fun getMonthlySpending(
+        cardId: String, month: String, year: String,
+        onComplete: ((monthlySpending: MonthlySpending) -> Unit)? = null
+    ) {
         AptoPlatform.cardMonthlySpending(cardId, month, year) { result ->
             val spendingMap = monthlySpendingMap.value ?: HashMap()
             result.either(::handleFailure) {
-                monthlySpending.postValue(it)
                 val sortedList = sortCategorySpending(it.spending)
                 spendingMap[Pair(month, year)] = sortedList
                 monthlySpendingMap.postValue(spendingMap)
@@ -38,19 +38,19 @@ internal class CardMonthlyStatsViewModel constructor(
     }
 
     private fun sortCategorySpending(categorySpending: List<CategorySpending>) =
-            categorySpending.sortedWith(compareBy {
-                val mcc = if (it.categoryId.isEmpty()) null
-                else MCC(name = it.categoryId, icon = MCC.Icon.valueOf(it.categoryId.toUpperCase()))
-                mcc?.toString()
-            })
+        categorySpending.sortedWith(compareBy {
+            val mcc = if (it.categoryId.isEmpty()) null
+            else MCC(name = it.categoryId, icon = MCC.Icon.valueOf(it.categoryId.toUpperCase()))
+            mcc?.toString()
+        })
 
     fun viewLoaded() = analyticsManager.track(Event.MonthlySpending)
 
     fun invalidateCache() = AptoPlatform.clearMonthlySpendingCache()
 
-    fun hasMonthlyStatementToShow(month: Int, year: Int, onComplete: ((included: Boolean) -> Unit)) {
-        if (AptoPlatform.cardOptions.showMonthlyStatementOption()) {
-            checkIfHasStatementOnCacheOrNetwork(month, year, onComplete)
+    fun hasMonthlyStatementToShow(date: LocalDate, onComplete: ((included: Boolean) -> Unit)) {
+        if (AptoPlatform.cardOptions.showMonthlyStatementOption() && (date != LocalDate.MAX)) {
+            getMonthlyStatementPeriod(date.monthValue, date.year, onComplete)
         } else {
             onComplete(false)
         }
@@ -66,13 +66,9 @@ internal class CardMonthlyStatsViewModel constructor(
         }
     }
 
-    private fun checkIfHasStatementOnCacheOrNetwork(month: Int, year: Int, onComplete: (included: Boolean) -> Unit) {
-        if (periodCache != null) {
-            completeStatementPeriodRequest(month, year, onComplete)
-        } else {
-            AptoPlatform.fetchMonthlyStatementPeriod { result ->
-                result.either(::handleFailure) { period -> onStatementPeriodArrived(period, month, year, onComplete) }
-            }
+    private fun getMonthlyStatementPeriod(month: Int, year: Int, onComplete: (included: Boolean) -> Unit) {
+        AptoPlatform.fetchMonthlyStatementPeriod { result ->
+            result.either(::handleFailure) { period -> onStatementPeriodArrived(period, month, year, onComplete) }
         }
     }
 
@@ -81,12 +77,6 @@ internal class CardMonthlyStatsViewModel constructor(
         month: Int,
         year: Int,
         onComplete: (included: Boolean) -> Unit
-    ) {
-        periodCache = period
-        completeStatementPeriodRequest(month, year, onComplete)
-    }
+    ) = onComplete.invoke(period.contains(month, year))
 
-    private fun completeStatementPeriodRequest(month: Int, year: Int, onComplete: (included: Boolean) -> Unit) {
-        onComplete.invoke(periodCache!!.contains(month, year))
-    }
 }
