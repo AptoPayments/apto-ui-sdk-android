@@ -147,12 +147,12 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     private fun enableTab(index: Int) {
-        (tabLayout.getChildAt(0) as ViewGroup).getChildAt(index).isClickable = true
+        (tabLayout.getChildAt(0) as ViewGroup)?.getChildAt(index)?.isClickable = true
     }
 
     private fun disableTab(index: Int) {
         if (dateList[index] == LocalDate.MAX) return
-        (tabLayout.getChildAt(0) as ViewGroup).getChildAt(index).isClickable = false
+        (tabLayout.getChildAt(0) as ViewGroup)?.getChildAt(index)?.isClickable = false
         dateList[index] = LocalDate.MAX
         pagerAdapter.notifyDataSetChanged()
     }

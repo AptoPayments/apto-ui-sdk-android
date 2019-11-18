@@ -8,6 +8,7 @@ import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.stats.MonthlySpending
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -41,7 +42,7 @@ internal class CardMonthlyStatsViewModel constructor(
         categorySpending.sortedWith(compareBy {
             val mcc = if (it.categoryId.isEmpty()) null
             else MCC(name = it.categoryId, icon = MCC.Icon.valueOf(it.categoryId.toUpperCase()))
-            mcc?.toString()
+            mcc?.toLocalizedString()
         })
 
     fun viewLoaded() = analyticsManager.track(Event.MonthlySpending)
@@ -49,7 +50,7 @@ internal class CardMonthlyStatsViewModel constructor(
     fun invalidateCache() = AptoPlatform.clearMonthlySpendingCache()
 
     fun hasMonthlyStatementToShow(date: LocalDate, onComplete: ((included: Boolean) -> Unit)) {
-        if (AptoPlatform.cardOptions.showMonthlyStatementOption() && (date != LocalDate.MAX)) {
+        if (AptoUiSdk.cardOptions.showMonthlyStatementOption() && (date != LocalDate.MAX)) {
             getMonthlyStatementPeriod(date.monthValue, date.year, onComplete)
         } else {
             onComplete(false)

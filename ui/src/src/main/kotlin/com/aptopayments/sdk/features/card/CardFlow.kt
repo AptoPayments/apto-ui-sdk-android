@@ -25,7 +25,6 @@ import java.lang.reflect.Modifier
 private const val NO_NETWORK_TAG = "NoNetworkFragment"
 private const val MAINTENANCE_TAG = "MaintenanceFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardFlow : Flow(), KoinComponent {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()

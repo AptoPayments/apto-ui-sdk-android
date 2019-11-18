@@ -298,7 +298,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         } ?: rl_address_holder.remove()
         tv_transaction_date_label.text = "transaction_details.basic_info.transaction_date.title".localized()
         tv_transaction_description.text = transaction.createdAt.toTransactionDetailsFormat()
-        transaction.merchant?.mcc?.toString()?.let { category ->
+        transaction.merchant?.mcc?.toLocalizedString()?.let { category ->
             tv_transaction_category_label.text = "transaction_details.details.category.title".localized()
             tv_transaction_category.text = category
         } ?: rl_transaction_category_holder.remove()
@@ -308,7 +308,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
             tv_transaction_funding_source_name.text = name
         } ?: rl_transaction_funding_source_name_holder.remove()
 
-        val deviceType = transaction.deviceType().toString()
+        val deviceType = transaction.deviceType().toLocalizedString()
         if (deviceType.isEmpty()) {
             rl_device_type_holder.remove()
         } else {
@@ -317,11 +317,11 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         }
 
         tv_transaction_type_label.text = "transaction_details.details.transaction_type.title".localized()
-        tv_transaction_type.text = transaction.transactionType.toString()
+        tv_transaction_type.text = transaction.transactionType.toLocalizedString()
         tv_transaction_status_label.text = "transaction_details.basic_info.transaction_status.title".localized()
-        tv_transaction_status.text = transaction.state.toString()
+        tv_transaction_status.text = transaction.state.toLocalizedString()
         tv_banner_title.text = "transaction_details.basic_info.declined_transaction_banner.title".localized()
-        tv_banner_description.text = transaction.declineCode?.toString()
+        tv_banner_description.text = transaction.declineCode?.toLocalizedString()
     }
 
     private fun setupAdjustmentsAdapter() = transaction.adjustments?.let { adjustments ->

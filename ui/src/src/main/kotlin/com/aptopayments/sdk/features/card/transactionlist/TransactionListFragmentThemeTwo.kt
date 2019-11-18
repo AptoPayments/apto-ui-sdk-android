@@ -59,7 +59,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     private fun setupToolbar() {
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        val title = config.mcc.toString()
+        val title = config.mcc.toLocalizedString()
         delegate?.configureToolbar(
                 toolbar = tb_llsdk_toolbar,
                 title = title,

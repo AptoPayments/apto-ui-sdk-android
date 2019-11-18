@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -81,7 +82,7 @@ internal class FundingSourcesViewModel constructor(
         fundingSources.forEach { balance ->
             list.add(FundingSourceListItem.FundingSourceRow(balance, balance.id == selected))
         }
-        if (!AptoPlatform.cardOptions.hideFundingSourcesReconnectButton()) {
+        if (!AptoUiSdk.cardOptions.hideFundingSourcesReconnectButton()) {
             list.add(FundingSourceListItem.AddFundingSourceButton)
         }
         return list

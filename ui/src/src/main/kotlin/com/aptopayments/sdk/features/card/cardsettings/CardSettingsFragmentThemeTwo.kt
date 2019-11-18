@@ -18,9 +18,9 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.data.voip.Action.LISTEN_PIN
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
@@ -167,11 +167,11 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         (rl_statement as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         (rl_lock_card as SectionSwitchViewTwo).hideBottomSeparator()
         (rl_terms_of_service as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
-        if (AptoPlatform.cardOptions.showDetailedCardActivityOption()) {
+        if (AptoUiSdk.cardOptions.showDetailedCardActivityOption()) {
             transactions_section.show()
             rl_detailed_card_activity.sw_tv_section_switch_switch.isChecked = getDetailedCardActivityPreference()
         }
-        if (!AptoPlatform.cardOptions.showMonthlyStatementOption()) {
+        if (!AptoUiSdk.cardOptions.showMonthlyStatementOption()) {
             rl_statement.remove()
             (rl_faq as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         }

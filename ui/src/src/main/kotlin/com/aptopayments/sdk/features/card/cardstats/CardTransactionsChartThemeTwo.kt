@@ -249,7 +249,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         if (pieChartElement.mcc == null) notifyAdapterCategorySpendingSelected(groupedCategories)
         else notifyAdapterCategorySpendingSelected(arrayListOf(pieChartElement.categorySpending))
         entry.icon.setColorFilter(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
-        tv_center_text_title.text = pieChartElement.mcc?.toString() ?: getString(R.string.ellipsis)
+        tv_center_text_title.text = pieChartElement.mcc?.toLocalizedString() ?: getString(R.string.ellipsis)
         tv_center_text_amount.text = pieChartElement.categorySpending.spending.toString()
         pieChartElement.categorySpending.difference?.let {
             tv_center_text_difference.show()

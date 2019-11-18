@@ -8,11 +8,10 @@ import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.SendEmailUtil
@@ -40,7 +39,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     }
 
     override fun setupUI() {
-        if (AptoPlatform.cardOptions.showNotificationPreferences()) ll_app_settings_holder.show()
+        if (AptoUiSdk.cardOptions.showNotificationPreferences()) ll_app_settings_holder.show()
         setupTheme()
         setupToolbar()
         setupTexts()
@@ -83,7 +82,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     }
 
     private fun evaluateMonthlyStatementsRemoval() {
-        if (!AptoPlatform.cardOptions.showMonthlyStatementOption()) {
+        if (!AptoUiSdk.cardOptions.showMonthlyStatementOption()) {
             statements_container.remove()
             statements_separator.remove()
         }

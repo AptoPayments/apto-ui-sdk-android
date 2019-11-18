@@ -200,7 +200,7 @@ internal open class TransactionListAdapter(
                 view.iv_icon.background?.setTint(UIConfig.uiErrorColor)
             }
 
-            val declinedHeader = transaction.state.toString()
+            val declinedHeader = transaction.state.toLocalizedString()
             val date = transaction.createdAt.toTransactionListFormat()
             view.tv_transaction_description.text = "$declinedHeader $date"
 

@@ -23,9 +23,9 @@ import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.features.managecard.CardOptions
-import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -81,11 +81,11 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         (this.menu?.findItem(R.id.menu_activate_physical_card))?.isVisible =
-                (viewModel.orderedStatus.value == Card.OrderedStatus.ORDERED)
+            (viewModel.orderedStatus.value == Card.OrderedStatus.ORDERED)
         (this.menu?.findItem(R.id.menu_card_stats))?.isVisible =
-                AptoPlatform.cardOptions.showStatsButton()
+            AptoUiSdk.cardOptions.showStatsButton()
         (this.menu?.findItem(R.id.menu_account_settings))?.isVisible =
-                AptoPlatform.cardOptions.showAccountSettingsButton()
+            AptoUiSdk.cardOptions.showAccountSettingsButton()
     }
 
     @SuppressLint("SetTextI18n")
@@ -242,7 +242,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             override fun onStateChanged(offsetPercent: Float) {
                 swipe_refresh_container.isEnabled = offsetPercent == 0.0f
                 abl_manage_card.post {
-                    bv_balance_view.applyAlphaAndTextSize(offsetPercent)
+                    bv_balance_view?.applyAlphaAndTextSize(offsetPercent)
                     animateBackground(offsetPercent)
                 }
             }
@@ -294,7 +294,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun onBackPressed() {
-        if (AptoPlatform.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED) {
+        if (AptoUiSdk.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED) {
             delegate?.onBackFromManageCard()
         }
     }
