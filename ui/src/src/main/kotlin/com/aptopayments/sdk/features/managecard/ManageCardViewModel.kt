@@ -208,7 +208,9 @@ internal class ManageCardViewModel constructor(
         getTransactionsQueue.loadMoreTransactions(cardId, lastTransactionId, rowsPerPage) { result ->
             result.either(::handleFailure) { transactionList ->
                 val updatedTransactions = updateTransactions(transactionList, append = true)
-                if (updatedTransactions.isNotEmpty()) updateTransactionItems(updatedTransactions, append = true, clearCachedValue = false)
+                if (updatedTransactions.isNotEmpty()) {
+                    updateTransactionItems(updatedTransactions, append = true, clearCachedValue = false)
+                }
                 transactionList.lastOrNull()?.let { lastTransactionId = it.transactionId }
                 onComplete(transactionList.size)
             }
@@ -219,7 +221,9 @@ internal class ManageCardViewModel constructor(
         getTransactionsQueue.backgroundRefresh(cardId, rowsPerPage) { result ->
             result.either(::handleFailure) { transactionList ->
                 val updatedTransactions = updateTransactions(transactionList, append = false)
-                updateTransactionItems(updatedTransactions, append = false, clearCachedValue = false)
+                if (updatedTransactions.isNotEmpty()) {
+                    updateTransactionItems(updatedTransactions, append = false, clearCachedValue = false)
+                }
                 updatedTransactions.lastOrNull()?.let { lastTransactionId = it.transactionId }
                 onComplete()
             }
