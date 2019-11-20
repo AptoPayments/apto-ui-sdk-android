@@ -33,8 +33,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
-private var dataLoaded = false
-
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
         OnChartValueSelectedListener, CategoryListAdapter.Delegate {
@@ -85,11 +83,15 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         super.onStart()
         if (date == LocalDate.MAX) return
         totalSpent = 0.0
-        if (!dataLoaded) showLoading()
-        viewModel.getMonthlySpending(cardID, date.monthToString(), date.yearToString()) {
-            hideLoading()
-            dataLoaded = true
-            showViews()
+        loadDataIfIsCurrentMonthOrBefore()
+    }
+
+    private fun loadDataIfIsCurrentMonthOrBefore() {
+        val currentDate = LocalDate.now()
+        if (date.isBefore(currentDate) || date.isEqual(currentDate)) {
+            viewModel.getMonthlySpending(cardID, date.monthToString(), date.yearToString()) {
+                showViews()
+            }
         }
     }
 

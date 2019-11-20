@@ -163,6 +163,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     override fun viewLoaded() {
+        showLoading()
         viewModel.viewLoaded()
         pagerAdapter = CardTransactionsChartPagerAdapter(childFragmentManager, cardId, dateList)
         viewPager.adapter = pagerAdapter
@@ -174,6 +175,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         tabAdded = false
         val currentDate = dateList[1]
         viewModel.getMonthlySpending(cardId, currentDate.monthToString(), currentDate.yearToString()) {
+           hideLoading()
             dateList[0] = dateList[1].minusMonths(1)
             updateTabs(it)
             pagerAdapter.notifyDataSetChanged()
