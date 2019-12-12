@@ -5,7 +5,7 @@ import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.voip.VoipCall
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockitokotlin2.given
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

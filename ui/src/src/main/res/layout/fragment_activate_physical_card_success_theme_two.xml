@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:background="@android:color/white">
@@ -25,16 +25,16 @@
         android:layout_above="@+id/continue_button"
         android:orientation="vertical">
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="@string/no_network_description"/>
+            app:localize="manage_card_get_pin_nue_title"/>
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,18 +43,19 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="@string/no_network_description"/>
+            app:localize="manage_card_get_pin_nue_explanation"/>
 
     </RelativeLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/continue_button"
         style="@style/ThemeTwo.ContinueButton"
         android:layout_above="@+id/tv_footer"
         android:layout_alignParentBottom="false"
-        android:layout_alignWithParentIfMissing="true"/>
+        android:layout_alignWithParentIfMissing="true"
+        app:localize="manage_card_get_pin_nue_call_to_action_title"/>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,6 +67,8 @@
         android:gravity="center_horizontal"
         android:textSize="@dimen/llsdk_form_text_link"
         android:visibility="gone"
-        tools:text="Test footer" />
+        app:localize="manage_card.get_pin_nue.footer"
+        tools:text="Test footer"
+        tools:visibility="visible"/>
 
 </RelativeLayout>

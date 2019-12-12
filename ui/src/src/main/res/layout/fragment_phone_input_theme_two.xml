@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true">
 
@@ -10,18 +10,20 @@
         android:id="@+id/tb_llsdk_toolbar_layout"
         layout="@layout/include_toolbar_two" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_phone_header"
         style="@style/ThemeTwo.TextHeader"
-        android:layout_below="@+id/tb_llsdk_toolbar_layout" />
+        android:layout_below="@+id/tb_llsdk_toolbar_layout"
+        app:localize="auth_input_phone_title"/>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_phone_label"
         style="@style/ThemeTwo.TextHeader"
         android:layout_below="@id/tv_phone_header"
         android:layout_marginTop="4sp"
         android:lineSpacingExtra="3sp"
-        android:textSize="@dimen/text_size_large" />
+        android:textSize="@dimen/text_size_large"
+        app:localize="auth_input_phone_explanation"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -77,8 +79,9 @@
 
     </ScrollView>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/continue_button"
-        style="@style/ThemeTwo.ContinueButton" />
+        style="@style/ThemeTwo.ContinueButton"
+        app:localize="auth_input_phone.call_to_action"/>
 
 </RelativeLayout>

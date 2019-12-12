@@ -112,22 +112,8 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     }
 
     override fun setupUI() {
-        setupTexts()
         setupTheme()
         setupToolBar()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_card_activity_title.text = "notification_preferences.card_activity.title".localized()
-        tv_card_activity_description.text = "notification_preferences.card_activity.description".localized()
-        tv_payment_successful.text = "notification_preferences.card_activity.payment_successful.title".localized()
-        tv_payment_declined.text = "notification_preferences.card_activity.payment_declined.title".localized()
-        tv_atm_withdrawal.text = "notification_preferences.card_activity.atm_withdrawal.title".localized()
-        tv_card_status_title.text = "notification_preferences.card_status.title".localized()
-        tv_card_status_description.text = "notification_preferences.card_status.description".localized()
-        tv_legal_title.text = "notification_preferences.legal.title".localized()
-        tv_legal_description.text = "notification_preferences.legal.description".localized()
     }
 
     private fun setupTheme() {
@@ -199,14 +185,14 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
 
     @SuppressLint("SetTextI18n")
     private fun setPushOrEmailHeader() {
-        tv_notifications_header.text = "notification_preferences.send_push_email.title".localized()
+        tv_notifications_header.localizedText = "notification_preferences.send_push_email.title"
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
         setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_mail)
     }
 
     @SuppressLint("SetTextI18n")
     private fun setPushOrSmsHeader() {
-        tv_notifications_header.text = "notification_preferences.send_push_sms.title".localized()
+        tv_notifications_header.localizedText = "notification_preferences.send_push_sms.title"
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
         setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_sms)
     }

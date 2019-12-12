@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard.success
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -71,18 +70,9 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     override fun setupUI() {
-        setupTexts()
         setupTheme()
         setupToolBar()
         setupFooter()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_title.text = "manage_card.get_pin_nue.title".localized()
-        tv_description.text = "manage_card.get_pin_nue.explanation".localized()
-        continue_button.text = "manage_card.get_pin_nue.call_to_action.title".localized()
-        tv_footer.text = "manage_card.get_pin_nue.footer".localized()
     }
 
     private fun setupTheme() {

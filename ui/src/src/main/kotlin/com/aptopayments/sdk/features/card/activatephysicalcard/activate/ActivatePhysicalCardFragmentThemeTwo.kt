@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard.activate
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -58,15 +57,8 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     override fun setupUI() {
-        setupTexts()
         setupTheme()
         setupToolBar()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_physical_activation_title.text = "manage_card.activate_physical_card_code.title".localized()
-        tv_physical_activation_explanation.text = "manage_card.activate_physical_card_code.message".localized()
     }
 
     private fun setupTheme() {

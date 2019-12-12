@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
     android:clickable="true"
@@ -26,7 +27,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_no_internet" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_description_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,11 +36,11 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="@string/no_network_description"/>
+            app:localize="no_network.description"/>
 
     </RelativeLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_loading_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +49,7 @@
         android:layout_marginBottom="40dp"
         android:gravity="center"
         android:textSize="12sp"
-        android:text="@string/no_network_reconnect_title"/>
+        app:localize="no_network.reconnect.title"/>
 
     <ProgressBar
         android:id="@+id/pb_progress"

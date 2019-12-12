@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.oauth.connect
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.Menu
@@ -116,11 +115,10 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
     )
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_coinbase_header.text = title.localized()
-        tv_coinbase_info.text = explanation.localized()
-        tv_submit_bttn.text = callToAction.localized()
+        tv_oauth_header.localizedText = title
+        tv_oauth_info.localizedText = explanation
+        tv_submit_bttn.localizedText = callToAction
     }
 
     private fun setupImageView() {
@@ -131,8 +129,8 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
-            customizeLargeTitleLabel(tv_coinbase_header)
-            customizeRegularTextLabel(tv_coinbase_info)
+            customizeLargeTitleLabel(tv_oauth_header)
+            customizeRegularTextLabel(tv_oauth_info)
             customizeSubmitButton(tv_submit_bttn)
             customizeHtml(tv_new_user, StringUtils.parseHtmlLinks(newUserAction.localized()))
         }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.CharacterStyle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.ImageView
@@ -17,6 +16,7 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.config.UITheme
+import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.google.android.material.appbar.AppBarLayout
 
 interface ThemeManager {
@@ -60,6 +60,10 @@ interface ThemeManager {
     fun customizeFormField(textView: TextView)
     fun customizeFormFieldSmall(textView: TextView)
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
+
+    fun loadLogoOnImageView(imageView: ImageView) {
+        imageView.loadFromUrl(UIConfig.logoImage)
+    }
 
     fun customizeMenuImage(item: MenuItem?, @ColorInt color: Int = UIConfig.textTopBarSecondaryColor) =
         item?.let {

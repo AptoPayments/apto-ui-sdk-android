@@ -29,7 +29,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     @SuppressLint("SetTextI18n")
     private fun setupUI() {
-        tv_title.text = "manage_card_balance_total_balance".localized()
         setupTheme()
     }
 

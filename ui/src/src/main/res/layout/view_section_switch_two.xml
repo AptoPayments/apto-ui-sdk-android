@@ -1,49 +1,54 @@
-<com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/contact_support_holder"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
-
-<RelativeLayout
+<com.aptopayments.sdk.ui.views.SectionSwitchViewTwo xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contact_support_holder"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_64sdp">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/sw_tv_section_switch_switch"
-        android:paddingLeft="16dp">
+        android:layout_height="@dimen/_64sdp">
 
         <TextView
             android:id="@+id/tv_section_switch_title"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/contact_support_title_two"/>
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="@string/contact_support_title_two"
+            app:layout_constraintBottom_toTopOf="@+id/tv_section_switch_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Title" />
 
         <TextView
             android:id="@+id/tv_section_switch_description"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_below="@id/tv_section_switch_title"/>
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_section_switch_title"
+            tools:text="Subtitle" />
 
-    </RelativeLayout>
+        <Switch
+            android:id="@+id/sw_tv_section_switch_switch"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_24sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/sw_tv_section_switch_switch"
-        android:layout_height="@dimen/_24sdp"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"/>
+        <View
+            android:id="@+id/vw_option_bottom_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-</RelativeLayout>
-
-<View
-    android:id="@+id/vw_option_bottom_separator"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_alignParentBottom="true"
-    android:background="@color/colorAccent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.aptopayments.sdk.ui.views.SectionSwitchViewTwo>

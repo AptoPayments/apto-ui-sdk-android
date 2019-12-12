@@ -12,7 +12,7 @@ interface ManageCardContract {
         fun onActivatePhysicalCardTapped(card: Card)
         fun onCardStatsTapped()
         fun onFundingSourceTapped(selectedBalanceID: String?)
-        fun onCardSettingsTapped(card: Card, cardDetailsShown: Boolean)
+        fun onCardSettingsTapped(card: Card)
         fun onTransactionTapped(transaction: Transaction)
         fun onBackFromManageCard()
     }
@@ -22,6 +22,5 @@ interface ManageCardContract {
         fun refreshCardData()
         fun refreshBalance()
         fun refreshTransactions()
-        fun cardDetailsChanged(cardDetails: CardDetails?)
     }
 }

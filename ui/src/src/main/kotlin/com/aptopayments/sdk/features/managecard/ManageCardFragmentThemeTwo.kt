@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
@@ -183,24 +182,28 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun onPanTapped() {
-        if (viewModel.cardInfoVisible.value != true) {
+        if (viewModel.cardInfo.value == null) {
             showCardSettings()
-            return
+        } else {
+            copyPanToClipboard(viewModel.cardInfo.value!!.pan)
         }
+    }
+
+    private fun copyPanToClipboard(pan: String) {
         context?.let { context ->
-            val clipData = ClipData.newPlainText("Card Number", viewModel.pan.value)
+            val clipData = ClipData.newPlainText("Card Number", pan)
             (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.let {
                 it.primaryClip = clipData
                 notify(
-                        message = "manage_card_card_view_copy_pan_text".localized(),
-                        type = MessageBanner.MessageType.SUCCESS
+                    message = "manage_card_card_view_copy_pan_text".localized(),
+                    type = MessageBanner.MessageType.SUCCESS
                 )
             }
         }
     }
 
     private fun showCardSettings() = viewModel.card.value?.let {
-        delegate?.onCardSettingsTapped(it, viewModel.cardInfoVisible.value == true)
+        delegate?.onCardSettingsTapped(it)
     }
 
     override fun onTransactionTapped(transaction: Transaction) {
@@ -208,10 +211,6 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             clicksAllowed = false
             delegate?.onTransactionTapped(transaction)
         }
-    }
-
-    override fun cardDetailsChanged(cardDetails: CardDetails?) {
-        viewModel.cardDetailsChanged(cardDetails)
     }
 
     override fun setupUI() {
@@ -227,7 +226,6 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         with (themeManager()) {
             customizeEmptyCase(tv_no_transactions)
         }
-        tv_no_transactions.text = "manage_card.transaction_list.empty_case.title".localized()
     }
 
     private fun setupToolbar() {
@@ -285,7 +283,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
 
     override fun onStart() {
         super.onStart()
-        viewModel.viewReady(cardId = cardId)
+        viewModel.viewReady(cardId)
     }
 
     override fun onResume() {

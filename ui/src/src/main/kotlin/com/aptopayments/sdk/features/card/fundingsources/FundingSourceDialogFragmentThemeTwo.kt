@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.fundingsources
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -53,7 +52,6 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
 
     override fun setUpUI() {
         setupTheme()
-        setupTexts()
         setupRecyclerView()
     }
 
@@ -131,13 +129,6 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
             customizeSubmitButton(add_funding_source_button)
         }
         refresh_button.setColorFilter(UIConfig.uiPrimaryColor)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_dialog_title.text = "manage_card.funding_source_selector.title".localized()
-        add_funding_source_button.text = "manage_card.funding_source_selector.empty_case.call_to_action".localized()
-        tv_no_funding_sources.text = "manage_card_funding_source_selector_empty_case_message".localized()
     }
 
     private fun setupRecyclerView() {

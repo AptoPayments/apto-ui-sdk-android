@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.toCapitalized
@@ -109,7 +110,7 @@ internal open class TransactionListAdapter(
                 with(lifecycleOwner) {
                     observeNullable(viewModel.cardHolder) { cardView.setCardholderName(it) }
                     observeNullable(viewModel.lastFour) { cardView.setLastFour(it) }
-                    observeNullable(viewModel.cardInfoVisible) { handleCardDetailsShown(cardView, it) }
+                    observeNullable(viewModel.cardInfo) { handleCardDetails(cardView, it) }
                     observeNullable(viewModel.cardNetwork) { cardView.setCardNetwork(it) }
                     observeNullable(viewModel.cardStyle) { cardView.setCardStyle(it) }
                     observeNullable(viewModel.fundingSource) { cardView.setBalance(it) }
@@ -123,23 +124,22 @@ internal open class TransactionListAdapter(
             }
         }
 
-        override fun bind(item: TransactionListItem, position: Int) {
-        }
+        private fun handleCardDetails(cardView: CardView, details: CardDetails?) {
+            if (details != null) {
+                cardView.setPan(details.pan)
+                cardView.setCvv(details.cvv)
 
-        private fun handleCardDetailsShown(cardView: CardView, value: Boolean?) {
-            if (value == true) {
-                cardView.setPan(viewModel.pan.value)
-                cardView.setCvv(viewModel.cvv.value)
-                var strMonth: String? = null
-                viewModel.expirationMonth.value?.let { strMonth = String.format("%02d", it) }
-                var strYear: String? = null
-                viewModel.expirationYear.value?.let { strYear = String.format("%02d", it) }
-                cardView.setExpiryDate(strMonth, strYear)
+                val month = String.format("%02d", details.expirationMonth)
+                val year = String.format("%02d", details.expirationYear)
+                cardView.setExpiryDate(month, year)
             } else {
                 cardView.setPan(null)
                 cardView.setCvv(null)
                 cardView.setExpiryDate(null, null)
             }
+        }
+
+        override fun bind(item: TransactionListItem, position: Int) {
         }
     }
 

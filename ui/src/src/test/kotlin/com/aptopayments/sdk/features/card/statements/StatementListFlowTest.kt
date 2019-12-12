@@ -10,8 +10,8 @@ import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin

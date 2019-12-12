@@ -2,7 +2,7 @@ package com.aptopayments.sdk
 
 import android.app.Application
 import com.aptopayments.core.platform.AptoPlatform
-import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.koin.test.AutoCloseKoinTest
@@ -18,10 +18,15 @@ import org.mockito.junit.MockitoJUnitRunner
 abstract class UnitTest : AutoCloseKoinTest() {
 
     @Suppress("LeakingThis")
-    @Rule @JvmField val injectMocks = InjectMocksRule.create(this@UnitTest)
+    @Rule
+    @JvmField
+    val injectMocks = InjectMocksRule.create(this@UnitTest)
 
-    @Before
-    open fun setUp() {
-        AptoPlatform.application = Application()
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun setup() {
+            AptoPlatform.application = Application()
+        }
     }
 }

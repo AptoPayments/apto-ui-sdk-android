@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true">
 
@@ -35,7 +36,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_phone_label"
         style="@style/ThemeTwo.TextHeader"
         android:layout_below="@+id/tb_llsdk_toolbar_layout"
@@ -43,7 +44,8 @@
         android:layout_marginBottom="-13dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:localize="auth_input_phone_explanation"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,7 +63,7 @@
                 android:layout_marginBottom="@dimen/_24sdp"
                 android:background="@drawable/rounded_corners">
 
-                <com.hbb20.CountryCodePicker xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.hbb20.CountryCodePicker
                     android:id="@+id/country_code_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

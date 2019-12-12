@@ -98,7 +98,6 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     override fun setupUI() {
         setupToolbar()
         setupTheme()
-        setupTexts()
     }
 
     override fun setupListeners() {
@@ -121,20 +120,6 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
             title = null,
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
     )
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_personal_information_header.text = "select_balance_store_oauth_confirm_title".localized()
-        tv_personal_information_description.text = "select_balance_store_oauth_confirm_explanation".localized()
-        tv_first_name_label.text = "select_balance_store_oauth_confirm_first_name".localized()
-        tv_last_name_label.text = "select_balance_store_oauth_confirm_last_name".localized()
-        tv_id_document_label.text = "select_balance_store_oauth_confirm_id_document".localized()
-        tv_email_label.text = "select_balance_store_oauth_confirm_email".localized()
-        tv_address_label.text = "select_balance_store_oauth_confirm_address".localized()
-        tv_phone_label.text = "select_balance_store_oauth_confirm_phone_number".localized()
-        tv_date_of_birth_label.text = "select_balance_store_oauth_confirm_birth_date".localized()
-        tv_submit_bttn.text = "select_balance_store_oauth_confirm_call_to_action_title".localized()
-    }
 
     private fun setupTheme() {
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)

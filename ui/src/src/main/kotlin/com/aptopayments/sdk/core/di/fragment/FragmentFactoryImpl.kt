@@ -26,8 +26,6 @@ import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragmentThemeOne
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.verification.*
-import com.aptopayments.sdk.features.biometric.BiometricDialogContract
-import com.aptopayments.sdk.features.biometric.BiometricDialogFragmentThemeTwo
 import com.aptopayments.sdk.features.card.account.AccountSettingsContract
 import com.aptopayments.sdk.features.card.account.AccountSettingsFragmentThemeTwo
 import com.aptopayments.sdk.features.card.activatephysicalcard.activate.ActivatePhysicalCardContract
@@ -77,6 +75,8 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentThemeTwo
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragmentThemeTwo
+import com.aptopayments.sdk.features.pin.CreatePinContract
+import com.aptopayments.sdk.features.pin.CreatePinFragment
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragmentThemeTwo
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
@@ -344,26 +344,16 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
     override fun cardSettingsFragment(
             uiTheme: UITheme,
             card: Card,
-            cardDetailsShown: Boolean,
             cardProduct: CardProduct,
             projectConfiguration: ProjectConfiguration,
             tag: String
     ): CardSettingsContract.View {
         return when(uiTheme) {
-            THEME_2 -> CardSettingsFragmentThemeTwo.newInstance(card, cardDetailsShown, cardProduct, projectConfiguration).apply {
+            THEME_2 -> CardSettingsFragmentThemeTwo.newInstance(card, cardProduct, projectConfiguration).apply {
                 this.TAG = tag
             }
-            else -> CardSettingsFragmentThemeTwo.newInstance(card, cardDetailsShown, cardProduct, projectConfiguration)
+            else -> CardSettingsFragmentThemeTwo.newInstance(card, cardProduct, projectConfiguration)
         }
-    }
-
-    override fun biometricDialogFragment(
-            uiTheme: UITheme,
-            title: String,
-            description: String,
-            tag: String
-    ): BiometricDialogContract.View {
-        return BiometricDialogFragmentThemeTwo.newInstance(title, description).apply { this.TAG = tag }
     }
 
     override fun transactionDetailsFragment(
@@ -503,6 +493,9 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
 
     override fun pdfRendererFragment(uiTheme: UITheme, title: String, file: File, tag: String): PdfRendererContract.View =
         configureTheme(uiTheme, PdfRendererFragment.newInstance(title, file),tag) as PdfRendererFragment
+
+    override fun createPinFragment(uiTheme: UITheme, tag: String): CreatePinContract.View =
+        configureTheme(uiTheme, CreatePinFragment(), tag) as CreatePinContract.View
 
     private fun configureTheme(uiTheme: UITheme, fragment: BaseFragment, tag: String): BaseFragment {
         return when (uiTheme) {

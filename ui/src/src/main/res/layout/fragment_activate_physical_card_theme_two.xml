@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:background="@android:color/white">
@@ -12,21 +12,21 @@
         android:id="@+id/tb_llsdk_toolbar_layout"
         layout="@layout/include_toolbar_two" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_physical_activation_title"
         style="@style/ThemeTwo.TextHeader"
         android:layout_marginTop="@dimen/llsdk_phone_input_wrapper_height"
         android:gravity="start"
-        android:text="@string/physical_card_activation_title" />
+        app:localize="manage_card_activate_physical_card_code_title" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_physical_activation_explanation"
         style="@style/ThemeTwo.TextInput"
         android:layout_below="@+id/tv_physical_activation_title"
         android:layout_centerHorizontal="true"
         android:lineSpacingExtra="3sp"
         android:gravity="start"
-        android:text="@string/physical_card_activation_hint"/>
+        app:localize="manage_card_activate_physical_card_code_message"/>
 
     <ScrollView
         android:layout_width="match_parent"

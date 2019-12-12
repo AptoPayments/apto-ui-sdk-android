@@ -75,19 +75,19 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_accept_disclaimer"
             style="@style/ThemeOne.ContinueButton"
             android:layout_marginTop="@dimen/_8sdp"
             android:elevation="@dimen/_4sdp"
-            android:text="@string/disclaimer_disclaimer_call_to_action_title" />
+            app:localize="disclaimer_disclaimer_call_to_action_title" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_reject_disclaimer"
             style="@style/ThemeTwo.TextLink"
             android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
             android:gravity="center_horizontal"
-            android:text="@string/disclaimer_disclaimer_cancel_action_button" />
+            app:localize="disclaimer_disclaimer_cancel_action_button" />
     </LinearLayout>
 
 </RelativeLayout>

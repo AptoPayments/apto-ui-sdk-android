@@ -19,8 +19,8 @@ import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragmentDouble
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -172,14 +172,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "CardSettingsFragment"
         val fragmentDouble = CardSettingsFragmentDouble(mockCardSettingsDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardDetailsShown = cardDetailsShown, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+            mockFragmentFactory.cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
         }.willReturn(fragmentDouble)
 
         // When
-        sut.onCardSettingsTapped(card, cardDetailsShown)
+        sut.onCardSettingsTapped(card)
 
         // Then
-        verify(mockFragmentFactory).cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardDetailsShown = cardDetailsShown, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+        verify(mockFragmentFactory).cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
     }
 
     @Test

@@ -67,8 +67,6 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
 
     @SuppressLint("SetTextI18n")
     private fun localizeStrings() {
-        tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized()
-        tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized()
         tv_toolbar_title.text = "disclaimer_disclaimer_title".localized()
     }
 

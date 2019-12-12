@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true">
 
@@ -35,13 +36,14 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_email_label"
         style="@style/ThemeTwo.TextHeader"
         android:layout_below="@+id/tb_llsdk_toolbar_layout"
         android:layout_marginTop="80dp"
         android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"/>
+        android:layout_marginEnd="25dp"
+        app:localize="auth_input_email_explanation"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

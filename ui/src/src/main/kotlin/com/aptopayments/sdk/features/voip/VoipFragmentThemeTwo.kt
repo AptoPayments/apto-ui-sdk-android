@@ -111,8 +111,8 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
         context?.let {
             when (action) {
                 Action.LISTEN_PIN -> {
-                    tv_title.text = "manage_card.get_pin_voip.title".localized()
-                    tv_description.text = "manage_card.get_pin_voip.message".localized()
+                    tv_title.localizedText = "manage_card.get_pin_voip.title"
+                    tv_description.localizedText = "manage_card.get_pin_voip.message"
                 }
                 else -> {}
             }
@@ -146,15 +146,15 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
 
     @SuppressLint("SetTextI18n")
     private fun showNotInitiatedState() {
-        tv_title.text = "manage_card.get_pin_voip.title".localized()
-        tv_description.text = "manage_card.get_pin_voip.message".localized()
+        tv_title.localizedText = "manage_card.get_pin_voip.title"
+        tv_description.localizedText = "manage_card.get_pin_voip.message"
         updateCallActionButtonState(isCallEstablished = false)
     }
 
     @SuppressLint("SetTextI18n")
     private fun showRingingState() {
-        tv_title.text = "manage_card.get_pin_voip.title".localized()
-        tv_description.text = "manage_card.get_pin_voip.message".localized()
+        tv_title.localizedText = "manage_card.get_pin_voip.title"
+        tv_description.localizedText = "manage_card.get_pin_voip.message"
         updateCallActionButtonState(isCallEstablished = false)
     }
 

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:clickable="true"
@@ -16,12 +17,12 @@
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_disclaimer_title"
         style="@style/ThemeTwo.TextHeader"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:text="@string/disclaimer_disclaimer_title" />
+        app:localize="disclaimer_disclaimer_title" />
 
     <com.aptopayments.sdk.ui.views.ContentPresenterView
         android:id="@+id/vw_content_presenter"
@@ -36,17 +37,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true">
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_accept_disclaimer"
             style="@style/ThemeTwo.ContinueButton"
             android:layout_marginTop="@dimen/_6sdp"
-            android:text="@string/disclaimer_disclaimer_call_to_action_title" />
-        <TextView
+            app:localize="disclaimer_disclaimer_call_to_action_title" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_reject_disclaimer"
             style="@style/ThemeTwo.TextLink"
             android:gravity="center_horizontal"
             android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
-            android:text="@string/disclaimer_disclaimer_cancel_action_button" />
+            app:localize="disclaimer_disclaimer_cancel_action_button" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -46,7 +47,7 @@
             android:background="@android:color/white"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_no_transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,5 +55,8 @@
         android:text="@string/manage_card_transaction_list_empty_case_title"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/_120sdp"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        app:localize="manage_card.transaction_list.empty_case.title"
+        tools:visibility="visible"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

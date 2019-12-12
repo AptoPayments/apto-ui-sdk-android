@@ -3,20 +3,27 @@ package com.aptopayments.sdk.features.card.account
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.widget.Switch
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.remove
-import com.aptopayments.sdk.core.extension.show
-import com.aptopayments.sdk.core.platform.AptoUiSdk
+import com.aptopayments.sdk.core.extension.observeNotNullable
+import com.aptopayments.sdk.core.extension.visibleIf
+import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.card.CardActivity
+import com.aptopayments.sdk.ui.views.AuthenticationView
+import com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
+import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
+import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.SendEmailUtil
 import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
+import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
@@ -32,6 +39,18 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     override fun layoutId(): Int = R.layout.fragment_account_settings_theme_two
 
     override fun setupViewModel() {
+        observeNotNullable(viewModel.monthlyStatementVisibility) { isVisible ->
+            rl_statements.visibleIf(isVisible)
+        }
+        observeNotNullable(viewModel.securityVisibility) { isVisible ->
+            rl_security.visibleIf(isVisible)
+            rl_fingerprint.visibleIf(isVisible)
+            rl_passcode.visibleIf(isVisible)
+        }
+        observeNotNullable(viewModel.notificationsEnabled) { isVisible ->
+            rl_settings_header.visibleIf(isVisible)
+            rl_notifications.visibleIf(isVisible)
+        }
     }
 
     override fun setUpArguments() {
@@ -39,10 +58,24 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     }
 
     override fun setupUI() {
-        if (AptoUiSdk.cardOptions.showNotificationPreferences()) ll_app_settings_holder.show()
         setupTheme()
         setupToolbar()
         setupTexts()
+
+        observeNotNullable(viewModel.fingerprintEnabled) {
+            silentlySetSwitch(it, rl_fingerprint.sw_tv_section_switch_switch) { fingerprintChanged() }
+            rl_fingerprint.sw_tv_section_switch_switch.isChecked = it
+        }
+    }
+
+    private fun silentlySetSwitch(value: Boolean, switch: Switch, listener: () -> Unit) {
+        switch.setOnCheckedChangeListener(null)
+        switch.isChecked = value
+        switch.setOnCheckedChangeListener { _, _ -> listener() }
+    }
+
+    private fun fingerprintChanged() {
+        viewModel.onFingerprintSwichTapped()
     }
 
     override fun setupListeners() {
@@ -51,7 +84,17 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         rl_contact_support.setOnClickListener { sendCustomerSupportEmail() }
         rl_sign_out.setOnClickListener { showConfirmLogOutDialog() }
         rl_notifications.setOnClickListener { delegate?.showNotificationPreferences() }
-        statements_container.setOnClickListener { delegate?.onMonthlyStatementTapped() }
+        rl_statements.setOnClickListener { delegate?.onMonthlyStatementTapped() }
+        rl_passcode.setOnClickListener { onChangePasscodeTapped() }
+    }
+
+    private fun onChangePasscodeTapped() {
+        (activity as CardActivity).authenticate(
+            type = AuthenticationView.AuthType.OPTIONAL,
+            onlyPin = true,
+            onCancelled = {},
+            onAuthenticated = { delegate?.onChangePasscodeTapped() }
+        )
     }
 
     override fun onBackPressed() {
@@ -63,28 +106,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
             with(themeManager()) {
                 customizeSecondaryNavigationStatusBar(it)
                 customizeToolbarTitle(tv_toolbar_title)
-                customizeStarredSectionTitle(tv_app_settings_header, UIConfig.textSecondaryColor)
-                customizeMainItem(tv_notifications)
-                customizeTimestamp(tv_notifications_description)
-                customizeStarredSectionTitle(tv_support_header, UIConfig.textSecondaryColor)
-                customizeMainItem(tv_contact_support)
-                customizeTimestamp(tv_contact_support_description)
-                customizeMainItem(tv_sign_out)
-                customizeMainItem(statements_title)
-                customizeTimestamp(statements_description)
             }
-        }
-        iv_notifications_icon.setColorFilter(UIConfig.uiTertiaryColor)
-        iv_help_center_icon.setColorFilter(UIConfig.uiTertiaryColor)
-        iv_sign_out_icon.setColorFilter(UIConfig.uiTertiaryColor)
-        statements_icon.setColorFilter(UIConfig.uiTertiaryColor)
-        evaluateMonthlyStatementsRemoval()
-    }
-
-    private fun evaluateMonthlyStatementsRemoval() {
-        if (!AptoUiSdk.cardOptions.showMonthlyStatementOption()) {
-            statements_container.remove()
-            statements_separator.remove()
         }
     }
 
@@ -97,24 +119,42 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_app_settings_header.text = "account_settings.app_settings.title".localized()
-        tv_notifications.text = "account_settings.notification_preferences.title".localized()
-        tv_notifications_description.text = "account_settings.notification_preferences.description".localized()
-        tv_support_header.text = "account_settings.help.title".localized()
-        tv_contact_support.text = "account_settings.help.contact_support.title".localized()
-        tv_contact_support_description.text = "account_settings.help.contact_support.description".localized()
-        tv_sign_out.text = "account_settings.logout.title".localized()
-        statements_title.text = "card_settings.help.monthly_statements.title".localized()
-        statements_description.text = "card_settings.help.monthly_statements.description".localized()
+        (rl_security as SectionHeaderViewTwo).set("account_settings_security_title".localized())
+        (rl_fingerprint as SectionSwitchViewTwo).apply {
+            set("account_settings_security_fingerprint".localized())
+            hideBottomSeparator()
+        }
+        (rl_passcode as SectionOptionWithSubtitleViewTwo).set(
+            "account_settings_security_change_pin_title".localized(),
+            "account_settings_security_change_pin_description".localized()
+        )
+        (rl_settings_header as SectionHeaderViewTwo).set("account_settings.app_settings.title".localized())
+        (rl_notifications as SectionOptionWithSubtitleViewTwo).apply {
+            set(
+                "account_settings.notification_preferences.title".localized(),
+                "account_settings.notification_preferences.description".localized()
+            )
+            hideBottomSeparator()
+        }
+        (rl_support_header as SectionHeaderViewTwo).set("account_settings.help.title".localized())
+        (rl_contact_support as SectionOptionWithSubtitleViewTwo).set(
+            "account_settings.help.contact_support.title".localized(),
+            "account_settings.help.contact_support.description".localized()
+        )
+        (rl_statements as SectionOptionWithSubtitleViewTwo).set(
+            "card_settings.help.monthly_statements.title".localized(),
+            "card_settings.help.monthly_statements.description".localized()
+        )
+        (rl_sign_out as SectionOptionWithSubtitleViewTwo).set("account_settings.logout.title".localized())
     }
 
     private fun showConfirmLogOutDialog() {
         confirm(title = "account_settings.logout.confirm_logout.title".localized(),
-                text = "account_settings.logout.confirm_logout.message".localized(),
-                confirm = "account_settings.logout.confirm_logout.ok_button".localized(),
-                cancel = "account_settings_logout_confirm_logout_cancel_button".localized(),
-                onConfirm = { delegate?.onLogOut() },
-                onCancel = { })
+            text = "account_settings.logout.confirm_logout.message".localized(),
+            confirm = "account_settings.logout.confirm_logout.ok_button".localized(),
+            cancel = "account_settings_logout_confirm_logout_cancel_button".localized(),
+            onConfirm = { delegate?.onLogOut() },
+            onCancel = { })
     }
 
     private fun sendCustomerSupportEmail() = contextConfiguration?.projectConfiguration?.supportEmailAddress?.let {

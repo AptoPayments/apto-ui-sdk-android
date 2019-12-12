@@ -65,7 +65,6 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
 
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        tv_phone_label.text = "auth_input_phone_explanation".localized()
         et_phone.hint = "auth_input_phone_hint".localized()
         view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)

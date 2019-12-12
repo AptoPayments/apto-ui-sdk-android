@@ -15,8 +15,7 @@ class IssueCardViewModelTest : UnitTest() {
     @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         sut = IssueCardViewModel(analyticsManager)
     }
 

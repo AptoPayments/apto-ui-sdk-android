@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true">
 
     <include
         android:id="@+id/tb_llsdk_toolbar_layout"
-        layout="@layout/include_toolbar_two" />
+        layout="@layout/include_toolbar_two"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_birthdate_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_marginBottom="10dp"
+        android:textSize="@dimen/text_size_xlarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
+        app:localize="auth_verify_birthdate_title" />
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_verification_code_header"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_below="@id/tv_birthdate_title"
+        android:lineSpacingExtra="3sp"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_birthdate_title"
+        app:localize="auth_verify_birthdate_explanation" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        style="@style/ThemeTwo.TextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tb_llsdk_toolbar_layout">
+        android:layout_below="@id/tv_verification_code_header"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_corners"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_verification_code_header">
 
-        <TextView
-            android:id="@+id/tv_birthdate_title"
-            style="@style/ThemeTwo.TextHeader"
-            android:layout_marginBottom="10dp"
-            android:textSize="@dimen/text_size_xlarge" />
-
-        <TextView
-            android:id="@+id/tv_verification_code_header"
-            style="@style/ThemeTwo.TextHeader"
-            android:layout_below="@id/tv_birthdate_title"
-            android:lineSpacingExtra="3sp"
-            android:textSize="@dimen/text_size_large" />
-
-        <LinearLayout
-            android:id="@+id/et_birthdate_input"
-            android:background="@drawable/rounded_corners"
-            android:elevation="2dp"
+        <ViewStub
+            android:id="@+id/stub_dmy"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-            style="@style/ThemeTwo.TextInput"
-            android:layout_below="@id/tv_verification_code_header"
-            android:layout_marginTop="@dimen/llsdk_card_holder_name_margin"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal"
-            android:weightSum="5">
+            android:layout="@layout/birthdate_validator_dmy"
+            tools:visibility="visible" />
 
-            <EditText
-                android:id="@+id/et_birthday_day"
-                style="@style/ThemeTwo.BirthDate.Input"
-                android:hint="@string/birthdate_hint_dd"
-                android:layout_weight="1.75"/>
+        <ViewStub
+            android:id="@+id/stub_mdy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+            android:layout="@layout/birthdate_validator_mdy"
+            tools:visibility="gone" />
 
-            <include layout="@layout/include_vertical_separator"/>
+        <ViewStub
+            android:id="@+id/stub_ymd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+            android:layout="@layout/birthdate_validator_ymd"
+            tools:visibility="gone" />
 
-            <EditText
-                android:id="@+id/et_birthday_month"
-                style="@style/ThemeTwo.BirthDate.Input"
-                android:hint="@string/birthdate_hint_mm"
-                android:layout_weight="1.75"/>
+    </FrameLayout>
 
-            <include layout="@layout/include_vertical_separator"/>
-
-            <EditText
-                android:id="@+id/et_birthday_year"
-                style="@style/ThemeTwo.BirthDate.Year"
-                android:hint="@string/birthdate_hint_yyyy"
-                android:layout_weight="1.5"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/continue_button"
-        style="@style/ThemeTwo.ContinueButton" />
+        style="@style/ThemeTwo.ContinueButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:localize="auth_verify_birthdate_call_to_action_title" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

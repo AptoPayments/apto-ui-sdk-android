@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:fitsSystemWindows="true"
     android:focusable="true">
@@ -21,7 +22,7 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical">
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_kyc_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,9 +32,9 @@
             android:layout_marginRight="48dp"
             android:layout_marginBottom="@dimen/llsdk_tiny_margin"
             android:gravity="center_horizontal"
-            tools:text="Application status under review ⌛" />
+            app:localize="manage_card.kyc.title"/>
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_status_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +45,7 @@
             android:gravity="center_horizontal"
             tools:text="Thank you for your application. We are reviewing your information. We will be in touch via email momentarily." />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/refresh_button"
             style="@style/ThemeTwo.ContinueButton"
             android:layout_above="@+id/tv_kyc_footer"
@@ -53,7 +54,7 @@
             android:layout_marginBottom="64dp"
             android:padding="16dp"
             android:textColor="@android:color/white"
-            tools:text="Refresh" />
+            app:localize="manage_card.kyc.call_to_action.title"/>
 
         <TextView
             android:id="@+id/tv_kyc_footer"

@@ -12,13 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:padding="@dimen/_9sdp" />
+            android:padding="@dimen/_9sdp"
+            app:localize="manage_card.funding_source_selector.title" />
 
         <ImageView
             android:id="@+id/refresh_button"
@@ -71,15 +72,16 @@
                 android:padding="@dimen/_7sdp"
                 android:visibility="gone">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_no_funding_sources"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_medium" />
+                    android:textSize="@dimen/text_size_medium"
+                    app:localize="manage_card_funding_source_selector_empty_case_message"/>
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/add_funding_source_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -92,7 +94,8 @@
                     android:gravity="center"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_medium_large" />
+                    android:textSize="@dimen/text_size_medium_large"
+                    app:localize="manage_card.funding_source_selector.empty_case.call_to_action" />
             </RelativeLayout>
 
         </RelativeLayout>

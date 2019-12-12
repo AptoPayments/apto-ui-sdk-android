@@ -1,52 +1,87 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.user.Verification
-import com.aptopayments.core.extension.ISO8601
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import java.util.*
+import com.aptopayments.sdk.utils.LiveEvent
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+
+private const val AUTH_TYPE = "birthdate"
 
 internal class BirthdateVerificationViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel()
-{
-    var enableNextButton: MutableLiveData<Boolean> = MutableLiveData()
-    var birthdateVerification: MutableLiveData<Verification> = MutableLiveData()
-    private var mBirthdate: Date? = Date()
-    private val AUTH_TYPE = "birthdate"
+    private val analyticsManager: AnalyticsServiceContract,
+    formatOrderGenerator: FormatOrderGenerator
+) : BaseViewModel(), KoinComponent {
 
-    fun finishVerification(verificationId: String, day: String, month: String, year: String) {
-        setBirthdate(year, month, day)
+    private var day = ""
+    private var month = ""
+    private var year = ""
+    private val _continueEnabled = MutableLiveData(false)
+    val dateOrder: LiveData<DateFormatOrder>
+    val continueEnabled = _continueEnabled as LiveData<Boolean>
+    val birthdateVerification = LiveEvent<Verification>()
 
-        mBirthdate?.let { date ->
-            val request = Verification(
-                    verificationId = verificationId,
-                    secret = ISO8601.formatDate(date),
-                    verificationType = AUTH_TYPE)
-            AptoPlatform.completeVerification(request) {
-                it.either(::handleFailure, ::handleVerification)
-            }
-        }
+    init {
+        dateOrder = MutableLiveData(formatOrderGenerator.getFormatOrder())
     }
 
-    private fun handleVerification(response: Verification) {
-        birthdateVerification.postValue(response)
-    }
-
-    fun setBirthdate(year: String, monthOfYear: String, dayOfMonth: String) {
-        try {
-            val birth = GregorianCalendar(Integer.valueOf(year), Integer.valueOf(monthOfYear)-1, Integer.valueOf(dayOfMonth))
-            birth.isLenient = false
-            mBirthdate = birth.time
+    private fun parseDate(year: String, monthOfYear: String, dayOfMonth: String): LocalDate? {
+        return try {
+            LocalDate.of(year.toInt(), monthOfYear.toInt(), dayOfMonth.toInt())
         } catch (iae: IllegalArgumentException) {
-            mBirthdate = null
+            null
         }
     }
 
     fun viewLoaded() {
         analyticsManager.track(Event.AuthVerifyBirthdate)
     }
+
+    fun setDay(text: String) {
+        day = text
+        checkDate()
+    }
+
+    private fun checkDate() {
+        _continueEnabled.value = areAllValuesPresent() && parseDate(year, month, day) != null
+    }
+
+    private fun areAllValuesPresent() = day.isNotEmpty() && month.isNotEmpty() && year.isNotEmpty()
+
+    fun setMonth(text: String) {
+        month = text
+        checkDate()
+    }
+
+    fun setYear(text: String) {
+        year = text
+        checkDate()
+    }
+
+    fun onContinueButtonPressed(verificationId: String) {
+        val date = parseDate(year, month, day)
+        val request = getRequestParams(verificationId, date!!)
+        AptoPlatform.completeVerification(request) {
+            it.either(::handleFailure, ::handleVerification)
+        }
+    }
+
+    private fun getRequestParams(verificationId: String, date: LocalDate) =
+        Verification(
+            verificationId = verificationId,
+            secret = date.format(DateTimeFormatter.ISO_DATE),
+            verificationType = AUTH_TYPE
+        )
+
+    private fun handleVerification(response: Verification) {
+        birthdateVerification.postValue(response)
+    }
+
 }

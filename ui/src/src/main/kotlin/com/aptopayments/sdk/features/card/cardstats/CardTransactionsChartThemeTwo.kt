@@ -60,7 +60,6 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     override fun setupUI() {
         setupTheme()
-        setupTexts()
         setupChart()
         setupCategoryListRecyclerView()
         setClickListeners()
@@ -128,14 +127,6 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             monthly_statement_link?.invisibleIf(!hasStatement)
             monthly_statement_top_separator?.invisibleIf(!hasStatement)
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_center_text_title.text = "stats.monthly_spending.graph.title".localized()
-        tv_no_transactions.text = "stats_monthly_spending_list_empty_case".localized()
-        tv_list_title.text = "stats.monthly_spending.list.title".localized()
-        monthly_statement_link.text = "stats_monthly_spending_view_statement".localized()
     }
 
     private fun setupChart() {
@@ -234,7 +225,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     }
 
     override fun onNothingSelected() {
-        tv_center_text_title.text = "stats.monthly_spending.graph.title".localized()
+        tv_center_text_title.localizedText = "stats.monthly_spending.graph.title"
         tv_center_text_difference.remove()
         tv_center_text_amount.text = Money(amount = totalSpent, currency = currency).toString()
         for (i in 0 until dataSet.colors.size) resetPieChartEntryColor(i)

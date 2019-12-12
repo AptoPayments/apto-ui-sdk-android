@@ -14,8 +14,6 @@ import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinViewModel
 import com.aptopayments.sdk.features.card.setpin.SetPinViewModel
-import com.aptopayments.sdk.repository.StatementRepository
-import com.aptopayments.sdk.repository.StatementRepositoryImpl
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
@@ -31,7 +29,6 @@ import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewMo
 import com.aptopayments.sdk.features.voip.VoipViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import java.io.File
 
 val viewModelModule = module {
     viewModel { InputPhoneViewModel(analyticsManager = get()) }
@@ -39,7 +36,7 @@ val viewModelModule = module {
     viewModel { OAuthConnectViewModel(analyticsManager = get()) }
     viewModel { OAuthVerifyViewModel(analyticsManager = get()) }
     viewModel { VerificationViewModel(analyticsManager = get()) }
-    viewModel { BirthdateVerificationViewModel(analyticsManager = get()) }
+    viewModel { BirthdateVerificationViewModel(get(), get()) }
     viewModel { FundingSourcesViewModel(analyticsManager = get()) }
     viewModel { KycStatusViewModel(analyticsManager = get()) }
     single { FetchTransactionsTaskQueue(aptoPlatformProtocol = get()) }
@@ -51,7 +48,7 @@ val viewModelModule = module {
     viewModel { CardMonthlyStatsViewModel(analyticsManager = get(), statementRepository = get()) }
     viewModel { NoNetworkViewModel(analyticsManager = get()) }
     viewModel { MaintenanceViewModel( get()) }
-    viewModel { AccountSettingsViewModel(analyticsManager = get()) }
+    viewModel { AccountSettingsViewModel(get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(analyticsManager = get()) }
     viewModel { IssueCardViewModel(analyticsManager = get()) }

@@ -70,10 +70,8 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_kyc_title.text = "manage_card.kyc.title".localized()
         tv_kyc_footer.text = StringUtils.parseHtmlLinks("manage_card_kyc_footer".localized())
         tv_kyc_footer.movementMethod = LinkMovementMethod.getInstance()
-        refresh_button.text = "manage_card.kyc.call_to_action.title".localized()
         updateKycLabel()
     }
 
@@ -99,7 +97,7 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
             KycStatus.UNDER_REVIEW -> "manage_card.kyc.state.under_review"
             KycStatus.TEMPORARY_ERROR -> "manage_card.kyc.state.temporary_error"
         }
-        tv_status_text.text = text.localized()
+        tv_status_text.localizedText = text
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

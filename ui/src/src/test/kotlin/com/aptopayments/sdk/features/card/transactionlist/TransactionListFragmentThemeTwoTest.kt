@@ -7,8 +7,8 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.R
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

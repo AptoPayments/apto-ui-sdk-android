@@ -11,13 +11,13 @@
         android:id="@+id/tb_llsdk_toolbar_layout"
         layout="@layout/include_toolbar_two" />
 
-    <TextView
-        android:id="@+id/tv_coinbase_header"
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_oauth_header"
         style="@style/ThemeTwo.TextHeader"
         android:text="@string/select_balance_store_login_title" />
 
-    <TextView
-        android:id="@+id/tv_coinbase_info"
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_oauth_info"
         style="@style/ThemeTwo.TextInput"
         android:layout_marginTop="4sp"
         android:lineSpacingExtra="3sp"
@@ -32,7 +32,7 @@
         android:layout_weight="3"
         android:scaleType="fitCenter" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_submit_bttn"
         style="@style/ThemeTwo.ContinueButton"
         android:layout_marginBottom="@dimen/_16sdp"

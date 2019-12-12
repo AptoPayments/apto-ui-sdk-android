@@ -1,7 +1,10 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.card.Card
@@ -11,32 +14,51 @@ import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
+import com.aptopayments.sdk.core.usecase.ClearCardDetailsUseCase
+import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
+import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase
+import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase.Params
+import com.aptopayments.sdk.core.usecase.ShouldAuthenticateWithPINOnPCIUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.PhoneDialer
+import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 internal class CardSettingsViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel() {
+    private val analyticsManager: AnalyticsServiceContract
+) : BaseViewModel(), KoinComponent {
 
-    var showGetPin: MutableLiveData<Boolean> = MutableLiveData()
-    var showSetPin: MutableLiveData<Boolean> = MutableLiveData()
-    var cardLocked: MutableLiveData<Boolean> = MutableLiveData()
-    var faq: MutableLiveData<Content> = MutableLiveData()
-    var cardholderAgreement: MutableLiveData<Content> = MutableLiveData()
-    var privacyPolicy: MutableLiveData<Content> = MutableLiveData()
-    var termsAndConditions: MutableLiveData<Content> = MutableLiveData()
-    var cardDetails: MutableLiveData<CardDetails?> = MutableLiveData()
-    var cardDetailsShown: MutableLiveData<Boolean> = MutableLiveData()
-    var showIvrSupport: MutableLiveData<Boolean> = MutableLiveData()
+    private val clearCardDetails: ClearCardDetailsUseCase by inject()
+    private val fetchRemoteCardDetailsUseCase: FetchRemoteCardDetailsUseCase by inject()
+    private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
+    private val shouldAuthenticateWithPINOnPCIUseCase: ShouldAuthenticateWithPINOnPCIUseCase by inject()
+
+    val showGetPin: MutableLiveData<Boolean> = MutableLiveData()
+    val showSetPin: MutableLiveData<Boolean> = MutableLiveData()
+    val cardLocked: MutableLiveData<Boolean> = MutableLiveData()
+    val faq: MutableLiveData<Content> = MutableLiveData()
+    val cardholderAgreement: MutableLiveData<Content> = MutableLiveData()
+    val privacyPolicy: MutableLiveData<Content> = MutableLiveData()
+    val termsAndConditions: MutableLiveData<Content> = MutableLiveData()
+    val showIvrSupport: MutableLiveData<Boolean> = MutableLiveData()
+
+    val cardDetailsFetchedCorrectly = LiveEvent<Boolean>()
+    val authenticateCardDetails = LiveEvent<Boolean>()
+
+    val hasCardDetails: LiveData<Boolean> = Transformations.map(getCardDetailsLiveData()) { details -> details != null }
 
     private var card: Card? = null
     private var cardProduct: CardProduct? = null
     private var phoneDialer: PhoneDialer? = null
 
-    fun viewResumed(card: Card, cardDetailsShown: Boolean, cardProduct: CardProduct) {
+    private fun getCardDetailsLiveData() =
+        fetchLocalCardDetailsUseCase().either({ MutableLiveData<CardDetails?>(null) }, { it }) as LiveData<CardDetails?>
+
+    fun viewResumed(card: Card, cardProduct: CardProduct) {
         this.card = card
         this.cardProduct = cardProduct
-        this.cardDetailsShown.postValue(cardDetailsShown)
         updateViewModel()
     }
 
@@ -58,7 +80,7 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun unlockCard(onComplete: (Unit) -> Unit) {
-        card?.accountID?.let{ accountId ->
+        card?.accountID?.let { accountId ->
             AptoPlatform.unlockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     this.card = it
@@ -70,7 +92,7 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun lockCard(onComplete: (Unit) -> Unit) {
-        card?.accountID?.let{ accountId ->
+        card?.accountID?.let { accountId ->
             AptoPlatform.lockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     this.card = it
@@ -81,24 +103,44 @@ internal class CardSettingsViewModel constructor(
         }
     }
 
-    fun hideCardDetails() {
-        cardDetailsShown.postValue(false)
-        cardDetails.postValue(null)
+    fun viewLoaded() {
+        analyticsManager.track(Event.ManageCardCardSettings)
     }
 
-    fun getCardDetails(onComplete: () -> Unit) {
-        card?.accountID?.let { accountId ->
-            AptoPlatform.fetchCardDetails(accountId) { result ->
-                onComplete()
-                result.either(::handleFailure) {
-                    cardDetailsShown.postValue(true)
-                    cardDetails.postValue(it)
+    fun cardDetailsTapped(switchValue: Boolean) {
+        if (switchValue) {
+            shouldAuthenticateWithPINOnPCIUseCase().either(
+                {},
+                { needsAuthenticate ->
+                    if (needsAuthenticate) {
+                        authenticateCardDetails.postValue(true)
+                    } else {
+                        cardDetailsAuthenticationSuccessful()
+                    }
                 }
-            }
+            )
+        } else {
+            clearCardDetails()
         }
     }
 
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardCardSettings)
+    fun cardDetailsAuthenticationSuccessful() {
+        card?.accountID?.let { accountId ->
+            viewModelScope.launch {
+                showLoading()
+                fetchRemoteCardDetailsUseCase(Params(accountId)).either(
+                    {
+                        cardDetailsFetchedCorrectly.postValue(false)
+                        handleFailure(it)
+                    },
+                    {
+                        cardDetailsFetchedCorrectly.postValue(true)
+                    })
+            }.invokeOnCompletion { hideLoading() }
+        }
+    }
+
+    fun cardDetailsAuthenticationCancelled() {
+        cardDetailsFetchedCorrectly.postValue(false)
     }
 }

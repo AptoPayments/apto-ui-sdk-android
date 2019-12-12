@@ -12,5 +12,6 @@ interface AccountSettingsContract {
         fun onAccountSettingsClosed()
         fun onMonthlyStatementTapped()
         fun onLogOut()
+        fun onChangePasscodeTapped()
     }
 }

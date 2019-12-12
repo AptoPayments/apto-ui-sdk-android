@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
+import com.aptopayments.core.extension.localized
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -12,6 +13,8 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
+import com.aptopayments.sdk.features.pin.CreatePINFlow
+import com.aptopayments.sdk.utils.MessageBanner
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.lang.reflect.Modifier
@@ -53,6 +56,20 @@ internal class AccountSettingsFlow(
     override fun onLogOut() {
         aptoPlatformProtocol.logout()
         analyticsManager.logoutUser()
+    }
+
+    override fun onChangePasscodeTapped() {
+        val flow = CreatePINFlow(
+            onBack = { popFlow(true) },
+            onFinish = {
+                popFlow(true)
+                notify(
+                    "biometric_change_pin_success_title".localized(),
+                    "biometric_change_pin_success_message".localized(),
+                    MessageBanner.MessageType.SUCCESS
+                )
+            })
+        flow.init { initResult -> initResult.either(::handleFailure) { push(flow, false) } }
     }
 
     //

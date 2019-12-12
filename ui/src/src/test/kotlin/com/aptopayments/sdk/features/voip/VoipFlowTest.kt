@@ -6,8 +6,8 @@ import com.aptopayments.core.data.voip.Action
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin

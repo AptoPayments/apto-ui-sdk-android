@@ -68,7 +68,6 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
     override fun setupUI() {
         setupToolbar()
         setUpTheme()
-        setUpTexts()
         setupRecycler()
     }
 
@@ -106,10 +105,6 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
 
     override fun onBackPressed() {
         delegate?.onBackPressed()
-    }
-
-    private fun setUpTexts() {
-        statements_list_empty_message.text = "monthly_statements_list_empty_case_message".localized()
     }
 
     private fun setUpTheme() {

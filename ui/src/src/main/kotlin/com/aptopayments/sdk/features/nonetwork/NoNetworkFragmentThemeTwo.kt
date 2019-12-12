@@ -1,11 +1,9 @@
 package com.aptopayments.sdk.features.nonetwork
 
-import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.extension.localized
 import com.aptopayments.core.network.ApiCatalog
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.sdk.R
@@ -55,10 +53,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         super.onStop()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun setupUI() {
-        tv_description_text.text = "no_network.description".localized()
-        tv_loading_text.text = "no_network.reconnect.title".localized()
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
         view!!.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tv_description_text.setTextColor(UIConfig.textTopBarSecondaryColor)

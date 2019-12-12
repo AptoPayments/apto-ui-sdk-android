@@ -17,9 +17,9 @@ import com.aptopayments.sdk.features.cardproductselector.countryselector.Country
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin

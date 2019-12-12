@@ -19,18 +19,20 @@ class TextInputWatcher(
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
     override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
-            val inputToValidate = charSequence.toString()
-        regexValidator?.let {
-            callback.onValidInput(it.toRegex().matches(inputToValidate) && charSequence.toString().length >= minNumberCharacters)
-        } ?: callback.onValidInput(inputToValidate.length >= minNumberCharacters)
+        val isValid = isValidInput(charSequence.toString())
+        callback.onValidInput(isValid)
     }
+
+    private fun isValidInput(input: String) =
+        isMinLengthValid(input) &&
+                (regexValidator?.let { it.toRegex().matches(input) && isMinLengthValid(input) } ?: true)
+
+    private fun isMinLengthValid(input: String) = input.length >= minNumberCharacters
 
     override fun afterTextChanged(string: Editable) {}
 
     private fun setMaxCharacters() {
-        val filterArray = arrayOfNulls<InputFilter>(1)
-        filterArray[0] = InputFilter.LengthFilter(minNumberCharacters)
+        val filterArray = arrayOf<InputFilter>(InputFilter.LengthFilter(minNumberCharacters))
         inputText.filters = filterArray
     }
-
 }

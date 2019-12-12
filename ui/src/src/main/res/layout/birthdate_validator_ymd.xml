@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/et_birthdate_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="5"
+    tools:showIn="@layout/fragment_birthdate_verification_theme_two">
+
+    <EditText
+        android:id="@+id/et_birthday_year"
+        style="@style/ThemeTwo.BirthDate.Year"
+        android:layout_weight="1.5"
+        android:hint="@string/birthdate_hint_yyyy" />
+
+    <include layout="@layout/include_vertical_separator" />
+
+    <EditText
+        android:id="@+id/et_birthday_month"
+        style="@style/ThemeTwo.BirthDate.Input"
+        android:layout_weight="1.75"
+        android:hint="@string/birthdate_hint_mm" />
+
+    <include layout="@layout/include_vertical_separator" />
+
+    <EditText
+        android:id="@+id/et_birthday_day"
+        style="@style/ThemeTwo.BirthDate.Input"
+        android:layout_weight="1.75"
+        android:hint="@string/birthdate_hint_dd" />
+
+</LinearLayout>

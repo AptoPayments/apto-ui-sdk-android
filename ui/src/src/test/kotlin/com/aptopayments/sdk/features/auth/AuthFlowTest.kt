@@ -14,8 +14,8 @@ import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

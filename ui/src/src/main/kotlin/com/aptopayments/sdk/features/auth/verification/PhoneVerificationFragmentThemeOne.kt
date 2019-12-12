@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.auth.verification
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -66,12 +65,7 @@ internal class PhoneVerificationFragmentThemeOne : BaseFragment(), PhoneVerifica
 
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.PHONE)
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_verification_code_title.text = "auth.verify_phone.explanation".localized()
-        tv_resend_label.text = "auth.verify_phone.footer".localized()
-        tv_resend_bttn.text = "auth.verify_phone.resend_button.title".localized()
-        tv_expired_pin_label.text = "auth.verify_phone.expired_pin.text".localized()
         tv_phone_number.text = phoneNumber
     }
 

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true"
@@ -13,235 +11,62 @@
         android:id="@+id/tb_llsdk_custom_toolbar"
         layout="@layout/include_custom_toolbar_two" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginLeft="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_105sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_20sdp"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tb_llsdk_custom_toolbar">
 
         <LinearLayout
-            android:id="@+id/ll_app_settings_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginEnd="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorAccent" />
+            <!-- Security -->
+            <include
+                android:id="@+id/rl_security"
+                layout="@layout/view_section_header_two" />
 
-            <TextView
-                android:id="@+id/tv_app_settings_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.60"
-                android:padding="@dimen/_4sdp"
-                tools:text="App settings" />
+            <include
+                android:id="@+id/rl_passcode"
+                layout="@layout/view_section_option_subtitle_two" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorAccent" />
+            <include
+                android:id="@+id/rl_fingerprint"
+                layout="@layout/view_section_switch_two" />
 
-            <RelativeLayout
+            <!-- Notifications -->
+            <include
+                android:id="@+id/rl_settings_header"
+                layout="@layout/view_section_header_two" />
+
+            <include
                 android:id="@+id/rl_notifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_13sdp"
-                android:background="?selectableItemBackground">
+                layout="@layout/view_section_option_subtitle_two" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp">
+            <!-- Support -->
+            <include
+                android:id="@+id/rl_support_header"
+                layout="@layout/view_section_header_two" />
 
-                    <TextView
-                        android:id="@+id/tv_notifications"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Notifications"
-                        tools:textColor="@color/title_color" />
+            <!-- Help & Info -->
+            <include
+                android:id="@+id/rl_contact_support"
+                layout="@layout/view_section_option_subtitle_two" />
 
-                    <TextView
-                        android:id="@+id/tv_notifications_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Your push and email notification preferences" />
-                </LinearLayout>
+            <!-- Monthly Statements -->
+            <include
+                android:id="@+id/rl_statements"
+                layout="@layout/view_section_option_subtitle_two" />
 
-                <ImageView
-                    android:id="@+id/iv_notifications_icon"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_27sdp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingStart="@dimen/_17sdp"
-                    android:paddingLeft="@dimen/_17sdp"
-                    android:src="@drawable/ic_row_arrow_white"
-                    tools:drawableTint="@color/title_color"
-                    tools:tint="@color/title_color" />
-            </RelativeLayout>
+            <!-- Signout -->
+            <include
+                android:id="@+id/rl_sign_out"
+                layout="@layout/view_section_option_subtitle_two" />
         </LinearLayout>
+    </ScrollView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/tv_support_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingMultiplier="1.60"
-            android:padding="@dimen/_4sdp"
-            tools:text="Support" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
-
-        <RelativeLayout
-            android:id="@+id/rl_contact_support"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_13sdp"
-            android:layout_marginBottom="@dimen/_13sdp"
-            android:background="?selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:paddingLeft="16dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_contact_support"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Help &amp; info"
-                    tools:textColor="@color/title_color" />
-
-                <TextView
-                    android:id="@+id/tv_contact_support_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Speak to our customer care team" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_help_center_icon"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_27sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingStart="@dimen/_17sdp"
-                android:paddingLeft="@dimen/_17sdp"
-                android:src="@drawable/ic_row_arrow_white"
-                tools:drawableTint="@color/title_color"
-                tools:tint="@color/title_color" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/statements_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_13sdp"
-            android:layout_marginBottom="@dimen/_13sdp"
-            android:paddingStart="16dp"
-            android:background="?selectableItemBackground">
-
-            <TextView
-                android:id="@+id/statements_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Monthly Statements"
-                tools:textColor="@color/title_color" />
-
-            <TextView
-                android:id="@+id/statements_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/statements_title"
-                tools:text="Speak to our customer care team" />
-
-            <ImageView
-                android:id="@+id/statements_icon"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_27sdp"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="@dimen/_17sdp"
-                android:paddingLeft="@dimen/_17sdp"
-                android:src="@drawable/ic_row_arrow_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:drawableTint="@color/title_color"
-                tools:tint="@color/title_color" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/statements_separator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
-
-        <RelativeLayout
-            android:id="@+id/rl_sign_out"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_12sdp"
-            android:background="?selectableItemBackground">
-
-            <TextView
-                android:id="@+id/tv_sign_out"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:paddingLeft="16dp"
-                tools:drawableTint="@color/title_color"
-                tools:text="Log out" />
-
-            <ImageView
-                android:id="@+id/iv_sign_out_icon"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_27sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingStart="@dimen/_17sdp"
-                android:paddingLeft="@dimen/_17sdp"
-                android:src="@drawable/ic_row_arrow_white"
-                tools:drawableTint="@color/title_color"
-                tools:tint="@color/title_color" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -6,7 +6,7 @@ import com.aptopayments.core.data.user.notificationpreferences.NotificationGroup
 import com.aptopayments.core.data.user.notificationpreferences.NotificationPreferences
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

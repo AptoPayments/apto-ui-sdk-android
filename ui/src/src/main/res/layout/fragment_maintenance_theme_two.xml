@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -24,7 +24,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_maintenance" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_description_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,15 +32,17 @@
             android:layout_below="@+id/iv_maintenance"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            app:localize="maintenance_description" />
 
     </RelativeLayout>
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/continue_button"
         style="@style/ThemeTwo.ContinueButton"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/llsdk_medium_margin"
-        android:layout_marginBottom="@dimen/llsdk_medium_margin"/>
+        android:layout_marginBottom="@dimen/llsdk_medium_margin"
+        app:localize="maintenance.retry.title" />
 
 </RelativeLayout>

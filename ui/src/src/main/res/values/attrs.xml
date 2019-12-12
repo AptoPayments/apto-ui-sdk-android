@@ -5,4 +5,13 @@
     <declare-styleable name="toggle_image_button">
         <attr name="android:checked" />
     </declare-styleable>
+
+    <declare-styleable name="AptoTextView">
+        <attr name="localize" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SecretPinView">
+        <attr name="length" format="integer"/>
+        <attr name="showForgot" format="boolean" />
+        <attr name="showBiometric" format="boolean" />
+    </declare-styleable>
 </resources>

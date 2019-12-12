@@ -9,6 +9,7 @@ import com.aptopayments.core.platform.AptoPlatformDelegate
 import com.aptopayments.core.platform.AptoSdkEnvironment
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.di.applicationModule
+import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
@@ -26,7 +27,7 @@ object AptoUiSdk {
         apiKey: String,
         environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD
     ) {
-        AptoPlatform.setUiModules(listOf(applicationModule, viewModelModule))
+        AptoPlatform.setUiModules(listOf(applicationModule, useCaseModule, viewModelModule))
         AptoPlatform.initializeWithApiKey(application, apiKey, environment)
     }
 

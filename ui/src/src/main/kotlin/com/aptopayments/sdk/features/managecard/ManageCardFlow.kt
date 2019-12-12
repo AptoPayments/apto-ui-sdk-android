@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.managecard
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
@@ -17,7 +16,6 @@ import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.addbalance.AddBalanceFlow
-import com.aptopayments.sdk.features.biometric.BiometricDialogContract
 import com.aptopayments.sdk.features.card.account.AccountSettingsFlow
 import com.aptopayments.sdk.features.card.activatephysicalcard.ActivatePhysicalCardFlow
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
@@ -40,27 +38,19 @@ private const val TRANSACTION_DETAILS_TAG = "TransactionDetailsFragment"
 private const val CARD_SETTINGS_TAG = "CardSettingsFragment"
 private const val FUNDING_SOURCE_DIALOG_TAG = "FundingSourceDialogFragment"
 private const val CONTENT_PRESENTER_TAG = "ContentPresenterFragment"
-private const val BIOMETRIC_DIALOG_TAG = "BiometricDialogFragment"
 private const val WAITLIST_TAG = "WaitlistFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ManageCardFlow (
         val cardId: String,
         val contextConfiguration: ContextConfiguration,
         var onClose: (Unit) -> Unit
-) : Flow(),
-    ManageCardContract.Delegate, FundingSourceContract.Delegate, CardSettingsContract.Delegate,
-        ContentPresenterContract.Delegate, BiometricDialogContract.Delegate,
-        TransactionDetailsContract.Delegate, WaitlistContract.Delegate {
+) : Flow(), ManageCardContract.Delegate, FundingSourceContract.Delegate, CardSettingsContract.Delegate,
+    ContentPresenterContract.Delegate, TransactionDetailsContract.Delegate, WaitlistContract.Delegate {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     val manageCardFragment: ManageCardContract.View?
         get() = fragmentWithTag(MANAGE_CARD_TAG) as? ManageCardContract.View
-
-    private var onBiometricAuthSuccess: (() -> Unit)? = null
-    private var onBiometricsAuthFailure: (() -> Unit)? = null
-    private var onBiometricsAuthCancel: (() -> Unit)? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
@@ -112,9 +102,6 @@ internal class ManageCardFlow (
             it.delegate = this
         }
         (fragmentWithTag(CONTENT_PRESENTER_TAG) as? ContentPresenterContract.View)?.let {
-            it.delegate = this
-        }
-        (fragmentDialogWithTag(BIOMETRIC_DIALOG_TAG) as? BiometricDialogContract.View)?.let {
             it.delegate = this
         }
     }
@@ -259,7 +246,7 @@ internal class ManageCardFlow (
     //
     // Card Settings
     //
-    override fun onCardSettingsTapped(card: Card, cardDetailsShown: Boolean) {
+    override fun onCardSettingsTapped(card: Card) {
         showLoading()
         card.cardProductID?.let { cardProductId ->
             aptoPlatformProtocol.fetchCardProduct(cardProductId, false) {
@@ -268,7 +255,6 @@ internal class ManageCardFlow (
                     val fragment = fragmentFactory.cardSettingsFragment(
                             uiTheme = UIConfig.uiTheme,
                             card = card,
-                            cardDetailsShown = cardDetailsShown,
                             cardProduct = cardProduct,
                             projectConfiguration = contextConfiguration.projectConfiguration,
                             tag = CARD_SETTINGS_TAG)
@@ -302,26 +288,6 @@ internal class ManageCardFlow (
         rootActivity()?.let {activity ->
             SendEmailUtil(recipient, subject, body).execute(activity)
         }
-    }
-
-    override fun cardDetailsChanged(cardDetails: CardDetails?) {
-        manageCardFragment?.cardDetailsChanged(cardDetails)
-    }
-
-    override fun askForBiometricAuthentication(title: String, description: String,
-                                               onAuthSuccess: () -> Unit,
-                                               onAuthFailure: () -> Unit,
-                                               onAuthCancel: () -> Unit) {
-        val fragment = fragmentFactory.biometricDialogFragment(
-                uiTheme = UIConfig.uiTheme,
-                title = title,
-                description = description,
-                tag = BIOMETRIC_DIALOG_TAG)
-        fragment.delegate = this
-        onBiometricAuthSuccess = onAuthSuccess
-        onBiometricsAuthFailure = onAuthFailure
-        onBiometricsAuthCancel = onAuthCancel
-        push(fragment as BaseDialogFragment)
     }
 
     override fun onCardStateChanged() {
@@ -364,28 +330,6 @@ internal class ManageCardFlow (
 
     private fun popAnimatedFlow(){
         popFlow(true)
-    }
-
-    //
-    // Biometric Authentication
-    //
-    override fun onAuthNotAvailable() = popDialogFragmentWithTag(BIOMETRIC_DIALOG_TAG)
-
-    override fun onAuthSuccess() {
-        popDialogFragmentWithTag(BIOMETRIC_DIALOG_TAG)
-        onBiometricAuthSuccess?.invoke()
-        onBiometricAuthSuccess = null
-    }
-
-    override fun onAuthFailure() {
-        onBiometricsAuthFailure?.invoke()
-        onBiometricsAuthFailure = null
-        popDialogFragmentWithTag(BIOMETRIC_DIALOG_TAG)
-    }
-
-    override fun onAuthCancelled() {
-        onBiometricsAuthCancel?.invoke()
-        onBiometricsAuthCancel = null
     }
 
     //

@@ -72,18 +72,18 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     @SuppressLint("SetTextI18n")
     private fun showInsufficientFundsError() {
         showOrRemoveErrorAsset()
-        tv_issue_card_error_title.text = "issue_card.issue_card.error_insufficient_funds.title".localized()
-        tv_description.text = "issue_card.issue_card.error_insufficient_funds.description".localized()
-        tv_primary_cta.text = "issue_card.issue_card.error_insufficient_funds.primary_cta".localized()
+        tv_issue_card_error_title.localizedText = "issue_card.issue_card.error_insufficient_funds.title"
+        tv_description.localizedText = "issue_card.issue_card.error_insufficient_funds.description"
+        tv_primary_cta.localizedText = "issue_card.issue_card.error_insufficient_funds.primary_cta"
     }
 
     @SuppressLint("SetTextI18n")
     private fun showGenericError() {
         showOrRemoveErrorAsset()
-        tv_issue_card_error_title.text = "issue_card.issue_card.generic_error.title".localized()
-        tv_description.text = "issue_card.issue_card.generic_error.description".localized()
+        tv_issue_card_error_title.localizedText = "issue_card.issue_card.generic_error.title"
+        tv_description.localizedText = "issue_card.issue_card.generic_error.description"
         tv_secondary_cta.remove()
-        tv_primary_cta.text = "issue_card.issue_card.generic_error.primary_cta".localized()
+        tv_primary_cta.localizedText = "issue_card.issue_card.generic_error.primary_cta"
     }
 
     private fun showOrRemoveErrorAsset() {

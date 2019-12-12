@@ -7,7 +7,7 @@ import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.ISO8601
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockitokotlin2.given
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

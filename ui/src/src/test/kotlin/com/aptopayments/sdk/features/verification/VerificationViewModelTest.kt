@@ -9,8 +9,8 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

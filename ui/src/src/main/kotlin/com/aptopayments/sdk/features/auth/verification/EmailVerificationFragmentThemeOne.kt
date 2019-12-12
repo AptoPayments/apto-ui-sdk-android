@@ -66,10 +66,6 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_verification_code_title.text = "auth.verify_email.explanation".localized()
-        tv_resend_label.text = "auth.verify_email.footer".localized()
-        tv_resend_btn.text = "auth.verify_email.resend_button.title".localized()
-        tv_expired_pin_label.text = "auth.verify_email.expired_pin.text".localized()
         tv_email_label.text = emailAddress
     }
 

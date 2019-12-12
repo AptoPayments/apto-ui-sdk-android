@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.aptopayments.sdk.features.card.cardstats.AptoPieChart
         android:id="@+id/chart"
@@ -22,7 +23,7 @@
         android:visibility="invisible"
         tools:visibility="visible">
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_center_text_title"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -30,7 +31,8 @@
             android:textAlignment="center"
             android:layout_gravity="center_horizontal"
             android:maxLines="1"
-            tools:text="Total Spent" />
+            tools:text="Total Spent"
+            app:localize="stats.monthly_spending.graph.title"/>
 
         <TextView
             android:id="@+id/tv_center_text_amount"
@@ -76,7 +78,7 @@
             android:visibility="invisible"
             tools:visibility="visible"/>
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/monthly_statement_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +86,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:visibility="invisible"
-            tools:text="@string/stats_monthly_spending_view_statement"
+            app:localize="stats_monthly_spending_view_statement"
             tools:visibility="visible" />
     </LinearLayout>
 
@@ -99,7 +101,7 @@
         android:visibility="invisible"
         tools:visibility="visible" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,8 +110,8 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="21dp"
         android:visibility="invisible"
-        tools:visibility="visible"
-        tools:text="Categories"/>
+        app:localize="stats_monthly_spending_list_title"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/transaction_list_bottom_separator"
@@ -130,7 +132,7 @@
         android:visibility="invisible"
         tools:visibility="visible" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_no_transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -141,5 +143,7 @@
         android:layout_marginRight="@dimen/_64sdp"
         android:layout_marginBottom="@dimen/_64sdp"
         tools:text="There are no ..."
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        app:localize="stats_monthly_spending_list_empty_case"/>
+
 </RelativeLayout>

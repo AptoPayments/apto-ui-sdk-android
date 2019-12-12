@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card
 
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.config.ContextConfiguration
@@ -12,15 +11,16 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
+import com.aptopayments.sdk.core.usecase.ShouldCreatePINUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.AuthFlow
-import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.features.managecard.ManageCardFlow
 import com.aptopayments.sdk.features.newcard.NewCardFlow
+import com.aptopayments.sdk.features.pin.CreatePINFlow
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
+import com.aptopayments.sdk.repository.StatementRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val NO_NETWORK_TAG = "NoNetworkFragment"
 private const val MAINTENANCE_TAG = "MaintenanceFragment"
@@ -31,6 +31,7 @@ internal class CardFlow : Flow(), KoinComponent {
     private val networkHandler: NetworkHandler by inject()
     val analyticsManager: AnalyticsServiceContract by inject()
     private val statementRepository: StatementRepository by inject()
+    private val shouldCreatePinUseCase : ShouldCreatePINUseCase by inject()
 
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
@@ -90,38 +91,31 @@ internal class CardFlow : Flow(), KoinComponent {
         AptoPlatform.fetchCards { result ->
             result.either({ onComplete(Either.Left(it)) }) { cards ->
                 cards.firstOrNull { it.state != Card.CardState.CANCELLED }?.let { card ->
-                    initManageCardFlow(cardId = card.accountID, onComplete = onComplete)
+                    initSetLoginPinFlow(cardId = card.accountID, onInitComplete = onComplete)
                 } ?: initCardProductSelectorFlow(onComplete)
             }
         }
     }
 
-    private fun showNewOrExistingCardFlow(onComplete: (Either<Failure, Unit>) -> Unit) {
+    private fun showNewOrExistingCardFlow() {
         showLoading()
         initNewOrExistingCardFlow { initResult ->
             hideLoading()
-            initResult.either({ onComplete(Either.Left(it))} ) { flow ->
-                push(flow = flow, animated = true)
-            }
+            initResult.either(::handleFailure) { flow -> push(flow = flow, animated = true) }
         }
     }
 
     //
     // Auth Flow
     //
-    private fun initAuthFlow(onComplete: (Either<Failure, Flow>) -> Unit) {
+    private fun initAuthFlow(onInitComplete: (Either<Failure, Flow>) -> Unit) {
         val flow = AuthFlow(
                 contextConfiguration = contextConfiguration,
                 onBack = { rootActivity()?.finish() },
-                onFinish= {
-                    showNewOrExistingCardFlow {
-                        result -> result.either(::handleFailure) {} }
-                }
+                onFinish = { showNewOrExistingCardFlow() }
         )
         flow.init { initResult ->
-            initResult.either({ onComplete(Either.Left(it)) }) {
-                onComplete(Either.Right(flow))
-            }
+            initResult.either({ onInitComplete(Either.Left(it)) }, { onInitComplete(Either.Right(flow)) })
         }
     }
 
@@ -147,7 +141,7 @@ internal class CardFlow : Flow(), KoinComponent {
         val flow = NewCardFlow(
                 cardProductId = cardProductId,
                 onBack = { rootActivity()?.finish() },
-                onFinish = { cardId -> showManageCardFlow(cardId) }
+                onFinish = { cardId -> showSetLoginPinFlow(cardId) }
         )
         showLoading()
         flow.init { initResult ->
@@ -218,23 +212,43 @@ internal class CardFlow : Flow(), KoinComponent {
     //
     // Manage Card Flow
     //
-    private fun showManageCardFlow(cardId: String) = initManageCardFlow(cardId = cardId) { initResult ->
-        initResult.either({ ::handleFailure }) { flow ->
-            clearChildElements()
-            push(flow = flow)
-        }
-    }
-
-    private fun initManageCardFlow(cardId: String, onComplete: (Either<Failure, Flow>) -> Unit) {
-        val flow = ManageCardFlow(
-                cardId = cardId,
-                contextConfiguration = contextConfiguration,
-                onClose = { rootActivity()?.finish() }
-        )
-        flow.init { initResult ->
-            initResult.either({ onComplete (Either.Left(it)) }) {
-                onComplete(Either.Right(flow))
+    private fun showSetLoginPinFlow(cardId: String) {
+        initSetLoginPinFlow(cardId) { initResult ->
+            initResult.either({ ::handleFailure }) { flow ->
+                clearChildElements()
+                push(flow = flow)
             }
         }
     }
+
+    private fun initSetLoginPinFlow(cardId: String, onInitComplete: (Either<Failure, Flow>) -> Unit) {
+        val shouldCreate = shouldCreatePinUseCase().either({ false }, { it }) as Boolean
+        if (shouldCreate) {
+            val flow = CreatePINFlow(onFinish = { showManageCardFlow(cardId) })
+            flow.init { initResult ->
+                initResult.either({ onInitComplete(Either.Left(it)) }) { onInitComplete(Either.Right(flow)) }
+            }
+        } else {
+            initManageCardFlow(cardId, onInitComplete)
+        }
+    }
+
+    private fun showManageCardFlow(cardId: String) {
+        initManageCardFlow(cardId = cardId) { initResult ->
+            initResult.either({ ::handleFailure }) { flow ->
+                clearChildElements()
+                push(flow = flow)
+            }
+        }
+    }
+
+    private fun initManageCardFlow(cardId: String, onInitComplete: (Either<Failure, Flow>) -> Unit) {
+        val flow = ManageCardFlow(cardId, contextConfiguration, onClose = { rootActivity()?.finish() })
+        flow.init { initResult ->
+            initResult.either({ onInitComplete(Either.Left(it)) }) {
+                onInitComplete(Either.Right(flow))
+            }
+        }
+    }
+
 }

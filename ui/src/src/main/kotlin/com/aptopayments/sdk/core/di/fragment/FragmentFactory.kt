@@ -19,7 +19,6 @@ import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
-import com.aptopayments.sdk.features.biometric.BiometricDialogContract
 import com.aptopayments.sdk.features.card.account.AccountSettingsContract
 import com.aptopayments.sdk.features.card.activatephysicalcard.activate.ActivatePhysicalCardContract
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessContract
@@ -45,6 +44,7 @@ import com.aptopayments.sdk.features.nonetwork.NoNetworkContract
 import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
+import com.aptopayments.sdk.features.pin.CreatePinContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipContract
@@ -150,17 +150,10 @@ internal interface FragmentFactory {
     fun cardSettingsFragment(
             uiTheme: UITheme,
             card: Card,
-            cardDetailsShown: Boolean,
             cardProduct: CardProduct,
             projectConfiguration: ProjectConfiguration,
             tag: String
     ): CardSettingsContract.View
-    fun biometricDialogFragment(
-            uiTheme: UITheme,
-            title: String,
-            description: String,
-            tag: String
-    ): BiometricDialogContract.View
     fun transactionDetailsFragment(
             uiTheme: UITheme,
             transaction: Transaction,
@@ -234,4 +227,6 @@ internal interface FragmentFactory {
         uiTheme: UITheme,
         title: String, file: File, tag: String
     ): PdfRendererContract.View
+
+    fun createPinFragment(uiTheme: UITheme, tag: String): CreatePinContract.View
 }

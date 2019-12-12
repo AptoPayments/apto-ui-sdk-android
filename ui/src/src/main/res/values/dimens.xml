@@ -118,4 +118,6 @@
     <dimen name="text_size_xlarge_hi_Res">@dimen/_24sdp</dimen>
     <dimen name="text_size_xxlarge">26sp</dimen>
     <dimen name="text_size_xx_large_hi_res">@dimen/_26sdp</dimen>
+    <dimen name="pin_view_button_height">@dimen/_38sdp</dimen>
+    <dimen name="pin_view_button_margin">@dimen/_14sdp</dimen>
 </resources>

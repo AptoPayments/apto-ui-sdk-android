@@ -45,7 +45,6 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
         setupToolBar()
         applyFontsAndColors()
         et_email.hint = "auth_input_email_hint".localized()
-        tv_email_label.text = "auth_input_email_explanation".localized()
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

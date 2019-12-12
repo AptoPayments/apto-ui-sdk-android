@@ -1,10 +1,8 @@
 package com.aptopayments.sdk.features.maintenance
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.extension.localized
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -32,7 +30,6 @@ internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract
 
     override fun setupUI() {
         setupTheme()
-        setupTexts()
     }
 
     private fun setupTheme() {
@@ -43,12 +40,6 @@ internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract
             customizeContentPlainInvertedText(tv_description_text)
             customizeSubmitButton(continue_button)
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupTexts() {
-        tv_description_text.text = "maintenance.description".localized()
-        continue_button.text = "maintenance.retry.title".localized()
     }
 
     override fun setupListeners() = continue_button.setOnClickListener { networkHandler.checkMaintenanceMode() }

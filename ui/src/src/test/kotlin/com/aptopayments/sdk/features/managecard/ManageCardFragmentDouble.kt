@@ -10,7 +10,6 @@ internal class ManageCardFragmentDouble(override var delegate: ManageCardContrac
     override fun refreshTransactions() {}
     override fun refreshCardData() {}
     override fun refreshBalance() {}
-    override fun cardDetailsChanged(cardDetails: CardDetails?) {}
     override fun layoutId(): Int = 0
     override fun setupViewModel() {}
     override fun setupUI() {}

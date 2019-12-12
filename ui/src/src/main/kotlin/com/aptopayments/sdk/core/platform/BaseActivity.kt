@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.isVisible
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
@@ -19,6 +19,8 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_layout.*
 import kotlinx.android.synthetic.main.include_rl_loading.*
+
+private const val RECORD_REQUEST_CODE = 101
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -112,19 +114,22 @@ abstract class BaseActivity : AppCompatActivity() {
         object None : BackButtonMode()
     }
 
-    sealed class NextButtonMode {
-        class Next(val title: String?) : NextButtonMode()
-        object None : NextButtonMode()
-    }
-
     internal fun checkPermission(permission: String): Int {
         return ContextCompat.checkSelfPermission(this, permission)
     }
 
-    private val RECORD_REQUEST_CODE = 101
     internal fun requestPermission(permission: String, onResult: (Boolean) -> Unit) {
         onRequestPermissionsResult = onResult
         ActivityCompat.requestPermissions(this, arrayOf(permission), RECORD_REQUEST_CODE)
+    }
+
+    protected fun confirm(
+        title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit,
+        onCancel: (Unit) -> Unit
+    ) {
+        val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(this,
+            confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+        themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -141,4 +146,3 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 }
-

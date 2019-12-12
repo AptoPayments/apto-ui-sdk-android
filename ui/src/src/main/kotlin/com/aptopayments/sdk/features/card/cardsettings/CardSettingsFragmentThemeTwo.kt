@@ -7,11 +7,7 @@ import android.widget.Switch
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.card.CardDetails
-import com.aptopayments.core.data.card.FeatureType.Api
-import com.aptopayments.core.data.card.FeatureType.Ivr
-import com.aptopayments.core.data.card.FeatureType.Unknown
-import com.aptopayments.core.data.card.FeatureType.Voip
+import com.aptopayments.core.data.card.FeatureType.*
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.config.ProjectConfiguration
 import com.aptopayments.core.data.config.UIConfig
@@ -23,12 +19,11 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.card.CardActivity
+import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
-import com.aptopayments.sdk.utils.BiometricAuthenticator
-import com.aptopayments.sdk.utils.BiometricAvailability.*
-import com.aptopayments.sdk.utils.runOnUiThreadAfter
 import kotlinx.android.synthetic.main.fragment_card_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
@@ -36,7 +31,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
-private const val CARD_DETAILS_SHOWN_KEY = "CARD_DETAILS_SHOWN"
 private const val CARD_PRODUCT_KEY = "CARD_PRODUCT"
 private const val PROJECT_CONFIGURATION_KEY = "PROJECT_CONFIGURATION"
 
@@ -44,7 +38,6 @@ private const val PROJECT_CONFIGURATION_KEY = "PROJECT_CONFIGURATION"
 internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContract.View {
 
     private lateinit var card: Card
-    private var cardDetailsShown = false
     private lateinit var cardProduct: CardProduct
     private lateinit var projectConfiguration: ProjectConfiguration
     private val viewModel: CardSettingsViewModel by viewModel()
@@ -52,14 +45,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun layoutId(): Int = R.layout.fragment_card_settings_theme_two
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) cardDetailsShown = savedInstanceState.getBoolean(CARD_DETAILS_SHOWN_KEY)
-    }
-
     override fun setUpArguments() {
         card = arguments!![CARD_KEY] as Card
-        cardDetailsShown = arguments!![CARD_DETAILS_SHOWN_KEY] as Boolean
         cardProduct = arguments!![CARD_PRODUCT_KEY] as CardProduct
         projectConfiguration = arguments!![PROJECT_CONFIGURATION_KEY] as ProjectConfiguration
     }
@@ -71,24 +58,41 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(CARD_DETAILS_SHOWN_KEY, cardDetailsShown)
-    }
-
     override fun setupViewModel() {
         viewModel.apply {
             observe(showGetPin, ::handleShowGetPin)
             observe(showSetPin, ::handleShowSetPin)
             observe(cardLocked, ::handleCardLocked)
-            observe(cardDetailsShown, ::handleCardDetailsShown)
             observe(showIvrSupport, ::handleShowIvrSupport)
-            observeNullable(cardDetails, ::handleCardDetails)
             observe(faq, ::handleFaq)
             observeThree(cardholderAgreement, privacyPolicy, termsAndConditions, ::handleLegalSectionVisibility)
-            failure(failure) { handleFailure(it) }
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
+            failure(viewModel.failure) { handleFailure(it) }
+            observeNotNullable(cardDetailsFetchedCorrectly) {manageCardDetailsFetched(it) }
+            observeNotNullable(hasCardDetails) { value -> silentlySetCardDetailSwitchValue(value) }
+            observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
         }
-        viewModel.viewResumed(card = card, cardDetailsShown = cardDetailsShown, cardProduct = cardProduct)
+        viewModel.viewResumed(card = card, cardProduct = cardProduct)
+    }
+
+    private fun handleAuthenticateCardDetails(authenticationNeeded: Boolean) {
+        if (authenticationNeeded) {
+            (activity as CardActivity).authenticate(AuthenticationView.AuthType.OPTIONAL,
+                onCancelled = { viewModel.cardDetailsAuthenticationCancelled() },
+                onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() })
+        }
+    }
+
+    private fun manageCardDetailsFetched(fetched: Boolean) {
+        if (fetched) {
+            onBackPressed()
+        } else {
+            silentlySetCardDetailSwitchValue(false)
+        }
+    }
+
+    private fun silentlySetCardDetailSwitchValue(value: Boolean) {
+        silentlySetSwitch(rl_card_info.sw_tv_section_switch_switch, value) { cardDetailsTapped(it) }
     }
 
     private fun handleShowIvrSupport(value: Boolean?) =
@@ -97,19 +101,6 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private fun handleShowGetPin(value: Boolean?) = if (value == true) rl_get_pin.show() else rl_get_pin.remove()
 
     private fun handleShowSetPin(value: Boolean?) = if (value == true) rl_set_pin.show() else rl_set_pin.remove()
-
-    private fun handleCardDetailsShown(value: Boolean?) {
-        if (rl_card_info.sw_tv_section_switch_switch.isChecked != value) {
-            silentlyToggleSwitch(rl_card_info.sw_tv_section_switch_switch, ::showHideCardDetails)
-        }
-        else if (value == true) {
-            onBackPressed()
-        }
-    }
-
-    private fun handleCardDetails(cardDetails: CardDetails?) {
-        delegate?.cardDetailsChanged(cardDetails)
-    }
 
     private fun handleCardLocked(value: Boolean?) {
         if (rl_lock_card.sw_tv_section_switch_switch.isChecked != value) {
@@ -144,7 +135,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         rl_get_pin.setOnClickListener { getPinPressed() }
         rl_set_pin.setOnClickListener { setPinPressed() }
         rl_card_info.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
-            showHideCardDetails(value)
+            cardDetailsTapped(value)
         }
         rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             lockUnlockCard(value)
@@ -318,93 +309,37 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         }
     }
 
-    private fun showHideCardDetails(value: Boolean) {
-        if (!value) viewModel.hideCardDetails()
-        else {
-            context?.let { context ->
-                val availability = BiometricAuthenticator.authAvailable(context)
-                when (availability) {
-                    AVAILABLE -> {
-                        // Show the biometric authentication dialog here
-                        delegate?.askForBiometricAuthentication(
-                                title = "card_settings.show_card_data.biometrics.title".localized(),
-                                description = "card_settings.show_card_data.biometrics.description".localized(),
-                                onAuthSuccess = {
-                                    showLoading()
-                                    viewModel.getCardDetails {
-                                        hideLoading()
-                                    }
-                                },
-                                onAuthFailure = {
-                                    notify("biometrics_fingerprint_authentication_failed".localized())
-                                    // We need to update the state of the switch after a small delay
-                                    // otherwise the Switch ends in an inconsistent state. This might
-                                    // be due to previous UI operation not finished yet or because the UI
-                                    // of the biometric is still shown.
-                                    runOnUiThreadAfter(30, activity) {
-                                        silentlyToggleSwitch(rl_card_info.sw_tv_section_switch_switch, ::showHideCardDetails)
-                                    }
-                                },
-                                onAuthCancel = {
-                                    silentlyToggleSwitch(rl_card_info.sw_tv_section_switch_switch, ::showHideCardDetails)
-                                }
-                        )
-                    }
-                    FINGERPRINT_PERMISSION_REVOKED, FINGERPRINT_NOT_CONFIGURED, LOCK_SCREEN_SECURITY_DISABLED -> {
-                        notify(availability.toLocalizedDescription())
-                        silentlyToggleSwitch(rl_card_info.sw_tv_section_switch_switch, ::showHideCardDetails)
-                    }
-                    NO_FINGERPRINT_SUPPORTED_IN_ANDROID_SDK, NO_FINGERPRINT_SUPPORTED_IN_DEVICE -> {
-                        // No biometrics available. Just show / hide card details here
-                        showLoading()
-                        viewModel.getCardDetails {
-                            hideLoading()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun silentlyToggleSwitch(switch: Switch, listener: (value: Boolean) -> Unit) {
         switch.setOnCheckedChangeListener(null)
         switch.toggle()
         switch.setOnCheckedChangeListener { _, value -> listener(value) }
     }
 
+    private fun silentlySetSwitch(switch: Switch, isChecked: Boolean, listener: (value: Boolean) -> Unit) {
+        switch.setOnCheckedChangeListener(null)
+        switch.isChecked = isChecked
+        switch.setOnCheckedChangeListener { _, value -> listener(value) }
+    }
+
     private fun onFaqPressed() {
-        viewModel.faq.value?.let { content ->
-            delegate?.showContentPresenter(
-                    content = content,
-                    title = "card_settings.legal.faq.title".localized()
-            )
-        }
+        showContentPresenter(viewModel.faq.value, "card_settings.legal.faq.title")
     }
 
     private fun onCardholderAgreementPressed() {
-        viewModel.cardholderAgreement.value?.let { content ->
-            delegate?.showContentPresenter(
-                    content = content,
-                    title = "card_settings.legal.cardholder_agreement.title".localized()
-            )
-        }
+        showContentPresenter(viewModel.cardholderAgreement.value, "card_settings.legal.cardholder_agreement.title")
     }
 
     private fun onPrivacyPolicyPressed() {
-        viewModel.privacyPolicy.value?.let { content ->
-            delegate?.showContentPresenter(
-                    content = content,
-                    title = "card_settings.legal.privacy_policy.title".localized()
-            )
-        }
+        showContentPresenter(viewModel.privacyPolicy.value, "card_settings.legal.privacy_policy.title")
     }
 
     private fun onTermsAndConditionsPressed() {
-        viewModel.termsAndConditions.value?.let { content ->
-            delegate?.showContentPresenter(
-                    content = content,
-                    title = "card_settings.legal.terms_of_service.title".localized()
-            )
+        showContentPresenter(viewModel.termsAndConditions.value, "card_settings.legal.terms_of_service.title")
+    }
+
+    private fun showContentPresenter(content: Content?, titleToLocalize: String) {
+        content?.let {
+            delegate?.showContentPresenter(it, titleToLocalize.localized())
         }
     }
 
@@ -447,16 +382,18 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun viewLoaded() = viewModel.viewLoaded()
 
+    private fun cardDetailsTapped(value: Boolean) {
+        viewModel.cardDetailsTapped(value)
+    }
+
     companion object {
-        fun newInstance(card: Card, cardDetailsShown: Boolean, cardProduct: CardProduct,
-                        projectConfiguration: ProjectConfiguration) =
-                CardSettingsFragmentThemeTwo().apply {
-                    arguments = Bundle().apply {
-                        putSerializable(CARD_KEY, card)
-                        putBoolean(CARD_DETAILS_SHOWN_KEY, cardDetailsShown)
-                        putSerializable(CARD_PRODUCT_KEY, cardProduct)
-                        putSerializable(PROJECT_CONFIGURATION_KEY, projectConfiguration)
-                    }
+        fun newInstance(card: Card, cardProduct: CardProduct, projectConfiguration: ProjectConfiguration) =
+            CardSettingsFragmentThemeTwo().apply {
+                arguments = Bundle().apply {
+                    putSerializable(CARD_KEY, card)
+                    putSerializable(CARD_PRODUCT_KEY, cardProduct)
+                    putSerializable(PROJECT_CONFIGURATION_KEY, projectConfiguration)
                 }
+            }
     }
 }

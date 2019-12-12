@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:pinview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true">
 
@@ -18,13 +18,14 @@
         android:layout_below="@id/tb_llsdk_toolbar_layout"
         android:background="@drawable/scrim_top" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_verification_code_title"
         android:gravity="center"
         android:layout_marginTop="30dp"
         android:layout_below="@+id/toolbar_dropshadow"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+        android:layout_width="match_parent"
+        app:localize="auth_verify_email_explanation"/>
 
     <TextView
         android:id="@+id/tv_email_label"
@@ -46,16 +47,16 @@
             <com.dpizarro.pinview.library.PinView
                 android:id="@+id/apto_pin_view"
                 android:layout_marginTop="10dp"
-                pinview:sizeSplit="8dp"
-                pinview:drawablePinBox="@drawable/pin_box"
-                pinview:numberPinBoxes="6"
-                pinview:keyboardMandatory="false"
-                pinview:password="false"
+                app:sizeSplit="8dp"
+                app:drawablePinBox="@drawable/pin_box"
+                app:numberPinBoxes="6"
+                app:keyboardMandatory="false"
+                app:password="false"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/tv_expired_pin_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +65,9 @@
                 android:layout_alignEnd="@+id/apto_pin_view"
                 android:layout_alignBottom="@+id/apto_pin_view"
                 android:layout_margin="0dp"
-                android:gravity="center" />
+                android:gravity="center"
+                tools:visibility="gone"
+                app:localize="auth_verify_email_expired_pin_text"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -74,12 +77,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_resend_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_1sdp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    app:localize="auth_verify_email_footer" />
 
                 <TextView
                     android:id="@+id/tv_resend_countdown_label"
@@ -89,13 +93,14 @@
                     android:padding="@dimen/_1sdp"
                     android:gravity="center"/>
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_resend_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_resend_countdown_label"
                     android:padding="@dimen/_1sdp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    app:localize="auth_verify_email_resend_button_title"/>
 
             </RelativeLayout>
 

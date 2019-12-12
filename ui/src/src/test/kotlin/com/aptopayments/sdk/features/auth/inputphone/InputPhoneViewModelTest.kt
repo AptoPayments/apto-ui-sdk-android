@@ -8,8 +8,8 @@ import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -31,8 +31,7 @@ class InputPhoneViewModelTest: UnitTest() {
     @JvmField var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         sut = InputPhoneViewModel(analyticsManager)
     }
 

@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.managecard
 
 import android.annotation.SuppressLint
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
@@ -16,7 +17,10 @@ import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.core.platform.BaseViewModel
+import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +28,9 @@ import java.util.*
 internal class ManageCardViewModel constructor(
         private val getTransactionsQueue: FetchTransactionsTaskQueue,
         private var analyticsManager: AnalyticsServiceContract
-) : BaseViewModel() {
+) : BaseViewModel(), KoinComponent {
+
+    private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
 
     var card: MutableLiveData<Card> = MutableLiveData()
     var cardLoaded: MutableLiveData<Boolean> = MutableLiveData()
@@ -37,11 +43,7 @@ internal class ManageCardViewModel constructor(
     var spendableToday: MutableLiveData<Money?> = MutableLiveData()
     var nativeSpendableToday: MutableLiveData<Money?> = MutableLiveData()
     var showPhysicalCardActivationMessage: MutableLiveData<Boolean> = MutableLiveData()
-    var cardInfoVisible: MutableLiveData<Boolean?> = MutableLiveData()
-    var pan: MutableLiveData<String?> = MutableLiveData()
-    var cvv: MutableLiveData<String?> = MutableLiveData()
-    var expirationMonth: MutableLiveData<Int?> = MutableLiveData()
-    var expirationYear: MutableLiveData<Int?> = MutableLiveData()
+    val cardInfo: LiveData<CardDetails?> = getCardDetailsLiveData()
     var transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
     var fundingSource: MutableLiveData<Balance?> = MutableLiveData()
     var transactionListItems: MutableLiveData<List<TransactionListItem>> = MutableLiveData(listOf())
@@ -59,19 +61,7 @@ internal class ManageCardViewModel constructor(
         analyticsManager.track(Event.ManageCard)
     }
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    var cardInfoDataTimeout: Date? = null
-
     fun viewReady(cardId: String) {
-        cardInfoDataTimeout?.let { timeout ->
-            if (Date().after(timeout)) {
-                pan.postValue(null)
-                cvv.postValue(null)
-                expirationMonth.postValue(null)
-                expirationYear.postValue(null)
-                cardInfoVisible.postValue(false)
-            }
-        }
         transactionsInfoRetrieved.postValue(false)
         fetchData(cardId, forceApiCall = false, clearCachedValue = false) {
             backgroundRefresh(cardId = cardId)
@@ -89,6 +79,9 @@ internal class ManageCardViewModel constructor(
             onComplete()
         }
     }
+
+    private fun getCardDetailsLiveData() =
+        fetchLocalCardDetailsUseCase().either({ MutableLiveData<CardDetails?>(null) }, { it }) as LiveData<CardDetails?>
 
     private fun fetchData(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
         getCard(cardId = cardId, refresh = forceApiCall) { card ->
@@ -164,18 +157,6 @@ internal class ManageCardViewModel constructor(
 
     private fun handleCardBalance(balance: Balance) {
         fundingSource.postValue(balance)
-    }
-
-    internal fun cardDetailsChanged(cardDetails: CardDetails?) {
-        pan.postValue(cardDetails?.pan)
-        cvv.postValue(cardDetails?.cvv)
-        val components = cardDetails?.expirationDate?.split("-")
-        expirationYear.postValue(components?.first()?.toInt()?.let { year ->
-            if (year > 2000) year - 2000 else year
-        })
-        expirationMonth.postValue(components?.last()?.toInt())
-        cardInfoVisible.postValue(cardDetails != null)
-        cardInfoDataTimeout = Date().add(Calendar.MINUTE, 2)
     }
 
     fun refreshBalance(cardId: String) {

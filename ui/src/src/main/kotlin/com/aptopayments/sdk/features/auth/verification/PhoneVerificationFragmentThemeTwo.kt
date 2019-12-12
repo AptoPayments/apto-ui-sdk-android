@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.auth.verification
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -11,7 +10,10 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.hide
+import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -65,14 +67,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.PHONE)
 
-    @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        tv_verification_code_title.text = "auth.verify_phone.title".localized()
-        tv_verification_code_header.text = "auth.verify_phone.explanation".localized()
-        tv_resend_label.text = "auth.verify_phone.footer".localized()
-        tv_resend_bttn.text = "auth.verify_phone.resend_button.title".localized()
-        tv_expired_pin_label.text = "auth.verify_phone.expired_pin.text".localized()
-
         view!!.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
         with(themeManager()){
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

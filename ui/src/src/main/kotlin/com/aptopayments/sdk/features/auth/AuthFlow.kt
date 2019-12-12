@@ -29,9 +29,8 @@ private const val PHONE_VERIFICATION_TAG = "PhoneVerificationFragment"
 private const val EMAIL_VERIFICATION_TAG = "EmailVerificationFragment"
 private const val BIRTHDATE_VERIFICATION_TAG = "BirthdateVerificationFragment"
 private const val INPUT_EMAIL_TAG = "InputEmailFragment"
-
-private val AUTH_TYPE_EMAIL = "email"
-private val AUTH_TYPE_PHONE = "phone"
+private const val AUTH_TYPE_EMAIL = "email"
+private const val AUTH_TYPE_PHONE = "phone"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AuthFlow (

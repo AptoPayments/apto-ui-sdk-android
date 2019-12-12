@@ -122,4 +122,12 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     override fun clearChildElements() {}
     override fun removeFromStack(animated: Boolean) {}
     override fun onPresented() {}
+
+    fun handleLoading(isLoading: Boolean) {
+        if (isLoading) {
+            showLoading()
+        } else {
+            hideLoading()
+        }
+    }
 }

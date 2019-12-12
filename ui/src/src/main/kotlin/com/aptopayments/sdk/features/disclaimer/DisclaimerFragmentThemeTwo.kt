@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.disclaimer
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -37,7 +36,6 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
 
     override fun setupUI() {
         setUpTheme()
-        localizeStrings()
         showLoading()
         setUpContent()
     }
@@ -60,13 +58,6 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
             customizeSubmitButton(tv_accept_disclaimer)
             customizeFormTextLink(tv_reject_disclaimer)
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun localizeStrings() {
-        tv_accept_disclaimer.text = "disclaimer_disclaimer_call_to_action_title".localized()
-        tv_reject_disclaimer.text = "disclaimer_disclaimer_cancel_action_button".localized()
-        tv_disclaimer_title.text = "disclaimer_disclaimer_title".localized()
     }
 
     override fun setupListeners() {

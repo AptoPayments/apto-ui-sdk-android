@@ -8,8 +8,8 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationFragmentThemeOne
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
