@@ -8,19 +8,14 @@ import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.*
-import com.aptopayments.sdk.core.platform.AppLifecycleObserver
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.features.auth.birthdateverification.FormatOrderGenerator
+import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
-import com.aptopayments.sdk.repository.StatementRepository
-import com.aptopayments.sdk.repository.StatementRepositoryImpl
-import com.aptopayments.sdk.utils.DateProvider
-import com.aptopayments.sdk.utils.FileSharer
-import com.aptopayments.sdk.utils.FileSharerImpl
+import com.aptopayments.sdk.utils.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -28,27 +23,21 @@ import org.koin.dsl.module
 private const val PREF_FILE_NAME = "com.aptopayments.sdk.sharedPreference"
 
 internal val applicationModule = module {
-
+    factory<CoroutineDispatcherProvider> { ProductionDispatchers() }
     single<AuthStateProvider> { AuthStateProviderImpl() }
-
     single<FragmentFactory> { FragmentFactoryImpl() }
-
     single<AnalyticsServiceContract> { AnalyticsManager(androidApplication()) }
-
     single<VoipContract.Handler> { TwilioVoipImpl() }
-
     single<AptoPlatformProtocol> { AptoPlatform }
-
+    single<AptoUiSdkProtocol> { AptoUiSdk }
     factory<FileSharer> { FileSharerImpl() }
-
-    factory<StatementRepository> { StatementRepositoryImpl(androidContext()) }
-
+    factory<FileDownloader> { FileDownloaderImpl() }
+    factory<CacheFileManager> { CacheFileManagerImpl(get()) }
+    factory<StatementRepository> { StatementRepositoryImpl(get(), get(), get()) }
     single { provideSharedPreferences(androidApplication()) }
-
     factory<AuthenticationRepository> { AuthenticationRepositoryImpl(get()) }
-
     factory { DateProvider() }
-    single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get()) }
+    single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get(), get()) }
     factory<RemoteCardDetailsRepository> { RemoteCardDetailsRepositoryImpl() }
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }

@@ -193,7 +193,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         context?.let { context ->
             val clipData = ClipData.newPlainText("Card Number", pan)
             (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.let {
-                it.primaryClip = clipData
+                it.setPrimaryClip(clipData)
                 notify(
                     message = "manage_card_card_view_copy_pan_text".localized(),
                     type = MessageBanner.MessageType.SUCCESS

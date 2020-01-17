@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:map="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -31,7 +31,7 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                map:liteMode="true" />
+                tools:liteMode="true" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -59,6 +59,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
@@ -100,14 +101,77 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <include layout="@layout/rl_transaction_address" />
-
-            <include layout="@layout/info_banner"
-                android:id="@+id/rl_declined_transaction_banner"
-                android:layout_margin="16dp"
-                android:layout_height="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_address_holder"
                 android:layout_width="match_parent"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_address_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/llsdk_medium_margin"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="13dp"
+                    android:clickable="false"
+                    android:src="@drawable/ic_map_location" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/iv_address_icon"
+                    android:clickable="false"
+                    tools:text="152 Brick Ln, London E1 6RU, UK" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_declined_transaction_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/dialog_rounded_background"
+                android:visibility="gone"
+                tools:background="@color/colorSecondary"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_banner_icon"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:src="@drawable/ic_ico_declined" />
+
+                <LinearLayout
+                    android:id="@+id/ll_text_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/iv_banner_icon"
+                    android:orientation="vertical">
+
+                    <com.aptopayments.sdk.ui.views.AptoTextView
+                        android:id="@+id/tv_banner_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        app:localize="transaction_details_basic_info_declined_transaction_banner_title"
+                        tools:textColor="@color/colorTextSecondary" />
+
+                    <TextView
+                        android:id="@+id/tv_banner_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        tools:text="Description"
+                        tools:textColor="@color/colorTextSecondary" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/ll_address_separator"
@@ -125,10 +189,11 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_transaction_date_label"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:localize="transaction_details.basic_info.transaction_date.title" />
 
                 <TextView
                     android:id="@+id/tv_transaction_description"
@@ -145,10 +210,11 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_transaction_category_label"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:localize="transaction_details.details.category.title" />
 
                 <TextView
                     android:id="@+id/tv_transaction_category"
@@ -165,10 +231,11 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_transaction_funding_source_name_label"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:localize="transaction_details.basic_info.funding_source.title" />
 
                 <TextView
                     android:id="@+id/tv_transaction_funding_source_name"
@@ -194,12 +261,13 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                <TextView
+                <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_transaction_info_expandable_section_header"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/_5sdp" />
+                    android:paddingLeft="@dimen/_5sdp"
+                    app:localize="transaction_details_details_title" />
 
                 <ImageView
                     android:id="@+id/iv_transaction_info_arrow"
@@ -224,7 +292,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <RelativeLayout
                     android:id="@+id/rl_transaction_status_holder"
@@ -234,10 +303,11 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                    <TextView
+                    <com.aptopayments.sdk.ui.views.AptoTextView
                         android:id="@+id/tv_transaction_status_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:localize="transaction_details.basic_info.transaction_status.title" />
 
                     <TextView
                         android:id="@+id/tv_transaction_status"
@@ -254,10 +324,11 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                    <TextView
+                    <com.aptopayments.sdk.ui.views.AptoTextView
                         android:id="@+id/tv_transaction_device_type_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:localize="transaction_details.details.device_type.title" />
 
                     <TextView
                         android:id="@+id/tv_transaction_device_type"
@@ -272,10 +343,11 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-                    <TextView
+                    <com.aptopayments.sdk.ui.views.AptoTextView
                         android:id="@+id/tv_transaction_type_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:localize="transaction_details.details.transaction_type.title" />
 
                     <TextView
                         android:id="@+id/tv_transaction_type"

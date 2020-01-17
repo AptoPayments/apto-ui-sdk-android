@@ -39,7 +39,7 @@ class StatementListFlowTest : AndroidTest() {
     @Mock
     private lateinit var pdfRendererFragmentDelegate: PdfRendererContract.Delegate
 
-    private val statementFile: StatementFile by lazy { StatementFile(TITLE, file) }
+    private val statementFile: StatementFile by lazy { StatementFile(file, TITLE) }
 
     @Before
     override fun setUp() {

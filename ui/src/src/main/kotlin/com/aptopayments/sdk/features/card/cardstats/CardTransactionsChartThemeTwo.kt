@@ -21,7 +21,7 @@ import com.aptopayments.sdk.core.data.transaction.iconResource
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.repository.StatementRepository
+import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -72,8 +72,8 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {
-            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage())
-            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage())
+            is DownloadStatementUseCase.StatementExpiredFailure -> notify(failure.errorMessage())
+            is DownloadStatementUseCase.StatementDownloadFailure -> notify(failure.errorMessage())
             else -> super.handleFailure(failure)
         }
     }
@@ -81,7 +81,6 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     override fun onStart() {
         super.onStart()
         if (date == LocalDate.MAX) return
-        totalSpent = 0.0
         loadDataIfIsCurrentMonthOrBefore()
     }
 
@@ -185,6 +184,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     private fun generateEntriesAndUpdateTotalSpending(spendingList: List<CategorySpending>): ArrayList<PieEntry> {
         val entries = ArrayList<PieEntry>()
+        totalSpent = 0.0
         spendingList.forEachIndexed { index, categorySpending ->
             categorySpending.spending?.currency?.let { currency = it }
             categorySpending.spending?.amount?.toFloat()?.let {

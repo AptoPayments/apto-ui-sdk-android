@@ -2,25 +2,32 @@ package com.aptopayments.sdk.ui.views
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.invisibleIf
+import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.usecase.BiometricsAuthCorrectUseCase
 import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
 import com.aptopayments.sdk.core.usecase.VerifyPinUseCase
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
+import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_BIOMETRICS
+import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_PIN
 import kotlinx.android.synthetic.main.view_authentication.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.lang.ref.WeakReference
 
 private val DEFAULT_AUTH_TYPE = AuthenticationView.AuthType.FORCED
+private val DEFAULT_AUTH_METHOD = AuthenticationView.AuthMethod.BOTH
 
 internal class AuthenticationView @JvmOverloads constructor(
     context: Context,
@@ -35,6 +42,7 @@ internal class AuthenticationView @JvmOverloads constructor(
 
     private var isAuthenticating = false
     private var authType = DEFAULT_AUTH_TYPE
+    private var authMethod = DEFAULT_AUTH_METHOD
     private var weakActivity: WeakReference<BaseActivity>? = null
     private lateinit var keyListener: (View, Int, KeyEvent) -> Boolean
     var delegate: Delegate? = null
@@ -53,26 +61,37 @@ internal class AuthenticationView @JvmOverloads constructor(
         secret_pin_view.delegate = this
     }
 
-    fun startAuthentication(activity: BaseActivity, type: AuthType, onlyPin: Boolean = false) {
+    fun startAuthentication(activity: BaseActivity, type: AuthType, method: AuthMethod = AuthMethod.BOTH) {
         configureKeyListener()
-        authType = type
+        configureAuthType(type)
         isAuthenticating = true
+        authMethod = method
         weakActivity = WeakReference(activity)
-        showBiometricDialogIfPossible(activity, onlyPin)
+        showBiometricDialogIfPossible(activity)
+    }
+
+    private fun configureAuthType(type: AuthType) {
+        authType = type
+        iv_close_button.visibleIf(isAuthOptional())
     }
 
     private fun createKeyListener() {
         keyListener = { _, keyCode: Int, event: KeyEvent ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                if (authType == AuthType.OPTIONAL) {
-                    delegate?.onAuthCancelled()
-                    clearAuthentication()
-                }
+                if (isAuthOptional())
+                    authCancelled()
                 true
             } else {
                 false
             }
         }
+    }
+
+    private fun isAuthOptional() = authType == AuthType.OPTIONAL
+
+    private fun authCancelled() {
+        delegate?.onAuthCancelled()
+        clearAuthentication()
     }
 
     private fun configureKeyListener() {
@@ -87,8 +106,10 @@ internal class AuthenticationView @JvmOverloads constructor(
         setBackgroundColor(Color.WHITE)
     }
 
-    private fun configureUi() {
-        themeManager().loadLogoOnImageView(client_logo)
+    private fun configureUi() = with(themeManager()) {
+        loadLogoOnImageView(client_logo)
+        iv_close_button.setColorFilter(UIConfig.textTopBarPrimaryColor, PorterDuff.Mode.SRC_IN)
+        iv_close_button.setOnClickListener { authCancelled() }
     }
 
     private fun authenticationEndedCorrectly() {
@@ -97,15 +118,15 @@ internal class AuthenticationView @JvmOverloads constructor(
     }
 
     private fun clearAuthentication() {
-        authType = DEFAULT_AUTH_TYPE
         isAuthenticating = false
         setOnKeyListener(null)
         clearFocus()
         secret_pin_view.clean()
     }
 
-    private fun showBiometricDialogIfPossible(activity: BaseActivity, onlyPin: Boolean) {
-        if (!onlyPin) {
+    private fun showBiometricDialogIfPossible(activity: BaseActivity) {
+        secret_pin_view.invisibleIf(isOnlyBiometricsMethod())
+        if (!isOnlyPinMethod()) {
             canAskBiometricsUseCase().either({}, { canAsk ->
                 if (canAsk) {
                     showBiometricDialog(activity)
@@ -114,21 +135,36 @@ internal class AuthenticationView @JvmOverloads constructor(
         }
     }
 
+    private fun isOnlyPinMethod() = ONLY_PIN == authMethod
+
+    private fun isOnlyBiometricsMethod() = ONLY_BIOMETRICS == authMethod
+
     private fun showBiometricDialog(activity: BaseActivity) {
         biometricWrapper.showBiometricPrompt(
             activity,
             "auth_verify_biometric_title".localized(),
             "",
-            "auth_verify_biometric_use_passcode".localized(),
+            getBiometricsCancelText(),
             {
                 biometricsAuthCorrectUseCase()
                 authenticationEndedCorrectly()
             },
-            {})
+            {
+                if (isOnlyBiometricsMethod() && isAuthOptional()) {
+                    authCancelled()
+                }
+            })
     }
+
+    private fun getBiometricsCancelText() =
+        if (isOnlyBiometricsMethod()) "auth_verify_biometric_cancel".localized() else "auth_verify_biometric_use_passcode".localized()
 
     enum class AuthType {
         FORCED, OPTIONAL
+    }
+
+    enum class AuthMethod {
+        BOTH, ONLY_PIN, ONLY_BIOMETRICS
     }
 
     override fun onPinEntered(currentPin: String) {

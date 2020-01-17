@@ -7,21 +7,17 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.localized
-import com.aptopayments.core.extension.toTransactionDetailsFormat
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.data.transaction.iconResource
-import com.aptopayments.sdk.core.extension.hide
-import com.aptopayments.sdk.core.extension.remove
-import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
-import com.aptopayments.sdk.core.extension.show
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -35,21 +31,21 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_transaction_details_theme_two.*
-import kotlinx.android.synthetic.main.info_banner.*
-import kotlinx.android.synthetic.main.rl_transaction_address.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.lang.reflect.Modifier
 import kotlin.math.abs
 
 private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
 private const val TRANSACTION_KEY = "TRANSACTION"
+private const val ZOOM = 16f
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionDetailsContract.View, OnMapReadyCallback {
 
     override var delegate: TransactionDetailsContract.Delegate? = null
     private lateinit var transaction: Transaction
-    private val viewModel: TransactionDetailsViewModel by viewModel()
+    private val viewModel: TransactionDetailsViewModel by viewModel { parametersOf(transaction) }
     private var mMapView: MapView? = null
 
     override fun layoutId(): Int = R.layout.fragment_transaction_details_theme_two
@@ -104,6 +100,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
 
     override fun onDestroy() {
         super.onDestroy()
+        (activity as AppCompatActivity).setSupportActionBar(null)
         mMapView?.onDestroy()
     }
 
@@ -150,20 +147,17 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         delegate?.onTransactionDetailsBackPressed()
     }
 
-    override fun onMapReady(map: GoogleMap?) {
-        transaction.store?.let {
-            val latitude = it.latitude
-            val longitude = it.longitude
-            map?.uiSettings?.isMapToolbarEnabled = false
-            val latLng = longitude?.let { lng -> latitude?.let { lat -> LatLng(lat, lng) } }
-            transaction.merchant?.mcc?.let { mcc ->
-                latLng?.let { position ->
-                    val marker = MarkerOptions().position(position).icon(getMapMarker(mcc.iconResource))
-                    map?.addMarker(marker)
-                    map?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16.0f))
-                } ?: hideMap()
-            } ?: hideMap()
-        } ?: hideMap()
+    override fun onMapReady(map: GoogleMap) {
+        val configuration = MapConfigurationFactory().create(viewModel.transaction)
+        configuration?.let { configureMap(map, configuration) } ?: hideMap()
+    }
+
+    private fun configureMap(map: GoogleMap, config: MapConfiguration) {
+        map.uiSettings?.isMapToolbarEnabled = false
+        val latLng = LatLng(config.latitude, config.longitude)
+        val marker = MarkerOptions().position(latLng).icon(getMapMarker(config.iconResource))
+        map.addMarker(marker)
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM))
     }
 
     private fun setupTheme() {
@@ -173,7 +167,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         ll_address_separator.setBackgroundColor(UIConfig.uiTertiaryColor)
         ll_details_top_separator.setBackgroundColor(UIConfig.uiTertiaryColor)
         ll_details_bottom_separator.setBackgroundColor(UIConfig.uiTertiaryColor)
-        if (transaction.state == Transaction.TransactionState.DECLINED) {
+        if (viewModel.isDeclined) {
             rl_declined_transaction_banner.setBackgroundColorKeepShape(UIConfig.uiErrorColor)
             iv_banner_icon.setColorFilter(UIConfig.iconTertiaryColor)
             rl_declined_transaction_banner.show()
@@ -233,16 +227,13 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
 
     private fun setupTitle() {
         ll_header.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tv_title.text = transaction.transactionDescription
-        tv_subtitle_left.text = transaction.getLocalAmountRepresentation()
-        if (transaction.getNativeBalanceRepresentation().isNotBlank()
-                && transaction.localAmount?.currency != transaction.nativeBalance?.currency) {
-            tv_subtitle_right.text = String.format("≈ %s", transaction.getNativeBalanceRepresentation())
-        }
+        tv_title.text = viewModel.transactionDescription
+        tv_subtitle_left.text = viewModel.localAmountRepresentation
+        tv_subtitle_right.text = viewModel.nativeBalanceRepresentation
     }
 
     private fun getMapMarker(@DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
-        activity?.let {
+        context?.let {
             val backgroundDrawable = ContextCompat.getDrawable(it, R.drawable.ic_map_marker_icon)
             backgroundDrawable?.let { background ->
                 background.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
@@ -257,8 +248,11 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
                     val marginTop = (backgroundHeight * 0.4 - iconHeight * 0.5).toInt()
                     icon.setBounds(marginLeft, marginTop, iconWidth + marginLeft, iconHeight + marginTop)
                     icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
-                    val bitmap = Bitmap.createBitmap(background.intrinsicWidth, background.intrinsicHeight,
-                            Bitmap.Config.ARGB_8888)
+                    val bitmap = Bitmap.createBitmap(
+                        background.intrinsicWidth,
+                        background.intrinsicHeight,
+                        Bitmap.Config.ARGB_8888
+                    )
                     val canvas = Canvas(bitmap)
                     background.draw(canvas)
                     icon.draw(canvas)
@@ -276,59 +270,65 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     }
 
     private fun toggleDetails() {
-        if (ll_expandable_section.isShown) ll_expandable_section.hide() else ll_expandable_section.show()
-        if (ll_expandable_section.isShown) flipExpandableSectionArrowUp() else flipExpandableSectionArrowDown()
+        ll_expandable_section.invisibleIf(ll_expandable_section.isShown)
+        changeArrowDrawable()
     }
 
-    private fun flipExpandableSectionArrowUp() = context?.let {
-        iv_transaction_info_arrow.setImageDrawable(
-                ContextCompat.getDrawable(it, R.drawable.ic_arrow_drop_up_black_24dp))
+    private fun changeArrowDrawable() {
+        context?.let {
+            iv_transaction_info_arrow.setImageDrawable(ContextCompat.getDrawable(it, getArrowDrawable()))
+        }
     }
 
-    private fun flipExpandableSectionArrowDown() = context?.let {
-        iv_transaction_info_arrow.setImageDrawable(
-                ContextCompat.getDrawable(it, R.drawable.ic_arrow_drop_down_black_24dp))
-    }
+    private fun getArrowDrawable() =
+        if (ll_expandable_section.isShown) R.drawable.ic_arrow_drop_up_black_24dp else R.drawable.ic_arrow_drop_down_black_24dp
 
     @SuppressLint("SetTextI18n")
-    fun setupTexts() = context?.let {
-        transaction.store?.address?.let { address ->
-            if (address.toStringRepresentation() != address.country?.name) tv_address.text = address.toStringRepresentation()
-            else rl_address_holder.remove()
-        } ?: rl_address_holder.remove()
-        tv_transaction_date_label.text = "transaction_details.basic_info.transaction_date.title".localized()
-        tv_transaction_description.text = transaction.createdAt.toTransactionDetailsFormat()
-        transaction.merchant?.mcc?.toLocalizedString()?.let { category ->
-            tv_transaction_category_label.text = "transaction_details.details.category.title".localized()
-            tv_transaction_category.text = category
-        } ?: rl_transaction_category_holder.remove()
-        tv_transaction_info_expandable_section_header.text = "transaction_details_details_title".localized()
-        transaction.fundingSourceName?.let { name ->
-            tv_transaction_funding_source_name_label.text = "transaction_details.basic_info.funding_source.title".localized()
-            tv_transaction_funding_source_name.text = name
-        } ?: rl_transaction_funding_source_name_holder.remove()
-
-        val deviceType = transaction.deviceType().toLocalizedString()
-        if (deviceType.isEmpty()) {
-            rl_device_type_holder.remove()
-        } else {
-            tv_transaction_device_type_label.text = "transaction_details.details.device_type.title".localized()
-            tv_transaction_device_type.text = deviceType
-        }
-
-        tv_transaction_type_label.text = "transaction_details.details.transaction_type.title".localized()
-        tv_transaction_type.text = transaction.transactionType.toLocalizedString()
-        tv_transaction_status_label.text = "transaction_details.basic_info.transaction_status.title".localized()
-        tv_transaction_status.text = transaction.state.toLocalizedString()
-        tv_banner_title.text = "transaction_details.basic_info.declined_transaction_banner.title".localized()
-        tv_banner_description.text = transaction.declineCode?.toLocalizedString()
+    fun setupTexts() {
+        setAddressName()
+        tv_transaction_description.text = viewModel.createdAt
+        setMccText()
+        setFundingSourceName()
+        setDeviceTypeText()
+        tv_transaction_type.text = viewModel.transactionType
+        tv_transaction_status.text = viewModel.transactionStatus
+        tv_banner_description.text = viewModel.declinedDescription
     }
 
-    private fun setupAdjustmentsAdapter() = transaction.adjustments?.let { adjustments ->
-        val linearLayoutManager = LinearLayoutManager(activity)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        adjustments_recycler_view.layoutManager = linearLayoutManager
-        adjustments_recycler_view.adapter = AdjustmentsAdapter(transaction, adjustments)
+    private fun setAddressName() {
+        setTextOrRemoveHolderIfNullOrEmpty(tv_address, rl_address_holder, viewModel.addressName)
+    }
+
+    private fun setMccText() {
+        setTextOrRemoveHolderIfNullOrEmpty(
+            tv_transaction_category,
+            rl_transaction_category_holder,
+            viewModel.mccName
+        )
+    }
+
+    private fun setFundingSourceName() {
+        setTextOrRemoveHolderIfNullOrEmpty(
+            tv_transaction_funding_source_name,
+            rl_transaction_funding_source_name_holder,
+            viewModel.fundingSourceName
+        )
+    }
+
+    private fun setDeviceTypeText() {
+        setTextOrRemoveHolderIfNullOrEmpty(tv_transaction_device_type, rl_device_type_holder, viewModel.deviceType)
+    }
+
+    private fun setTextOrRemoveHolderIfNullOrEmpty(tv: TextView, holder: View, text: String?) {
+        holder.goneIf(text.isNullOrEmpty())
+        tv.text = text ?: ""
+    }
+
+    private fun setupAdjustmentsAdapter() {
+        adjustments_recycler_view.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        viewModel.transaction.adjustments?.let { adjustments ->
+            adjustments_recycler_view.adapter = AdjustmentsAdapter(viewModel.transaction, adjustments)
+        }
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

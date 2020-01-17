@@ -1,14 +1,6 @@
 package com.aptopayments.sdk.core.di
 
 import com.aptopayments.sdk.core.usecase.*
-import com.aptopayments.sdk.core.usecase.BiometricsAuthCorrectUseCase
-import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
-import com.aptopayments.sdk.core.usecase.ClearCardDetailsUseCase
-import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
-import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase
-import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnStartUpUseCase
-import com.aptopayments.sdk.core.usecase.ShouldAuthenticateWithPINOnPCIUseCase
-import com.aptopayments.sdk.core.usecase.VerifyPinUseCase
 import org.koin.dsl.module
 
 internal val useCaseModule = module {
@@ -23,5 +15,6 @@ internal val useCaseModule = module {
     factory { CanAskBiometricsUseCase(get(), get()) }
     factory { VerifyPinUseCase(get()) }
     factory { BiometricsAuthCorrectUseCase(get()) }
-    factory { ForgotPinUseCase() }
+    factory { ForgotPinUseCase(get()) }
+    factory { DownloadStatementUseCase(get()) }
 }

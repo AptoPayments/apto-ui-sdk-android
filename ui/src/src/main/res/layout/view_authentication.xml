@@ -5,6 +5,16 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <ImageView
+        android:id="@+id/iv_close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/ic_close"
+        android:background="?selectableItemBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/client_logo"
         android:layout_width="0dp"
         android:layout_height="@dimen/_40sdp"

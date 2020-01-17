@@ -2,11 +2,11 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
-import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 
-internal class ForgotPinUseCase : UseCaseWithoutParams<Unit>() {
+internal class ForgotPinUseCase(private val uiSdk: AptoUiSdkProtocol) : UseCaseWithoutParams<Unit>() {
     override fun run(): Either<Failure, Unit> {
-        AptoPlatform.logout()
+        uiSdk.logout()
         return Either.Right(Unit)
     }
 }

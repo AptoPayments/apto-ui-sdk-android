@@ -61,7 +61,7 @@ internal class AuthenticationRepositoryImpl(private val sharedPref: SharedPrefer
         sharedPref.edit().putString(PIN_VALUE, value).commit()
     }
 
-    override fun getPin() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE)
+    override fun getPin() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE)!!
 
     private fun getAuthenticationTime(): Either<Unit, LocalDateTime> {
         val lastAuth = sharedPref.getLong(LAST_BIOMETRIC_AUTH, DEFAULT_AUTH_TIME)

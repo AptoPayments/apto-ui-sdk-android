@@ -6,12 +6,11 @@ import android.os.Bundle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.remove
+import com.aptopayments.sdk.core.extension.removeAnimated
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.AppLifecycleObserver
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseActivity
-import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.usecase.ForgotPinUseCase
 import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnStartUpUseCase
 import com.aptopayments.sdk.ui.views.AuthenticationView
@@ -22,13 +21,16 @@ import org.koin.android.ext.android.inject
 
 class CardActivity : BaseActivity(), AuthenticationView.Delegate {
 
-    private val shouldAuthenticateOnStartupUseCase : ShouldAuthenticateOnStartUpUseCase by inject()
+    private val shouldAuthenticateOnStartupUseCase: ShouldAuthenticateOnStartUpUseCase by inject()
+    private val forgotPinUseCase: ForgotPinUseCase by inject()
     private val observer: AppLifecycleObserver by inject()
     private var onAuthenticatedCorrectly: (() -> Unit)? = null
     private var onAuthenticatedCancelled: (() -> Unit)? = null
 
     private val cardFlow: CardFlow?
-        get() { return AptoUiSdk.cardFlow?.get() }
+        get() {
+            return AptoUiSdk.cardFlow?.get()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,13 +105,13 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         val cancel = "biometric_verify_pin_forgot_alert_cancel".localized()
 
         confirm(title, message, confirm, cancel, {
-            ForgotPinUseCase().invoke()
+            forgotPinUseCase()
             cleanAuth()
         }, {})
     }
 
     private fun cleanAuth() {
-        authentication_view.remove()
+        authentication_view.removeAnimated()
         onAuthenticatedCorrectly = null
         onAuthenticatedCancelled = null
     }
@@ -123,8 +125,17 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         authentication_view.show()
         this.onAuthenticatedCorrectly = onAuthenticated
         this.onAuthenticatedCancelled = onCancelled
-        authentication_view.startAuthentication(this, type, onlyPin)
+        authentication_view.startAuthentication(this, type, getAuthType(onlyPin))
     }
+
+    private fun getAuthType(onlyPin: Boolean) =
+        if (onlyPin) {
+            AuthenticationView.AuthMethod.ONLY_PIN
+        } else if (AptoUiSdk.cardOptions.authenticateWithPINOnPCI() || AptoUiSdk.cardOptions.authenticateOnStartup()) {
+            AuthenticationView.AuthMethod.BOTH
+        } else {
+            AuthenticationView.AuthMethod.ONLY_BIOMETRICS
+        }
 
     companion object {
         fun callingIntent(from: Context): Intent = Intent(from, CardActivity::class.java)

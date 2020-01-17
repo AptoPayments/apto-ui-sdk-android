@@ -5,43 +5,35 @@ import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
+import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 internal class AccountSettingsViewModel constructor(
     private val analyticsManager: AnalyticsServiceContract,
     private val authRepository: AuthenticationRepository
-) : BaseViewModel() {
+) : BaseViewModel(), KoinComponent {
 
-    private val _monthlyStatementsVisibility = MutableLiveData<Boolean>(true)
-    val monthlyStatementVisibility: LiveData<Boolean>
-        get() = _monthlyStatementsVisibility
+    val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
 
-    private val _securityVisibility = MutableLiveData<Boolean>(true)
-    val securityVisibility: LiveData<Boolean>
-        get() = _securityVisibility
+    val monthlyStatementVisibility = isMonthlyStatementFlagActive()
+    val securityVisibility = isSecurityAvailable()
+    val fingerprintVisibility = isFingerprintAvailable()
+    val notificationVisibility = isNotificationsAvailable()
 
     private val _fingerprintEnabled = MutableLiveData<Boolean>(true)
-    val fingerprintEnabled: LiveData<Boolean>
-        get() = _fingerprintEnabled
-
-    private val _notificationsEnabled = MutableLiveData<Boolean>(true)
-    val notificationsEnabled: LiveData<Boolean>
-        get() = _notificationsEnabled
+    val fingerprintEnabled = _fingerprintEnabled as LiveData<Boolean>
 
     init {
-        configureMonthlyStatement()
-        configureSecurity()
         configureFingerprint()
-        configureNotifications()
     }
 
-    private fun configureNotifications() {
-        _notificationsEnabled.value = AptoUiSdk.cardOptions.showNotificationPreferences()
-    }
+    private fun isNotificationsAvailable() = AptoUiSdk.cardOptions.showNotificationPreferences()
 
     private fun configureFingerprint() {
-        _fingerprintEnabled.value = authRepository.isBiometricsEnabledByUser()
+        _fingerprintEnabled.value = canAskBiometricsUseCase().either({ false }, { it }) as Boolean
     }
 
     @Synchronized
@@ -51,13 +43,13 @@ internal class AccountSettingsViewModel constructor(
         _fingerprintEnabled.value = !currentValue
     }
 
-    private fun configureSecurity() {
-        _securityVisibility.value = AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI()
-    }
+    private fun isSecurityAvailable() =
+        AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI()
 
-    private fun configureMonthlyStatement() {
-        _monthlyStatementsVisibility.value = AptoUiSdk.cardOptions.showMonthlyStatementOption()
-    }
+    private fun isFingerprintAvailable() =
+        canAskBiometricsUseCase().either({ false }, { it && isSecurityAvailable() }) as Boolean
+
+    private fun isMonthlyStatementFlagActive() = AptoUiSdk.cardOptions.showMonthlyStatementOption()
 
     fun viewLoaded() {
         analyticsManager.track(Event.AccountSettings)

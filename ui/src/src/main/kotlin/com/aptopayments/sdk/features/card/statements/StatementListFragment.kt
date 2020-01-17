@@ -17,8 +17,8 @@ import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.data.StatementFile
-import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.utils.ItemDecoratorFirstLast
 import kotlinx.android.synthetic.main.fragment_statement_list.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -46,17 +46,23 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
     override fun layoutId(): Int = R.layout.fragment_statement_list
 
     override fun setupViewModel() {
+        viewModel.fetchStatementList()
         observe(viewModel.statementList, ::updateAdapter)
         observeNotNullable(viewModel.file) { file -> handleFileDownloaded(file) }
         observeNotNullable(viewModel.statementListEmpty) { configureEmptyStateVisibility(it) }
         failure(viewModel.failure) { handleFailure(it) }
     }
 
+    override fun viewLoaded() {
+        super.viewLoaded()
+        viewModel.viewLoaded()
+    }
+
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {
-            is StatementRepository.StatementExpiredFailure -> notify(failure.errorMessage())
-            is StatementRepository.StatementDownloadFailure -> notify(failure.errorMessage())
+            is DownloadStatementUseCase.StatementExpiredFailure -> notify(failure.errorMessage())
+            is DownloadStatementUseCase.StatementDownloadFailure -> notify(failure.errorMessage())
             else -> super.handleFailure(failure)
         }
     }
@@ -95,12 +101,6 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
         val title = "monthly_statements.list.title".localized()
         val backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
         delegate?.configureToolbar(toolbar, title, backButtonMode)
-    }
-
-    override fun onPresented() {
-        super.onPresented()
-        showLoading()
-        viewModel.fetchStatementList()
     }
 
     override fun onBackPressed() {

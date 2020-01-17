@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.card.cardstats
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.aptopayments.core.analytics.Event
+import com.aptopayments.core.data.statements.MonthlyStatement
 import com.aptopayments.core.data.statements.MonthlyStatementPeriod
 import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.stats.MonthlySpending
@@ -10,16 +11,20 @@ import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
+import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.repository.StatementRepository
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.threeten.bp.LocalDate
 
 internal class CardMonthlyStatsViewModel constructor(
-    private val analyticsManager: AnalyticsServiceContract,
-    private val statementRepository: StatementRepository
-) : BaseViewModel() {
+    private val analyticsManager: AnalyticsServiceContract
+) : BaseViewModel(), KoinComponent {
+
+    private val downloadUseCase: DownloadStatementUseCase by inject()
+
     var monthlySpendingMap: MutableLiveData<HashMap<Pair<String, String>, List<CategorySpending>>> = MutableLiveData()
 
     fun getMonthlySpending(
@@ -60,10 +65,15 @@ internal class CardMonthlyStatsViewModel constructor(
     fun getMonthlyStatement(month: Int, year: Int, onComplete: ((statementFile: StatementFile) -> Unit)) {
         AptoPlatform.fetchMonthlyStatement(month, year) { result ->
             result.either(::handleFailure) {
-                viewModelScope.launch {
-                    statementRepository.download(it).either(::handleFailure) { onComplete(it) }
-                }
+                downloadStatement(it, onComplete)
             }
+        }
+    }
+
+    private fun downloadStatement(it: MonthlyStatement, onComplete: (statementFile: StatementFile) -> Unit) {
+        viewModelScope.launch {
+            val params = DownloadStatementUseCase.Params(it)
+            downloadUseCase(params).either(::handleFailure) { onComplete(it) }
         }
     }
 

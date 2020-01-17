@@ -16,26 +16,50 @@ import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.utils.FontsUtil
 import java.lang.ref.WeakReference
 
-object AptoUiSdk {
+interface AptoUiSdkProtocol {
+    fun initializeWithApiKey(
+        application: Application,
+        apiKey: String,
+        environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD
+    )
+
+    fun startCardFlow(
+        from: Activity,
+        cardOptions: CardOptions = CardOptions(),
+        onSuccess: (() -> Unit)?,
+        onError: ((Failure) -> Unit)?
+    )
+
+    fun userTokenPresent(): Boolean
+    fun registerFirebaseToken(firebaseToken: String)
+    fun logout()
+}
+
+object AptoUiSdk : AptoUiSdkProtocol {
 
     internal var cardFlow: WeakReference<CardFlow>? = null
 
     var cardOptions: CardOptions = CardOptions()
 
-    fun initializeWithApiKey(
+    override fun initializeWithApiKey(
         application: Application,
         apiKey: String,
-        environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD
+        environment: AptoSdkEnvironment
     ) {
         AptoPlatform.setUiModules(listOf(applicationModule, useCaseModule, viewModelModule))
         AptoPlatform.initializeWithApiKey(application, apiKey, environment)
     }
 
-    fun setDelegate(delegate : AptoPlatformDelegate){
+    fun setDelegate(delegate: AptoPlatformDelegate) {
         AptoPlatform.delegate = delegate
     }
 
-    fun startCardFlow(from: Activity, cardOptions: CardOptions = CardOptions(), onSuccess: (() -> Unit)?, onError: ((Failure) -> Unit)?) {
+    override fun startCardFlow(
+        from: Activity,
+        cardOptions: CardOptions,
+        onSuccess: (() -> Unit)?,
+        onError: ((Failure) -> Unit)?
+    ) {
         this.cardOptions = cardOptions
         with(cardOptions.fontOptions) {
             FontsUtil.overrideFonts(
@@ -61,10 +85,13 @@ object AptoUiSdk {
         }
     }
 
-    fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()
+    override fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()
 
-    fun registerFirebaseToken(firebaseToken: String) {
+    override fun registerFirebaseToken(firebaseToken: String) {
         AptoPlatform.registerFirebaseToken(firebaseToken)
     }
 
+    override fun logout() {
+        AptoPlatform.logout()
+    }
 }

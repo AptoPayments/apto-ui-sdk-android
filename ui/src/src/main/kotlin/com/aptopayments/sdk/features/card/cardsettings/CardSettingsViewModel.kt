@@ -14,6 +14,7 @@ import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
+import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
 import com.aptopayments.sdk.core.usecase.ClearCardDetailsUseCase
 import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
 import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase
@@ -33,6 +34,7 @@ internal class CardSettingsViewModel constructor(
     private val clearCardDetails: ClearCardDetailsUseCase by inject()
     private val fetchRemoteCardDetailsUseCase: FetchRemoteCardDetailsUseCase by inject()
     private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
+    private val canAskBiometricsUseCase : CanAskBiometricsUseCase by inject()
     private val shouldAuthenticateWithPINOnPCIUseCase: ShouldAuthenticateWithPINOnPCIUseCase by inject()
 
     val showGetPin: MutableLiveData<Boolean> = MutableLiveData()
@@ -109,19 +111,29 @@ internal class CardSettingsViewModel constructor(
 
     fun cardDetailsTapped(switchValue: Boolean) {
         if (switchValue) {
-            shouldAuthenticateWithPINOnPCIUseCase().either(
-                {},
-                { needsAuthenticate ->
-                    if (needsAuthenticate) {
-                        authenticateCardDetails.postValue(true)
-                    } else {
-                        cardDetailsAuthenticationSuccessful()
-                    }
+            canAskBiometricsUseCase().either({}, { canAsk ->
+                if (canAsk) {
+                    checkIfAuthNeeded()
+                } else {
+                    cardDetailsAuthenticationSuccessful()
                 }
-            )
+            })
         } else {
             clearCardDetails()
         }
+    }
+
+    private fun checkIfAuthNeeded() {
+        shouldAuthenticateWithPINOnPCIUseCase().either(
+            {},
+            { needsAuthenticate ->
+                if (needsAuthenticate) {
+                    authenticateCardDetails.postValue(true)
+                } else {
+                    cardDetailsAuthenticationSuccessful()
+                }
+            }
+        )
     }
 
     fun cardDetailsAuthenticationSuccessful() {

@@ -39,17 +39,9 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     override fun layoutId(): Int = R.layout.fragment_account_settings_theme_two
 
     override fun setupViewModel() {
-        observeNotNullable(viewModel.monthlyStatementVisibility) { isVisible ->
-            rl_statements.visibleIf(isVisible)
-        }
-        observeNotNullable(viewModel.securityVisibility) { isVisible ->
-            rl_security.visibleIf(isVisible)
-            rl_fingerprint.visibleIf(isVisible)
-            rl_passcode.visibleIf(isVisible)
-        }
-        observeNotNullable(viewModel.notificationsEnabled) { isVisible ->
-            rl_settings_header.visibleIf(isVisible)
-            rl_notifications.visibleIf(isVisible)
+        observeNotNullable(viewModel.fingerprintEnabled) {
+            silentlySetSwitch(it, rl_fingerprint.sw_tv_section_switch_switch) { fingerprintChanged() }
+            rl_fingerprint.sw_tv_section_switch_switch.isChecked = it
         }
     }
 
@@ -61,11 +53,16 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         setupTheme()
         setupToolbar()
         setupTexts()
+        setUpVisibility()
+    }
 
-        observeNotNullable(viewModel.fingerprintEnabled) {
-            silentlySetSwitch(it, rl_fingerprint.sw_tv_section_switch_switch) { fingerprintChanged() }
-            rl_fingerprint.sw_tv_section_switch_switch.isChecked = it
-        }
+    private fun setUpVisibility() {
+        rl_statements.visibleIf(viewModel.monthlyStatementVisibility)
+        rl_security.visibleIf(viewModel.securityVisibility)
+        rl_fingerprint.visibleIf(viewModel.fingerprintVisibility)
+        rl_passcode.visibleIf(viewModel.securityVisibility)
+        rl_settings_header.visibleIf(viewModel.notificationVisibility)
+        rl_notifications.visibleIf(viewModel.notificationVisibility)
     }
 
     private fun silentlySetSwitch(value: Boolean, switch: Switch, listener: () -> Unit) {

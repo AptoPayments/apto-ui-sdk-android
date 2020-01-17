@@ -1,36 +1,35 @@
 package com.aptopayments.sdk.ui.views
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.extension.localized
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
+import com.aptopayments.sdk.utils.MarkDownBuilder
 import com.aptopayments.sdk.utils.ViewUtils.isSmallScreen
 import kotlinx.android.synthetic.main.view_content_presenter.view.*
 import kotlinx.android.synthetic.main.view_native_content.view.*
 
-class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, AptoWebViewDelegate {
-    @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-            : super(context, attrs, defStyleAttr)
+class ContentPresenterView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : RelativeLayout(context, attrs, defStyleAttr), NativeContentContract.Delegate, AptoWebViewDelegate {
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
-            : super(context, attrs, defStyleAttr, defStyleRes)
+    private val markdownProcessor by lazy { MarkDownBuilder().build(context) }
 
     init {
         inflate(context, R.layout.view_content_presenter, this)
+        configureUi()
         setUpWebView()
     }
 
@@ -45,6 +44,10 @@ class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, Apt
             field = value
             updateContent()
         }
+
+    private fun configureUi() {
+        themeManager().customizeContentPlainText(md_content_markdown)
+    }
 
     private fun updateContent() {
         // This is needed because content is mutable and the compiler complain when we try to use
@@ -113,7 +116,7 @@ class ContentPresenterView : RelativeLayout, NativeContentContract.Delegate, Apt
         wb_content_web.remove()
         tv_content_text.remove()
         md_content_markdown.show()
-        md_content_markdown.loadMarkdown(markdown)
+        markdownProcessor.setMarkdown(md_content_markdown, markdown)
         delegate?.onContentLoaded()
     }
 

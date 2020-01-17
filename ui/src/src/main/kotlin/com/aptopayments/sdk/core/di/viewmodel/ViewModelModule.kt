@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.core.di.viewmodel
 
+import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
@@ -44,10 +45,10 @@ val viewModelModule = module {
     viewModel { ActivatePhysicalCardViewModel(analyticsManager = get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(analyticsManager = get()) }
     viewModel { CardSettingsViewModel(analyticsManager = get()) }
-    viewModel { TransactionDetailsViewModel(analyticsManager = get()) }
-    viewModel { CardMonthlyStatsViewModel(analyticsManager = get(), statementRepository = get()) }
+    viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
+    viewModel { CardMonthlyStatsViewModel(analyticsManager = get()) }
     viewModel { NoNetworkViewModel(analyticsManager = get()) }
-    viewModel { MaintenanceViewModel( get()) }
+    viewModel { MaintenanceViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(analyticsManager = get()) }
@@ -57,5 +58,5 @@ val viewModelModule = module {
     viewModel { SetPinViewModel(analyticsManager = get()) }
     viewModel { ConfirmPinViewModel(analyticsManager = get()) }
     viewModel { VoipViewModel(analyticsManager = get(), voipHandler = get()) }
-    viewModel { StatementListViewModel(get(), get()) }
+    viewModel { StatementListViewModel(get()) }
 }

@@ -1,11 +1,14 @@
 package com.aptopayments.sdk.core.extension
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
@@ -20,6 +23,17 @@ fun View.show() = show(View.VISIBLE)
 fun View.hide() = show(View.INVISIBLE)
 
 fun View.remove() = show(View.GONE)
+
+fun View.removeAnimated() {
+    this.animate().alpha(0.0f).setInterpolator(AccelerateInterpolator()).setDuration(400)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                visibility = View.GONE
+                alpha = 1.0f
+            }
+        })
+}
 
 fun View.invisibleIf(bool: Boolean) {
     this.visibility = if (bool) View.INVISIBLE else View.VISIBLE

@@ -675,6 +675,7 @@
     <string name="biometric_show_pin_error_wrong_pin">Invalid PIN</string>
     <string name="auth_verify_biometric_title">Unlock with your fingerprint</string>
     <string name="auth_verify_biometric_use_passcode">Use passcode instead</string>
+    <string name="auth_verify_biometric_cancel">Cancel</string>
     <string name="biometric_create_pin_confirmation_title">Confirm passcode</string>
     <string name="biometric_create_pin_error_title">Error</string>
     <string name="biometric_create_pin_error_pin_not_match">Passcodes do not match</string>

@@ -4,6 +4,7 @@ import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.data.card.CardDetails
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.utils.DateProvider
 import org.threeten.bp.LocalDateTime
 
@@ -17,7 +18,10 @@ interface LocalCardDetailsRepository {
     fun clear()
 }
 
-class InMemoryLocalCardDetailsRepository(private val dateProvider: DateProvider) : LocalCardDetailsRepository {
+class InMemoryLocalCardDetailsRepository(
+    private val dateProvider: DateProvider,
+    private val aptoPlatformProtocol: AptoPlatformProtocol
+) : LocalCardDetailsRepository {
 
     private val handler = Handler()
     private var savedTime: LocalDateTime? = null
@@ -32,6 +36,7 @@ class InMemoryLocalCardDetailsRepository(private val dateProvider: DateProvider)
 
     override fun saveCardDetails(details: CardDetails) {
         savedTime = dateProvider.localDateTime()
+        aptoPlatformProtocol.subscribeSessionInvalidListener(this) { clear() }
         this.details = details
     }
 
@@ -49,6 +54,7 @@ class InMemoryLocalCardDetailsRepository(private val dateProvider: DateProvider)
         savedTime = null
         details = null
         clearHandler()
+        aptoPlatformProtocol.unsubscribeSessionInvalidListener(this)
     }
 
     private fun clearHandler() = handler.removeCallbacksAndMessages(null)

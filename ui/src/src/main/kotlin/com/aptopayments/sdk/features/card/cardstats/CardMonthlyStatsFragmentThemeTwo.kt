@@ -11,6 +11,7 @@ import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.stats.MonthlySpending
 import com.aptopayments.core.data.transaction.MCC
+import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
@@ -48,6 +49,14 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
 
     override fun setupViewModel() {
         viewModel.apply { failure(failure) { handleFailure(it) } }
+    }
+
+    override fun handleFailure(failure: Failure?) {
+        hideLoading()
+        when (failure) {
+            is Failure.FeatureFailure -> notify(failure.errorMessage())
+            else -> super.handleFailure(failure)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -37,7 +37,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     val fragmentFactory: FragmentFactory by inject()
 
     private var fragmentContainer: Int = 0
-    private var activity: AppCompatActivity? = null
+    private var activity: WeakReference<AppCompatActivity?> = WeakReference(null)
     private val fragmentManager: FragmentManager?
         get() { return rootActivity()?.supportFragmentManager }
     private var parentFlow: WeakReference<Flow?> = WeakReference(null)
@@ -78,7 +78,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     }
 
     open fun attachTo(activity: AppCompatActivity, fragmentContainer: Int) {
-        this.activity = activity
+        this.activity = WeakReference(activity)
         this.fragmentContainer = fragmentContainer
         updateChildFragmentManager(fragmentManager)
     }
@@ -90,7 +90,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
                 is FragmentWrapper -> it.fragmentManager = null
             }
         }
-        this.activity = null
+        this.activity.clear()
         this.fragmentContainer = 0
     }
 
@@ -219,7 +219,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     }
 
     protected fun rootActivity(): AppCompatActivity? {
-        return activity ?: parentFlow.get()?.rootActivity()
+        return activity.get() ?: parentFlow.get()?.rootActivity()
     }
 
     private fun fragmentContainer(): Int {

@@ -8,11 +8,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 interface RemoteCardDetailsRepository {
-    suspend fun run(cardId: String): Either<Failure, CardDetails>
+    suspend fun fetch(cardId: String): Either<Failure, CardDetails>
 }
 
 class RemoteCardDetailsRepositoryImpl : RemoteCardDetailsRepository {
-    override suspend fun run(cardId: String): Either<Failure, CardDetails> = suspendCoroutine { cont ->
+    override suspend fun fetch(cardId: String): Either<Failure, CardDetails> = suspendCoroutine { cont ->
         AptoPlatform.fetchCardDetails(cardId) { cont.resume(it) }
     }
 }
