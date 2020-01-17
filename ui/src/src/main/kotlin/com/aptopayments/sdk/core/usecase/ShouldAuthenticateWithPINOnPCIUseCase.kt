@@ -13,7 +13,7 @@ internal class ShouldAuthenticateWithPINOnPCIUseCase(
         return if (AptoUiSdk.cardOptions.authenticateWithPINOnPCI()) {
             Either.Right(authenticationRepo.isAuthTimeInvalid())
         } else {
-            Either.Right(authenticationRepo.isBiometricsEnabledByUser() && authenticationRepo.isAuthTimeInvalid())
+            Either.Right(authenticationRepo.isBiometricsEnabledByUser())
         }
     }
 

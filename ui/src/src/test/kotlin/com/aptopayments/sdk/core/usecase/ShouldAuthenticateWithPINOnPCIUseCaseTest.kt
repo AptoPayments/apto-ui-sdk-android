@@ -63,7 +63,7 @@ internal class ShouldAuthenticateWithPINOnPCIUseCaseTest : AndroidTest() {
             authWithPINOnPCI = false,
             isAuthTimeValid = false,
             biometricsEnabled = true,
-            expectedResult = false
+            expectedResult = true
         )
     }
 
