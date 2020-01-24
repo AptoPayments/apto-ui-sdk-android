@@ -49,6 +49,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     private var assetUrl: String? = null
     private var errorMessageKeys: List<String>? = null
     private var oauthAttempt: OAuthAttempt? = null
+    private var shouldReloadStatus = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,16 +81,16 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         delegate?.configureStatusBar()
     }
 
+    override fun onResume() {
+        super.onResume()
+        reloadStatus()
+    }
+
     override fun setupUI() {
         setupTheme()
         setupToolbar()
         setupTexts()
         setupImageView()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        reloadStatus()
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()
@@ -98,6 +99,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         super.setupListeners()
         tv_submit_bttn.setOnClickListener { _ ->
             allowedBalanceType?.let {
+                shouldReloadStatus = true
                 showLoading()
                 viewModel.startOAuthAuthentication(it) { oauthAttempt ->
                     this.oauthAttempt = oauthAttempt
@@ -147,15 +149,21 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     override fun reloadStatus() {
-        oauthAttempt?.let {
-            showLoading()
-            viewModel.checkOAuthAuthentication(it) { oauthAttempt ->
-                hideLoading()
-                this.oauthAttempt = oauthAttempt
-                when(oauthAttempt.status) {
-                    PASSED -> delegate?.onOAuthSuccess(oauthAttempt)
-                    FAILED -> { showOauthFailure(oauthAttempt) }
-                    else -> {}
+        if (shouldReloadStatus) {
+            oauthAttempt?.let {
+                shouldReloadStatus = false
+                showLoading()
+                viewModel.checkOAuthAuthentication(it) { oauthAttempt ->
+                    hideLoading()
+                    this.oauthAttempt = oauthAttempt
+                    when (oauthAttempt.status) {
+                        PASSED -> delegate?.onOAuthSuccess(oauthAttempt)
+                        FAILED -> {
+                            showOauthFailure(oauthAttempt)
+                        }
+                        else -> {
+                        }
+                    }
                 }
             }
         }

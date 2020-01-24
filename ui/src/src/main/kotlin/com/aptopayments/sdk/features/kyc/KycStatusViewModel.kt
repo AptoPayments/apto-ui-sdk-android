@@ -15,8 +15,10 @@ internal class KycStatusViewModel constructor(
     var kycStatus: MutableLiveData<KycStatus> = MutableLiveData()
 
     fun getKycStatus(cardID: String) {
+        showLoading()
         AptoPlatform.fetchFinancialAccount(accountId = cardID, showDetails = false, forceRefresh = true) { result ->
             result.either(::handleFailure) {
+                hideLoading()
                 handleCard(it)
             }
         }

@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.card.cardstats
+package com.aptopayments.sdk.features.card.cardstats.chart
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -30,17 +30,19 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_transactions_chart_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
-        OnChartValueSelectedListener, CategoryListAdapter.Delegate {
+        OnChartValueSelectedListener,
+    CategoryListAdapter.Delegate {
 
-    private val viewModel: CardMonthlyStatsViewModel by viewModel()
     private lateinit var pieChart: AptoPieChart
     private lateinit var cardID: String
     private lateinit var date: LocalDate
+    private val viewModel: CardTransactionsChartViewModel by viewModel { parametersOf(cardID, date) }
     private lateinit var categoryListAdapter: CategoryListAdapter
     private var dataSet: PieDataSet = PieDataSet(null, "")
     private var totalSpent = 0.0
@@ -53,9 +55,15 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     override fun setupViewModel() {
         viewModel.apply {
             failure(failure) { handleFailure(it) }
-            observe(monthlySpendingMap) { updateChartData(it) }
+            observeNotNullable(categorySpending) {
+                updateChartData(it)
+                showViews()
+            }
+            observeNotNullable(hasMonthlyStatement) {
+                monthly_statement_link?.invisibleIf(!it)
+                monthly_statement_top_separator?.invisibleIf(!it)
+            }
         }
-        configureMonthlyStatement()
     }
 
     override fun setupUI() {
@@ -75,21 +83,6 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
             is DownloadStatementUseCase.StatementExpiredFailure -> notify(failure.errorMessage())
             is DownloadStatementUseCase.StatementDownloadFailure -> notify(failure.errorMessage())
             else -> super.handleFailure(failure)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (date == LocalDate.MAX) return
-        loadDataIfIsCurrentMonthOrBefore()
-    }
-
-    private fun loadDataIfIsCurrentMonthOrBefore() {
-        val currentDate = LocalDate.now()
-        if (date.isBefore(currentDate) || date.isEqual(currentDate)) {
-            viewModel.getMonthlySpending(cardID, date.monthToString(), date.yearToString()) {
-                showViews()
-            }
         }
     }
 
@@ -121,13 +114,6 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun configureMonthlyStatement() {
-        viewModel.hasMonthlyStatementToShow(date) { hasStatement ->
-            monthly_statement_link?.invisibleIf(!hasStatement)
-            monthly_statement_top_separator?.invisibleIf(!hasStatement)
-        }
-    }
-
     private fun setupChart() {
         val initialList = ArrayList<PieEntry>(1)
         initialList.add(0, PieEntry(100f))
@@ -146,24 +132,20 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         pieChart.invalidate()
     }
 
-    private fun updateChartData(monthlySpendingMap: HashMap<Pair<String, String>, List<CategorySpending>>?) {
-        monthlySpendingMap?.get(Pair(date.monthToString(), date.yearToString()))?.let { spendingList ->
-            currency = if (spendingList.isEmpty()) {
-                tv_no_transactions.show()
-                drawPieChartEntries(ArrayList())
-                "stats.monthly_spending.graph.default_currency".localized()
-            } else {
-                tv_no_transactions.remove()
-                drawPieChartEntries(calculatePieChartEntries(spendingList))
-                spendingList.first().spending?.currency
-            }
-            val categorySpendingArrayList = ArrayList<CategoryListItem>()
-            spendingList.forEach { categorySpending ->
-                categorySpendingArrayList.add(CategoryListItem(categorySpending, false))
-            }
-            categoryListAdapter.categorySpendingList = categorySpendingArrayList
-            tv_center_text_amount.text = Money(amount = totalSpent, currency = currency).toString()
-        } ?: tv_no_transactions.show()
+    private fun updateChartData(spendingList: List<CategorySpending>) {
+        tv_no_transactions.visibleIf(spendingList.isNullOrEmpty())
+        drawPieChartEntries(calculatePieChartEntries(spendingList))
+        currency = calculateSpendingListCurrency(spendingList)
+        categoryListAdapter.categorySpendingList = spendingList.map { CategoryListItem(it, false) }
+        tv_center_text_amount.text = Money(amount = totalSpent, currency = currency).toString()
+    }
+
+    private fun calculateSpendingListCurrency(spendingList: List<CategorySpending>): String? {
+        return if (spendingList.isEmpty()) {
+            "stats.monthly_spending.graph.default_currency".localized()
+        } else {
+            spendingList.first().spending?.currency
+        }
     }
 
     private fun drawPieChartEntries(entries: ArrayList<PieEntry>) {
@@ -178,8 +160,12 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     }
 
     private fun calculatePieChartEntries(spendingList: List<CategorySpending>): ArrayList<PieEntry> {
-        val entries = generateEntriesAndUpdateTotalSpending(spendingList)
-        return groupSmallEntries(entries)
+        return if (spendingList.isEmpty()) {
+            ArrayList()
+        } else {
+            val entries = generateEntriesAndUpdateTotalSpending(spendingList)
+            groupSmallEntries(entries)
+        }
     }
 
     private fun generateEntriesAndUpdateTotalSpending(spendingList: List<CategorySpending>): ArrayList<PieEntry> {
@@ -215,7 +201,13 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         // Entries must have a drawable so we create an invisible one for this case
         val emptyDrawable = ColorDrawable(Color.TRANSPARENT)
         val spending = Money(amount = totalSpendingOfSmallCategories, currency = currency)
-        entries.add(PieEntry(totalSpendingOfSmallCategories.toFloat(), emptyDrawable, PieChartElement(CategorySpending("", spending))))
+        entries.add(
+            PieEntry(
+                totalSpendingOfSmallCategories.toFloat(),
+                emptyDrawable,
+                PieChartElement(CategorySpending("", spending))
+            )
+        )
         return entries
     }
 
@@ -244,20 +236,26 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         entry.icon.setColorFilter(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
         tv_center_text_title.text = pieChartElement.mcc?.toLocalizedString() ?: getString(R.string.ellipsis)
         tv_center_text_amount.text = pieChartElement.categorySpending.spending.toString()
+        tv_center_text_difference.visibleIf(pieChartElement.categorySpending.difference != null)
         pieChartElement.categorySpending.difference?.let {
-            tv_center_text_difference.show()
             val difference = it.toFloat()
-            if (difference == 0F || context == null) return
-            if (difference > 0F) {
-                tv_center_text_difference.text = "+$it%"
+            if (difference != 0F && context != null) {
                 tv_center_text_difference.setTextColor(UIConfig.textMessageColor)
-                tv_center_text_difference.background.setColorFilter(UIConfig.statsDifferenceIncreaseBackgroundColor, PorterDuff.Mode.SRC_ATOP)
-            } else {
-                tv_center_text_difference.text = "$it%"
-                tv_center_text_difference.setTextColor(UIConfig.textMessageColor)
-                tv_center_text_difference.background.setColorFilter(UIConfig.statsDifferenceDecreaseBackgroundColor, PorterDuff.Mode.SRC_ATOP)
+                if (difference > 0F) {
+                    tv_center_text_difference.text = "+$it%"
+                    tv_center_text_difference.background.setColorFilter(
+                        UIConfig.statsDifferenceIncreaseBackgroundColor,
+                        PorterDuff.Mode.SRC_ATOP
+                    )
+                } else {
+                    tv_center_text_difference.text = "$it%"
+                    tv_center_text_difference.background.setColorFilter(
+                        UIConfig.statsDifferenceDecreaseBackgroundColor,
+                        PorterDuff.Mode.SRC_ATOP
+                    )
+                }
             }
-        } ?: tv_center_text_difference.remove()
+        }
     }
 
     private fun notifyAdapterCategorySpendingSelected(categorySpendingList: ArrayList<CategorySpending>) {
@@ -273,7 +271,8 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     private fun setupCategoryListRecyclerView() {
         context?.let { context ->
-            categoryListAdapter = CategoryListAdapter()
+            categoryListAdapter =
+                CategoryListAdapter()
             categoryListAdapter.delegate = this
             rv_categories.apply {
                 layoutManager = LinearLayoutManager(context)

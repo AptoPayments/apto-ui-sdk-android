@@ -12,6 +12,7 @@ import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.birthdateverification.FormatOrderGenerator
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
+import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
 import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
@@ -42,6 +43,7 @@ internal val applicationModule = module {
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }
     factory { FormatOrderGenerator(get()) }
+    factory { CategorySpendingSorter() }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.card.cardstats
+package com.aptopayments.sdk.features.card.cardstats.chart
 
 import android.graphics.Canvas
 import android.graphics.Paint

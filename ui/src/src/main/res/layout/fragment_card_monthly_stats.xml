@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -8,24 +9,53 @@
 
     <include
         android:id="@+id/tb_llsdk_toolbar_layout"
-        layout="@layout/include_toolbar_two" />
+        layout="@layout/include_toolbar_two"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/title_previous_month"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tb_llsdk_toolbar_layout"
-        android:minHeight="?actionBarSize"
-        android:paddingTop="4dp"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/transparent"
-        app:tabMode="fixed" />
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/title_current_month"
+        app:layout_constraintEnd_toStartOf="@id/title_current_month"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_current_month"
+        tools:text="left" />
 
-    <androidx.viewpager.widget.ViewPager
+    <TextView
+        android:id="@+id/title_current_month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/title_next_month"
+        app:layout_constraintStart_toEndOf="@+id/title_previous_month"
+        app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
+        tools:text="center" />
+
+    <TextView
+        android:id="@+id/title_next_month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/title_current_month"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title_current_month"
+        app:layout_constraintTop_toTopOf="@+id/title_current_month"
+        tools:text="right" />
+
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tabLayout"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layoutDirection="rtl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_previous_month" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

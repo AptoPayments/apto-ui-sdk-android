@@ -117,6 +117,8 @@
         <item name="android:layout_marginTop">@dimen/llsdk_big_button_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/llsdk_big_button_bottom_margin</item>
         <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
     </style>
 
     <style name="ThemeTwo.BirthDate" parent="ThemeTwo">

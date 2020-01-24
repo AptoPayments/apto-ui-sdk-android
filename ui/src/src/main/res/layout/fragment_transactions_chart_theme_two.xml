@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutDirection="locale">
 
-    <com.aptopayments.sdk.features.card.cardstats.AptoPieChart
+    <com.aptopayments.sdk.features.card.cardstats.chart.AptoPieChart
         android:id="@+id/chart"
         android:layout_width="260dp"
         android:layout_height="260dp"

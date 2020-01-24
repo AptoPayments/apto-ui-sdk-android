@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.card.cardstats
+package com.aptopayments.sdk.features.card.cardstats.chart
 
 import com.aptopayments.core.data.transaction.MCC
 import org.threeten.bp.LocalDate

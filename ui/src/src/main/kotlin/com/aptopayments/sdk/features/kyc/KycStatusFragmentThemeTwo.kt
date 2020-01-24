@@ -10,6 +10,7 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
@@ -38,6 +39,7 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
         viewModel.apply {
             observe(kycStatus, ::handleKycStatus)
             failure(failure) { handleFailure(it) }
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
         }
     }
 

@@ -7,9 +7,9 @@ import org.threeten.bp.ZonedDateTime
 
 class DateProvider {
 
-    fun localDate() = LocalDate.now()
+    fun localDate(): LocalDate = LocalDate.now()
 
-    fun localDateTime() = LocalDateTime.now()
+    fun localDateTime(): LocalDateTime = LocalDateTime.now()
 
     fun zonedDateTime(zone: ZoneId = ZoneId.systemDefault()) = ZonedDateTime.now(ZoneId.systemDefault())
 

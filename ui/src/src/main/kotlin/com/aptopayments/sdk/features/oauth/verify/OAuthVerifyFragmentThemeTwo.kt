@@ -6,8 +6,10 @@ import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
+import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
@@ -149,13 +151,15 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
 
     @SuppressLint("SetTextI18n")
     private fun styleMenuItem() {
-        themeManager().customizeMenuImage(menu?.findItem(R.id.menu_update_personal_details))
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_update_personal_details)?.let {
                 themeManager().customizeMenuItem(it)
                 it.text = "select_balance_store_oauth_confirm_refresh_title".localized()
                 it.setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
                 it.setTextColor(UIConfig.textButtonColor)
+            }
+            tb_llsdk_toolbar.findViewById<ImageView>(R.id.iv_menu_refresh)?.let {
+                DrawableCompat.setTint(it.drawable, UIConfig.uiPrimaryColor)
             }
         }
     }

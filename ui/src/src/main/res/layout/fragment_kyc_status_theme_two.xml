@@ -62,7 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
             android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
             android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
             android:gravity="center_horizontal"
             tools:text="Have questions? Contact support" />

@@ -11,6 +11,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.activate.Activate
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessViewModel
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel
 import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsViewModel
+import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartViewModel
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinViewModel
@@ -30,6 +31,7 @@ import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewMo
 import com.aptopayments.sdk.features.voip.VoipViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import org.threeten.bp.LocalDate
 
 val viewModelModule = module {
     viewModel { InputPhoneViewModel(analyticsManager = get()) }
@@ -46,7 +48,8 @@ val viewModelModule = module {
     viewModel { ActivatePhysicalCardSuccessViewModel(analyticsManager = get()) }
     viewModel { CardSettingsViewModel(analyticsManager = get()) }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
-    viewModel { CardMonthlyStatsViewModel(analyticsManager = get()) }
+    viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
+    viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
     viewModel { NoNetworkViewModel(analyticsManager = get()) }
     viewModel { MaintenanceViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get()) }

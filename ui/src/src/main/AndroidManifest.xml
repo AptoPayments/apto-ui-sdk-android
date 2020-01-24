@@ -44,7 +44,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.aptopayments.sdk"
+            android:authorities="${applicationId}.aptopayments.sdk"
             android:exported="false"
             android:grantUriPermissions="true">
 

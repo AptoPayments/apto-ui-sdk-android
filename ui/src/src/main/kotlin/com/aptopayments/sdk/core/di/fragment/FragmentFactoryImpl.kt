@@ -36,8 +36,8 @@ import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsFragmentThemeTwo
 import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsContract
 import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsFragmentThemeTwo
-import com.aptopayments.sdk.features.card.cardstats.CardTransactionsChartContract
-import com.aptopayments.sdk.features.card.cardstats.CardTransactionsChartThemeTwo
+import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
+import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartThemeTwo
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceDialogFragmentThemeTwo
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract

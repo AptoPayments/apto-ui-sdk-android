@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.card.cardstats
+package com.aptopayments.sdk.features.card.cardstats.chart
 
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
@@ -8,19 +8,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.data.transaction.iconResource
-import com.aptopayments.sdk.core.extension.monthToString
-import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
-import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import org.threeten.bp.LocalDate
 
 internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -37,7 +32,9 @@ internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater.inflate(R.layout.view_category_row, parent, false))
+        return ViewHolder(
+            inflater.inflate(R.layout.view_category_row, parent, false)
+        )
     }
 
     override fun getItemCount(): Int = categorySpendingList?.size ?: 0

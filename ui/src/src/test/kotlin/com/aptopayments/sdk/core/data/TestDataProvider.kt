@@ -7,6 +7,7 @@ import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.data.oauth.OAuthAttemptStatus
 import com.aptopayments.core.data.oauth.OAuthUserDataUpdate
 import com.aptopayments.core.data.oauth.OAuthUserDataUpdateResult
+import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
@@ -183,5 +184,14 @@ class TestDataProvider {
                 cardHolder = cardHolder,
                 features = features
         )
+
+        fun provideCategorySpendingList(): List<CategorySpending> {
+            val spending1 = CategorySpending("glass", Money("USD", 130.0))
+            val spending2 = CategorySpending("car", Money("USD", 80.0))
+            val spending3 = CategorySpending("plane", Money("USD", 100.0))
+            val list = listOf(spending1, spending2, spending3)
+            return list
+        }
     }
+        
 }

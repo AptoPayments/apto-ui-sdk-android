@@ -24,7 +24,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.activate.Activate
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessContract
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsContract
-import com.aptopayments.sdk.features.card.cardstats.CardTransactionsChartContract
+import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinContract
