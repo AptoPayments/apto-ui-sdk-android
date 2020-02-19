@@ -5,7 +5,6 @@ import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -92,14 +91,19 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "WaitlistFragment"
         val fragmentDouble = WaitlistFragmentDouble(mockWaitlistDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.waitlistFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId, cardProduct = mockCardProduct)
+            mockFragmentFactory.waitlistFragment(
+                uiTheme = TestDataProvider.provideDefaultTheme(),
+                tag = tag,
+                cardId = cardId,
+                cardProduct = mockCardProduct
+            )
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).waitlistFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId, cardProduct = mockCardProduct)
+        verify(mockFragmentFactory).waitlistFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId, cardProduct = mockCardProduct)
     }
 
     @Test
@@ -112,14 +116,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "ManageCardFragment"
         val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.manageCardFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId)
+            mockFragmentFactory.manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).manageCardFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId)
+        verify(mockFragmentFactory).manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
     }
 
     @Test
@@ -132,14 +136,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "ManageCardFragment"
         val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.manageCardFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId)
+            mockFragmentFactory.manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.showManageCardFragment()
 
         // Then
-        verify(mockFragmentFactory).manageCardFragment(uiTheme = UITheme.THEME_1, tag = tag, cardId = cardId)
+        verify(mockFragmentFactory).manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
     }
 
     @Test
@@ -172,14 +176,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "CardSettingsFragment"
         val fragmentDouble = CardSettingsFragmentDouble(mockCardSettingsDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+            mockFragmentFactory.cardSettingsFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
         }.willReturn(fragmentDouble)
 
         // When
         sut.onCardSettingsTapped(card)
 
         // Then
-        verify(mockFragmentFactory).cardSettingsFragment(uiTheme = UITheme.THEME_1, tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+        verify(mockFragmentFactory).cardSettingsFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
     }
 
     @Test
@@ -189,14 +193,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "FundingSourceDialogFragment"
         val fragmentDouble = FundingSourcesDialogFragmentDouble(mockFundingSourcesDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.fundingSourceFragment(uiTheme = UITheme.THEME_1, tag = tag, cardID = cardId, selectedBalanceID = balanceId)
+            mockFragmentFactory.fundingSourceFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardID = cardId, selectedBalanceID = balanceId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.onFundingSourceTapped(balanceId)
 
         // Then
-        verify(mockFragmentFactory).fundingSourceFragment(uiTheme = UITheme.THEME_1, tag = tag, cardID = cardId, selectedBalanceID = balanceId)
+        verify(mockFragmentFactory).fundingSourceFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardID = cardId, selectedBalanceID = balanceId)
     }
 
     @Test
@@ -206,14 +210,14 @@ class ManageCardFlowTest : AndroidTest() {
         val title = "TEST_TITLE"
         val fragmentDouble = ContentPresenterFragmentDouble(mockContentPresenterDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.contentPresenterFragment(uiTheme = UITheme.THEME_1, tag = tag, content = mockContent, title = title)
+            mockFragmentFactory.contentPresenterFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, content = mockContent, title = title)
         }.willReturn(fragmentDouble)
 
         // When
         sut.showContentPresenter(mockContent, title)
 
         // Then
-        verify(mockFragmentFactory).contentPresenterFragment(uiTheme = UITheme.THEME_1, tag = tag, content = mockContent, title = title)
+        verify(mockFragmentFactory).contentPresenterFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, content = mockContent, title = title)
     }
 
     @Test

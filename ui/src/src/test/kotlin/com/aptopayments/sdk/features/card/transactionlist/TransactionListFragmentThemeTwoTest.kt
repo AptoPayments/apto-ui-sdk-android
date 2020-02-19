@@ -1,12 +1,9 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
-import android.app.Activity
-import android.os.Bundle
-import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.sdk.R
+import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.core.data.TestDataProvider
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before

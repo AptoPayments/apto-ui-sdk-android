@@ -9,12 +9,13 @@ internal val useCaseModule = module {
     factory { ClearCardDetailsUseCase(get()) }
     factory { FetchRemoteCardDetailsUseCase(get(), get()) }
     factory { FetchLocalCardDetailsUseCase(get()) }
-    factory { SavePinUseCase(get()) }
-    factory { ShouldCreatePINUseCase(get()) }
+    factory { SavePasscodeUseCase(get()) }
+    factory { ShouldCreatePasscodeUseCase(get()) }
     factory { OnEnterBackgroundUseCase(get(), get()) }
     factory { CanAskBiometricsUseCase(get(), get()) }
-    factory { VerifyPinUseCase(get()) }
+    factory { VerifyPasscodeUseCase(get()) }
     factory { BiometricsAuthCorrectUseCase(get()) }
     factory { ForgotPinUseCase(get()) }
     factory { DownloadStatementUseCase(get()) }
+    factory { ShouldShowBiometricOption(get(), get()) }
 }

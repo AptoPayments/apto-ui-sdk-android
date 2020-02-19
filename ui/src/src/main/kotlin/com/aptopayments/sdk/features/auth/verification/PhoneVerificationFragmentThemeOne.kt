@@ -37,6 +37,8 @@ internal class PhoneVerificationFragmentThemeOne : BaseFragment(), PhoneVerifica
 
     override fun layoutId() = R.layout.fragment_phone_verification_theme_one
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         phoneNumber = verification.verificationDataPoint!!
@@ -70,7 +72,6 @@ internal class PhoneVerificationFragmentThemeOne : BaseFragment(), PhoneVerifica
     }
 
     private fun applyFontsAndColors() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

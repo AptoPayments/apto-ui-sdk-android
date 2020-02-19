@@ -75,8 +75,9 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentThemeTwo
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragmentThemeTwo
-import com.aptopayments.sdk.features.pin.CreatePinContract
-import com.aptopayments.sdk.features.pin.CreatePinFragment
+import com.aptopayments.sdk.features.passcode.ChangePasscodeFragment
+import com.aptopayments.sdk.features.passcode.CreatePasscodeFragment
+import com.aptopayments.sdk.features.passcode.PasscodeContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragmentThemeTwo
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
@@ -494,8 +495,11 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
     override fun pdfRendererFragment(uiTheme: UITheme, title: String, file: File, tag: String): PdfRendererContract.View =
         configureTheme(uiTheme, PdfRendererFragment.newInstance(title, file),tag) as PdfRendererFragment
 
-    override fun createPinFragment(uiTheme: UITheme, tag: String): CreatePinContract.View =
-        configureTheme(uiTheme, CreatePinFragment(), tag) as CreatePinContract.View
+    override fun createPasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View =
+        configureTheme(uiTheme, CreatePasscodeFragment(), tag) as PasscodeContract.View
+
+    override fun changePasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View =
+        configureTheme(uiTheme, ChangePasscodeFragment(), tag) as PasscodeContract.View
 
     private fun configureTheme(uiTheme: UITheme, fragment: BaseFragment, tag: String): BaseFragment {
         return when (uiTheme) {

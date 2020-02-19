@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.aptopayments.sdk.BuildConfig
 import java.io.File
 
 interface FileSharer {
     fun shareFile(file: File, context: Context)
 }
 
-class FileSharerImpl() : FileSharer {
+class FileSharerImpl : FileSharer {
 
     override fun shareFile(file: File, context: Context) {
-        val contentUri = FileProvider.getUriForFile(context, BuildConfig.LIBRARY_PACKAGE_NAME, file)
+        val contentUri =
+            FileProvider.getUriForFile(context, "${context.applicationInfo.packageName}.aptopayments.sdk", file)
         contentUri?.also { uri ->
             val shareIntent = getShareIntent(context, uri)
             context.startActivity(Intent.createChooser(shareIntent, ""))

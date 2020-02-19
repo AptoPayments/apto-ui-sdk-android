@@ -14,7 +14,9 @@
         android:layout_weight="1.75"
         android:hint="@string/birthdate_hint_dd" />
 
-    <include layout="@layout/include_vertical_separator" />
+    <include
+        android:id="@+id/separator_left"
+        layout="@layout/include_vertical_separator" />
 
     <EditText
         android:id="@+id/et_birthday_month"
@@ -22,7 +24,9 @@
         android:layout_weight="1.75"
         android:hint="@string/birthdate_hint_mm" />
 
-    <include layout="@layout/include_vertical_separator" />
+    <include
+        android:id="@+id/separator_right"
+        layout="@layout/include_vertical_separator" />
 
     <EditText
         android:id="@+id/et_birthday_year"

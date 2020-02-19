@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.issuecard
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
+import com.aptopayments.core.data.config.Branding
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -31,9 +31,9 @@ class IssueCardFlowTest : AndroidTest() {
     }
 
     @Test
-    fun `should use the factory to instantiate IssueCardFragment as first fragment on init for THEME_2`() {
+    fun `should use the factory to instantiate IssueCardFragment as first fragment on init`() {
         // Given
-        UIConfig.uiTheme = UITheme.THEME_2
+        UIConfig.updateUIConfigFrom(Branding.createDefault())
         val tag = "IssueCardFragment"
         val fragmentDouble = IssueCardFragmentDouble(mockIssueCardDelegate).apply { this.TAG = tag }
         val cardApplicationId = TestDataProvider.provideCardApplicationId()
@@ -44,7 +44,7 @@ class IssueCardFlowTest : AndroidTest() {
                 onFinish = {})
         given {
             mockFragmentFactory.issueCardFragment(
-                uiTheme = UITheme.THEME_2,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 cardApplicationId = cardApplicationId,
                 tag = tag)
         }.willReturn(fragmentDouble)
@@ -54,15 +54,14 @@ class IssueCardFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).issueCardFragment(
-                uiTheme = UITheme.THEME_2,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 cardApplicationId = cardApplicationId,
                 tag = tag)
     }
 
     @Test
-    fun `should use the factory to instantiate IssueCardErrorFragment for THEME_2 on card issue failure`() {
+    fun `should use the factory to instantiate IssueCardErrorFragment on card issue failure`() {
         // Given
-        UIConfig.uiTheme = UITheme.THEME_2
         val issueCardTag = "IssueCardFragment"
         val issueCardErrorTag = "IssueCardErrorFragment"
 
@@ -77,13 +76,13 @@ class IssueCardFlowTest : AndroidTest() {
                 onFinish = {})
         given {
             mockFragmentFactory.issueCardFragment(
-                    uiTheme = UITheme.THEME_2,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     cardApplicationId = cardApplicationId,
                     tag = issueCardTag)
         }.willReturn(issueCardFragmentDouble)
         given {
             mockFragmentFactory.issueCardErrorFragment(
-                    uiTheme = UITheme.THEME_2,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     tag = issueCardErrorTag,
                     errorCode = 3,
                     errorAsset = null)
@@ -95,7 +94,7 @@ class IssueCardFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).issueCardErrorFragment(
-                uiTheme = UITheme.THEME_2,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 tag = issueCardErrorTag,
                 errorCode = 3,
                 errorAsset = null)

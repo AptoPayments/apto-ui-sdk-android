@@ -38,13 +38,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:layout_below="@id/abl_manage_card">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactions_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.aptopayments.sdk.ui.views.AptoTextView

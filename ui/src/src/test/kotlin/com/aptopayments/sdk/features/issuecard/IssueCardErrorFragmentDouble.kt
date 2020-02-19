@@ -7,6 +7,7 @@ internal class IssueCardErrorFragmentDouble(override var delegate: IssueCardErro
         IssueCardErrorContract.View
 {
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

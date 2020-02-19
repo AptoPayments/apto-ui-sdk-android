@@ -45,6 +45,8 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
 
     override fun layoutId(): Int = R.layout.fragment_statement_list
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setupViewModel() {
         viewModel.fetchStatementList()
         observe(viewModel.statementList, ::updateAdapter)

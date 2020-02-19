@@ -18,10 +18,7 @@ class TextInputWatcher(
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
-        val isValid = isValidInput(charSequence.toString())
-        callback.onValidInput(isValid)
-    }
+    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {}
 
     private fun isValidInput(input: String) =
         isMinLengthValid(input) &&
@@ -29,7 +26,10 @@ class TextInputWatcher(
 
     private fun isMinLengthValid(input: String) = input.length >= minNumberCharacters
 
-    override fun afterTextChanged(string: Editable) {}
+    override fun afterTextChanged(editable: Editable) {
+        val isValid = isValidInput(editable.toString())
+        callback.onValidInput(isValid)
+    }
 
     private fun setMaxCharacters() {
         val filterArray = arrayOf<InputFilter>(InputFilter.LengthFilter(minNumberCharacters))

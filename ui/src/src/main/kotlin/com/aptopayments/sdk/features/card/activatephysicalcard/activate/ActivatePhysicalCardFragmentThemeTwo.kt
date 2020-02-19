@@ -35,6 +35,8 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
 
     override fun layoutId(): Int = R.layout.fragment_activate_physical_card_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         card = arguments!![CARD_KEY] as Card
     }
@@ -62,7 +64,6 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_physical_activation_title)

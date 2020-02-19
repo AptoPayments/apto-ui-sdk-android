@@ -10,6 +10,7 @@ internal class ContentPresenterFragmentDouble(override var delegate: ContentPres
     override fun onContentLoadingFailed() {}
     override fun didScrollToBottom() {}
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

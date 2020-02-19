@@ -38,6 +38,8 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
 
     override fun layoutId(): Int = R.layout.fragment_account_settings_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setupViewModel() {
         observeNotNullable(viewModel.fingerprintEnabled) {
             silentlySetSwitch(it, rl_fingerprint.sw_tv_section_switch_switch) { fingerprintChanged() }
@@ -86,12 +88,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     }
 
     private fun onChangePasscodeTapped() {
-        (activity as CardActivity).authenticate(
-            type = AuthenticationView.AuthType.OPTIONAL,
-            onlyPin = true,
-            onCancelled = {},
-            onAuthenticated = { delegate?.onChangePasscodeTapped() }
-        )
+        delegate?.onChangePasscodeTapped()
     }
 
     override fun onBackPressed() {

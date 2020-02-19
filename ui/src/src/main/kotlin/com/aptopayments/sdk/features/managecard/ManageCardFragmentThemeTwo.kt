@@ -54,6 +54,8 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
 
     override fun layoutId(): Int = R.layout.fragment_manage_card_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         cardId = arguments!![CARD_ID_KEY] as String
     }
@@ -222,7 +224,6 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
 
     @SuppressLint("SetTextI18n")
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         with (themeManager()) {
             customizeEmptyCase(tv_no_transactions)
         }

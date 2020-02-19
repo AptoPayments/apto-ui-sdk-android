@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,7 +22,10 @@
         android:layout_below="@+id/tv_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        tools:text="Description"
+        tools:textColor="@android:color/black" />
 
     <ImageButton
         android:id="@+id/bttn_finish_call"
@@ -34,17 +38,17 @@
         android:src="@drawable/ic_finish_call"
         tools:ignore="ContentDescription" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/bttn_hide_keyboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_36sdp"
         android:layout_alignBottom="@id/bttn_finish_call"
         android:layout_toStartOf="@id/bttn_finish_call"
-        android:text="@string/manage_card_get_pin_voip_hide"
-        android:textColor="@android:color/white"
         android:padding="@dimen/_12sdp"
         android:visibility="invisible"
+        android:textColor="@android:color/white"
+        app:localize="manage_card_get_pin_voip_hide"
         tools:textColor="@android:color/black"
         tools:visibility="visible"/>
 
@@ -80,14 +84,16 @@
                 android:src="@drawable/call_mute_button"
                 tools:ignore="ContentDescription"
                 tools:background="@color/button_active" />
-            <TextView
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/tv_mute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:gravity="center"
-                android:text="@string/manage_card_get_pin_voip_mute"
                 android:textColor="@android:color/white"
-                tools:textColor="@color/title_color"/>
+                app:localize="manage_card_get_pin_voip_mute"
+                tools:textColor="@color/title_color" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -104,14 +110,16 @@
                 android:src="@drawable/call_speaker_button"
                 tools:ignore="ContentDescription"
                 tools:background="@color/button_active" />
-            <TextView
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/tv_speaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:gravity="center"
-                android:text="@string/manage_card_get_pin_voip_speaker"
                 android:textColor="@android:color/white"
-                tools:textColor="@color/title_color"/>
+                app:localize="manage_card_get_pin_voip_speaker"
+                tools:textColor="@color/title_color" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -126,16 +134,19 @@
                 android:gravity="center"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_dialpad"
+                android:textColor="@android:color/white"
                 tools:ignore="ContentDescription"
                 tools:background="@color/button_active"/>
-            <TextView
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/tv_keypad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:gravity="center"
-                android:text="@string/manage_card_get_pin_voip_keypad"
                 android:textColor="@android:color/white"
-                tools:textColor="@color/title_color"/>
+                app:localize="manage_card_get_pin_voip_keypad"
+                tools:textColor="@color/title_color" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -16,6 +16,7 @@ import com.aptopayments.sdk.core.extension.isVisible
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.DarkThemeUtils
 import com.aptopayments.sdk.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_layout.*
 import kotlinx.android.synthetic.main.include_rl_loading.*
@@ -29,6 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureDarkTheme()
         setContentView(R.layout.activity_layout)
     }
 
@@ -144,5 +146,10 @@ abstract class BaseActivity : AppCompatActivity() {
                 onRequestPermissionsResult = null
             }
         }
+    }
+
+    private fun configureDarkTheme() {
+        val darkThemUtils = DarkThemeUtils(AptoUiSdk, this)
+        UIConfig.darkTheme = darkThemUtils.isEnabled()
     }
 }

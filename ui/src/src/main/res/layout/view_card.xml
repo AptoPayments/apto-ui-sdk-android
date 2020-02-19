@@ -117,9 +117,9 @@
             android:alpha="0.7"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
             android:text="@string/card_expiration_date_label"
-            android:textColor="@color/llsdk_dark_text_color"
             android:textSize="@dimen/llsdk_expiry_date_label_text_size"
-            tools:ignore="SmallSp" />
+            tools:ignore="SmallSp"
+            tools:textColor="@color/llsdk_dark_text_color" />
 
         <EditText
             android:id="@+id/et_card_name"
@@ -175,9 +175,9 @@
             android:alpha="0.7"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
             android:text="@string/card_cvv_label"
-            android:textColor="@color/llsdk_dark_text_color"
             android:textSize="@dimen/llsdk_cvv_text_label_size"
-            tools:ignore="SmallSp" />
+            tools:ignore="SmallSp"
+            tools:textColor="@color/llsdk_dark_text_color" />
 
         <EditText
             android:id="@+id/et_cvv"

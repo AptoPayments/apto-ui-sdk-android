@@ -42,6 +42,8 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     private lateinit var tokenId: String
     private var menu: Menu? = null
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         dataPoints = arguments!![DATA_POINTS_KEY] as DataPointList
         allowedBalanceType = arguments!![ALLOWED_BALANCE_TYPE_KEY] as AllowedBalanceType
@@ -117,14 +119,16 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         viewModel.setDataPoints(dataPointList)
     }
 
-    private fun setupToolbar() = delegate?.configureToolbar(
+    private fun setupToolbar() {
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(
             toolbar = tb_llsdk_toolbar,
             title = null,
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+        )
+    }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         styleMenuItem()
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
@@ -143,6 +147,8 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
             customizeFormLabel(tv_phone)
             customizeSectionHeader(tv_date_of_birth_label)
             customizeFormLabel(tv_date_of_birth)
+            customizeSectionHeader(tv_id_document_label)
+            customizeFormLabel(tv_id_document)
             val title = "select_balance_store_oauth_confirm_footer".localized()
             customizeHtml(tv_delivery_address_instructions, StringUtils.parseHtmlLinks(title))
         }

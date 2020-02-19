@@ -31,7 +31,6 @@ class SecretPinView @JvmOverloads constructor(context: Context, attrs: Attribute
     interface Delegate {
         fun onPinEntered(currentPin: String)
         fun onForgotPressed()
-        fun onBiometricPressed()
     }
 
     init {
@@ -40,7 +39,6 @@ class SecretPinView @JvmOverloads constructor(context: Context, attrs: Attribute
             val typedArray =
                 context.obtainStyledAttributes(it, R.styleable.SecretPinView, 0, 0)
             configureForgot(typedArray)
-            configureBiometric(typedArray)
             configureLength(typedArray)
             typedArray.recycle()
         }
@@ -81,19 +79,18 @@ class SecretPinView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun configureButtons() {
-        configureClick(pin_btn_0, 0)
-        configureClick(pin_btn_1, 1)
-        configureClick(pin_btn_2, 2)
-        configureClick(pin_btn_3, 3)
-        configureClick(pin_btn_4, 4)
-        configureClick(pin_btn_5, 5)
-        configureClick(pin_btn_6, 6)
-        configureClick(pin_btn_7, 7)
-        configureClick(pin_btn_8, 8)
-        configureClick(pin_btn_9, 9)
+        configureClickAndColor(pin_btn_0, 0)
+        configureClickAndColor(pin_btn_1, 1)
+        configureClickAndColor(pin_btn_2, 2)
+        configureClickAndColor(pin_btn_3, 3)
+        configureClickAndColor(pin_btn_4, 4)
+        configureClickAndColor(pin_btn_5, 5)
+        configureClickAndColor(pin_btn_6, 6)
+        configureClickAndColor(pin_btn_7, 7)
+        configureClickAndColor(pin_btn_8, 8)
+        configureClickAndColor(pin_btn_9, 9)
         pin_btn_back.setOnClickListener { removeDigit() }
         pin_btn_forgot.setOnClickListener { delegate?.onForgotPressed() }
-        pin_biometric_button.setOnClickListener { delegate?.onBiometricPressed() }
     }
 
     private fun configureLength(typedArray: TypedArray) {
@@ -104,20 +101,14 @@ class SecretPinView @JvmOverloads constructor(context: Context, attrs: Attribute
         pin_btn_forgot.visibleIf(show)
     }
 
-    fun showBiometricButton(show: Boolean) = pin_biometric_button.visibleIf(show)
-
-    private fun configureClick(pinBtn: TextView, value: Int) {
+    private fun configureClickAndColor(pinBtn: TextView, value: Int) {
+        pinBtn.setTextColor(UIConfig.textPrimaryColor)
         pinBtn.setOnClickListener { addDigit(value) }
     }
 
     private fun configureForgot(typedArray: TypedArray) {
         val showForgot = typedArray.getBoolean(R.styleable.SecretPinView_showForgot, false)
         pin_btn_forgot.visibleIf(showForgot)
-    }
-
-    private fun configureBiometric(typedArray: TypedArray) {
-        val showBiometric = typedArray.getBoolean(R.styleable.SecretPinView_showBiometric, false)
-        pin_biometric_button.visibleIf(showBiometric)
     }
 
     private fun addDigit(value: Int) {

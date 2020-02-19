@@ -41,6 +41,8 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     override fun layoutId() = R.layout.fragment_verification_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         phoneNumber = verification.verificationDataPoint!!
@@ -68,8 +70,8 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.PHONE)
 
     private fun applyFontsAndColors() {
-        view!!.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
         with(themeManager()){
+            apto_pin_view.setTextColor(UIConfig.textPrimaryColor)
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_verification_code_title)
             customizeFormLabel(tv_verification_code_header)
@@ -80,11 +82,14 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
         }
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
+    private fun setupToolBar() {
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(
             toolbar = tb_llsdk_toolbar,
             title = null,
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+        )
+    }
 
     override fun setupListeners() {
         super.setupListeners()

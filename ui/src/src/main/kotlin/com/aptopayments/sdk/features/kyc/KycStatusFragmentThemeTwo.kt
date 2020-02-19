@@ -30,6 +30,8 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     private lateinit var cardId: String
     override var delegate: KycStatusContract.Delegate? = null
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         kycStatus = arguments!![KYC_STATUS_PARAMETER_KEY] as KycStatus
         cardId = arguments!![CARD_ID_PARAMETER_KEY] as String
@@ -61,7 +63,6 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeLargeTitleLabel(tv_kyc_title)
             customizeRegularTextLabel(tv_status_text)

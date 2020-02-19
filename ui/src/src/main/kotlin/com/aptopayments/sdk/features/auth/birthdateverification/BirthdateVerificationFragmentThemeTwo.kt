@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
@@ -36,6 +37,8 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
     private lateinit var birthdayYear: EditText
 
     override fun layoutId() = R.layout.fragment_birthdate_verification_theme_two
+
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
         primaryCredential = arguments!![BIRTHDATE_VERIFICATION_BUNDLE] as DataPoint
@@ -92,7 +95,6 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_birthdate_title)
@@ -101,11 +103,14 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
         }
     }
 
-    private fun setupToolbar() = delegate?.configureToolbar(
-        toolbar = tb_llsdk_toolbar,
-        title = null,
-        backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+    private fun setupToolbar()  {
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(
+            toolbar = tb_llsdk_toolbar,
+            title = null,
+            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+        )
+    }
 
     private fun onContinueButtonPressed() {
         primaryCredential.verification?.secondaryCredential?.verificationId?.let {
@@ -160,6 +165,13 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
         birthdayDay = container.findViewById(R.id.et_birthday_day)
         birthdayMonth = container.findViewById(R.id.et_birthday_month)
         birthdayYear = container.findViewById(R.id.et_birthday_year)
+        container.findViewById<View>(R.id.separator_left).setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
+        container.findViewById<View>(R.id.separator_right).setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
+        with(themeManager()){
+            customizeEditText(birthdayDay)
+            customizeEditText(birthdayMonth)
+            customizeEditText(birthdayYear)
+        }
     }
 
     private fun setEditTextOrderList(isDayMonth: DateFormatOrder) {

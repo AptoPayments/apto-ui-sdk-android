@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.oauth
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -39,7 +38,7 @@ class OAuthFlowTest: AndroidTest() {
         val config = TestDataProvider.provideOauthConfig()
         val sut = OAuthFlow(config = config, onBack = {}, onFinish = {})
         given { mockFragmentFactory.oauthConnectFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 config = config,
                 tag = tag)
         }.willReturn(fragmentDouble)
@@ -49,7 +48,7 @@ class OAuthFlowTest: AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).oauthConnectFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 config = config,
                 tag = tag)
     }

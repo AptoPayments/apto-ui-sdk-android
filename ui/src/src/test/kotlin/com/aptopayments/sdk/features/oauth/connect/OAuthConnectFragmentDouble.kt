@@ -7,6 +7,7 @@ internal class OAuthConnectFragmentDouble(override var delegate: OAuthConnectCon
         OAuthConnectContract.View
 {
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
     override fun reloadStatus() {}

@@ -4,15 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.annotation.VisibleForTesting
+import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
-import com.aptopayments.sdk.R
-import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.core.extension.localized
+import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -39,6 +38,8 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
 
     override fun layoutId() = R.layout.fragment_phone_input_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     @Suppress("UNCHECKED_CAST")
     override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
@@ -61,14 +62,15 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
         et_phone.hint = "auth_input_phone_hint".localized()
-
-        view?.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        country_code_picker.contentColor = UIConfig.textSecondaryColor
 
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_phone_header)
             customizeFormLabel(tv_phone_label)
             customizeSubmitButton(continue_button)
+            customizeRoundedBackground(phone_in)
+            customizeEditText(et_phone)
         }
     }
 
@@ -80,14 +82,20 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
         country_code_picker.setDefaultCountryUsingNameCode(allowedCountriesArrayList[0])
         country_code_picker.resetToDefaultCountry()
         country_code_picker.setCustomMasterCountries(TextUtils.join(",", allowedCountriesArrayList))
+        country_code_picker.setDialogBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
+        country_code_picker.setDialogSearchEditTextTintColor(UIConfig.textPrimaryColor)
+        country_code_picker.setDialogTextColor(UIConfig.textPrimaryColor)
         disableCountryPicker(allowedCountriesList.size == 1, country_code_picker)
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
+    private fun setupToolBar() {
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(
             toolbar = tb_llsdk_toolbar,
             title = null,
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+        )
+    }
 
     override fun setupListeners() {
         super.setupListeners()

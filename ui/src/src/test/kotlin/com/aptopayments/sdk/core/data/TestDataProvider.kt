@@ -36,7 +36,7 @@ class TestDataProvider {
                 projectConfiguration = ProjectConfiguration(
                         name = "",
                         summary = "",
-                        branding = provideProjectBranding(),
+                        branding = Branding.createDefault(),
                         labels = hashMapOf(),
                         allowedCountries = arrayListOf(Country("US")),
                         supportEmailAddress = "",
@@ -45,38 +45,7 @@ class TestDataProvider {
                         authCredential = AuthCredential.PHONE)
         )
 
-        fun provideProjectBranding() = ProjectBranding(
-                uiBackgroundPrimaryColor = 0,
-                uiBackgroundSecondaryColor = 0,
-                iconPrimaryColor = 0,
-                iconSecondaryColor = 0,
-                iconTertiaryColor = 0,
-                textPrimaryColor = 0,
-                textSecondaryColor = 0,
-                textTertiaryColor = 0,
-                textTopBarPrimaryColor = 0,
-                textTopBarSecondaryColor = 0,
-                textLinkColor = 0,
-                textLinkUnderlined = true,
-                textButtonColor = 0,
-                buttonCornerRadius = 0f,
-                uiPrimaryColor = 0,
-                uiSecondaryColor = 0,
-                uiTertiaryColor = 0,
-                uiErrorColor = 0,
-                uiSuccessColor = 0,
-                uiNavigationPrimaryColor = 0,
-                uiNavigationSecondaryColor = 0,
-                textMessageColor = 0,
-                badgeBackgroundPositiveColor = 0,
-                badgeBackgroundNegativeColor = 0,
-                showToastTitle = true,
-                transactionDetailsCollapsable = true,
-                disclaimerBackgroundColor = 0,
-                uiStatusBarStyle = UIStatusBarStyle.LIGHT,
-                logoUrl = "",
-                uiTheme = UITheme.THEME_1
-        )
+        fun provideProjectBranding() = Branding.createDefault()
 
         fun provideContextConfigurationEmail() = ContextConfiguration(
                 teamConfiguration = TeamConfiguration(
@@ -85,38 +54,7 @@ class TestDataProvider {
                 projectConfiguration = ProjectConfiguration(
                         name = "",
                         summary = "",
-                        branding = ProjectBranding(
-                                uiBackgroundPrimaryColor = 0,
-                                uiBackgroundSecondaryColor = 0,
-                                iconPrimaryColor = 0,
-                                iconSecondaryColor = 0,
-                                iconTertiaryColor = 0,
-                                textPrimaryColor = 0,
-                                textSecondaryColor = 0,
-                                textTertiaryColor = 0,
-                                textTopBarPrimaryColor = 0,
-                                textTopBarSecondaryColor = 0,
-                                textLinkColor = 0,
-                                textLinkUnderlined = true,
-                                textButtonColor = 0,
-                                buttonCornerRadius = 0f,
-                                uiPrimaryColor = 0,
-                                uiSecondaryColor = 0,
-                                uiTertiaryColor = 0,
-                                uiErrorColor = 0,
-                                uiSuccessColor = 0,
-                                uiNavigationPrimaryColor = 0,
-                                uiNavigationSecondaryColor = 0,
-                                textMessageColor = 0,
-                                badgeBackgroundPositiveColor = 0,
-                                badgeBackgroundNegativeColor = 0,
-                                showToastTitle = true,
-                                transactionDetailsCollapsable = true,
-                                disclaimerBackgroundColor = 0,
-                                uiStatusBarStyle = UIStatusBarStyle.LIGHT,
-                                logoUrl = "",
-                                uiTheme = UITheme.THEME_1
-                        ),
+                        branding = Branding.createDefault(),
                         labels = hashMapOf(),
                         allowedCountries = arrayListOf(Country("US")),
                         supportEmailAddress = "",
@@ -192,6 +130,8 @@ class TestDataProvider {
             val list = listOf(spending1, spending2, spending3)
             return list
         }
+
+        fun provideDefaultTheme() = DEFAULT_THEME
     }
         
 }

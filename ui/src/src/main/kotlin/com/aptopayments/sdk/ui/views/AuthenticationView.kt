@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.ui.views
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -17,14 +16,13 @@ import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.usecase.BiometricsAuthCorrectUseCase
 import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
-import com.aptopayments.sdk.core.usecase.VerifyPinUseCase
+import com.aptopayments.sdk.core.usecase.VerifyPasscodeUseCase
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_BIOMETRICS
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_PIN
 import kotlinx.android.synthetic.main.view_authentication.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.ref.WeakReference
 
 private val DEFAULT_AUTH_TYPE = AuthenticationView.AuthType.FORCED
 private val DEFAULT_AUTH_METHOD = AuthenticationView.AuthMethod.BOTH
@@ -36,14 +34,13 @@ internal class AuthenticationView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), KoinComponent, SecretPinView.Delegate {
 
     private val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
-    private val verifyPinUseCase: VerifyPinUseCase by inject()
+    private val verifyPasscodeUseCase: VerifyPasscodeUseCase by inject()
     private val biometricsAuthCorrectUseCase: BiometricsAuthCorrectUseCase by inject()
     private val biometricWrapper: BiometricWrapper by inject()
 
     private var isAuthenticating = false
     private var authType = DEFAULT_AUTH_TYPE
     private var authMethod = DEFAULT_AUTH_METHOD
-    private var weakActivity: WeakReference<BaseActivity>? = null
     private lateinit var keyListener: (View, Int, KeyEvent) -> Boolean
     var delegate: Delegate? = null
 
@@ -66,7 +63,6 @@ internal class AuthenticationView @JvmOverloads constructor(
         configureAuthType(type)
         isAuthenticating = true
         authMethod = method
-        weakActivity = WeakReference(activity)
         showBiometricDialogIfPossible(activity)
     }
 
@@ -103,7 +99,7 @@ internal class AuthenticationView @JvmOverloads constructor(
         inflate(context, R.layout.view_authentication, this)
         isClickable = true
         isFocusableInTouchMode = true
-        setBackgroundColor(Color.WHITE)
+        setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
     }
 
     private fun configureUi() = with(themeManager()) {
@@ -168,7 +164,7 @@ internal class AuthenticationView @JvmOverloads constructor(
     }
 
     override fun onPinEntered(currentPin: String) {
-        verifyPinUseCase(currentPin).either({}, { isCorrect ->
+        verifyPasscodeUseCase(currentPin).either({}, { isCorrect ->
             if (isCorrect) {
                 authenticationEndedCorrectly()
             } else {
@@ -185,11 +181,5 @@ internal class AuthenticationView @JvmOverloads constructor(
 
     override fun onForgotPressed() {
         delegate?.onAuthForgot()
-    }
-
-    override fun onBiometricPressed() {
-        weakActivity?.get()?.let {
-            showBiometricDialog(it)
-        }
     }
 }

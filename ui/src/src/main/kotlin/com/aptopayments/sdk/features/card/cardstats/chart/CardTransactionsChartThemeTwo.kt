@@ -52,6 +52,8 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     override fun layoutId(): Int = R.layout.fragment_transactions_chart_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setupViewModel() {
         viewModel.apply {
             failure(failure) { handleFailure(it) }
@@ -129,6 +131,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         pieChart.isRotationEnabled = false
         pieChart.transparentCircleRadius = 0f
         pieChart.holeRadius = 60f
+        pieChart.setHoleColor(UIConfig.uiBackgroundSecondaryColor)
         pieChart.invalidate()
     }
 

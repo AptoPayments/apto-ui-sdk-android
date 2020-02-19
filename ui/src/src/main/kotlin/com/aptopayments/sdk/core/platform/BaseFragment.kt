@@ -25,6 +25,7 @@ private const val TAG_KEY = "APTO_TAG_KEY"
 internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponent {
 
     abstract fun layoutId(): Int
+    abstract fun backgroundColor(): Int
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     lateinit var TAG: String
@@ -46,6 +47,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        setBackground()
         setupListeners()
         viewLoaded()
     }
@@ -129,5 +131,9 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
         } else {
             hideLoading()
         }
+    }
+
+    private fun setBackground() {
+        view?.setBackgroundColor(backgroundColor())
     }
 }

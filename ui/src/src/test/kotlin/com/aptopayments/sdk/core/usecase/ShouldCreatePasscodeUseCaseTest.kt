@@ -10,15 +10,15 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 
-internal class ShouldCreatePINUseCaseTest : UnitTest() {
+internal class ShouldCreatePasscodeUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var authenticationRepo: AuthenticationRepository
-    lateinit var sut: ShouldCreatePINUseCase
+    lateinit var sut: ShouldCreatePasscodeUseCase
 
     @Before
     fun before() {
-        sut = ShouldCreatePINUseCase(authenticationRepo)
+        sut = ShouldCreatePasscodeUseCase(authenticationRepo)
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class ShouldCreatePINUseCaseTest : UnitTest() {
         pinOnPCI: Boolean,
         resultExpected: Boolean
     ) {
-        whenever(authenticationRepo.isPinSet()).thenReturn(pinSet)
+        whenever(authenticationRepo.isPasscodeSet()).thenReturn(pinSet)
         configureFlags(startup = pinOnStartup, pci = pinOnPCI)
         val result = sut()
 

@@ -31,6 +31,8 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
     private val viewModel: NoNetworkViewModel by viewModel()
     private var timer = Timer()
 
+    override fun backgroundColor(): Int = UIConfig.uiNavigationSecondaryColor
+
     override fun setupViewModel() {
     }
 
@@ -55,7 +57,6 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
 
     override fun setupUI() {
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
-        view!!.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         tv_description_text.setTextColor(UIConfig.textTopBarSecondaryColor)
         tv_loading_text.setTextColor(UIConfig.textTertiaryColor)
         pb_progress.indeterminateDrawable.setColorFilter(UIConfig.textTertiaryColor, PorterDuff.Mode.SRC_IN)

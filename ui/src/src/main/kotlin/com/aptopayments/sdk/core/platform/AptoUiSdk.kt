@@ -17,6 +17,8 @@ import com.aptopayments.sdk.utils.FontsUtil
 import java.lang.ref.WeakReference
 
 interface AptoUiSdkProtocol {
+    var cardOptions: CardOptions
+
     fun initializeWithApiKey(
         application: Application,
         apiKey: String,
@@ -39,7 +41,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
 
     internal var cardFlow: WeakReference<CardFlow>? = null
 
-    var cardOptions: CardOptions = CardOptions()
+    override var cardOptions: CardOptions = CardOptions()
 
     override fun initializeWithApiKey(
         application: Application,

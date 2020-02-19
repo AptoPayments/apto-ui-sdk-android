@@ -7,6 +7,7 @@ internal class SetPinFragmentDouble(override var delegate: SetPinContract.Delega
         SetPinContract.View
 {
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

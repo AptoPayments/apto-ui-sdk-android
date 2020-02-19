@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
+import com.aptopayments.sdk.core.usecase.ShouldShowBiometricOption
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import org.koin.core.KoinComponent
@@ -13,10 +13,9 @@ import org.koin.core.inject
 
 internal class AccountSettingsViewModel constructor(
     private val analyticsManager: AnalyticsServiceContract,
-    private val authRepository: AuthenticationRepository
+    private val authRepository: AuthenticationRepository,
+    private val showBiometricOption: ShouldShowBiometricOption
 ) : BaseViewModel(), KoinComponent {
-
-    val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
 
     val monthlyStatementVisibility = isMonthlyStatementFlagActive()
     val securityVisibility = isSecurityAvailable()
@@ -33,7 +32,7 @@ internal class AccountSettingsViewModel constructor(
     private fun isNotificationsAvailable() = AptoUiSdk.cardOptions.showNotificationPreferences()
 
     private fun configureFingerprint() {
-        _fingerprintEnabled.value = canAskBiometricsUseCase().either({ false }, { it }) as Boolean
+        _fingerprintEnabled.value = authRepository.isBiometricsEnabledByUser()
     }
 
     @Synchronized
@@ -46,8 +45,7 @@ internal class AccountSettingsViewModel constructor(
     private fun isSecurityAvailable() =
         AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI()
 
-    private fun isFingerprintAvailable() =
-        canAskBiometricsUseCase().either({ false }, { it && isSecurityAvailable() }) as Boolean
+    private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it }) as Boolean
 
     private fun isMonthlyStatementFlagActive() = AptoUiSdk.cardOptions.showMonthlyStatementOption()
 

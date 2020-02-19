@@ -50,6 +50,8 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
 
     override fun layoutId(): Int = R.layout.fragment_transaction_details_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -161,7 +163,6 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         setTitleBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         iv_address_icon.setColorFilter(UIConfig.uiPrimaryColor)
         ll_address_separator.setBackgroundColor(UIConfig.uiTertiaryColor)

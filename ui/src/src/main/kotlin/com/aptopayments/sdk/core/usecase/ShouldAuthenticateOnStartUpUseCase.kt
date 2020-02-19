@@ -16,9 +16,8 @@ internal class ShouldAuthenticateOnStartUpUseCase(
         return Either.Right(
             AptoUiSdk.cardOptions.authenticateOnStartup() &&
                     authStateProviderImpl.userTokenPresent() &&
-                    authenticationRepo.isAuthenticationNeedSaved() &&
-                    authenticationRepo.isAuthTimeInvalid() &&
-                    authenticationRepo.isPinSet()
+                    (authenticationRepo.isAuthenticationNeedSaved() || authenticationRepo.isAuthTimeInvalid()) &&
+                    authenticationRepo.isPasscodeSet()
         )
     }
 }

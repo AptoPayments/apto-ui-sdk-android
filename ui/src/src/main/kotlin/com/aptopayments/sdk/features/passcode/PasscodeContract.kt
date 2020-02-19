@@ -1,11 +1,11 @@
-package com.aptopayments.sdk.features.pin
+package com.aptopayments.sdk.features.passcode
 
 import com.aptopayments.sdk.core.platform.FragmentDelegate
 
-interface CreatePinContract {
+interface PasscodeContract {
 
     interface Delegate : FragmentDelegate {
-        fun onPinSetCorrectly(pin: String)
+        fun onPasscodeSetCorrectly(passCode: String)
         fun onBackPressed()
     }
 

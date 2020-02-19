@@ -665,18 +665,24 @@
     <string name="monthly_statements_list_empty_case_message">No stataments available yet</string>
 
     <!--Auth Biometric-->
-    <string name="biometric_create_pin_title">Create a new passcode</string>
-    <string name="biometric_create_pin_agreement">By creating a passcode you agree to Terms of Service and Privacy Policy</string>
+    <string name="biometric_create_pin_title">Set your Passcode</string>
+    <string name="biometric_create_pin_title_description">Choose a unique, four digit passcode for your App</string>
+    <string name="biometric_create_pin_title_description_long">Note - this Passcode is only used to manage your Card Settings within the app. If you sign out of this app completely, you will be required to log back in with your Phone Number and Date of Birth.</string>
+    <string name="biometric_create_pin_confirmation_title">Confirm passcode</string>
+    <string name="biometric_create_pin_confirmation_title_description">Please enter your passcode code to confirm it</string>
+    <string name="biometric_verify_pin_title">Enter your Current Passcode</string>
+    <string name="biometric_verify_pin_title_description">Please enter the four digit Passcode you use to log into your Card App.</string>
+    <string name="biometric_change_pin_title">Set your new Passcode</string>
+    <string name="biometric_change_pin_confirmation_title">Confirm your new Passcode</string>
     <string name="biometric_verify_pin_forgot_cta">Forgot?</string>
     <string name="biometric_verify_pin_forgot_alert_title">Warning</string>
-    <string name="biometric_verify_pin_forgot_alert_message">This action will log you out of the app, so you can identify yourself and set a new PIN</string>
+    <string name="biometric_verify_pin_forgot_alert_message">You will be logged out of the App and required to verify your identity by completing the full sign-in process.</string>
     <string name="biometric_verify_pin_forgot_alert_confirm">Confirm</string>
     <string name="biometric_verify_pin_forgot_alert_cancel">Cancel</string>
-    <string name="biometric_show_pin_error_wrong_pin">Invalid PIN</string>
+    <string name="biometric_show_pin_error_wrong_pin">Invalid Passcode</string>
     <string name="auth_verify_biometric_title">Unlock with your fingerprint</string>
     <string name="auth_verify_biometric_use_passcode">Use passcode instead</string>
     <string name="auth_verify_biometric_cancel">Cancel</string>
-    <string name="biometric_create_pin_confirmation_title">Confirm passcode</string>
     <string name="biometric_create_pin_error_title">Error</string>
     <string name="biometric_create_pin_error_pin_not_match">Passcodes do not match</string>
     <string name="biometric_change_pin_success_title">Congratulations</string>

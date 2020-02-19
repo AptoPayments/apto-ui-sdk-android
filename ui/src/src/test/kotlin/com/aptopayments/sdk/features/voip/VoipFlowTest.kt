@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.voip
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
@@ -17,9 +16,12 @@ import org.mockito.Mock
 class VoipFlowTest : AndroidTest() {
 
     private lateinit var sut: VoipFlow
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockDelegate: VoipContract.Delegate
-    @Mock private lateinit var mockAction: Action
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockDelegate: VoipContract.Delegate
+    @Mock
+    private lateinit var mockAction: Action
     private val cardId = "TEST_CARD_ID"
 
     @Before
@@ -39,13 +41,24 @@ class VoipFlowTest : AndroidTest() {
         // Given
         val tag = "VoipFragment"
         val fragmentDouble = VoipFragmentDouble(mockDelegate).apply { this.TAG = tag }
-        given { mockFragmentFactory.getVoipFragment(uiTheme = UITheme.THEME_1, tag = tag, action = mockAction, cardId = cardId)
+        given {
+            mockFragmentFactory.getVoipFragment(
+                uiTheme = TestDataProvider.provideDefaultTheme(),
+                tag = tag,
+                action = mockAction,
+                cardId = cardId
+            )
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).getVoipFragment(uiTheme = UITheme.THEME_1, tag = tag, action = mockAction, cardId = cardId)
+        verify(mockFragmentFactory).getVoipFragment(
+            uiTheme = TestDataProvider.provideDefaultTheme(),
+            tag = tag,
+            action = mockAction,
+            cardId = cardId
+        )
     }
 }

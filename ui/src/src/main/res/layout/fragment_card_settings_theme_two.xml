@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/tb_llsdk_custom_toolbar"

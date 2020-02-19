@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.setpin
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -16,9 +15,12 @@ import org.mockito.Mock
 class SetPinFlowTest : AndroidTest() {
 
     private lateinit var sut: SetPinFlow
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockSetPinDelegate: SetPinContract.Delegate
-    @Mock private lateinit var mockConfirmPinDelegate: ConfirmPinContract.Delegate
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockSetPinDelegate: SetPinContract.Delegate
+    @Mock
+    private lateinit var mockConfirmPinDelegate: ConfirmPinContract.Delegate
 
     @Before
     override fun setUp() {
@@ -37,14 +39,15 @@ class SetPinFlowTest : AndroidTest() {
         // Given
         val tag = "SetPinFragment"
         val fragmentDouble = SetPinFragmentDouble(mockSetPinDelegate).apply { this.TAG = tag }
-        given { mockFragmentFactory.setPinFragment(uiTheme = UITheme.THEME_1, tag = tag)
+        given {
+            mockFragmentFactory.setPinFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).setPinFragment(uiTheme = UITheme.THEME_1, tag = tag)
+        verify(mockFragmentFactory).setPinFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag)
     }
 
     @Test
@@ -53,13 +56,22 @@ class SetPinFlowTest : AndroidTest() {
         val tag = "ConfirmPinFragment"
         val pin = "1234"
         val fragmentDouble = ConfirmPinFragmentDouble(mockConfirmPinDelegate).apply { this.TAG = tag }
-        given { mockFragmentFactory.confirmPinFragment(uiTheme = UITheme.THEME_1, pin = pin, tag = tag)
+        given {
+            mockFragmentFactory.confirmPinFragment(
+                uiTheme = TestDataProvider.provideDefaultTheme(),
+                pin = pin,
+                tag = tag
+            )
         }.willReturn(fragmentDouble)
 
         // When
         sut.setPinFinished(pin)
 
         // Then
-        verify(mockFragmentFactory).confirmPinFragment(uiTheme = UITheme.THEME_1, pin = pin, tag = tag)
+        verify(mockFragmentFactory).confirmPinFragment(
+            uiTheme = TestDataProvider.provideDefaultTheme(),
+            pin = pin,
+            tag = tag
+        )
     }
 }

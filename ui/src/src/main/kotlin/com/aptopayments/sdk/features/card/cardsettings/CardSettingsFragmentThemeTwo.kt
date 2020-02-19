@@ -45,6 +45,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun layoutId(): Int = R.layout.fragment_card_settings_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         card = arguments!![CARD_KEY] as Card
         cardProduct = arguments!![CARD_PRODUCT_KEY] as CardProduct

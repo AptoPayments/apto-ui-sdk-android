@@ -35,6 +35,8 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
 
     override fun layoutId(): Int = R.layout.fragment_notification_preferences_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         cardId = arguments!![CARD_ID_PARAMETER_KEY] as String
     }
@@ -117,7 +119,6 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         ll_notifications_header.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         with(themeManager()) {
             customizeStarredSectionTitle(tv_notifications_header)

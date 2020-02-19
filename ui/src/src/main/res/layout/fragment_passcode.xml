@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/tb_llsdk_toolbar_layout"
+        layout="@layout/include_toolbar_two" />
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_set_pin_title"
+        style="@style/ThemeTwo.TextHeader"
+        android:layout_marginTop="@dimen/llsdk_phone_input_wrapper_height"
+        tools:text="Set your passcode" />
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/tv_set_pin_subtitle"
+        style="@style/ThemeTwo.TextInput"
+        android:layout_below="@+id/tv_set_pin_title"
+        android:layout_centerHorizontal="true"
+        tools:text="Choose a unique four digit password ..." />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_set_pin_subtitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.aptopayments.sdk.features.auth.inputphone.AptoPinView
+                android:id="@+id/pin_view"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginStart="@dimen/llsdk_medium_margin"
+                android:layout_marginTop="@dimen/llsdk_medium_margin"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:layout_marginBottom="@dimen/llsdk_medium_margin"
+                android:background="@drawable/rounded_corners"
+                android:digits="1234567890"
+                android:elevation="2dp"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:paddingStart="@dimen/_85sdp"
+                android:paddingEnd="@dimen/_85sdp"
+                android:paddingBottom="@dimen/_24sdp"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/text_size_larger" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/tv_forgot_passcode"
+                style="@style/ThemeTwo.TextInput"
+                app:localize="biometric_verify_pin_forgot_cta" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

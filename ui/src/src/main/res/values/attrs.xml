@@ -10,8 +10,7 @@
         <attr name="localize" format="string" />
     </declare-styleable>
     <declare-styleable name="SecretPinView">
-        <attr name="length" format="integer"/>
+        <attr name="length" format="integer" />
         <attr name="showForgot" format="boolean" />
-        <attr name="showBiometric" format="boolean" />
     </declare-styleable>
 </resources>

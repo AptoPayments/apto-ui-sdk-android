@@ -23,12 +23,13 @@
             app:popupTheme="?attr/llsdk_toolbarPopupTheme"
             app:theme="@style/AppTheme.Toolbar">
 
-            <TextView
+            <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/tv_toolbar_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="72dp"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_16sdp"
+                app:localize="disclaimer_disclaimer_title" />
 
         </androidx.appcompat.widget.Toolbar>
 

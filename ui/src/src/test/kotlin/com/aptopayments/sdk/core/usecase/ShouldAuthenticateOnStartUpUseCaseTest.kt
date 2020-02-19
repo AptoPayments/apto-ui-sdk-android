@@ -68,6 +68,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         assertRightEitherIsEqualTo(result, false)
         verify(authenticationRepo).isAuthenticationNeedSaved()
+        verify(authenticationRepo).isAuthTimeInvalid()
         verifyNoMoreInteractions(authenticationRepo)
     }
 
@@ -75,7 +76,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
     fun `when first login no authentication needed`() {
         configureCardOptions(true)
         configureUserTokenPresent(true)
-        configureAuthNeeded(true)
+        configureAuthNeeded(false)
         configureAuthTimeInvalid(false)
 
         val result = sut()
@@ -84,17 +85,30 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
         verify(authenticationRepo).isAuthTimeInvalid()
     }
 
+    @Test
+    fun `when logged and went to background then authentication needed`() {
+        configureCardOptions(true)
+        configureUserTokenPresent(true)
+        configureAuthNeeded(true)
+        configurePasscodeSet(true)
+
+        val result = sut()
+
+        assertRightEitherIsEqualTo(result, true)
+    }
+
+
     private fun configureAuthTimeInvalid(authTimeInvalid: Boolean) {
         given(authenticationRepo.isAuthTimeInvalid()).willReturn(authTimeInvalid)
     }
 
     @Test
-    fun `when no pin no authentication needed`() {
+    fun `when no passcode no authentication needed`() {
         configureCardOptions(true)
         configureUserTokenPresent(true)
         configureAuthNeeded(true)
         configureAuthTimeInvalid(true)
-        configurePinSet(false)
+        configurePasscodeSet(false)
 
         val result = sut()
 
@@ -102,12 +116,25 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
     }
 
     @Test
-    fun `when pin authentication needed`() {
+    fun `when logged but time passed then authentication needed`() {
+        configureCardOptions(true)
+        configureUserTokenPresent(true)
+        configureAuthNeeded(false)
+        configureAuthTimeInvalid(true)
+        configurePasscodeSet(false)
+
+        val result = sut()
+
+        assertRightEitherIsEqualTo(result, false)
+    }
+
+    @Test
+    fun `when passcode authentication needed`() {
         configureCardOptions(true)
         configureUserTokenPresent(true)
         configureAuthNeeded(true)
         configureAuthTimeInvalid(true)
-        configurePinSet(true)
+        configurePasscodeSet(true)
 
         val result = sut()
 
@@ -120,8 +147,8 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
         result.either({}, { it shouldBe rightValue })
     }
 
-    private fun configurePinSet(pinSet: Boolean) {
-        given(authenticationRepo.isPinSet()).willReturn(pinSet)
+    private fun configurePasscodeSet(passcodeSet: Boolean) {
+        given(authenticationRepo.isPasscodeSet()).willReturn(passcodeSet)
     }
 
     private fun configureAuthNeeded(need: Boolean) {

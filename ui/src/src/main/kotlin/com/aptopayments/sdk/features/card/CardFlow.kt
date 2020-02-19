@@ -11,12 +11,13 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
-import com.aptopayments.sdk.core.usecase.ShouldCreatePINUseCase
+import com.aptopayments.sdk.core.usecase.ShouldCreatePasscodeUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.AuthFlow
 import com.aptopayments.sdk.features.managecard.ManageCardFlow
 import com.aptopayments.sdk.features.newcard.NewCardFlow
-import com.aptopayments.sdk.features.pin.CreatePINFlow
+import com.aptopayments.sdk.features.passcode.CreatePasscodeFlow
+import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
 import com.aptopayments.sdk.repository.StatementRepository
 import org.koin.core.KoinComponent
@@ -31,7 +32,7 @@ internal class CardFlow : Flow(), KoinComponent {
     private val networkHandler: NetworkHandler by inject()
     val analyticsManager: AnalyticsServiceContract by inject()
     private val statementRepository: StatementRepository by inject()
-    private val shouldCreatePinUseCase : ShouldCreatePINUseCase by inject()
+    private val shouldCreatePasscodeUseCase : ShouldCreatePasscodeUseCase by inject()
 
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
@@ -222,9 +223,9 @@ internal class CardFlow : Flow(), KoinComponent {
     }
 
     private fun initSetLoginPinFlow(cardId: String, onInitComplete: (Either<Failure, Flow>) -> Unit) {
-        val shouldCreate = shouldCreatePinUseCase().either({ false }, { it }) as Boolean
+        val shouldCreate = shouldCreatePasscodeUseCase().either({ false }, { it }) as Boolean
         if (shouldCreate) {
-            val flow = CreatePINFlow(onFinish = { showManageCardFlow(cardId) })
+            val flow = CreatePasscodeFlow(mode = PasscodeMode.CREATE, onFinish = { showManageCardFlow(cardId) })
             flow.init { initResult ->
                 initResult.either({ onInitComplete(Either.Left(it)) }) { onInitComplete(Either.Right(flow)) }
             }

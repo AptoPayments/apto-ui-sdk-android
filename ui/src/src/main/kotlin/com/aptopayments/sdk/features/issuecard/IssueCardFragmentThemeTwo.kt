@@ -7,7 +7,6 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.viewModel
 import com.aptopayments.sdk.core.platform.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.reflect.Modifier
@@ -22,6 +21,8 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
     private lateinit var cardApplicationId: String
 
     override fun layoutId() = R.layout.fragment_issue_card_theme_two
+
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
         cardApplicationId = arguments!![CARD_APPLICATION_ID] as String
@@ -47,9 +48,7 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
         delegate?.onCardIssuedFailed(issueCardErrorCode)
     }
 
-    override fun setupUI() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
-    }
+    override fun setupUI() {}
 
     override fun viewLoaded() {
         viewModel.viewLoaded()

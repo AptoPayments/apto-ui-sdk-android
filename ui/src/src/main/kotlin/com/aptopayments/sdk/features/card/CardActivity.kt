@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.removeAnimated
@@ -13,6 +14,7 @@ import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.usecase.ForgotPinUseCase
 import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnStartUpUseCase
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthType.FORCED
 import com.aptopayments.sdk.utils.MessageBanner
@@ -24,6 +26,7 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
     private val shouldAuthenticateOnStartupUseCase: ShouldAuthenticateOnStartUpUseCase by inject()
     private val forgotPinUseCase: ForgotPinUseCase by inject()
     private val observer: AppLifecycleObserver by inject()
+    private val analyticsManager: AnalyticsServiceContract by inject()
     private var onAuthenticatedCorrectly: (() -> Unit)? = null
     private var onAuthenticatedCancelled: (() -> Unit)? = null
 
@@ -122,6 +125,7 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         onCancelled: (() -> Unit)? = null,
         onAuthenticated: (() -> Unit)? = null
     ) {
+        analyticsManager.track(Event.VerifyPasscodeStart)
         authentication_view.show()
         this.onAuthenticatedCorrectly = onAuthenticated
         this.onAuthenticatedCancelled = onCancelled

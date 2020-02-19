@@ -7,6 +7,7 @@ internal class VoipFragmentDouble(override var delegate: VoipContract.Delegate?)
         VoipContract.View
 {
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

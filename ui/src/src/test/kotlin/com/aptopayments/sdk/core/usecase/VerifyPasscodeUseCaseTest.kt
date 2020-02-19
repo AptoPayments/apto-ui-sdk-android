@@ -15,21 +15,21 @@ import kotlin.test.assertTrue
 private const val CORRECT_PIN = "1234"
 private const val INCORRECT_PIN = "5678"
 
-internal class VerifyPinUseCaseTest : UnitTest() {
+internal class VerifyPasscodeUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var authenticationRepo: AuthenticationRepository
 
-    lateinit var sut: VerifyPinUseCase
+    lateinit var sut: VerifyPasscodeUseCase
 
     @Before
     fun before() {
-        sut = VerifyPinUseCase(authenticationRepo)
+        sut = VerifyPasscodeUseCase(authenticationRepo)
     }
 
     @Test
     fun `when Pin is correct then authTime is saved and true returned`() {
-        whenever(authenticationRepo.getPin()).thenReturn(CORRECT_PIN)
+        whenever(authenticationRepo.getPasscode()).thenReturn(CORRECT_PIN)
 
         val result = sut(CORRECT_PIN)
 
@@ -40,7 +40,7 @@ internal class VerifyPinUseCaseTest : UnitTest() {
 
     @Test
     fun `when Pin is Not correct then authTime is Not saved and false returned`() {
-        whenever(authenticationRepo.getPin()).thenReturn(CORRECT_PIN)
+        whenever(authenticationRepo.getPasscode()).thenReturn(CORRECT_PIN)
 
         val result = sut(INCORRECT_PIN)
 

@@ -26,6 +26,8 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
 
     override fun layoutId(): Int = R.layout.fragment_content_presenter_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         content = arguments!![CONTENT_KEY] as Content
         title = arguments!![TITLE_KEY] as String
@@ -67,7 +69,6 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
     override fun didScrollToBottom() {}
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         vw_content_presenter.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         activity?.window?.let { themeManager().customizeSecondaryNavigationStatusBar(it) }
     }

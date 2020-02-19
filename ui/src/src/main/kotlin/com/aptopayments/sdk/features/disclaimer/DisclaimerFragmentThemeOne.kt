@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.disclaimer
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.RelativeLayout
 import com.aptopayments.core.data.config.UIConfig
@@ -26,6 +25,8 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
 
     override fun layoutId(): Int = R.layout.fragment_disclaimer_theme_one
 
+    override fun backgroundColor(): Int = UIConfig.disclaimerBackgroundColor
+
     override fun setUpArguments() {
         content = arguments!![CONTENT_KEY] as Content
     }
@@ -34,7 +35,6 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
     }
 
     override fun setupUI() {
-        localizeStrings()
         setUpTheme()
         showLoading()
         setUpContent()
@@ -54,7 +54,6 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
 
     private fun setUpTheme() {
         activity?.window?.let { themeManager().customizeStatusBar(it) }
-        view?.setBackgroundColor(UIConfig.disclaimerBackgroundColor)
         vw_content_presenter.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout)
@@ -63,11 +62,6 @@ internal class DisclaimerFragmentThemeOne : BaseFragment(), DisclaimerContract.V
         }
         tv_toolbar_title.setTextColor(UIConfig.textTopBarPrimaryColor)
         tb_llsdk_toolbar_layout.setBackgroundColor(UIConfig.uiTertiaryColor)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun localizeStrings() {
-        tv_toolbar_title.text = "disclaimer_disclaimer_title".localized()
     }
 
     override fun setupListeners() {

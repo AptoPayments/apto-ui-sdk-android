@@ -20,9 +20,9 @@ internal interface AuthenticationRepository {
     fun isAuthenticationNeedSaved(): Boolean
     fun isBiometricsEnabledByUser(): Boolean
     fun enableBiometrics(value: Boolean)
-    fun isPinSet(): Boolean
-    fun setPin(value: String)
-    fun getPin(): String
+    fun isPasscodeSet(): Boolean
+    fun setPasscode(value: String)
+    fun getPasscode(): String
 }
 
 internal class AuthenticationRepositoryImpl(private val sharedPref: SharedPreferences) : AuthenticationRepository {
@@ -55,13 +55,13 @@ internal class AuthenticationRepositoryImpl(private val sharedPref: SharedPrefer
         sharedPref.edit().putBoolean(BIOMETRIC_ENABLED_BY_USER, value).commit()
     }
 
-    override fun isPinSet() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE) != DEFAULT_PIN_VALUE
+    override fun isPasscodeSet() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE) != DEFAULT_PIN_VALUE
 
-    override fun setPin(value: String) {
+    override fun setPasscode(value: String) {
         sharedPref.edit().putString(PIN_VALUE, value).commit()
     }
 
-    override fun getPin() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE)!!
+    override fun getPasscode() = sharedPref.getString(PIN_VALUE, DEFAULT_PIN_VALUE)!!
 
     private fun getAuthenticationTime(): Either<Unit, LocalDateTime> {
         val lastAuth = sharedPref.getLong(LAST_BIOMETRIC_AUTH, DEFAULT_AUTH_TIME)

@@ -36,6 +36,8 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     override fun layoutId() = R.layout.fragment_email_verification_theme_one
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         verification = arguments!![VERIFICATION_BUNDLE] as Verification
         emailAddress = verification.verificationDataPoint!!
@@ -70,7 +72,6 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
     }
 
     private fun applyFontsAndColors() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

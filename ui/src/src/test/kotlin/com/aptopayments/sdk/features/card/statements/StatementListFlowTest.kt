@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.statements
 
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -60,7 +59,7 @@ class StatementListFlowTest : AndroidTest() {
             PdfRendererFragmentDouble(pdfRendererFragmentDelegate).apply { this.TAG = PDF_RENDERER_TAG }
         given {
             mockFragmentFactory.pdfRendererFragment(
-                UITheme.THEME_1,
+                TestDataProvider.provideDefaultTheme(),
                 statementFile.title,
                 statementFile.file,
                 PDF_RENDERER_TAG

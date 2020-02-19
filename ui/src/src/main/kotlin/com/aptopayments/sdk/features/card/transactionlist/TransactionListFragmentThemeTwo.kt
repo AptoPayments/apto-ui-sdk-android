@@ -25,7 +25,9 @@ private const val CONFIG_KEY = "CONFIG"
 internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionListContract.View,
         TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
     override var delegate: TransactionListContract.Delegate? = null
+
     override fun layoutId(): Int = R.layout.transaction_list_fragment_theme_two
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: TransactionListViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var cardId: String

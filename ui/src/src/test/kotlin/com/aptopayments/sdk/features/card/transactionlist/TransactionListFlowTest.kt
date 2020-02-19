@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme.THEME_2
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.AndroidTest
@@ -21,7 +20,8 @@ import kotlin.test.assertTrue
 class TransactionListFlowTest : AndroidTest() {
     private lateinit var sut: TransactionListFlow
     // Collaborators
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
     private val tag = "TransactionListFragment"
@@ -33,26 +33,35 @@ class TransactionListFlowTest : AndroidTest() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(module {
-                single{ mockFragmentFactory }
+                single { mockFragmentFactory }
             })
         }
     }
 
     @Test
-    fun `sut initialized with THEME2 instantiate fragment from the factory`() {
+    fun `sut initialized with correct Theme instantiate fragment from the factory`() {
         // Given
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
-        UIConfig.uiTheme = THEME_2
         val fragmentTestDouble = transactionListFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionListFragment(uiTheme = THEME_2, cardId = cardId, config = config, tag = tag)
+            mockFragmentFactory.transactionListFragment(
+                uiTheme = TestDataProvider.provideDefaultTheme(),
+                cardId = cardId,
+                config = config,
+                tag = tag
+            )
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).transactionListFragment(uiTheme = THEME_2, cardId = cardId, config = config, tag = tag)
+        verify(mockFragmentFactory).transactionListFragment(
+            uiTheme = TestDataProvider.provideDefaultTheme(),
+            cardId = cardId,
+            config = config,
+            tag = tag
+        )
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 
@@ -70,21 +79,28 @@ class TransactionListFlowTest : AndroidTest() {
     }
 
     @Test
-    fun `on transaction tapped with THEME2 instantiate fragment from the factory`() {
+    fun `on transaction tapped instantiate fragment from the factory`() {
         // Given
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
-        UIConfig.uiTheme = THEME_2
         val transaction = mock(Transaction::class.java)
         val fragmentTestDouble = transactionDetailsFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionDetailsFragment(THEME_2, transaction, detailsTag)
+            mockFragmentFactory.transactionDetailsFragment(
+                TestDataProvider.provideDefaultTheme(),
+                transaction,
+                detailsTag
+            )
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.onTransactionTapped(transaction)
 
         // Then
-        verify(mockFragmentFactory).transactionDetailsFragment(THEME_2, transaction, detailsTag)
+        verify(mockFragmentFactory).transactionDetailsFragment(
+            TestDataProvider.provideDefaultTheme(),
+            transaction,
+            detailsTag
+        )
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 

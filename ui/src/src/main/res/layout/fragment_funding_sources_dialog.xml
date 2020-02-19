@@ -93,7 +93,6 @@
                     android:background="@drawable/rounded_button_theme_two"
                     android:gravity="center"
                     android:padding="@dimen/_12sdp"
-                    android:textColor="@android:color/white"
                     android:textSize="@dimen/text_size_medium_large"
                     app:localize="manage_card.funding_source_selector.empty_case.call_to_action" />
             </RelativeLayout>

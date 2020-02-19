@@ -1,11 +1,15 @@
 package com.aptopayments.sdk.core.platform.theme
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.CharacterStyle
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -60,6 +64,11 @@ interface ThemeManager {
     fun customizeFormField(textView: TextView)
     fun customizeFormFieldSmall(textView: TextView)
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
+    fun customizeEditText(editText: EditText)
+
+    fun customizeRoundedBackground(view: View){
+        (view.background as? GradientDrawable)?.setColor(UIConfig.uiBackgroundSecondaryColor)
+    }
 
     fun loadLogoOnImageView(imageView: ImageView) {
         imageView.loadFromUrl(UIConfig.logoImage)

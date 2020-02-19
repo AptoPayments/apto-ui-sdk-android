@@ -20,6 +20,8 @@ internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract
     private val viewModel: MaintenanceViewModel by viewModel()
     override fun layoutId() = R.layout.fragment_maintenance_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiNavigationSecondaryColor
+
     override fun setupViewModel() {
     }
 
@@ -34,7 +36,6 @@ internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract
 
     private fun setupTheme() {
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
-        view!!.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         iv_maintenance.setColorFilter(UIConfig.uiTertiaryColor)
         themeManager().apply {
             customizeContentPlainInvertedText(tv_description_text)

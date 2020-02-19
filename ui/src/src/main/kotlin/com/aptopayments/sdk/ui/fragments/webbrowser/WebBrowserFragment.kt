@@ -35,6 +35,9 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     override var delegate: WebBrowserContract.Delegate? = null
 
     override fun layoutId(): Int = R.layout.fragment_web_browser
+
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setupViewModel() = Unit
 
     override fun setUpArguments() {
@@ -58,9 +61,7 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     }
 
     private fun setupTheme() {
-        val color = UIConfig.uiBackgroundPrimaryColor
-        view?.setBackgroundColor(color)
-        wb_web_view.setBackgroundColor(color)
+        wb_web_view.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         themeManager().customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
     }
 

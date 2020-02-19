@@ -32,6 +32,8 @@ internal class ConfirmPinFragmentThemeTwo : BaseFragment(), ConfirmPinContract.V
 
     override fun layoutId(): Int = R.layout.fragment_set_pin_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         pin = arguments!![PIN_KEY] as String
     }
@@ -67,7 +69,6 @@ internal class ConfirmPinFragmentThemeTwo : BaseFragment(), ConfirmPinContract.V
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_set_pin_title)

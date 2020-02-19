@@ -44,6 +44,8 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
 
     override fun layoutId() = R.layout.fragment_phone_input_theme_one
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     @Suppress("UNCHECKED_CAST")
     override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
@@ -66,7 +68,6 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
     @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
         et_phone.hint = "auth_input_phone_hint".localized()
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
@@ -82,6 +83,7 @@ internal class InputPhoneFragmentThemeOne : BaseFragment(), InputPhoneContract.V
         country_code_picker.setDefaultCountryUsingNameCode(allowedCountriesArrayList[0])
         country_code_picker.resetToDefaultCountry()
         country_code_picker.setCustomMasterCountries(TextUtils.join(",", allowedCountriesArrayList))
+        country_code_picker.contentColor = UIConfig.textSecondaryColor
         disableCountryPicker(allowedCountriesList.size == 1, country_code_picker)
     }
 

@@ -8,6 +8,7 @@ internal class AuthVerifyBirthdayFragmentDouble(override var delegate: Birthdate
         BirthdateVerificationContract.View
 {
     override fun layoutId(): Int { return 0 }
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

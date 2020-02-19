@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -7,7 +8,7 @@
     android:padding="@dimen/_9sdp"
     android:weightSum="2.0">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:id="@+id/add_funding_source_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +19,7 @@
         android:background="@drawable/rounded_button_theme_two"
         android:gravity="center"
         android:padding="@dimen/_12sdp"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_medium_large" />
+        android:textSize="@dimen/text_size_medium_large"
+        tools:textColor="@android:color/white" />
 
 </LinearLayout>

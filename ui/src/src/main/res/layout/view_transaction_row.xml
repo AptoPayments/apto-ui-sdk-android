@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_transaction_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/ll_transaction_row"
@@ -43,10 +42,10 @@
                     android:layout_weight="1"
                     android:gravity="start"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:textColor="@color/title_color"
                     android:textSize="@dimen/text_size_medium"
                     android:ellipsize="end"
                     android:singleLine="true"
+                    tools:textColor="@color/title_color"
                     tools:text="Taxi Licence 4986"/>
 
                 <TextView
@@ -54,10 +53,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
+                    android:textSize="@dimen/text_size_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/title_color"
-                    android:textSize="@dimen/text_size_medium"
+                    tools:textColor="@color/title_color"
                     tools:text="£ 12.45"/>
             </LinearLayout>
 
@@ -72,8 +71,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/text_size_small"
+                    tools:textColor="@android:color/darker_gray"
                     tools:text="11 May - 10:15pm"/>
 
                 <TextView
@@ -83,8 +82,8 @@
                     android:gravity="end"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/text_size_small"
+                    tools:textColor="@android:color/darker_gray"
                     tools:text="£ 12.45"/>
             </LinearLayout>
 

@@ -7,6 +7,7 @@ internal class TransactionListFragmentTestDouble : BaseFragment(), TransactionLi
     override var delegate: Delegate? = null
 
     override fun layoutId(): Int = 0
+    override fun backgroundColor() = 0
     override fun setupViewModel() {}
     override fun setupUI() {}
 }

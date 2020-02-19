@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true">
 
@@ -40,7 +39,7 @@
         android:id="@+id/container"
         style="@style/ThemeTwo.TextInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
         android:layout_below="@id/tv_verification_code_header"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_corners"

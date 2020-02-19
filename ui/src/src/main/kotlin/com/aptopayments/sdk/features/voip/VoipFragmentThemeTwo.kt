@@ -64,6 +64,8 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
 
     override fun layoutId(): Int = R.layout.fragment_voip_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiNavigationSecondaryColor
+
     override fun setupViewModel() {
         viewModel.apply {
             observeNullable(callState) { callStateChanged(it) }
@@ -101,26 +103,28 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
     }
 
     override fun setupUI() {
-        view?.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         setupTheme()
         setupKeyboard()
     }
 
     @SuppressLint("SetTextI18n")
     private fun setupTheme() {
-        context?.let {
-            when (action) {
-                Action.LISTEN_PIN -> {
-                    tv_title.localizedText = "manage_card.get_pin_voip.title"
-                    tv_description.localizedText = "manage_card.get_pin_voip.message"
-                }
-                else -> {}
-            }
-        }
+        setActionTitle()
         with(themeManager()) {
             customizeToolbarTitle(tv_title)
             customizeRegularTextLabel(tv_description)
             tv_description.setTextColor(Color.WHITE)
+        }
+    }
+
+    private fun setActionTitle() {
+        when (action) {
+            Action.LISTEN_PIN -> {
+                tv_title.localizedText = "manage_card.get_pin_voip.title"
+                tv_description.localizedText = "manage_card.get_pin_voip.message"
+            }
+            else -> {
+            }
         }
     }
 

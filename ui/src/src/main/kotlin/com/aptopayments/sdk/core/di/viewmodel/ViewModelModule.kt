@@ -27,6 +27,8 @@ import com.aptopayments.sdk.features.managecard.ManageCardViewModel
 import com.aptopayments.sdk.features.nonetwork.NoNetworkViewModel
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
+import com.aptopayments.sdk.features.passcode.CreatePasscodeViewModel
+import com.aptopayments.sdk.features.passcode.ChangePasscodeViewModel
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewModel
 import com.aptopayments.sdk.features.voip.VoipViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -52,7 +54,7 @@ val viewModelModule = module {
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
     viewModel { NoNetworkViewModel(analyticsManager = get()) }
     viewModel { MaintenanceViewModel(get()) }
-    viewModel { AccountSettingsViewModel(get(), get()) }
+    viewModel { AccountSettingsViewModel(get(), get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(analyticsManager = get()) }
     viewModel { IssueCardViewModel(analyticsManager = get()) }
@@ -62,4 +64,6 @@ val viewModelModule = module {
     viewModel { ConfirmPinViewModel(analyticsManager = get()) }
     viewModel { VoipViewModel(analyticsManager = get(), voipHandler = get()) }
     viewModel { StatementListViewModel(get()) }
+    viewModel { CreatePasscodeViewModel(get()) }
+    viewModel { ChangePasscodeViewModel(get(), get()) }
 }

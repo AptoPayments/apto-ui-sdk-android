@@ -13,7 +13,8 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
-import com.aptopayments.sdk.features.pin.CreatePINFlow
+import com.aptopayments.sdk.features.passcode.CreatePasscodeFlow
+import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.utils.MessageBanner
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -59,7 +60,8 @@ internal class AccountSettingsFlow(
     }
 
     override fun onChangePasscodeTapped() {
-        val flow = CreatePINFlow(
+        val flow = CreatePasscodeFlow(
+            mode = PasscodeMode.CHANGE,
             onBack = { popFlow(true) },
             onFinish = {
                 popFlow(true)

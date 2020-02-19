@@ -29,6 +29,8 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
 
     override fun layoutId(): Int = R.layout.fragment_set_pin_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setupViewModel() {
         viewModel.apply {
             failure(failure) { handleFailure(it) }
@@ -60,7 +62,6 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_set_pin_title)

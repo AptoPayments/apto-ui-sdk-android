@@ -39,6 +39,8 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     override fun layoutId(): Int = R.layout.fragment_country_picker_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }
@@ -76,7 +78,6 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_country_selector_header)

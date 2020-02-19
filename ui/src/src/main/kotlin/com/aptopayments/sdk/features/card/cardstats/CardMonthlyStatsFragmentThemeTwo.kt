@@ -39,6 +39,8 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
 
     override fun layoutId(): Int = R.layout.fragment_card_monthly_stats
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
     override fun setUpArguments() {
         cardId = arguments!![CARD_ID_KEY] as String
     }
@@ -57,7 +59,6 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     override fun setupUI() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         with(themeManager()) {
             customizeTimestamp(title_previous_month)
             customizeTimestamp(title_next_month)

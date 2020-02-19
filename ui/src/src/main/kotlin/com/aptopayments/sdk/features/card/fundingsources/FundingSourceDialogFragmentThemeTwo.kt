@@ -127,6 +127,7 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
             customizeHighlightTitleLabel(tv_dialog_title)
             customizeEmptyCase(tv_no_funding_sources)
             customizeSubmitButton(add_funding_source_button)
+            view?.let { customizeRoundedBackground(it) }
         }
         refresh_button.setColorFilter(UIConfig.uiPrimaryColor)
     }

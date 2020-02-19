@@ -10,15 +10,15 @@ import org.mockito.Mock
 
 private const val PIN = "1234"
 
-internal class SavePinUseCaseTest : UnitTest() {
+internal class SavePasscodeUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var authenticationRepo: AuthenticationRepository
-    lateinit var sut: SavePinUseCase
+    lateinit var sut: SavePasscodeUseCase
 
     @Before
     fun before() {
-        sut = SavePinUseCase(authenticationRepo)
+        sut = SavePasscodeUseCase(authenticationRepo)
     }
 
     @Test
@@ -26,6 +26,6 @@ internal class SavePinUseCaseTest : UnitTest() {
         val result = sut(PIN)
 
         assertTrue(result.isRight)
-        verify(authenticationRepo).setPin(PIN)
+        verify(authenticationRepo).setPasscode(PIN)
     }
 }

@@ -15,14 +15,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:paddingTop="@dimen/_12sdp"
         android:layout_below="@id/toolbar">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactions_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

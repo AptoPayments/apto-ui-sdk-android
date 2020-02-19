@@ -27,6 +27,8 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
 
     override fun layoutId(): Int = R.layout.fragment_disclaimer_theme_two
 
+    override fun backgroundColor(): Int = UIConfig.disclaimerBackgroundColor
+
     override fun setUpArguments() {
         content = arguments!![CONTENT_KEY] as Content
     }
@@ -52,7 +54,6 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
     }
 
     private fun setUpTheme() {
-        view?.setBackgroundColor(UIConfig.disclaimerBackgroundColor)
         with(themeManager()) {
             customizeLargeTitleLabel(tv_disclaimer_title)
             customizeSubmitButton(tv_accept_disclaimer)

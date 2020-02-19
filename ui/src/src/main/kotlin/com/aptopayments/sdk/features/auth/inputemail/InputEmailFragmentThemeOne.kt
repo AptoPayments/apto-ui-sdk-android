@@ -34,6 +34,8 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
 
     override fun layoutId() = R.layout.fragment_email_input_theme_one
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun onPresented() {
         delegate?.configureStatusBar()
         et_email.requestFocus()
@@ -50,7 +52,6 @@ internal class InputEmailFragmentThemeOne : BaseFragment(), InputEmailContract.V
     override fun viewLoaded() = viewModel.viewLoaded()
 
     private fun applyFontsAndColors() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

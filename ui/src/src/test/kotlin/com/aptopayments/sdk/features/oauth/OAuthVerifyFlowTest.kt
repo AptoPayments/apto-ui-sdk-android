@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.oauth
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -41,7 +40,7 @@ class OAuthVerifyFlowTest: AndroidTest() {
         val sut = OAuthVerifyFlow(allowedBalanceType = allowedBalanceType, oauthAttempt = oAuthAttempt,
                 onBack = {}, onFinish = {}, onError = {})
         given { mockFragmentFactory.oauthVerifyFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 datapoints = oAuthAttempt.userData!!,
                 allowedBalanceType = allowedBalanceType,
                 tokenId = oAuthAttempt.tokenId,
@@ -53,7 +52,7 @@ class OAuthVerifyFlowTest: AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).oauthVerifyFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 datapoints = oAuthAttempt.userData!!,
                 allowedBalanceType = allowedBalanceType,
                 tokenId = oAuthAttempt.tokenId,

@@ -23,11 +23,14 @@ private const val ERROR_ASSET_KEY = "ERROR_ASSET"
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorContract.View {
-    override fun layoutId() = R.layout.fragment_issue_card_error_theme_two
     private var errorAsset: String? = null
     private var errorCode: Int? = null
     private val viewModel: IssueCardViewModel by viewModel()
     override var delegate: IssueCardErrorContract.Delegate? = null
+
+    override fun layoutId() = R.layout.fragment_issue_card_error_theme_two
+
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
     override fun setUpArguments() {
         errorCode = arguments?.getInt(ERROR_CODE_KEY)
@@ -50,7 +53,6 @@ internal class IssueCardErrorFragmentThemeTwo : BaseFragment(), IssueCardErrorCo
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         with (themeManager()) {
             customizeLargeTitleLabel(tv_issue_card_error_title)
             customizeRegularTextLabel(tv_description)

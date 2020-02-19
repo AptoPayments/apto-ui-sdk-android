@@ -44,7 +44,8 @@ import com.aptopayments.sdk.features.nonetwork.NoNetworkContract
 import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
-import com.aptopayments.sdk.features.pin.CreatePinContract
+import com.aptopayments.sdk.features.passcode.PasscodeContract
+import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipContract
@@ -228,5 +229,6 @@ internal interface FragmentFactory {
         title: String, file: File, tag: String
     ): PdfRendererContract.View
 
-    fun createPinFragment(uiTheme: UITheme, tag: String): CreatePinContract.View
+    fun createPasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View
+    fun changePasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View
 }

@@ -11,6 +11,7 @@ import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -272,6 +273,10 @@ internal object ThemeOneManager: ThemeManager {
     }
 
     override fun customizeCheckBox(checkBox: AppCompatCheckBox) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun customizeEditText(editText: EditText) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

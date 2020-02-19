@@ -51,6 +51,8 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     private var oauthAttempt: OAuthAttempt? = null
     private var shouldReloadStatus = false
 
+    override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -111,11 +113,14 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         }
     }
 
-    private fun setupToolbar() = delegate?.configureToolbar(
+    private fun setupToolbar() {
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(
             toolbar = tb_llsdk_toolbar,
             title = null,
             backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+        )
+    }
 
     private fun setupTexts() {
         tv_oauth_header.localizedText = title
@@ -128,7 +133,6 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     private fun setupTheme() {
-        view?.setBackgroundColor(UIConfig.uiBackgroundPrimaryColor)
         with (themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_oauth_header)

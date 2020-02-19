@@ -175,6 +175,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         et_card_name.setTextColor(textColor)
         et_expiry_date.setTextColor(textColor)
         et_cvv.setTextColor(textColor)
+        tv_expiration_label.setTextColor(textColor)
+        tv_cvv_label.setTextColor(textColor)
     }
 
     fun setCardState(state: Card.CardState?) {

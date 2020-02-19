@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.cardproductselector
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.cardproduct.CardProductSummary
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -67,7 +66,7 @@ class CardProductSelectorFlowTest: AndroidTest() {
         val fragmentDouble = CountrySelectorFragmentDouble(mockDelegate).apply { this.TAG = tag }
 
         given { mockFragmentFactory.countrySelectorFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 allowedCountries = emptyList(),
                 tag = tag)
         }.willReturn(fragmentDouble)
@@ -77,7 +76,7 @@ class CardProductSelectorFlowTest: AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).countrySelectorFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 allowedCountries = emptyList(),
                 tag = tag)
         assertTrue { analyticsManager.trackCalled }

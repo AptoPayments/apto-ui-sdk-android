@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.text.SpannableStringBuilder
@@ -13,6 +14,7 @@ import android.text.style.*
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -20,6 +22,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.core.graphics.ColorUtils
 import com.aptopayments.sdk.R
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
@@ -33,6 +36,7 @@ import com.aptopayments.sdk.utils.toDp
 import com.google.android.material.appbar.AppBarLayout
 
 private const val CARD_FONT_FILE = "fonts/ocraextended.ttf"
+private const val OPACITY_50_PERCENT = 128
 
 internal object ThemeTwoManager: ThemeManager {
     private var mCardTypeface: Typeface? = null
@@ -123,6 +127,7 @@ internal object ThemeTwoManager: ThemeManager {
     override fun customizeFormLabel(textView: TextView) {
         FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+        textView.setTextColor(UIConfig.textSecondaryColor)
     }
 
     override fun customizeFooterLabel(textView: TextView) {
@@ -383,6 +388,7 @@ internal object ThemeTwoManager: ThemeManager {
         dialog.setView(view)
 
         dialog.show() // Required to format buttons
+        dialog.window?.setBackgroundDrawable(ColorDrawable(UIConfig.uiBackgroundSecondaryColor))
 
         val cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         cancelButton.setTextColor(UIConfig.uiPrimaryColor)
@@ -398,6 +404,7 @@ internal object ThemeTwoManager: ThemeManager {
         FontsUtil.getFontOfType(REGULAR)?.let {
             dialogMessage.typeface = it
         }
+
         return dialog
     }
 
@@ -434,5 +441,10 @@ internal object ThemeTwoManager: ThemeManager {
                 intArrayOf(Color.LTGRAY, UIConfig.uiPrimaryColor)
         )
         checkBox.buttonTintList = tintList
+    }
+
+    override fun customizeEditText(editText: EditText) {
+        editText.setTextColor(UIConfig.textPrimaryColor)
+        editText.setHintTextColor(ColorUtils.setAlphaComponent(UIConfig.textPrimaryColor, OPACITY_50_PERCENT))
     }
 }

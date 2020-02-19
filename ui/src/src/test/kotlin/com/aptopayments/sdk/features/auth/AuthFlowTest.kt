@@ -1,9 +1,10 @@
 package com.aptopayments.sdk.features.auth
 
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.geo.Country
-import com.aptopayments.core.data.user.*
+import com.aptopayments.core.data.user.PhoneDataPoint
+import com.aptopayments.core.data.user.Verification
+import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -16,7 +17,6 @@ import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -67,7 +67,7 @@ class AuthFlowTest : AndroidTest() {
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
         given {
             mockFragmentFactory.inputPhoneFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     allowedCountries = countries,
                     tag = tag)
         }.willReturn(fragmentPhoneInputDouble)
@@ -77,7 +77,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).inputPhoneFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 allowedCountries = countries,
                 tag = tag)
     }
@@ -92,7 +92,7 @@ class AuthFlowTest : AndroidTest() {
         val verification = Verification("", "phone")
         given {
             mockFragmentFactory.phoneVerificationFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     verification = verification,
                     tag = tag)
         }.willReturn(fragmentPhoneVerificationDouble)
@@ -102,7 +102,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).phoneVerificationFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 verification = verification,
                 tag = tag)
     }
@@ -117,7 +117,7 @@ class AuthFlowTest : AndroidTest() {
         val verification = Verification("", "phone")
         given {
             mockFragmentFactory.emailVerificationFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     verification = verification,
                     tag = tag)
         }.willReturn(fragmentEmailVerifyDouble)
@@ -127,7 +127,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).emailVerificationFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 verification = verification,
                 tag = tag)
     }
@@ -142,7 +142,7 @@ class AuthFlowTest : AndroidTest() {
         val fragmentPhoneInputDouble = AuthInputPhoneFragmentDouble(mockPhoneDelegate).apply { this.TAG = tag }
         given {
             mockFragmentFactory.inputPhoneFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     allowedCountries = countries,
                     tag = tag)
         }.willReturn(fragmentPhoneInputDouble)
@@ -154,7 +154,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).inputPhoneFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 allowedCountries = countries,
                 tag = tag)
     }
@@ -169,7 +169,7 @@ class AuthFlowTest : AndroidTest() {
         val fragmentEmailDouble = AuthInputEmailFragmentDouble(mockEmailDelegate).apply { this.TAG = tag }
         given {
             mockFragmentFactory.inputEmailFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     tag = tag)
         }.willReturn(fragmentEmailDouble)
         mockDataPoint = PhoneDataPoint(verification = Verification("", "email",
@@ -180,7 +180,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).inputEmailFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 tag = tag)
     }
 
@@ -196,7 +196,7 @@ class AuthFlowTest : AndroidTest() {
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {
             mockFragmentFactory.birthdateVerificationFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     primaryCredential = mockDataPoint,
                     tag = tag)
         }.willReturn(fragmentBirthdayDouble)
@@ -206,7 +206,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).birthdateVerificationFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 primaryCredential = mockDataPoint,
                 tag = tag)
     }
@@ -223,7 +223,7 @@ class AuthFlowTest : AndroidTest() {
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {
             mockFragmentFactory.birthdateVerificationFragment(
-                    uiTheme = UITheme.THEME_1,
+                    uiTheme = TestDataProvider.provideDefaultTheme(),
                     primaryCredential = mockDataPoint,
                     tag = tag)
         }.willReturn(fragmentBirthdayDouble)
@@ -233,7 +233,7 @@ class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).birthdateVerificationFragment(
-                uiTheme = UITheme.THEME_1,
+                uiTheme = TestDataProvider.provideDefaultTheme(),
                 primaryCredential = mockDataPoint,
                 tag = tag)
     }
