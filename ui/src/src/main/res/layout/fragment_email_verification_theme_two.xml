@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true">
 
@@ -15,20 +15,30 @@
         android:id="@+id/tv_verification_code_title"
         style="@style/ThemeTwo.TextHeader"
         android:layout_below="@+id/tb_llsdk_toolbar_layout"
-        app:localize="auth_verify_phone_title" />
+        app:localize="auth_verify_email_title" />
 
     <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_verification_code_header"
-        android:layout_below="@+id/tv_verification_code_title"
-        android:lineSpacingExtra="3sp"
-        android:layout_marginTop="4sp"
         style="@style/ThemeTwo.TextInput"
-        app:localize="auth_verify_phone_explanation" />
+        android:layout_below="@+id/tv_verification_code_title"
+        android:layout_marginTop="4sp"
+        android:lineSpacingExtra="3sp"
+        app:localize="auth.verify_email_explanation" />
+
+    <TextView
+        android:id="@+id/tv_email_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_verification_code_header"
+        android:layout_marginStart="@dimen/llsdk_medium_margin"
+        android:layout_marginEnd="@dimen/llsdk_medium_margin"
+        android:gravity="start"
+        tools:text="neo@matrix.com" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tv_verification_code_header"
+        android:layout_below="@+id/tv_email_label"
         android:layout_marginTop="14sp">
 
         <RelativeLayout
@@ -37,23 +47,23 @@
 
             <com.aptopayments.sdk.features.auth.inputphone.AptoPinView
                 android:id="@+id/apto_pin_view"
-                android:elevation="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-                android:layout_marginTop="@dimen/llsdk_medium_margin"
                 android:layout_marginStart="@dimen/llsdk_medium_margin"
+                android:layout_marginTop="@dimen/llsdk_medium_margin"
                 android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:background="@drawable/rounded_corners"
+                android:digits="1234567890"
+                android:elevation="2dp"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:maxLength="6"
                 android:paddingStart="@dimen/_85sdp"
                 android:paddingEnd="@dimen/_85sdp"
-                android:maxLength="6"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size_larger"
-                android:digits="1234567890"
                 android:textIsSelectable="false"
-                android:focusableInTouchMode="true"
-                android:inputType="number"
-                android:gravity="center_vertical"
-                android:background="@drawable/rounded_corners" />
+                android:textSize="@dimen/text_size_larger" />
 
             <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/tv_expired_pin_label"
@@ -64,44 +74,36 @@
                 android:layout_alignBottom="@+id/apto_pin_view"
                 android:layout_margin="0dp"
                 android:gravity="center_vertical"
-                app:localize="auth_verify_phone_expired_pin_text" />
+                app:localize="auth_verify_email_expired_pin_text" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/llsdk_marginTop_resend_label"
                 android:layout_below="@id/apto_pin_view"
+                android:layout_marginTop="@dimen/llsdk_marginTop_resend_label"
                 android:orientation="vertical">
 
                 <com.aptopayments.sdk.ui.views.AptoTextView
                     android:id="@+id/tv_resend_label"
                     style="@style/ThemeTwo.Instructions"
-                    android:padding="@dimen/_1sdp"
                     android:gravity="start"
-                    app:localize="auth_verify_phone_footer" />
-
-                <TextView
-                    android:id="@+id/tv_resend_countdown_label"
-                    style="@style/ThemeTwo.Instructions"
-                    android:layout_below="@+id/tv_resend_label"
                     android:padding="@dimen/_1sdp"
-                    android:gravity="start"
-                    tools:text="00:30"/>
+                    app:localize="auth_verify_email_footer" />
 
                 <com.aptopayments.sdk.ui.views.AptoTextView
-                    android:id="@+id/tv_resend_bttn"
+                    android:id="@+id/tv_resend_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/llsdk_medium_margin"
                     android:layout_marginRight="@dimen/llsdk_medium_margin"
-                    android:layout_below="@+id/tv_resend_label"
-                    android:padding="@dimen/_1sdp"
                     android:gravity="start"
-                    app:localize="auth_verify_phone_resend_button_title" />
+                    android:padding="@dimen/_1sdp"
+                    app:localize="auth_verify_email_resend_button_title" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
+

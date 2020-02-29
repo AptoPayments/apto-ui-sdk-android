@@ -2,40 +2,40 @@ package com.aptopayments.sdk.features.auth.verification
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
+import android.view.animation.AnimationUtils
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.EmailDataPoint
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.hide
+import com.aptopayments.sdk.core.extension.goneIf
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.show
+import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.TextInputWatcher
+import com.aptopayments.sdk.utils.ValidInputListener
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.fragment_email_verification_theme_one.*
+import kotlinx.android.synthetic.main.fragment_email_verification_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val VERIFICATION_BUNDLE = "verificationBundle"
+private const val PIN_CHARACTERS = 6
 
-internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerificationContract.View {
+internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerificationContract.View {
 
     override var delegate: EmailVerificationContract.Delegate? = null
     private val viewModel: VerificationViewModel by viewModel()
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    lateinit var verification: Verification
+    private lateinit var verification: Verification
     private lateinit var emailAddress: String
 
-    override fun layoutId() = R.layout.fragment_email_verification_theme_one
+    override fun layoutId() = R.layout.fragment_email_verification_theme_two
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
@@ -53,7 +53,6 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
     override fun setupViewModel() {
         viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
-            observe(resendButtonState, ::handleResendButtonState)
             failure(failure) { handleFailure(it) }
         }
         viewModel.verification.postValue(verification)
@@ -76,25 +75,31 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
-            customizeFormLabel(tv_verification_code_title)
-            customizeFormFieldSmall(tv_email_label)
-            customizeFormFieldSmall(tv_resend_label)
-            customizeFormFieldSmall(tv_expired_pin_label)
-            customizeFormFieldSmall(tv_resend_countdown_label)
+            customizeLargeTitleLabel(tv_verification_code_title)
+            customizeFormLabel(tv_verification_code_header)
+            customizeFormLabel(tv_email_label)
+            customizeFooterLabel(tv_resend_label)
+            customizeFooterLabel(tv_resend_btn)
+            customizeErrorLabel(tv_expired_pin_label)
         }
     }
 
     private fun setupToolBar() = delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = "auth_verify_email_title".localized(),
-            backButtonMode = BaseActivity.BackButtonMode.Close(null, UIConfig.iconTertiaryColor)
+        toolbar = tb_llsdk_toolbar,
+        title = "",
+        backButtonMode = BaseActivity.BackButtonMode.Back(null)
     )
 
     override fun setupListeners() {
         super.setupListeners()
-        apto_pin_view.setOnCompleteListener { completed, _ ->
-            if (completed) finishVerification()
+        val validator = object : ValidInputListener {
+            override fun onValidInput(isValid: Boolean) {
+                if (isValid) {
+                    finishVerification(apto_pin_view.text.toString())
+                }
+            }
         }
+        apto_pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view))
         tv_resend_btn.setOnClickListener { resendVerification() }
     }
 
@@ -107,31 +112,25 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
         }
     }
 
-    private fun finishVerification() {
+    private fun finishVerification(pin: String) {
         showLoading()
-        viewModel.finishVerification(apto_pin_view.pinResults) { result ->
+        viewModel.finishVerification(pin) { result ->
             hideLoading()
             hideKeyboard()
             result.either(::handleFailure) { verification ->
-                hideKeyboard()
                 when (verification.status) {
                     VerificationStatus.PASSED -> {
-                        val dataPoint = EmailDataPoint(
-                                verification = verification,
-                                email = emailAddress
-                        )
+                        val dataPoint = EmailDataPoint(verification = verification, email = emailAddress)
                         delegate?.onEmailVerificationPassed(dataPoint)
                     }
                     VerificationStatus.FAILED, VerificationStatus.PENDING -> {
-                        hideLoading()
                         notify(
-                            "auth.verify_email.error_wrong_code.title".localized(),
-                            "auth.verify_email.error_wrong_code.message".localized()
+                            "auth_verify_email_error_wrong_code_title".localized(),
+                            "auth_verify_email_error_wrong_code_message".localized()
                         )
-                        apto_pin_view.clear()
+                        apto_pin_view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                        apto_pin_view.text?.clear()
                         apto_pin_view.clearFocus()
-
-                        hideKeyboard()
                     }
                 }
                 Unit
@@ -141,36 +140,8 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
 
     private fun handlePinEntryState(newState: PINEntryState?) {
         newState?.let { state ->
-            when (state) {
-                is PINEntryState.Enabled -> {
-                    tv_expired_pin_label.hide()
-                    apto_pin_view.show()
-                }
-                is PINEntryState.Expired -> {
-                    tv_expired_pin_label.show()
-                    apto_pin_view.hide()
-                }
-            }
-        }
-    }
-
-    private fun handleResendButtonState(newState: ResendButtonState?) {
-        newState?.let { state ->
-            when (state) {
-                is ResendButtonState.Enabled -> {
-                    tv_resend_btn.show()
-                    tv_resend_countdown_label.hide()
-                }
-                is ResendButtonState.Waiting -> {
-                    val waitTimeDescription = state.pendingSeconds.stringFromTimeInterval()
-                    val newText = "auth.verify_email.resent_wait_text".localized()
-                        .replace("<<WAIT_TIME>>", waitTimeDescription)
-                    tv_resend_countdown_label.text = newText
-
-                    tv_resend_btn.hide()
-                    tv_resend_countdown_label.show()
-                }
-            }
+            tv_expired_pin_label.goneIf(state is PINEntryState.Enabled)
+            apto_pin_view.visibleIf(state is PINEntryState.Enabled)
         }
     }
 
@@ -180,7 +151,7 @@ internal class EmailVerificationFragmentThemeOne : BaseFragment(), EmailVerifica
     }
 
     companion object {
-        fun newInstance(verification: Verification) = EmailVerificationFragmentThemeOne().apply {
+        fun newInstance(verification: Verification) = EmailVerificationFragmentThemeTwo().apply {
             this.arguments = Bundle().apply { putSerializable(VERIFICATION_BUNDLE, verification) }
         }
     }

@@ -13,7 +13,7 @@ internal class InputEmailViewModel constructor(
         private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
-    var enableNextButton: MutableLiveData<Boolean> = MutableLiveData()
+    var enableNextButton: MutableLiveData<Boolean> = MutableLiveData(false)
     var state: MutableLiveData<State> = MutableLiveData()
     var verificationData: MutableLiveData<Verification> = MutableLiveData()
 

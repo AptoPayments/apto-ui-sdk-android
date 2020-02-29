@@ -12,11 +12,9 @@ import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.extension.visibleIf
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.features.card.CardActivity
-import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
@@ -25,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_account_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.inject
 import java.lang.reflect.Modifier
 
 const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
@@ -35,6 +34,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
     override var delegate: AccountSettingsContract.Delegate? = null
     private var contextConfiguration: ContextConfiguration? = null
     private val viewModel: AccountSettingsViewModel by viewModel()
+    private val uiSdkProtocol: AptoUiSdkProtocol by inject()
 
     override fun layoutId(): Int = R.layout.fragment_account_settings_theme_two
 
@@ -138,6 +138,10 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         (rl_statements as SectionOptionWithSubtitleViewTwo).set(
             "card_settings.help.monthly_statements.title".localized(),
             "card_settings.help.monthly_statements.description".localized()
+        )
+        (rl_app_version as SectionOptionWithSubtitleViewTwo).set(
+            "account_settings_app_version_title".localized(),
+            uiSdkProtocol.getAppVersion(activity)
         )
         (rl_sign_out as SectionOptionWithSubtitleViewTwo).set("account_settings.logout.title".localized())
     }

@@ -41,11 +41,7 @@ internal class AdjustmentsAdapter(
         setDescription(adjustment,viewHolder)
 
         adjustment.nativeAmount?.let { nativeAmount ->
-            val amount: String = if(mTransaction.transactionType.isCredit()) {
-                mTransaction.getAmountPrefix() + nativeAmount.toAbsString()
-            } else {
-                nativeAmount.toAbsString()
-            }
+            val amount: String = nativeAmount.toAbsString()
             viewHolder.amount.text = String.format("%s %s", "transaction_details.adjustment.amount.title".localized(), amount)
             themeManager().customizeTimestamp(viewHolder.amount)
 

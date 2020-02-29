@@ -61,6 +61,11 @@
                 android:id="@+id/rl_statements"
                 layout="@layout/view_section_option_subtitle_two" />
 
+            <!-- App Version -->
+            <include
+                android:id="@+id/rl_app_version"
+                layout="@layout/view_section_option_subtitle_two" />
+
             <!-- Signout -->
             <include
                 android:id="@+id/rl_sign_out"

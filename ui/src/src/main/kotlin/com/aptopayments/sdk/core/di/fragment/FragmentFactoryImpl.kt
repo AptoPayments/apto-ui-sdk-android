@@ -22,6 +22,7 @@ import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerific
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailFragmentThemeOne
+import com.aptopayments.sdk.features.auth.inputemail.InputEmailFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragmentThemeOne
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragmentThemeTwo
@@ -128,12 +129,10 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
 
     override fun inputEmailFragment(uiTheme: UITheme, tag: String): InputEmailContract.View {
         return when (uiTheme) {
-            THEME_1 -> {
-                InputEmailFragmentThemeOne.newInstance().apply {
-                    this.TAG = tag
-                }
+            THEME_1 -> InputEmailFragmentThemeOne.newInstance().apply {
+                this.TAG = tag
             }
-            else -> InputEmailFragmentThemeOne.newInstance().apply {
+            THEME_2 -> InputEmailFragmentThemeTwo.newInstance().apply {
                 this.TAG = tag
             }
         }
@@ -207,12 +206,8 @@ internal class FragmentFactoryImpl constructor() : FragmentFactory {
             tag: String
     ): EmailVerificationContract.View {
         return when (uiTheme) {
-            THEME_2 -> {
-                EmailVerificationFragmentThemeOne.newInstance(verification).apply { this.TAG = tag }
-            }
-            THEME_1 -> {
-                EmailVerificationFragmentThemeOne.newInstance(verification).apply { this.TAG = tag }
-            }
+            THEME_1 -> EmailVerificationFragmentThemeOne.newInstance(verification).apply { this.TAG = tag }
+            THEME_2 -> EmailVerificationFragmentThemeTwo.newInstance(verification).apply { this.TAG = tag }
         }
     }
 

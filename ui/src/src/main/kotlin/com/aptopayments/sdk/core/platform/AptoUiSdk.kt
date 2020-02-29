@@ -2,11 +2,14 @@ package com.aptopayments.sdk.core.platform
 
 import android.app.Activity
 import android.app.Application
+import android.content.pm.PackageInfo
+import androidx.fragment.app.FragmentActivity
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.platform.AptoPlatformDelegate
 import com.aptopayments.core.platform.AptoSdkEnvironment
+import com.aptopayments.sdk.BuildConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
@@ -33,6 +36,7 @@ interface AptoUiSdkProtocol {
     )
 
     fun userTokenPresent(): Boolean
+    fun getAppVersion(activity: FragmentActivity?) : String
     fun registerFirebaseToken(firebaseToken: String)
     fun logout()
 }
@@ -91,6 +95,13 @@ object AptoUiSdk : AptoUiSdkProtocol {
 
     override fun registerFirebaseToken(firebaseToken: String) {
         AptoPlatform.registerFirebaseToken(firebaseToken)
+    }
+
+    override fun getAppVersion(activity: FragmentActivity?): String {
+        return activity?.let {
+            val packageInfo: PackageInfo = activity.packageManager.getPackageInfo(activity.packageName, 0)
+            "${packageInfo.versionName} - (${BuildConfig.VERSION_NAME})"
+        } ?: ""
     }
 
     override fun logout() {

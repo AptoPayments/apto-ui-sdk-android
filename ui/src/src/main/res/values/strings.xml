@@ -43,7 +43,7 @@
     <string name="auth_input_phone_error_invalid_called_phone_number">Looks like the phone number you\'ve entered isn\'t valid. Please try again.</string>
 
     <!-- Email -->
-    <string name="auth_input_email_title">Email address</string>
+    <string name="auth_input_email_title">Get Started</string>
     <string name="auth_input_email_explanation">Enter your email address</string>
     <string name="auth_input_email_hint">emailaddress@example.com</string>
     <string name="auth_input_email_footer">emailaddress@example.com</string>
@@ -385,6 +385,7 @@
     <string name="account_settings_security_fingerprint">Sign in with fingerprint</string>
     <string name="account_settings_security_change_pin_title">Change passcode</string>
     <string name="account_settings_security_change_pin_description">Change the passcode used to unlock the app</string>
+    <string name="account_settings_app_version_title">App Version</string>
 
     <!-- Notification preferences screen -->
     <string name="notification_preferences_title">Notifications</string>
