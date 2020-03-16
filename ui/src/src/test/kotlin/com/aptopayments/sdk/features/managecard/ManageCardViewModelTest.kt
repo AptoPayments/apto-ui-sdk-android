@@ -3,18 +3,17 @@ package com.aptopayments.sdk.features.managecard
 import androidx.lifecycle.Observer
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
@@ -34,6 +33,7 @@ class ManageCardViewModelTest : AndroidTest() {
     @Mock private lateinit var mockTransaction: Transaction
     @Mock private lateinit var transactionsObserver: Observer<List<Transaction>?>
     @Mock private lateinit var transactionListItemsObserver: Observer<List<TransactionListItem>?>
+    @Mock private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
 
     private val EXPECTED_WAITLIST_VALUE = true
 
@@ -43,7 +43,7 @@ class ManageCardViewModelTest : AndroidTest() {
         startKoin {
             modules( listOf(applicationModule,useCaseModule) )
         }
-        sut = ManageCardViewModel(fetchTransactionsTaskQueue, analyticsManager)
+        sut = ManageCardViewModel(TestDataProvider.provideCardId(), fetchTransactionsTaskQueue, analyticsManager, aptoUiSdkProtocol)
         `when`(mockCard.isWaitlisted).thenReturn(EXPECTED_WAITLIST_VALUE)
         `when`(mockTransaction.createdAt).thenReturn(Date())
         `when`(mockTransaction.transactionId).thenReturn("")

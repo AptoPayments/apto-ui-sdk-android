@@ -1,7 +1,9 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Switch
 import androidx.annotation.VisibleForTesting
@@ -24,10 +26,14 @@ import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.SectionHeaderViewTwo
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleViewTwo
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
+import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
+import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import kotlinx.android.synthetic.main.fragment_card_settings_theme_two.*
 import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
@@ -40,7 +46,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private lateinit var card: Card
     private lateinit var cardProduct: CardProduct
     private lateinit var projectConfiguration: ProjectConfiguration
-    private val viewModel: CardSettingsViewModel by viewModel()
+    private val viewModel: CardSettingsViewModel by viewModel { parametersOf(card, cardProduct) }
+    private val intentGenerator: IntentGenerator by inject()
     override var delegate: CardSettingsContract.Delegate? = null
 
     override fun layoutId(): Int = R.layout.fragment_card_settings_theme_two
@@ -74,7 +81,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
             observeNotNullable(hasCardDetails) { value -> silentlySetCardDetailSwitchValue(value) }
             observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
         }
-        viewModel.viewResumed(card = card, cardProduct = cardProduct)
+        viewModel.viewResumed()
     }
 
     private fun handleAuthenticateCardDetails(authenticationNeeded: Boolean) {
@@ -129,6 +136,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         setupTheme()
         setupTexts()
         setupToolBar()
+        rl_google_pay.visibleIf(viewModel.showAddToGooglePay)
     }
 
     override fun setupListeners() {
@@ -153,6 +161,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         rl_report_stolen_card.setOnClickListener { reportLostOrStolenCard() }
         rl_ivr_support.setOnClickListener { callIvrSupport() }
         rl_statement.setOnClickListener { onStatementPressed() }
+        rl_google_pay.setOnClickListener { onGooglePayPressed() }
     }
 
     private fun setupTheme() {
@@ -236,6 +245,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         (rl_statement as SectionOptionWithSubtitleViewTwo).set(
             title = "card_settings.help.monthly_statements.title".localized(),
             description = "card_settings.help.monthly_statements.description".localized()
+        )
+        (rl_google_pay as SectionOptionWithSubtitleViewTwo).set(
+            title = "card_settings_google_pay_provisioning_title".localized(),
+            description = "card_settings_google_pay_provisioning_subtitle".localized()
         )
     }
 
@@ -373,6 +386,13 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                 },
                 onCancel = { }
         )
+    }
+
+    private fun onGooglePayPressed() {
+        activity?.let {
+            val intent = intentGenerator.invoke(InAppProvisioningDeepLinkGenerator(it, card.accountID))
+            it.startActivity(intent)
+        }
     }
 
     private fun getDetailedCardActivityPreference() = aptoPlatformProtocol.isShowDetailedCardActivityEnabled()

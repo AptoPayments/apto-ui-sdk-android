@@ -107,11 +107,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     @SuppressLint("SetTextI18n")
     fun setExpiryDate(month: String?, year: String?) {
-        if (month == null || year == null) {
+        if (month.isNullOrEmpty() || year.isNullOrEmpty()) {
             et_expiry_date.setText(expiryDatePlaceholder)
-            return
+        } else {
+            et_expiry_date.setText("$month/$year")
         }
-        et_expiry_date.setText("$month/$year")
     }
 
     fun setCvv(cvv: String?) {

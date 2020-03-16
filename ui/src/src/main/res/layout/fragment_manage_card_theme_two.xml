@@ -45,16 +45,36 @@
             android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_no_transactions"
+    <FrameLayout
+        android:id="@+id/empty_state_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/manage_card_transaction_list_empty_case_title"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/_120sdp"
-        android:visibility="invisible"
-        app:localize="manage_card.transaction_list.empty_case.title"
-        tools:visibility="visible"/>
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_no_transactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:localize="manage_card.transaction_list.empty_case.title"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/add_to_gpay"
+            layout="@layout/add_to_googlepay_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:layout_marginEnd="@dimen/_18sdp"
+            android:visibility="gone"
+            tools:layout_marginTop="40dp"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

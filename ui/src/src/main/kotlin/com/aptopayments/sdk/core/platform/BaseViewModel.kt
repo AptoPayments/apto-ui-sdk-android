@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier
  * @see ViewModel
  * @see Failure
  */
-internal abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel : ViewModel() {
 
     val failure: MutableLiveData<Failure> = MutableLiveData()
 

@@ -132,6 +132,8 @@ class TestDataProvider {
         }
 
         fun provideDefaultTheme() = DEFAULT_THEME
+
+        fun provideCardId() = "CARD_ID"
     }
         
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Menu
@@ -34,18 +35,20 @@ import kotlinx.android.synthetic.main.fragment_manage_card_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import kotlinx.android.synthetic.main.include_transaction_list_header.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.lang.reflect.Modifier
 import java.util.*
 
 private const val FIVE_SECONDS = 5000
 private const val CARD_ID_KEY = "CARD_ID"
+private const val REQUEST_CODE_PUSH_PROVISIONING = 1100
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.View,
         TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
     override var delegate: ManageCardContract.Delegate? = null
     private lateinit var cardId: String
-    private val viewModel: ManageCardViewModel by viewModel()
+    private val viewModel: ManageCardViewModel by viewModel { parametersOf(cardId) }
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var menu: Menu? = null
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
@@ -77,6 +80,13 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         tintMenuItems()
         if(this.menu == null) this.menu = menu
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun setupListeners() {
+        super.setupListeners()
+        add_to_gpay.setOnClickListener {
+            onGooglePayPressed()
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -124,27 +134,29 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     override fun setupViewModel() {
         viewModel.apply {
             observe(orderedStatus) { refreshMenuOptions() }
-            observeTwo(transactions, transactionsInfoRetrieved) {
-                transactions, transactionInfoRetrieved -> handleEmptyCase(transactions, transactionInfoRetrieved)
+            observeThree(transactions, transactionsInfoRetrieved, showAddToGooglePay) { transactions, transactionInfoRetrieved, showAddToGooglePay ->
+                handleEmptyCase(transactions, transactionInfoRetrieved, showAddToGooglePay!!)
             }
             observeNullable(fundingSource, ::handleBalance)
             observeNullable(cardStyle) { it?.balanceSelectorAsset?.let { url ->
                 bv_balance_view.setSelectBalanceIcon(url) }
             }
             failure(failure) { handleFailure(it) }
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
         }
     }
 
-    private fun handleEmptyCase(transactions: List<Transaction>?, transactionInfoRetrieved: Boolean?) {
-        if (transactionInfoRetrieved == null || transactionInfoRetrieved == false) return
-        transactions?.let {
-            if (it.isEmpty()) {
-                tv_no_transactions.show()
-            }
-            else {
-                tv_no_transactions.hide()
-            }
-        } ?: tv_no_transactions.show()
+    private fun handleEmptyCase(
+        transactions: List<Transaction>?,
+        transactionInfoRetrieved: Boolean?,
+        showAddToGooglePay: Boolean
+    ) {
+        if (transactionInfoRetrieved != true) {
+            return
+        }
+        empty_state_container.visibleIf(transactions.isNullOrEmpty())
+        add_to_gpay.visibleIf(showAddToGooglePay)
+        tv_no_transactions.goneIf(!showAddToGooglePay)
     }
 
     private var previousMessageShownAt = 0L
@@ -284,7 +296,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
 
     override fun onStart() {
         super.onStart()
-        viewModel.viewReady(cardId)
+        viewModel.viewReady()
     }
 
     override fun onResume() {
@@ -310,6 +322,19 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()
+
+    private fun onGooglePayPressed() {
+        activity?.let {
+            viewModel.onAddToGooglePayPressed(it, REQUEST_CODE_PUSH_PROVISIONING)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_PUSH_PROVISIONING -> viewModel.onReturnedFromAddToGooglePay()
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 
     companion object {
         fun newInstance(cardId: String) = ManageCardFragmentThemeTwo().apply {

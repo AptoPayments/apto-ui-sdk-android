@@ -29,6 +29,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         vw_option_bottom_separator.hide()
     }
 
+    fun hideRightArrow() = iv_option_subtitle_icon.hide()
+
     private fun setupTheme() {
         with(themeManager()) {
             customizeSectionOptionTitle(tv_option_subtitle_title)

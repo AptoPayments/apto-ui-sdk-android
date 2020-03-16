@@ -17,6 +17,7 @@ import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.utils.*
+import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -44,6 +45,8 @@ internal val applicationModule = module {
     single { BiometricWrapper(androidContext()) }
     factory { FormatOrderGenerator(get()) }
     factory { CategorySpendingSorter() }
+    single<IAPHelper> { (cardId: String) -> IAPHelperMock(cardId) }
+    factory { IntentGenerator() }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

@@ -65,6 +65,7 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         rl_passcode.visibleIf(viewModel.securityVisibility)
         rl_settings_header.visibleIf(viewModel.notificationVisibility)
         rl_notifications.visibleIf(viewModel.notificationVisibility)
+        (rl_app_version as SectionOptionWithSubtitleViewTwo).hideRightArrow()
     }
 
     private fun silentlySetSwitch(value: Boolean, switch: Switch, listener: () -> Unit) {

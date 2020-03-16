@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CardApp</string>
+    <string name="apto_deep_link_scheme">appdeeplink</string>
 
     <string name="action_refresh">Refresh</string>
 
@@ -213,7 +214,7 @@
     <string name="select_balance_store_oauth_confirm_phone_number">Phone number</string>
     <string name="select_balance_store_oauth_confirm_birth_date">Date of birth</string>
     <string name="select_balance_store_oauth_confirm_id_document">ID document</string>
-    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.aptopayments.com\'&gt;To make changes, go to the settings section in your Coinbase account and update your information&lt;/a&gt;</string>
+    <string name="select_balance_store_oauth_confirm_footer">Having issues with your delivery address?&lt;br/&gt;&lt;a href=\'https://www.aptopayments.com\'&gt;To make changes, go to the settings section in your account and update your information&lt;/a&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_title">Get your physical card</string>
     <string name="select_balance_store_oauth_confirm_address_confirmation_message">We\'ll send your physical card to the address below:\n\n&lt;&lt;ADDRESS&gt;&gt;</string>
     <string name="select_balance_store_oauth_confirm_address_ok_button">Confirm</string>
@@ -538,6 +539,8 @@
     <string name="email_lost_card_subject">Lost Card</string>
     <string name="card_settings_show_card_data_biometrics_title">Fingerprint Authentication</string>
     <string name="card_settings_show_card_data_biometrics_description">Please verify your fingerprint to proceed.</string>
+    <string name="card_settings_google_pay_provisioning_title">Google Pay</string>
+    <string name="card_settings_google_pay_provisioning_subtitle">Add card to your Google wallet</string>
 
     <!--Monthly stats-->
     <string name="stats_monthly_spending_title">Stats for &lt;&lt;YEAR&gt;&gt;</string>
@@ -675,9 +678,9 @@
     <string name="biometric_verify_pin_title_description">Please enter the four digit Passcode you use to log into your Card App.</string>
     <string name="biometric_change_pin_title">Set your new Passcode</string>
     <string name="biometric_change_pin_confirmation_title">Confirm your new Passcode</string>
-    <string name="biometric_verify_pin_forgot_cta">Forgot?</string>
-    <string name="biometric_verify_pin_forgot_alert_title">Warning</string>
-    <string name="biometric_verify_pin_forgot_alert_message">You will be logged out of the App and required to verify your identity by completing the full sign-in process.</string>
+    <string name="biometric_verify_pin_forgot_cta">Forgot Passcode</string>
+    <string name="biometric_verify_pin_forgot_alert_title">Reset Passcode</string>
+    <string name="biometric_verify_pin_forgot_alert_message">We will log you out of the app. To reset your passcode, please sign back in using your other credentials.</string>
     <string name="biometric_verify_pin_forgot_alert_confirm">Confirm</string>
     <string name="biometric_verify_pin_forgot_alert_cancel">Cancel</string>
     <string name="biometric_show_pin_error_wrong_pin">Invalid Passcode</string>

@@ -17,6 +17,7 @@ import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.utils.FontsUtil
+import org.koin.core.module.Module
 import java.lang.ref.WeakReference
 
 interface AptoUiSdkProtocol {
@@ -25,7 +26,8 @@ interface AptoUiSdkProtocol {
     fun initializeWithApiKey(
         application: Application,
         apiKey: String,
-        environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD
+        environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD,
+        extraModules: List<((MutableList<Any>) -> Any)> = listOf()
     )
 
     fun startCardFlow(
@@ -50,9 +52,11 @@ object AptoUiSdk : AptoUiSdkProtocol {
     override fun initializeWithApiKey(
         application: Application,
         apiKey: String,
-        environment: AptoSdkEnvironment
+        environment: AptoSdkEnvironment,
+        extraModules: List<((MutableList<Any>) -> Any)>
     ) {
-        AptoPlatform.setUiModules(listOf(applicationModule, useCaseModule, viewModelModule))
+        val list = getModuleList(extraModules)
+        AptoPlatform.setUiModules(list)
         AptoPlatform.initializeWithApiKey(application, apiKey, environment)
     }
 
@@ -106,5 +110,12 @@ object AptoUiSdk : AptoUiSdkProtocol {
 
     override fun logout() {
         AptoPlatform.logout()
+    }
+
+    private fun getModuleList(extraModules: List<(MutableList<Any>) -> Any>): MutableList<Module> {
+        val list = mutableListOf(applicationModule, useCaseModule, viewModelModule)
+        extraModules.forEach { it.invoke(list as MutableList<Any>) }
+
+        return list
     }
 }

@@ -1,5 +1,7 @@
 package com.aptopayments.sdk.core.di.viewmodel
 
+import com.aptopayments.core.data.card.Card
+import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
@@ -27,8 +29,8 @@ import com.aptopayments.sdk.features.managecard.ManageCardViewModel
 import com.aptopayments.sdk.features.nonetwork.NoNetworkViewModel
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
-import com.aptopayments.sdk.features.passcode.CreatePasscodeViewModel
 import com.aptopayments.sdk.features.passcode.ChangePasscodeViewModel
+import com.aptopayments.sdk.features.passcode.CreatePasscodeViewModel
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewModel
 import com.aptopayments.sdk.features.voip.VoipViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -45,10 +47,12 @@ val viewModelModule = module {
     viewModel { FundingSourcesViewModel(analyticsManager = get()) }
     viewModel { KycStatusViewModel(analyticsManager = get()) }
     single { FetchTransactionsTaskQueue(aptoPlatformProtocol = get()) }
-    viewModel { ManageCardViewModel(getTransactionsQueue = get(), analyticsManager = get()) }
+    viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get()) }
     viewModel { ActivatePhysicalCardViewModel(analyticsManager = get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(analyticsManager = get()) }
-    viewModel { CardSettingsViewModel(analyticsManager = get()) }
+    viewModel { (card: Card, cardProduct: CardProduct) ->
+        CardSettingsViewModel(card, cardProduct, get(), get(), get())
+    }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
     viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }

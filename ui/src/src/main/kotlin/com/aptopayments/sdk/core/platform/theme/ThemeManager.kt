@@ -84,7 +84,7 @@ interface ThemeManager {
         }
 }
 
-internal fun themeManager(): ThemeManager {
+fun themeManager(): ThemeManager {
     return when (UIConfig.uiTheme) {
         UITheme.THEME_1 -> ThemeOneManager
         UITheme.THEME_2 -> ThemeTwoManager

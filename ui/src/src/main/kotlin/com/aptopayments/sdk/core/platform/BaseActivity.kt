@@ -34,7 +34,7 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_layout)
     }
 
-    internal fun showLoading() {
+    fun showLoading() {
         isLoading = true
         if (rl_loading_view.isVisible()) return
         val animation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
@@ -43,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity() {
         rl_loading_view.startAnimation(animation)
     }
 
-    internal fun hideLoading() {
+    fun hideLoading() {
         isLoading = false
         if (!rl_loading_view.isVisible()) return
         val animation = AnimationUtils.loadAnimation(this, R.anim.fade_out)

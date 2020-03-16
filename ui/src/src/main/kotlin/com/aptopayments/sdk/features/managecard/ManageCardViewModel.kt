@@ -2,8 +2,11 @@ package com.aptopayments.sdk.features.managecard
 
 import android.annotation.SuppressLint
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.CardDetails
@@ -12,25 +15,33 @@ import com.aptopayments.core.data.card.Money
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.add
 import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.repository.IAPHelper
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val ROWS_PER_PAGE = 20
+
 internal class ManageCardViewModel constructor(
+        private val cardId: String,
         private val getTransactionsQueue: FetchTransactionsTaskQueue,
-        private var analyticsManager: AnalyticsServiceContract
+        private var analyticsManager: AnalyticsServiceContract,
+        private val aptoUiSdkProtocol: AptoUiSdkProtocol
 ) : BaseViewModel(), KoinComponent {
 
     private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
+    private val iapHelper: IAPHelper by inject { parametersOf(cardId) }
 
     var card: MutableLiveData<Card> = MutableLiveData()
     var cardLoaded: MutableLiveData<Boolean> = MutableLiveData()
@@ -49,19 +60,25 @@ internal class ManageCardViewModel constructor(
     var transactionListItems: MutableLiveData<List<TransactionListItem>> = MutableLiveData(listOf())
     var cardProduct: MutableLiveData<CardProduct> = MutableLiveData()
     var transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData()
+    val showAddToGooglePay = Transformations.map(iapHelper.showAddCardButton) { showAddCardButton ->
+        aptoUiSdkProtocol.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites() && showAddCardButton
+    }
 
-    private val rowsPerPage = 20
     private var lastTransactionId: String? = null
     private var cardInfoRetrieved = false
     var balanceLoaded = false
     @SuppressLint("SimpleDateFormat")
     private val dateFormatter = SimpleDateFormat("MMMM, yyyy")
 
+    init {
+        startIapHelper()
+    }
+
     fun viewLoaded() {
         analyticsManager.track(Event.ManageCard)
     }
 
-    fun viewReady(cardId: String) {
+    fun viewReady() {
         transactionsInfoRetrieved.postValue(false)
         fetchData(cardId, forceApiCall = false, clearCachedValue = false) {
             backgroundRefresh(cardId = cardId)
@@ -174,7 +191,7 @@ internal class ManageCardViewModel constructor(
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun getTransactions(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
-        getTransactionsQueue.loadTransactions(cardId, rowsPerPage, forceApiCall, clearCachedValue) { result ->
+        getTransactionsQueue.loadTransactions(cardId, ROWS_PER_PAGE, forceApiCall, clearCachedValue) { result ->
             result.either(::handleFailure) { transactionList ->
                 if (clearCachedValue) transactions.value = null
                 val updatedTransactions = updateTransactions(transactionList, append = false)
@@ -186,7 +203,7 @@ internal class ManageCardViewModel constructor(
     }
 
     fun getMoreTransactions(cardId: String, onComplete: (Int) -> Unit) {
-        getTransactionsQueue.loadMoreTransactions(cardId, lastTransactionId, rowsPerPage) { result ->
+        getTransactionsQueue.loadMoreTransactions(cardId, lastTransactionId, ROWS_PER_PAGE) { result ->
             result.either(::handleFailure) { transactionList ->
                 val updatedTransactions = updateTransactions(transactionList, append = true)
                 if (updatedTransactions.isNotEmpty()) {
@@ -199,7 +216,7 @@ internal class ManageCardViewModel constructor(
     }
 
     private fun getBackgroundTransactions(cardId: String, onComplete: () -> Unit) {
-        getTransactionsQueue.backgroundRefresh(cardId, rowsPerPage) { result ->
+        getTransactionsQueue.backgroundRefresh(cardId, ROWS_PER_PAGE) { result ->
             result.either(::handleFailure) { transactionList ->
                 val updatedTransactions = updateTransactions(transactionList, append = false)
                 if (updatedTransactions.isNotEmpty()) {
@@ -319,5 +336,23 @@ internal class ManageCardViewModel constructor(
             if (index != -1) result.addAll(currentTransactionItems.subList(index, currentTransactionItems.size-1))
         }
         transactionListItems.postValue(result)
+    }
+
+    private fun startIapHelper() {
+        viewModelScope.launch {
+            iapHelper.initProcess()
+        }
+    }
+
+    fun onAddToGooglePayPressed(activity: FragmentActivity, requestCode: Int) {
+        viewModelScope.launch {
+            showLoading()
+            iapHelper.startInAppProvisioningFlow(activity, requestCode)
+            hideLoading()
+        }
+    }
+
+    fun onReturnedFromAddToGooglePay() {
+        startIapHelper()
     }
 }

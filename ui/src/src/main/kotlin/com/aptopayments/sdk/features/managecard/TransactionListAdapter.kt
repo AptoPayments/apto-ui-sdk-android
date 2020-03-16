@@ -128,10 +128,7 @@ internal open class TransactionListAdapter(
             if (details != null) {
                 cardView.setPan(details.pan)
                 cardView.setCvv(details.cvv)
-
-                val month = String.format("%02d", details.expirationMonth)
-                val year = String.format("%02d", details.expirationYear)
-                cardView.setExpiryDate(month, year)
+                cardView.setExpiryDate(details.expirationMonth, details.expirationYear)
             } else {
                 cardView.setPan(null)
                 cardView.setCvv(null)

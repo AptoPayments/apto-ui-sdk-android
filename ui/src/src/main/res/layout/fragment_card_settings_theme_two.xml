@@ -35,6 +35,9 @@
                     android:id="@+id/rl_settings" />
 
                 <include layout="@layout/view_section_option_subtitle_two"
+                    android:id="@+id/rl_google_pay" />
+
+                <include layout="@layout/view_section_option_subtitle_two"
                     android:id="@+id/rl_get_pin" />
 
                 <include layout="@layout/view_section_option_subtitle_two"
