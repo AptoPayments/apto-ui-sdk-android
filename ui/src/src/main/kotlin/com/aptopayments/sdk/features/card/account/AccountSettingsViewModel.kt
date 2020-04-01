@@ -45,7 +45,7 @@ internal class AccountSettingsViewModel constructor(
     private fun isSecurityAvailable() =
         AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI()
 
-    private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it }) as Boolean
+    private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it })
 
     private fun isMonthlyStatementFlagActive() = AptoUiSdk.cardOptions.showMonthlyStatementOption()
 

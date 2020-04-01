@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.auth
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.AuthCredential
 import com.aptopayments.core.data.config.ContextConfiguration
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
@@ -47,25 +46,21 @@ internal class AuthFlow (
         when (contextConfiguration.projectConfiguration.authCredential) {
             AuthCredential.PHONE -> {
                 val fragment = fragmentFactory.inputPhoneFragment(
-                        UIConfig.uiTheme,
                         contextConfiguration.projectConfiguration.allowedCountries,
                         INPUT_PHONE_TAG)
                 fragment.delegate = this
                 setStartElement(element = fragment as FlowPresentable)
             }
             AuthCredential.EMAIL -> {
-                val fragment = fragmentFactory.inputEmailFragment(
-                        uiTheme = UIConfig.uiTheme,
-                        tag = INPUT_EMAIL_TAG
-                )
+                val fragment = fragmentFactory.inputEmailFragment(INPUT_EMAIL_TAG)
                 fragment.delegate = this
                 setStartElement(fragment as FlowPresentable)
             }
             else -> {
                 val fragment = fragmentFactory.inputPhoneFragment(
-                        UIConfig.uiTheme,
-                        contextConfiguration.projectConfiguration.allowedCountries,
-                        INPUT_PHONE_TAG)
+                    contextConfiguration.projectConfiguration.allowedCountries,
+                    INPUT_PHONE_TAG
+                )
                 fragment.delegate = this
                 setStartElement(element = fragment as FlowPresentable)
             }
@@ -97,10 +92,7 @@ internal class AuthFlow (
     override fun onBackFromInputPhone() = onBack(Unit)
 
     override fun onPhoneVerificationStarted(verification: Verification) {
-        val fragment = fragmentFactory.phoneVerificationFragment(
-                UIConfig.uiTheme,
-                verification,
-                PHONE_VERIFICATION_TAG)
+        val fragment = fragmentFactory.phoneVerificationFragment(verification, PHONE_VERIFICATION_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }
@@ -111,10 +103,7 @@ internal class AuthFlow (
     override fun onBackFromInputEmail() = onBack(Unit)
 
     override fun onEmailVerificationStarted(verification: Verification) {
-        val fragment = fragmentFactory.emailVerificationFragment(
-                UIConfig.uiTheme,
-                verification,
-                EMAIL_VERIFICATION_TAG)
+        val fragment = fragmentFactory.emailVerificationFragment(verification, EMAIL_VERIFICATION_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }
@@ -133,17 +122,12 @@ internal class AuthFlow (
                     loginUser(verification, it)
                 } else {
                     if (it.verificationType == AUTH_TYPE_EMAIL) {
-                        val fragment = fragmentFactory.inputEmailFragment(
-                                uiTheme = UIConfig.uiTheme,
-                                tag = INPUT_EMAIL_TAG
-                        )
+                        val fragment = fragmentFactory.inputEmailFragment(INPUT_EMAIL_TAG)
                         fragment.delegate = this
                         setStartElement(fragment as FlowPresentable)
                     } else {
-                        val fragment = fragmentFactory.birthdateVerificationFragment(
-                                UIConfig.uiTheme,
-                                dataPoint,
-                                BIRTHDATE_VERIFICATION_TAG)
+                        val fragment =
+                            fragmentFactory.birthdateVerificationFragment(dataPoint, BIRTHDATE_VERIFICATION_TAG)
                         fragment.delegate = this
                         push(fragment as BaseFragment)
                     }
@@ -167,17 +151,14 @@ internal class AuthFlow (
                 } else {
                     if (it.verificationType == AUTH_TYPE_PHONE) {
                         val fragment = fragmentFactory.inputPhoneFragment(
-                                uiTheme = UIConfig.uiTheme,
-                                allowedCountries = contextConfiguration.projectConfiguration.allowedCountries,
-                                tag = INPUT_PHONE_TAG
+                            contextConfiguration.projectConfiguration.allowedCountries,
+                            INPUT_PHONE_TAG
                         )
                         fragment.delegate = this
                         setStartElement(fragment as FlowPresentable)
                     } else {
-                        val fragment = fragmentFactory.birthdateVerificationFragment(
-                                UIConfig.uiTheme,
-                                dataPoint,
-                                BIRTHDATE_VERIFICATION_TAG)
+                        val fragment =
+                            fragmentFactory.birthdateVerificationFragment(dataPoint, BIRTHDATE_VERIFICATION_TAG)
                         fragment.delegate = this
                         push(fragment as BaseFragment)
                     }

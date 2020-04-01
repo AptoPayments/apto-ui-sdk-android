@@ -133,7 +133,6 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
                         apto_pin_view.clearFocus()
                     }
                 }
-                Unit
             }
         }
     }

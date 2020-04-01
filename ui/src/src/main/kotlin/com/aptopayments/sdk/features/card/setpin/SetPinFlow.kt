@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.setpin
 
 import androidx.annotation.VisibleForTesting
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
@@ -21,9 +20,7 @@ internal class SetPinFlow (
 ) : Flow(), SetPinContract.Delegate, ConfirmPinContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.setPinFragment(
-                uiTheme = UIConfig.uiTheme,
-                tag = SET_PIN_TAG)
+        val fragment = fragmentFactory.setPinFragment(SET_PIN_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -42,10 +39,7 @@ internal class SetPinFlow (
     // Set Pin
     //
     override fun setPinFinished(pin: String) {
-        val fragment = fragmentFactory.confirmPinFragment(
-                uiTheme = UIConfig.uiTheme,
-                pin = pin,
-                tag = CONFIRM_PIN_TAG)
+        val fragment = fragmentFactory.confirmPinFragment(pin, CONFIRM_PIN_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

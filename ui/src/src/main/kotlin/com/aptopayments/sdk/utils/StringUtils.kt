@@ -6,6 +6,7 @@ import android.util.Patterns
 import com.aptopayments.core.data.PhoneNumber
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import java.util.Locale
 
 class StringUtils {
 
@@ -21,7 +22,7 @@ class StringUtils {
         }
 
         fun capitalizeString(stringToCapitalize: String): String {
-            return stringToCapitalize.toUpperCase()[0] + stringToCapitalize.substring(1, stringToCapitalize.length)
+            return stringToCapitalize.toUpperCase(Locale.getDefault())[0] + stringToCapitalize.substring(1, stringToCapitalize.length)
         }
 
         fun isValidEmail(stringToValidate: String): Boolean = stringToValidate.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(stringToValidate).matches()

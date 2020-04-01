@@ -10,6 +10,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.ui.StatusBarUtil
 import com.aptopayments.sdk.utils.FontsUtil
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_no_network_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
@@ -59,7 +60,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         activity?.window?.let { StatusBarUtil.setStatusBarColor(it, UIConfig.uiNavigationSecondaryColor) }
         tv_description_text.setTextColor(UIConfig.textTopBarSecondaryColor)
         tv_loading_text.setTextColor(UIConfig.textTertiaryColor)
-        pb_progress.indeterminateDrawable.setColorFilter(UIConfig.textTertiaryColor, PorterDuff.Mode.SRC_IN)
+        pb_progress.indeterminateDrawable.setColorFilterCompat(UIConfig.textTertiaryColor, PorterDuff.Mode.SRC_IN)
 
         FontsUtil.getFontOfType(FontsUtil.FontType.REGULAR)?.let{
             tv_description_text.typeface = it

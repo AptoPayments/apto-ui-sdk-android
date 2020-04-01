@@ -1,15 +1,14 @@
 package com.aptopayments.sdk.features.oauth
 
 import androidx.annotation.VisibleForTesting
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
+import com.aptopayments.core.repository.oauth.remote.OAUTH_FINISHED_URL
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
-import com.aptopayments.core.repository.oauth.remote.OAUTH_FINISHED_URL
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
 import java.lang.reflect.Modifier
 
@@ -24,10 +23,7 @@ internal class OAuthFlow(
 ) : Flow(), OAuthConnectContract.Delegate, WebBrowserContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.oauthConnectFragment(
-                uiTheme = UIConfig.uiTheme,
-                config = config,
-                tag = OAUTH_CONNECT_TAG)
+        val fragment = fragmentFactory.oauthConnectFragment(config, OAUTH_CONNECT_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))

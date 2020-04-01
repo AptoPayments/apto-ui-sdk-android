@@ -4,8 +4,6 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.UnitTest
-import com.aptopayments.sdk.core.di.applicationModule
-import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.AuthStateProvider
 import com.aptopayments.sdk.repository.AuthenticationRepository
@@ -17,23 +15,19 @@ import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.test.inject
-import org.koin.test.mock.declareMock
+import org.mockito.Mock
 
 internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
-    private val authStateProvider: AuthStateProvider by inject()
-    private val authenticationRepo: AuthenticationRepository by inject()
+    @Mock
+    private lateinit var authStateProvider: AuthStateProvider
+    @Mock
+    private lateinit var authenticationRepo: AuthenticationRepository
+
     lateinit var sut: ShouldAuthenticateOnStartUpUseCase
 
     @Before
-    fun configureKoin() {
-        startKoin {
-            modules(listOf(useCaseModule, applicationModule))
-        }
-        declareMock<AuthStateProvider>()
-        declareMock<AuthenticationRepository>()
+    fun setUp() {
         sut = ShouldAuthenticateOnStartUpUseCase(authStateProvider, authenticationRepo)
     }
 

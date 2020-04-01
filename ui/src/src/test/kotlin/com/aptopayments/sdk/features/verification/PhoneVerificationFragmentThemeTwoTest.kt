@@ -67,7 +67,7 @@ class PhoneVerificationFragmentThemeTwoTest : AndroidTest() {
         val tag = "SOME_TAG"
 
         // When
-        val fragment = sut.phoneVerificationFragment(UITheme.THEME_2, verification, tag)
+        val fragment = sut.phoneVerificationFragment(verification, tag)
 
         //Then
         assert(fragment is PhoneVerificationFragmentThemeTwo)

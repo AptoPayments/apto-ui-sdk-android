@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.selectcountry
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
@@ -47,8 +46,8 @@ internal class CardProductSelectorFlow (
                                 allowedCountriesSet.add(Country(allowedCountry))
                             }
                         }
-                        val fragment = fragmentFactory.countrySelectorFragment(
-                                UIConfig.uiTheme, allowedCountriesSet.toList(), COUNTRY_SELECTOR_TAG)
+                        val fragment =
+                            fragmentFactory.countrySelectorFragment(allowedCountriesSet.toList(), COUNTRY_SELECTOR_TAG)
                         fragment.delegate = this
                         analyticsManager.track(Event.CardProductSelectorCountrySelectorShown)
                         // TODO: show the card product selector if only 1 country

@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.activatephysicalcard
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
@@ -29,10 +28,7 @@ internal class ActivatePhysicalCardFlow (
 ) : Flow(), ActivatePhysicalCardContract.Delegate, ActivatePhysicalCardSuccessContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.activatePhysicalCardFragment(
-                uiTheme = UIConfig.uiTheme,
-                card = card,
-                tag = ACTIVATE_PHYSICAL_CARD_TAG)
+        val fragment = fragmentFactory.activatePhysicalCardFragment(card, ACTIVATE_PHYSICAL_CARD_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -51,10 +47,7 @@ internal class ActivatePhysicalCardFlow (
     // Activate
     //
     override fun onPhysicalCardActivated() {
-        val fragment = fragmentFactory.activatePhysicalCardSuccessFragment(
-                uiTheme = UIConfig.uiTheme,
-                card = card,
-                tag = ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG)
+        val fragment = fragmentFactory.activatePhysicalCardSuccessFragment(card, ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
         onPhysicalCardActivated(Unit)

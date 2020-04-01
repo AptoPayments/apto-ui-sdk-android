@@ -32,7 +32,7 @@ import com.aptopayments.sdk.utils.CustomTypefaceSpan
 import com.aptopayments.sdk.utils.FontsUtil
 import com.aptopayments.sdk.utils.FontsUtil.FontType.REGULAR
 import com.aptopayments.sdk.utils.FontsUtil.FontType.SEMI_BOLD
-import com.aptopayments.sdk.utils.toDp
+import com.aptopayments.sdk.utils.extensions.toDp
 import com.google.android.material.appbar.AppBarLayout
 
 private const val CARD_FONT_FILE = "fonts/ocraextended.ttf"
@@ -425,14 +425,6 @@ internal object ThemeTwoManager: ThemeManager {
             setTextColor(UIConfig.textTopBarSecondaryColor)
             setLineSpacing(0f, 1.17f)
         }
-    }
-
-    override fun customizeFormField(textView: TextView) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun customizeFormFieldSmall(textView: TextView) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun customizeCheckBox(checkBox: AppCompatCheckBox) {

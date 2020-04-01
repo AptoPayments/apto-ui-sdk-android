@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.voip
 
 import androidx.annotation.VisibleForTesting
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -19,11 +18,7 @@ internal class VoipFlow (
         val onFinish: (Unit) -> Unit
 ) : Flow(), VoipContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.getVoipFragment(
-                uiTheme = UIConfig.uiTheme,
-                cardId = cardId,
-                action = action,
-                tag = VOIP_TAG)
+        val fragment = fragmentFactory.getVoipFragment(cardId, action, VOIP_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))

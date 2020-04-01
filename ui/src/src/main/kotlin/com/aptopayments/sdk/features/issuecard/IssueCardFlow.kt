@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.issuecard
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -28,10 +27,7 @@ internal class IssueCardFlow (
         get() = fragmentWithTag(ISSUE_CARD_TAG) as? IssueCardContract.View
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.issueCardFragment(
-                uiTheme = UIConfig.uiTheme,
-                cardApplicationId = cardApplicationId,
-                tag = ISSUE_CARD_TAG)
+        val fragment = fragmentFactory.issueCardFragment(cardApplicationId, ISSUE_CARD_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -47,11 +43,8 @@ internal class IssueCardFlow (
     }
 
     private fun presentIssueCardError(errorCode: Int?) {
-        val fragment = fragmentFactory.issueCardErrorFragment(
-                UIConfig.uiTheme,
-                ISSUE_CARD_ERROR_TAG,
-                errorCode,
-                actionConfiguration?.errorAsset)
+        val fragment =
+            fragmentFactory.issueCardErrorFragment(ISSUE_CARD_ERROR_TAG, errorCode, actionConfiguration?.errorAsset)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

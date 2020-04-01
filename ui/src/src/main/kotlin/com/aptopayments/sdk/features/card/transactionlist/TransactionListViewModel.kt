@@ -13,6 +13,8 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.managecard.TransactionListItem
 import org.threeten.bp.LocalDate
 import java.text.SimpleDateFormat
+import java.util.ArrayList
+import java.util.Locale
 
 private const val ROWS_TO_RETRIEVE = 20
 
@@ -50,7 +52,7 @@ internal class TransactionListViewModel constructor(
                                        clearCurrent: Boolean): TransactionListFilters {
         val lastTransactionId = if (clearCurrent) null else this.lastTransactionId
         return TransactionListFilters(rows = ROWS_TO_RETRIEVE, lastTransactionId = lastTransactionId,
-                startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase())
+                startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase(Locale.US))
     }
 
     @SuppressLint("SimpleDateFormat")

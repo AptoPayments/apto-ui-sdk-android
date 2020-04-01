@@ -3,9 +3,9 @@ package com.aptopayments.sdk.features.card
 import androidx.appcompat.app.AppCompatActivity
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.config.ContextConfiguration
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
+import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.platform.AptoPlatformProtocol
@@ -43,7 +43,7 @@ internal class CardFlow : Flow(), KoinComponent {
         subscribeToNetworkAvailabilityEvent()
         subscribeToMaintenanceModeEvent()
         if (networkHandler.isConnected != true) {
-            val fragment = fragmentFactory.noNetworkFragment(UIConfig.uiTheme, NO_NETWORK_TAG)
+            val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
             setStartElement(fragment as BaseFragment)
             noNetworkFragmentShown = true
             onInitComplete(Either.Right(Unit))
@@ -169,7 +169,7 @@ internal class CardFlow : Flow(), KoinComponent {
             initAuthFlow { initResult ->
                 initResult.either(::handleFailure) { flow ->
                     clearChildElements()
-                    popAllFragments(animated = true) { push(flow) }
+                    popAllFragments { push(flow) }
                     statementRepository.clearCache()
                 }
             }
@@ -179,7 +179,7 @@ internal class CardFlow : Flow(), KoinComponent {
     private fun subscribeToNetworkAvailabilityEvent() {
         networkHandler.subscribeNetworkReachabilityListener(this) { available ->
             if (!available && !noNetworkFragmentShown) {
-                val fragment = fragmentFactory.noNetworkFragment(UIConfig.uiTheme, NO_NETWORK_TAG)
+                val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
                 push(fragment as BaseFragment)
                 noNetworkFragmentShown = true
             }
@@ -201,7 +201,7 @@ internal class CardFlow : Flow(), KoinComponent {
 
     private fun subscribeToMaintenanceModeEvent() = networkHandler.subscribeMaintenanceListener(this) { available ->
         if (!available && !maintenanceFragmentShown) {
-            val fragment = fragmentFactory.maintenanceFragment(UIConfig.uiTheme, MAINTENANCE_TAG)
+            val fragment = fragmentFactory.maintenanceFragment(MAINTENANCE_TAG)
             push(fragment as BaseFragment)
             maintenanceFragmentShown = true
         } else if (available && maintenanceFragmentShown) {
@@ -223,7 +223,7 @@ internal class CardFlow : Flow(), KoinComponent {
     }
 
     private fun initSetLoginPinFlow(cardId: String, onInitComplete: (Either<Failure, Flow>) -> Unit) {
-        val shouldCreate = shouldCreatePasscodeUseCase().either({ false }, { it }) as Boolean
+        val shouldCreate = shouldCreatePasscodeUseCase().getOrElse { false }
         if (shouldCreate) {
             val flow = CreatePasscodeFlow(mode = PasscodeMode.CREATE, onFinish = { showManageCardFlow(cardId) })
             flow.init { initResult ->

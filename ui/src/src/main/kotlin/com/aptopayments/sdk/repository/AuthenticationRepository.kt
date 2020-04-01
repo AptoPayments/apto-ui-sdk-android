@@ -40,7 +40,7 @@ internal class AuthenticationRepositoryImpl(private val sharedPref: SharedPrefer
         return getAuthenticationTime().either(
             { true },
             { it.plusSeconds(AUTHENTICATION_LIMIT_THRESHOLD).isBefore(LocalDateTime.now()) }
-        ) as Boolean
+        )
     }
 
     override fun saveNeedToAuthenticate() {

@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.AppCompatEditText
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.core.extension.starsExceptLast
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 
 private const val XML_NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/android"
 private const val DEFAULT_NUMBER_OF_DIGITS = 6
@@ -73,7 +74,7 @@ class AptoPinView @JvmOverloads constructor(
 
     override fun setBackgroundColor(color: Int) {
         val background = background
-        background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        background.setColorFilterCompat(color, PorterDuff.Mode.SRC_ATOP)
         this.background = background
     }
 

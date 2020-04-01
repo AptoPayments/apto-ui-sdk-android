@@ -91,19 +91,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "WaitlistFragment"
         val fragmentDouble = WaitlistFragmentDouble(mockWaitlistDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.waitlistFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                tag = tag,
-                cardId = cardId,
-                cardProduct = mockCardProduct
-            )
+            mockFragmentFactory.waitlistFragment(cardId, mockCardProduct, tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).waitlistFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId, cardProduct = mockCardProduct)
+        verify(mockFragmentFactory).waitlistFragment(cardId, mockCardProduct, tag)
     }
 
     @Test
@@ -116,14 +111,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "ManageCardFragment"
         val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
+            mockFragmentFactory.manageCardFragment(tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
+        verify(mockFragmentFactory).manageCardFragment(tag = tag, cardId = cardId)
     }
 
     @Test
@@ -136,14 +131,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "ManageCardFragment"
         val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
+            mockFragmentFactory.manageCardFragment(tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.showManageCardFragment()
 
         // Then
-        verify(mockFragmentFactory).manageCardFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardId = cardId)
+        verify(mockFragmentFactory).manageCardFragment(tag = tag, cardId = cardId)
     }
 
     @Test
@@ -168,7 +163,6 @@ class ManageCardFlowTest : AndroidTest() {
     fun `should use the factory to instantiate CardSettingsFragmentInterface when onCardSettingsTapped is called`() {
         // Given
         val card = TestDataProvider.provideCard(accountID = cardId, kycStatus = KycStatus.PASSED, isWaitlisted = false)
-        val cardDetailsShown = false
         Mockito.`when`(sut.aptoPlatformProtocol.fetchCardProduct(anyString(), anyBoolean(), TestDataProvider.anyObject())).thenAnswer { invocation ->
             (invocation.arguments[2] as (Either<Failure, CardProduct>) -> Unit).invoke(Either.Right(mockCardProduct))
         }
@@ -176,14 +170,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "CardSettingsFragment"
         val fragmentDouble = CardSettingsFragmentDouble(mockCardSettingsDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.cardSettingsFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+            mockFragmentFactory.cardSettingsFragment(tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
         }.willReturn(fragmentDouble)
 
         // When
         sut.onCardSettingsTapped(card)
 
         // Then
-        verify(mockFragmentFactory).cardSettingsFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
+        verify(mockFragmentFactory).cardSettingsFragment(tag = tag, card = card, cardProduct = mockCardProduct, projectConfiguration = mockConfig.projectConfiguration)
     }
 
     @Test
@@ -193,14 +187,14 @@ class ManageCardFlowTest : AndroidTest() {
         val tag = "FundingSourceDialogFragment"
         val fragmentDouble = FundingSourcesDialogFragmentDouble(mockFundingSourcesDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.fundingSourceFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardID = cardId, selectedBalanceID = balanceId)
+            mockFragmentFactory.fundingSourceFragment(tag = tag, cardID = cardId, selectedBalanceID = balanceId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.onFundingSourceTapped(balanceId)
 
         // Then
-        verify(mockFragmentFactory).fundingSourceFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, cardID = cardId, selectedBalanceID = balanceId)
+        verify(mockFragmentFactory).fundingSourceFragment(tag = tag, cardID = cardId, selectedBalanceID = balanceId)
     }
 
     @Test
@@ -210,14 +204,14 @@ class ManageCardFlowTest : AndroidTest() {
         val title = "TEST_TITLE"
         val fragmentDouble = ContentPresenterFragmentDouble(mockContentPresenterDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.contentPresenterFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, content = mockContent, title = title)
+            mockFragmentFactory.contentPresenterFragment(tag = tag, content = mockContent, title = title)
         }.willReturn(fragmentDouble)
 
         // When
         sut.showContentPresenter(mockContent, title)
 
         // Then
-        verify(mockFragmentFactory).contentPresenterFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag, content = mockContent, title = title)
+        verify(mockFragmentFactory).contentPresenterFragment(tag = tag, content = mockContent, title = title)
     }
 
     @Test

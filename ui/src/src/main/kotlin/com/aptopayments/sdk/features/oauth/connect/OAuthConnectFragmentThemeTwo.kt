@@ -100,14 +100,12 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     override fun setupListeners() {
         super.setupListeners()
         tv_submit_bttn.setOnClickListener { _ ->
-            allowedBalanceType?.let {
-                shouldReloadStatus = true
-                showLoading()
-                viewModel.startOAuthAuthentication(it) { oauthAttempt ->
-                    this.oauthAttempt = oauthAttempt
-                    oauthAttempt.url?.let { url ->
-                        startOAuthAuthenticationWith(url = url)
-                    }
+            shouldReloadStatus = true
+            showLoading()
+            viewModel.startOAuthAuthentication(allowedBalanceType) { oauthAttempt ->
+                this.oauthAttempt = oauthAttempt
+                oauthAttempt.url?.let { url ->
+                    startOAuthAuthenticationWith(url = url)
                 }
             }
         }

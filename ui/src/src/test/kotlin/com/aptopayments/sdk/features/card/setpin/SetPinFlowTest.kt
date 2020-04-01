@@ -40,14 +40,14 @@ class SetPinFlowTest : AndroidTest() {
         val tag = "SetPinFragment"
         val fragmentDouble = SetPinFragmentDouble(mockSetPinDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.setPinFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag)
+            mockFragmentFactory.setPinFragment(tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).setPinFragment(uiTheme = TestDataProvider.provideDefaultTheme(), tag = tag)
+        verify(mockFragmentFactory).setPinFragment(tag)
     }
 
     @Test
@@ -57,21 +57,13 @@ class SetPinFlowTest : AndroidTest() {
         val pin = "1234"
         val fragmentDouble = ConfirmPinFragmentDouble(mockConfirmPinDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.confirmPinFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                pin = pin,
-                tag = tag
-            )
+            mockFragmentFactory.confirmPinFragment(pin,tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.setPinFinished(pin)
 
         // Then
-        verify(mockFragmentFactory).confirmPinFragment(
-            uiTheme = TestDataProvider.provideDefaultTheme(),
-            pin = pin,
-            tag = tag
-        )
+        verify(mockFragmentFactory).confirmPinFragment(pin, tag)
     }
 }

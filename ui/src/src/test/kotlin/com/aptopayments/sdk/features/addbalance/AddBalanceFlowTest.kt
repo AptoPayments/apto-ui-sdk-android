@@ -50,7 +50,6 @@ class AddBalanceFlowTest : AndroidTest() {
         val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = "OAuthConnectFragment" }
         val captor = argumentCaptor<OAuthConfig>()
         given { mockFragmentFactory.oauthConnectFragment(
-                uiTheme = TestDataProvider.anyObject(),
                 config = captor.capture(),
                 tag = TestDataProvider.anyObject())
         }.willReturn(fragmentDouble)

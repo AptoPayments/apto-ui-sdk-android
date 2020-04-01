@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.oauth
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
@@ -33,7 +32,6 @@ internal class OAuthVerifyFlow(
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         oauthAttempt.userData?.let {
             val fragment = fragmentFactory.oauthVerifyFragment(
-                    uiTheme = UIConfig.uiTheme,
                     datapoints = it,
                     allowedBalanceType = allowedBalanceType,
                     tokenId = oauthAttempt.tokenId,

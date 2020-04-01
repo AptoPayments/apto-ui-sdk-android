@@ -44,24 +44,14 @@ class TransactionListFlowTest : AndroidTest() {
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
         val fragmentTestDouble = transactionListFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionListFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                cardId = cardId,
-                config = config,
-                tag = tag
-            )
+            mockFragmentFactory.transactionListFragment(cardId, config, tag)
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).transactionListFragment(
-            uiTheme = TestDataProvider.provideDefaultTheme(),
-            cardId = cardId,
-            config = config,
-            tag = tag
-        )
+        verify(mockFragmentFactory).transactionListFragment(cardId, config, tag)
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 
@@ -85,22 +75,14 @@ class TransactionListFlowTest : AndroidTest() {
         val transaction = mock(Transaction::class.java)
         val fragmentTestDouble = transactionDetailsFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionDetailsFragment(
-                TestDataProvider.provideDefaultTheme(),
-                transaction,
-                detailsTag
-            )
+            mockFragmentFactory.transactionDetailsFragment(transaction, detailsTag)
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.onTransactionTapped(transaction)
 
         // Then
-        verify(mockFragmentFactory).transactionDetailsFragment(
-            TestDataProvider.provideDefaultTheme(),
-            transaction,
-            detailsTag
-        )
+        verify(mockFragmentFactory).transactionDetailsFragment(transaction, detailsTag)
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 

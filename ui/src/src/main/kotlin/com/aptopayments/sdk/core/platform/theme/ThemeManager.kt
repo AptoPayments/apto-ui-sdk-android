@@ -61,8 +61,6 @@ interface ThemeManager {
     fun getAlertDialog(builder: AlertDialog.Builder, alertTitle: String, alertMessage: String): AlertDialog
     fun customizeRadioButton(button: AppCompatRadioButton)
     fun customizeMenuItem(textView: TextView)
-    fun customizeFormField(textView: TextView)
-    fun customizeFormFieldSmall(textView: TextView)
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
     fun customizeEditText(editText: EditText)
 
@@ -85,10 +83,7 @@ interface ThemeManager {
 }
 
 fun themeManager(): ThemeManager {
-    return when (UIConfig.uiTheme) {
-        UITheme.THEME_1 -> ThemeOneManager
-        UITheme.THEME_2 -> ThemeTwoManager
-    }
+    return ThemeTwoManager
 }
 
 internal fun applyStyle(style: CharacterStyle, spannable: Spannable, start: Int, end: Int) {

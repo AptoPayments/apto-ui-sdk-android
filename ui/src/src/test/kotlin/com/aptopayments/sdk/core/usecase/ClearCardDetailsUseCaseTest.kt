@@ -1,28 +1,23 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.sdk.UnitTest
-import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.nhaarman.mockitokotlin2.verify
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.test.inject
-import org.koin.test.mock.declareMock
+import org.mockito.Mock
 
 internal class ClearCardDetailsUseCaseTest : UnitTest() {
+
+    @Mock
+    private lateinit var repo: LocalCardDetailsRepository
+
     lateinit var sut: ClearCardDetailsUseCase
-    val repo: LocalCardDetailsRepository by inject()
 
     @Before
-    fun configureKoin() {
-        startKoin {
-            modules(listOf(applicationModule))
-        }
-
-        declareMock<LocalCardDetailsRepository>()
+    fun setUp() {
         sut = ClearCardDetailsUseCase(repo)
     }
 

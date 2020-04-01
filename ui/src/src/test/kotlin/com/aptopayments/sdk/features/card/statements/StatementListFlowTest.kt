@@ -58,12 +58,7 @@ class StatementListFlowTest : AndroidTest() {
         val pdfRendererFragment =
             PdfRendererFragmentDouble(pdfRendererFragmentDelegate).apply { this.TAG = PDF_RENDERER_TAG }
         given {
-            mockFragmentFactory.pdfRendererFragment(
-                TestDataProvider.provideDefaultTheme(),
-                statementFile.title,
-                statementFile.file,
-                PDF_RENDERER_TAG
-            )
+            mockFragmentFactory.pdfRendererFragment(statementFile.title, statementFile.file, PDF_RENDERER_TAG)
         }.willReturn(pdfRendererFragment)
 
         sut.onStatementDownloaded(statementFile)

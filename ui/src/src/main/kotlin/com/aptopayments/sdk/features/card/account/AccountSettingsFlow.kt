@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.account
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.ContextConfiguration
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.functional.Either
@@ -34,10 +33,7 @@ internal class AccountSettingsFlow(
     val analyticsManager: AnalyticsServiceContract by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.accountSettingsFragment(
-                UIConfig.uiTheme,
-                contextConfiguration,
-                ACCOUNT_SETTINGS_TAG)
+        val fragment = fragmentFactory.accountSettingsFragment(contextConfiguration, ACCOUNT_SETTINGS_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -78,8 +74,7 @@ internal class AccountSettingsFlow(
     // Notification Preferences
     //
     override fun showNotificationPreferences() {
-        val fragment = fragmentFactory.notificationPreferencesFragment(
-                UIConfig.uiTheme, cardId, NOTIFICATION_PREFERENCES_TAG)
+        val fragment = fragmentFactory.notificationPreferencesFragment(cardId, NOTIFICATION_PREFERENCES_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

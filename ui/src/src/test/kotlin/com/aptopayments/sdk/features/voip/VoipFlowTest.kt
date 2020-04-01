@@ -42,23 +42,13 @@ class VoipFlowTest : AndroidTest() {
         val tag = "VoipFragment"
         val fragmentDouble = VoipFragmentDouble(mockDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.getVoipFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                tag = tag,
-                action = mockAction,
-                cardId = cardId
-            )
+            mockFragmentFactory.getVoipFragment(tag = tag, action = mockAction, cardId = cardId)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).getVoipFragment(
-            uiTheme = TestDataProvider.provideDefaultTheme(),
-            tag = tag,
-            action = mockAction,
-            cardId = cardId
-        )
+        verify(mockFragmentFactory).getVoipFragment(tag = tag, action = mockAction, cardId = cardId)
     }
 }

@@ -110,17 +110,15 @@ internal class SelectBalanceStoreFlow (
 
     private fun confirmAddressIfNeeded(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt) {
         (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)?.firstOrNull() as? AddressDataPoint)?.let { address ->
-            rootActivity()?.let { context ->
-                val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized()
-                        .replace("<<ADDRESS>>", address.toStringRepresentation())
-                confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
-                        text = message,
-                        confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(),
-                        cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(),
-                        onConfirm = { updateUserIfNeeded(allowedBalanceType, oauthAttempt) },
-                        onCancel = { }
-                )
-            }
+            val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized()
+                .replace("<<ADDRESS>>", address.toStringRepresentation())
+            confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
+                text = message,
+                confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(),
+                cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(),
+                onConfirm = { updateUserIfNeeded(allowedBalanceType, oauthAttempt) },
+                onCancel = { }
+            )
         } ?: updateUserIfNeeded(allowedBalanceType, oauthAttempt)
     }
 
@@ -130,13 +128,11 @@ internal class SelectBalanceStoreFlow (
             aptoPlatformProtocol.saveOauthUserData(userData, allowedBalanceType, oauthAttempt.tokenId) { result ->
                 result.either({ handleError(it) }, {
                     hideLoading()
-                    if (it.result == OAuthUserDataUpdateResult.VALID) selectBalanceStore(oauthAttempt)
-                    else {
-                        rootActivity()?.let { context ->
-                            notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized())
-                        }
+                    if (it.result == OAuthUserDataUpdateResult.VALID) {
+                        selectBalanceStore(oauthAttempt)
+                    } else {
+                        notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized())
                         it.userData?.let { userData -> verifyFlow.showUpdatedUserData(userData) }
-                        Unit
                     }
                 })
             }
@@ -159,7 +155,6 @@ internal class SelectBalanceStoreFlow (
                             "select_balance_store.login.error.title".localized(),
                             selectBalanceStoreResult.errorMessage()
                         )
-                        Unit
                     }
                 }
             }

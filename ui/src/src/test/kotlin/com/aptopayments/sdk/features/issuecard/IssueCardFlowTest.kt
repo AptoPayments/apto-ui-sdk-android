@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.issuecard
 
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.config.Branding
+import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
@@ -43,20 +43,14 @@ class IssueCardFlowTest : AndroidTest() {
                 onBack = {},
                 onFinish = {})
         given {
-            mockFragmentFactory.issueCardFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                cardApplicationId = cardApplicationId,
-                tag = tag)
+            mockFragmentFactory.issueCardFragment(cardApplicationId, tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).issueCardFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                cardApplicationId = cardApplicationId,
-                tag = tag)
+        verify(mockFragmentFactory).issueCardFragment(cardApplicationId, tag)
     }
 
     @Test
@@ -75,17 +69,10 @@ class IssueCardFlowTest : AndroidTest() {
                 onBack = {},
                 onFinish = {})
         given {
-            mockFragmentFactory.issueCardFragment(
-                    uiTheme = TestDataProvider.provideDefaultTheme(),
-                    cardApplicationId = cardApplicationId,
-                    tag = issueCardTag)
+            mockFragmentFactory.issueCardFragment(cardApplicationId, issueCardTag)
         }.willReturn(issueCardFragmentDouble)
         given {
-            mockFragmentFactory.issueCardErrorFragment(
-                    uiTheme = TestDataProvider.provideDefaultTheme(),
-                    tag = issueCardErrorTag,
-                    errorCode = 3,
-                    errorAsset = null)
+            mockFragmentFactory.issueCardErrorFragment(issueCardErrorTag, 3, null)
         }.willReturn(issueCardErrorFragmentDouble)
 
         // When
@@ -93,10 +80,6 @@ class IssueCardFlowTest : AndroidTest() {
         issueCardFragmentDouble.delegate?.onCardIssuedFailed(3)
 
         // Then
-        verify(mockFragmentFactory).issueCardErrorFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                tag = issueCardErrorTag,
-                errorCode = 3,
-                errorAsset = null)
+        verify(mockFragmentFactory).issueCardErrorFragment(issueCardErrorTag, 3, null)
     }
 }

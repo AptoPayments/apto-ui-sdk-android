@@ -10,7 +10,7 @@ class CategorySpendingSorter {
             if (it.categoryId.isEmpty()) {
                 null
             } else {
-                MCC(name = it.categoryId, icon = MCC.Icon.valueOf(it.categoryId.toUpperCase())).toLocalizedString()
+                MCC(it.categoryId).toLocalizedString()
             }
         })
 }

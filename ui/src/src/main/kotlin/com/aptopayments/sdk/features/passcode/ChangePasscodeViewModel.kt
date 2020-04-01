@@ -64,8 +64,6 @@ internal class ChangePasscodeViewModel(
         override fun getTitle() = "biometric_change_pin_confirmation_title"
     }
 
-    private fun isPasscodeCorrect(passcode: String): Boolean {
-        return verifyPasscodeUseCase.run(passcode).either({ false }, { it }) as Boolean
-    }
+    private fun isPasscodeCorrect(passcode: String) = verifyPasscodeUseCase.run(passcode).either({ false }, { it })
 
 }

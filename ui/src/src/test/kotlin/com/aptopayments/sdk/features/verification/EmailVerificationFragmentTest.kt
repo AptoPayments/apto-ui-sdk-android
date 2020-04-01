@@ -1,12 +1,11 @@
 package com.aptopayments.sdk.features.verification
 
 import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.core.data.config.UITheme.THEME_1
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
-import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragmentThemeOne
+import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -24,7 +23,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
     @Mock
     private lateinit var viewModel: VerificationViewModel
     private val verification = Verification("", "email")
-    private lateinit var sut: EmailVerificationFragmentThemeOne
+    private lateinit var sut: EmailVerificationFragmentThemeTwo
 
     @Before
     override fun setUp() {
@@ -34,8 +33,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
                 viewModel { viewModel }
             })
         }
-        sut = EmailVerificationFragmentThemeOne.newInstance(verification)
-        sut.verification = verification
+        sut = EmailVerificationFragmentThemeTwo.newInstance(verification)
     }
 
     @Test
@@ -61,16 +59,16 @@ class EmailVerificationFragmentTest : AndroidTest() {
     }
 
     @Test
-    fun `email verification fragment for theme1 return expected fragment and set TAG`() {
+    fun `email verification fragment return expected fragment and set TAG`() {
         // Given
         val sut = FragmentFactoryImpl()
         val tag = "SOME_TAG"
 
         // When
-        val fragment = sut.emailVerificationFragment(THEME_1, verification, tag)
+        val fragment = sut.emailVerificationFragment(verification, tag)
 
         //Then
-        assert(fragment is EmailVerificationFragmentThemeOne)
+        assert(fragment is EmailVerificationFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
 }

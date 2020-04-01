@@ -22,6 +22,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -33,6 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
 import java.lang.reflect.Modifier
+import java.util.Locale
 
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
@@ -177,9 +179,9 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         spendingList.forEachIndexed { index, categorySpending ->
             categorySpending.spending?.currency?.let { currency = it }
             categorySpending.spending?.amount?.toFloat()?.let {
-                val mcc = MCC(name = categorySpending.categoryId, icon = Icon.valueOf(categorySpending.categoryId.toUpperCase()))
+                val mcc = MCC(categorySpending.categoryId)
                 val icon = context?.let { context -> ContextCompat.getDrawable(context, mcc.iconResource) }
-                icon?.setColorFilter(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+                icon?.setColorFilterCompat(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
                 entries.add(index, PieEntry(it, icon, PieChartElement(categorySpending, mcc)))
                 totalSpent += it
             }
@@ -236,7 +238,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
         val pieChartElement = entry.data as PieChartElement
         if (pieChartElement.mcc == null) notifyAdapterCategorySpendingSelected(groupedCategories)
         else notifyAdapterCategorySpendingSelected(arrayListOf(pieChartElement.categorySpending))
-        entry.icon.setColorFilter(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
+        entry.icon.setColorFilterCompat(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
         tv_center_text_title.text = pieChartElement.mcc?.toLocalizedString() ?: getString(R.string.ellipsis)
         tv_center_text_amount.text = pieChartElement.categorySpending.spending.toString()
         tv_center_text_difference.visibleIf(pieChartElement.categorySpending.difference != null)
@@ -246,13 +248,13 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
                 tv_center_text_difference.setTextColor(UIConfig.textMessageColor)
                 if (difference > 0F) {
                     tv_center_text_difference.text = "+$it%"
-                    tv_center_text_difference.background.setColorFilter(
+                    tv_center_text_difference.background.setColorFilterCompat(
                         UIConfig.statsDifferenceIncreaseBackgroundColor,
                         PorterDuff.Mode.SRC_ATOP
                     )
                 } else {
                     tv_center_text_difference.text = "$it%"
-                    tv_center_text_difference.background.setColorFilter(
+                    tv_center_text_difference.background.setColorFilterCompat(
                         UIConfig.statsDifferenceDecreaseBackgroundColor,
                         PorterDuff.Mode.SRC_ATOP
                     )
@@ -269,7 +271,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     private fun resetPieChartEntryColor(index: Int) {
         dataSet.colors[index] = UIConfig.uiTertiaryColor
-        dataSet.values[index].icon?.setColorFilter(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+        dataSet.values[index].icon?.setColorFilterCompat(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
     }
 
     private fun setupCategoryListRecyclerView() {
@@ -285,7 +287,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
     }
 
     override fun onCategoryTapped(categorySpending: CategorySpending) {
-        val mcc = MCC(name = null, icon = Icon.valueOf(categorySpending.categoryId.toUpperCase()))
+        val mcc = MCC(name = null, icon = Icon.valueOf(categorySpending.categoryId.toUpperCase(Locale.US)))
         delegate?.onCategorySelected(mcc, startOfMonth, endOfMonth)
     }
 

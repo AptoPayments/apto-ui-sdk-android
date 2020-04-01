@@ -168,11 +168,11 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         }
     }
 
-    protected fun popAllFragments(animated: Boolean, omComplete: ((Unit) -> Unit)?) {
+    protected fun popAllFragments(onComplete: ((Unit) -> Unit)?) {
         fragmentManager?.beginTransaction()?.apply {
             fragmentManager?.fragments?.forEach { remove(it) }
             commit()
-            runOnCommit { omComplete?.invoke(Unit) }
+            runOnCommit { onComplete?.invoke(Unit) }
         }
     }
 

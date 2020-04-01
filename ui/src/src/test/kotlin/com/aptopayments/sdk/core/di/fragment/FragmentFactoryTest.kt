@@ -1,8 +1,7 @@
 package com.aptopayments.sdk.core.di.fragment
 
-import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.core.data.config.UITheme.THEME_2
 import com.aptopayments.core.data.transaction.MCC
+import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.card.setpin.ConfirmPinFragmentThemeTwo
 import com.aptopayments.sdk.features.card.setpin.SetPinFragmentThemeTwo
@@ -32,7 +31,7 @@ class FragmentFactoryTest : AndroidTest() {
         val tag = "TRANSACTION_LIST_TEST_TAG"
 
         // When
-        val fragment = sut.transactionListFragment(THEME_2, cardId, config, tag)
+        val fragment = sut.transactionListFragment(cardId, config, tag)
 
         //Then
         assert(fragment is TransactionListFragmentThemeTwo)
@@ -45,7 +44,7 @@ class FragmentFactoryTest : AndroidTest() {
         val tag = "SET_PIN_TEST_TAG"
 
         // When
-        val fragment = sut.setPinFragment(uiTheme = THEME_2, tag = tag)
+        val fragment = sut.setPinFragment(tag)
 
         //Then
         assert(fragment is SetPinFragmentThemeTwo)
@@ -59,7 +58,7 @@ class FragmentFactoryTest : AndroidTest() {
         val pin = "1234"
 
         // When
-        val fragment = sut.confirmPinFragment(uiTheme = THEME_2, pin = pin, tag = tag)
+        val fragment = sut.confirmPinFragment(pin, tag)
 
         //Then
         assert(fragment is ConfirmPinFragmentThemeTwo)

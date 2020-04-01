@@ -65,20 +65,15 @@ class CardProductSelectorFlowTest: AndroidTest() {
         val tag = "CountrySelectorFragment"
         val fragmentDouble = CountrySelectorFragmentDouble(mockDelegate).apply { this.TAG = tag }
 
-        given { mockFragmentFactory.countrySelectorFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                allowedCountries = emptyList(),
-                tag = tag)
+        given {
+            mockFragmentFactory.countrySelectorFragment(emptyList(), tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).countrySelectorFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                allowedCountries = emptyList(),
-                tag = tag)
+        verify(mockFragmentFactory).countrySelectorFragment(emptyList(), tag)
         assertTrue { analyticsManager.trackCalled }
         assertEquals(analyticsManager.lastEvent, Event.CardProductSelectorCountrySelectorShown)
     }

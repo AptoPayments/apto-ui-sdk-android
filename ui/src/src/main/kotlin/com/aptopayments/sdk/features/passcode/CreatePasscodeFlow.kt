@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.passcode
 
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.flow.Flow
@@ -43,9 +42,9 @@ internal class CreatePasscodeFlow(
 
     private fun getCorrectFragment(): PasscodeContract.View {
         return if (mode == PasscodeMode.CREATE) {
-            fragmentFactory.createPasscodeFragment(uiTheme = UIConfig.uiTheme, tag = PASSCODE_PIN_TAG)
+            fragmentFactory.createPasscodeFragment(PASSCODE_PIN_TAG)
         } else {
-            fragmentFactory.changePasscodeFragment(uiTheme = UIConfig.uiTheme, tag = PASSCODE_PIN_TAG)
+            fragmentFactory.changePasscodeFragment(PASSCODE_PIN_TAG)
         }
     }
 }

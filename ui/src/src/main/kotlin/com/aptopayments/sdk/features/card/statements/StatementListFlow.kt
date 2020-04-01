@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.statements
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -26,7 +25,7 @@ internal class StatementListFlow(
     val analyticsManager: AnalyticsServiceContract by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.statementListFragment(UIConfig.uiTheme, STATEMENT_LIST_TAG)
+        val fragment = fragmentFactory.statementListFragment(STATEMENT_LIST_TAG)
         fragment.delegate = this
         setStartElement(fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -36,7 +35,7 @@ internal class StatementListFlow(
 
     override fun onStatementDownloaded(file: StatementFile) {
         analyticsManager.track(Event.MonthlyStatementsReportStart)
-        val fragment = fragmentFactory.pdfRendererFragment(UIConfig.uiTheme, file.title, file.file, PDF_RENDERER_TAG)
+        val fragment = fragmentFactory.pdfRendererFragment(file.title, file.file, PDF_RENDERER_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

@@ -37,19 +37,13 @@ class OAuthFlowTest: AndroidTest() {
         val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = tag }
         val config = TestDataProvider.provideOauthConfig()
         val sut = OAuthFlow(config = config, onBack = {}, onFinish = {})
-        given { mockFragmentFactory.oauthConnectFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                config = config,
-                tag = tag)
+        given { mockFragmentFactory.oauthConnectFragment(config = config, tag = tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).oauthConnectFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
-                config = config,
-                tag = tag)
+        verify(mockFragmentFactory).oauthConnectFragment(config = config, tag = tag)
     }
 }

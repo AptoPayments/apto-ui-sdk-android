@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.utils
+package com.aptopayments.sdk.utils.extensions
 
 import android.content.res.Resources
 import android.util.DisplayMetrics

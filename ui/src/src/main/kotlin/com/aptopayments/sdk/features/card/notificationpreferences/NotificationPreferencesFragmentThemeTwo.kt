@@ -18,6 +18,7 @@ import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_notification_preferences_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -200,13 +201,13 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
 
     private fun setPrimaryNotificationChannelDrawable(drawableResource: Int) = context?.let {
         val icon = ContextCompat.getDrawable(it, drawableResource)
-        icon?.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+        icon?.setColorFilterCompat(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
         iv_primary_notification_channel.setImageDrawable(icon)
     }
 
     private fun setSecondaryNotificationChannelDrawable(drawableResource: Int) = context?.let {
         val icon = ContextCompat.getDrawable(it, drawableResource)
-        icon?.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+        icon?.setColorFilterCompat(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
         iv_secondary_notification_channel.setImageDrawable(icon)
     }
 

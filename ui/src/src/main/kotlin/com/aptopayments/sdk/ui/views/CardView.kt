@@ -5,12 +5,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.CardBackgroundStyle
 import com.aptopayments.core.data.card.CardStyle
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.fundingsources.Balance
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.remove
@@ -19,6 +19,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.include_card_disabled_overlay.view.*
 import kotlinx.android.synthetic.main.include_card_error_overlay.view.*
 import kotlinx.android.synthetic.main.view_card.view.*
+import java.util.Locale
 
 private const val CARD_ASPECT_RATIO = 1.586
 
@@ -82,7 +83,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setCardholderName(name: String?) {
-        name?.let { et_card_name.setText(it.toUpperCase()) } ?: et_card_name.setText("")
+        name?.let { et_card_name.setText(it.toUpperCase(Locale.getDefault())) } ?: et_card_name.setText("")
     }
 
     fun setLastFour(lastFour: String?) {

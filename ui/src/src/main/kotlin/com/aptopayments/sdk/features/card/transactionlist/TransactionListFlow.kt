@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
 import androidx.annotation.VisibleForTesting
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -22,7 +21,7 @@ internal class TransactionListFlow(
         private val onBack: () -> Unit
 ) : Flow(), TransactionListContract.Delegate, TransactionDetailsContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.transactionListFragment(UIConfig.uiTheme, cardId, config, TRANSACTION_LIST_TAG)
+        val fragment = fragmentFactory.transactionListFragment(cardId, config, TRANSACTION_LIST_TAG)
         fragment.delegate = this
         setStartElement(fragment as FlowPresentable)
         onInitComplete(Right(Unit))
@@ -37,8 +36,7 @@ internal class TransactionListFlow(
     override fun onBackPressed() = onBack()
 
     override fun onTransactionTapped(transaction: Transaction) {
-        val fragment = fragmentFactory.transactionDetailsFragment(
-                UIConfig.uiTheme, transaction, TRANSACTION_DETAILS_TAG)
+        val fragment = fragmentFactory.transactionDetailsFragment(transaction, TRANSACTION_DETAILS_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

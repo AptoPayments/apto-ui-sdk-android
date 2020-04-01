@@ -16,6 +16,7 @@ import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.getMonthYear
+import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
@@ -98,7 +99,7 @@ internal class ManageCardViewModel constructor(
     }
 
     private fun getCardDetailsLiveData() =
-        fetchLocalCardDetailsUseCase().either({ MutableLiveData<CardDetails?>(null) }, { it }) as LiveData<CardDetails?>
+        fetchLocalCardDetailsUseCase().getOrElse { MutableLiveData<CardDetails?>(null) }
 
     private fun fetchData(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
         getCard(cardId = cardId, refresh = forceApiCall) { card ->

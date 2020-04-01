@@ -128,7 +128,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
                             delegate?.onPhoneVerificationPassed(dataPoint)
                         }
                         catch(exception: NumberParseException) {
-                            notify(exception.localizedMessage)
+                            exception.localizedMessage?.let { notify(it) }
                         }
                     }
                     VerificationStatus.FAILED, VerificationStatus.PENDING -> {
@@ -139,7 +139,6 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
                         apto_pin_view.text?.clear()
                     }
                 }
-                Unit
             }
         }
     }

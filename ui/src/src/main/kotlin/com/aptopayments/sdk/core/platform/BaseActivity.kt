@@ -18,6 +18,7 @@ import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.DarkThemeUtils
 import com.aptopayments.sdk.utils.ViewUtils
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.activity_layout.*
 import kotlinx.android.synthetic.main.include_rl_loading.*
 
@@ -38,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
         isLoading = true
         if (rl_loading_view.isVisible()) return
         val animation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
-        pb_progress.indeterminateDrawable.setColorFilter(UIConfig.uiPrimaryColor, PorterDuff.Mode.SRC_IN)
+        pb_progress.indeterminateDrawable.setColorFilterCompat(UIConfig.uiPrimaryColor, PorterDuff.Mode.SRC_IN)
         rl_loading_view.show()
         rl_loading_view.startAnimation(animation)
     }
@@ -75,7 +76,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 if (backButtonMode.title.isNullOrEmpty()) {
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     val closeIcon = getDrawable(R.drawable.ic_nav_back_icon)
-                    closeIcon?.setColorFilter(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
+                    closeIcon?.setColorFilterCompat(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
                     supportActionBar?.setHomeAsUpIndicator(closeIcon)
                 }
                 // TODO: Handle the case where's there's a title to be shown as back button
@@ -84,7 +85,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 if (backButtonMode.title.isNullOrEmpty()) {
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     val closeIcon = getDrawable(R.drawable.ic_close)
-                    closeIcon?.setColorFilter(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
+                    closeIcon?.setColorFilterCompat(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
                     supportActionBar?.setHomeAsUpIndicator(closeIcon)
                 }
                 // TODO: Handle the case where's there's a title to be shown as close button

@@ -4,7 +4,6 @@ import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.config.ContextConfiguration
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.data.voip.Action
@@ -61,8 +60,8 @@ internal class ManageCardFlow (
                             card.cardProductID?.let {
                                 aptoPlatformProtocol.fetchCardProduct(it, true) { getCardProductResult ->
                                     getCardProductResult.either({ onInitComplete(Either.Left(ManageCardInitFailure())) }, { cardProduct ->
-                                        val fragment = fragmentFactory.waitlistFragment(
-                                                UIConfig.uiTheme, cardId = card.accountID, cardProduct = cardProduct, tag = WAITLIST_TAG)
+                                        val fragment =
+                                            fragmentFactory.waitlistFragment(card.accountID, cardProduct, WAITLIST_TAG)
                                         fragment.delegate = this
                                         setStartElement(fragment as BaseFragment)
                                         onInitComplete(Either.Right(Unit))
@@ -70,8 +69,7 @@ internal class ManageCardFlow (
                                 }
                             } ?: onInitComplete(Either.Left(ManageCardInitFailure()))
                         } else {
-                            val fragment = fragmentFactory.manageCardFragment(
-                                    UIConfig.uiTheme, cardId = card.accountID, tag = MANAGE_CARD_TAG)
+                            val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
                             fragment.delegate = this
                             setStartElement(fragment as BaseFragment)
                             onInitComplete(Either.Right(Unit))
@@ -110,8 +108,7 @@ internal class ManageCardFlow (
     fun showManageCardFragment() {
         aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
             result.either(::handleFailure) { card ->
-                val fragment = fragmentFactory.manageCardFragment(
-                        UIConfig.uiTheme, cardId = card.accountID, tag = MANAGE_CARD_TAG)
+                val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
                 fragment.delegate = this
                 push(fragment as BaseFragment)
             }
@@ -127,8 +124,7 @@ internal class ManageCardFlow (
     // Transaction Details
     //
     override fun onTransactionTapped(transaction: Transaction) {
-        val fragment = fragmentFactory.transactionDetailsFragment(
-                UIConfig.uiTheme, transaction, TRANSACTION_DETAILS_TAG)
+        val fragment = fragmentFactory.transactionDetailsFragment(transaction, TRANSACTION_DETAILS_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }
@@ -156,11 +152,7 @@ internal class ManageCardFlow (
     }
 
     private fun showFundingSourcesDialog(selectedBalanceID: String?) {
-        val fragment = fragmentFactory.fundingSourceFragment(
-                UIConfig.uiTheme,
-                cardId,
-                selectedBalanceID,
-                FUNDING_SOURCE_DIALOG_TAG)
+        val fragment = fragmentFactory.fundingSourceFragment(cardId, selectedBalanceID, FUNDING_SOURCE_DIALOG_TAG)
         fragment.delegate = this
         push(fragment as BaseDialogFragment)
     }
@@ -253,7 +245,6 @@ internal class ManageCardFlow (
                 hideLoading()
                 it.either(::handleFailure) { cardProduct ->
                     val fragment = fragmentFactory.cardSettingsFragment(
-                            uiTheme = UIConfig.uiTheme,
                             card = card,
                             cardProduct = cardProduct,
                             projectConfiguration = contextConfiguration.projectConfiguration,
@@ -272,12 +263,7 @@ internal class ManageCardFlow (
     }
 
     override fun showContentPresenter(content: Content, title: String) {
-        val fragment = fragmentFactory.contentPresenterFragment(
-                uiTheme = UIConfig.uiTheme,
-                content = content,
-                title = title,
-                tag = CONTENT_PRESENTER_TAG
-        )
+        val fragment = fragmentFactory.contentPresenterFragment(content, title, CONTENT_PRESENTER_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

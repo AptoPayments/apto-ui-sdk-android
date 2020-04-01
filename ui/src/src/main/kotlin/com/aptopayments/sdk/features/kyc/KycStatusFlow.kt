@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.kyc
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -21,7 +20,6 @@ internal class KycStatusFlow(
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         // We can assume that the card has a kyc status here.
         val fragment = fragmentFactory.kycStatusFragment(
-                uiTheme = UIConfig.uiTheme,
                 kycStatus = card.kycStatus!!,
                 cardID = card.accountID,
                 tag = KYC_STATUS_TAG)

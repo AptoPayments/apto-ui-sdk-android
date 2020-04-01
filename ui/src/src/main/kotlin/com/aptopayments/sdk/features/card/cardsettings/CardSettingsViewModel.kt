@@ -12,6 +12,7 @@ import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.card.FeatureStatus
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.content.Content
+import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
@@ -58,21 +59,21 @@ internal class CardSettingsViewModel constructor(
     private var phoneDialer: PhoneDialer? = null
 
     private fun getCardDetailsLiveData() =
-        fetchLocalCardDetailsUseCase().either({ MutableLiveData<CardDetails?>(null) }, { it }) as LiveData<CardDetails?>
+        fetchLocalCardDetailsUseCase().getOrElse { MutableLiveData<CardDetails?>(null) }
 
     fun viewResumed() {
         updateViewModel()
     }
 
     private fun updateViewModel() {
-        showGetPin.postValue(card?.features?.getPin?.status == FeatureStatus.ENABLED)
-        showSetPin.postValue(card?.features?.setPin?.status == FeatureStatus.ENABLED)
-        faq.postValue(cardProduct?.faq)
-        cardholderAgreement.postValue(cardProduct?.cardholderAgreement)
-        privacyPolicy.postValue(cardProduct?.privacyPolicy)
-        termsAndConditions.postValue(cardProduct?.termsAndConditions)
-        cardLocked.postValue(card?.state != Card.CardState.ACTIVE)
-        showIvrSupport.postValue(card?.features?.ivrSupport?.status == FeatureStatus.ENABLED)
+        showGetPin.postValue(card.features?.getPin?.status == FeatureStatus.ENABLED)
+        showSetPin.postValue(card.features?.setPin?.status == FeatureStatus.ENABLED)
+        faq.postValue(cardProduct.faq)
+        cardholderAgreement.postValue(cardProduct.cardholderAgreement)
+        privacyPolicy.postValue(cardProduct.privacyPolicy)
+        termsAndConditions.postValue(cardProduct.termsAndConditions)
+        cardLocked.postValue(card.state != Card.CardState.ACTIVE)
+        showIvrSupport.postValue(card.features?.ivrSupport?.status == FeatureStatus.ENABLED)
     }
 
     fun dial(phone: PhoneNumber, from: Context) {
@@ -82,7 +83,7 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun unlockCard(onComplete: (Unit) -> Unit) {
-        card?.accountID?.let { accountId ->
+        card.accountID.let { accountId ->
             aptoPlatform.unlockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     this.card = it
@@ -94,7 +95,7 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun lockCard(onComplete: (Unit) -> Unit) {
-        card?.accountID?.let { accountId ->
+        card.accountID.let { accountId ->
             aptoPlatform.lockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     this.card = it
@@ -137,7 +138,7 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun cardDetailsAuthenticationSuccessful() {
-        card?.accountID?.let { accountId ->
+        card.accountID.let { accountId ->
             viewModelScope.launch {
                 showLoading()
                 fetchRemoteCardDetailsUseCase(Params(accountId)).either(

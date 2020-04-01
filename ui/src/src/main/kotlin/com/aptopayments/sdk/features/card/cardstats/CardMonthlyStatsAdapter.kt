@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.cardstats
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
@@ -37,7 +36,6 @@ internal class CardMonthlyStatsAdapter(date: LocalDate, private val cardID: Stri
 
     override fun createFragment(position: Int): Fragment {
         val fragment = fragmentFactory.cardTransactionsChartFragment(
-            UIConfig.uiTheme,
             cardID,
             months[position],
             CARD_TRANSACTIONS_CHART_TAG + position

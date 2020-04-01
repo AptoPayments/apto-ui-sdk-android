@@ -40,7 +40,6 @@ class OAuthVerifyFlowTest: AndroidTest() {
         val sut = OAuthVerifyFlow(allowedBalanceType = allowedBalanceType, oauthAttempt = oAuthAttempt,
                 onBack = {}, onFinish = {}, onError = {})
         given { mockFragmentFactory.oauthVerifyFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
                 datapoints = oAuthAttempt.userData!!,
                 allowedBalanceType = allowedBalanceType,
                 tokenId = oAuthAttempt.tokenId,
@@ -52,7 +51,6 @@ class OAuthVerifyFlowTest: AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).oauthVerifyFragment(
-                uiTheme = TestDataProvider.provideDefaultTheme(),
                 datapoints = oAuthAttempt.userData!!,
                 allowedBalanceType = allowedBalanceType,
                 tokenId = oAuthAttempt.tokenId,

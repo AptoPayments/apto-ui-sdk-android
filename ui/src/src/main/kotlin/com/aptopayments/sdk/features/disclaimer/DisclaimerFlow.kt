@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.disclaimer
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.workflowaction.WorkflowAction
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationShowDisclaimer
 import com.aptopayments.core.exception.Failure
@@ -32,10 +31,7 @@ internal class DisclaimerFlow (
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val content = actionConfiguration.content
-        val fragment = fragmentFactory.disclaimerFragment(
-                UIConfig.uiTheme,
-                content,
-                DISCLAIMER_TAG)
+        val fragment = fragmentFactory.disclaimerFragment(content, DISCLAIMER_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))

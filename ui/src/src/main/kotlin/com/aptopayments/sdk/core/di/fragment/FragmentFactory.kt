@@ -56,179 +56,56 @@ import java.io.File
 
 internal interface FragmentFactory {
 
-    fun countrySelectorFragment(
-            uiTheme: UITheme,
-            allowedCountries: List<Country>,
-            tag: String
-    ): CountrySelectorContract.View
-    fun inputPhoneFragment(
-            uiTheme: UITheme,
-            allowedCountries: List<Country>,
-            tag: String
-    ): InputPhoneContract.View
-    fun inputEmailFragment(
-            uiTheme: UITheme,
-            tag: String
-    ): InputEmailContract.View
-    fun phoneVerificationFragment(
-            uiTheme: UITheme,
-            verification: Verification,
-            tag: String
-    ): PhoneVerificationContract.View
-    fun emailVerificationFragment(
-            uiTheme: UITheme,
-            verification: Verification,
-            tag: String
-    ): EmailVerificationContract.View
-    fun birthdateVerificationFragment(
-            uiTheme: UITheme,
-            primaryCredential: DataPoint,
-            tag: String
-    ): BirthdateVerificationContract.View
-    fun kycStatusFragment(
-            uiTheme: UITheme,
-            kycStatus: KycStatus,
-            cardID: String,
-            tag: String
-    ): KycStatusContract.View
-    fun noNetworkFragment(
-            uiTheme: UITheme,
-            tag: String
-    ): NoNetworkContract.View
-    fun maintenanceFragment(
-            uiTheme: UITheme,
-            tag: String
-    ): MaintenanceContract.View
-    fun disclaimerFragment(
-            uiTheme: UITheme,
-            content: Content,
-            tag: String
-    ): DisclaimerContract.View
-    fun oauthConnectFragment(
-            uiTheme: UITheme,
-            config: OAuthConfig,
-            tag: String
-    ): OAuthConnectContract.View
-    fun contentPresenterFragment(
-            uiTheme: UITheme,
-            content: Content,
-            title: String,
-            tag: String
-    ): ContentPresenterContract.View
+    fun countrySelectorFragment(allowedCountries: List<Country>, tag: String): CountrySelectorContract.View
+    fun inputPhoneFragment(allowedCountries: List<Country>, tag: String): InputPhoneContract.View
+    fun inputEmailFragment(tag: String): InputEmailContract.View
+    fun phoneVerificationFragment(verification: Verification, tag: String): PhoneVerificationContract.View
+    fun emailVerificationFragment(verification: Verification, tag: String): EmailVerificationContract.View
+    fun birthdateVerificationFragment(primaryCredential: DataPoint, tag: String): BirthdateVerificationContract.View
+    fun kycStatusFragment(kycStatus: KycStatus, cardID: String, tag: String): KycStatusContract.View
+    fun noNetworkFragment(tag: String): NoNetworkContract.View
+    fun maintenanceFragment(tag: String): MaintenanceContract.View
+    fun disclaimerFragment(content: Content, tag: String): DisclaimerContract.View
+    fun oauthConnectFragment(config: OAuthConfig, tag: String): OAuthConnectContract.View
+    fun contentPresenterFragment(content: Content, title: String, tag: String): ContentPresenterContract.View
     fun oauthVerifyFragment(
-            uiTheme: UITheme,
-            datapoints: DataPointList,
-            allowedBalanceType: AllowedBalanceType,
-            tokenId: String,
-            tag: String
-    ): OAuthVerifyContract.View
-    fun manageCardFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            tag: String
-    ): ManageCardContract.View
-    fun fundingSourceFragment(
-            uiTheme: UITheme,
-            cardID: String,
-            selectedBalanceID: String?,
-            tag: String
-    ): FundingSourceContract.View
-    fun accountSettingsFragment(
-            uiTheme: UITheme,
-            contextConfiguration: ContextConfiguration,
-            tag: String
-    ): AccountSettingsContract.View
-    fun activatePhysicalCardFragment(
-            uiTheme: UITheme,
-            card: Card,
-            tag: String
-    ): ActivatePhysicalCardContract.View
-    fun activatePhysicalCardSuccessFragment(
-            uiTheme: UITheme,
-            card: Card,
-            tag: String
-    ): ActivatePhysicalCardSuccessContract.View
-    fun cardSettingsFragment(
-            uiTheme: UITheme,
-            card: Card,
-            cardProduct: CardProduct,
-            projectConfiguration: ProjectConfiguration,
-            tag: String
-    ): CardSettingsContract.View
-    fun transactionDetailsFragment(
-            uiTheme: UITheme,
-            transaction: Transaction,
-            tag: String
-    ): TransactionDetailsContract.View
-    fun cardMonthlyStatsFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            tag: String
-    ): CardMonthlyStatsContract.View
-    fun cardTransactionsChartFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            date: LocalDate,
-            tag: String
-    ): CardTransactionsChartContract.View
-    fun webBrowserFragment(
-            url: String,
-            tag: String
-    ): WebBrowserContract.View
-    fun notificationPreferencesFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            tag: String
-    ): NotificationPreferencesContract.View
-    fun issueCardFragment(
-            uiTheme: UITheme,
-            tag: String,
-            cardApplicationId: String
-    ): IssueCardContract.View
-    fun issueCardErrorFragment(
-            uiTheme: UITheme,
-            tag: String,
-            errorCode: Int?,
-            errorAsset: String?
-    ): IssueCardErrorContract.View
-    fun transactionListFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            config: TransactionListConfig,
-            tag: String
-    ): TransactionListContract.View
-    fun waitlistFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            cardProduct: CardProduct,
-            tag: String
-    ): WaitlistContract.View
-    fun setPinFragment(
-            uiTheme: UITheme,
-            tag: String
-    ): SetPinContract.View
-    fun confirmPinFragment(
-            uiTheme: UITheme,
-            pin: String,
-            tag: String
-    ): ConfirmPinContract.View
-    fun getVoipFragment(
-            uiTheme: UITheme,
-            cardId: String,
-            action: Action,
-            tag: String
-    ): VoipContract.View
-
-    fun statementListFragment(
-        uiTheme: UITheme,
+        datapoints: DataPointList,
+        allowedBalanceType: AllowedBalanceType,
+        tokenId: String,
         tag: String
-    ): StatementListContract.View
+    ): OAuthVerifyContract.View
 
-    fun pdfRendererFragment(
-        uiTheme: UITheme,
-        title: String, file: File, tag: String
-    ): PdfRendererContract.View
+    fun manageCardFragment(cardId: String, tag: String): ManageCardContract.View
+    fun fundingSourceFragment(cardID: String, selectedBalanceID: String?, tag: String): FundingSourceContract.View
+    fun accountSettingsFragment(contextConfiguration: ContextConfiguration, tag: String): AccountSettingsContract.View
+    fun activatePhysicalCardFragment(card: Card, tag: String): ActivatePhysicalCardContract.View
+    fun activatePhysicalCardSuccessFragment(card: Card, tag: String): ActivatePhysicalCardSuccessContract.View
+    fun cardSettingsFragment(
+        card: Card,
+        cardProduct: CardProduct,
+        projectConfiguration: ProjectConfiguration,
+        tag: String
+    ): CardSettingsContract.View
 
-    fun createPasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View
-    fun changePasscodeFragment(uiTheme: UITheme, tag: String): PasscodeContract.View
+    fun transactionDetailsFragment(transaction: Transaction, tag: String): TransactionDetailsContract.View
+    fun cardMonthlyStatsFragment(cardId: String, tag: String): CardMonthlyStatsContract.View
+    fun cardTransactionsChartFragment(cardId: String, date: LocalDate, tag: String): CardTransactionsChartContract.View
+    fun webBrowserFragment(url: String, tag: String): WebBrowserContract.View
+    fun notificationPreferencesFragment(cardId: String, tag: String): NotificationPreferencesContract.View
+    fun issueCardFragment(tag: String, cardApplicationId: String): IssueCardContract.View
+    fun issueCardErrorFragment(tag: String, errorCode: Int?, errorAsset: String?): IssueCardErrorContract.View
+    fun transactionListFragment(
+        cardId: String,
+        config: TransactionListConfig,
+        tag: String
+    ): TransactionListContract.View
+
+    fun waitlistFragment(cardId: String, cardProduct: CardProduct, tag: String): WaitlistContract.View
+    fun setPinFragment(tag: String): SetPinContract.View
+    fun confirmPinFragment(pin: String, tag: String): ConfirmPinContract.View
+    fun getVoipFragment(cardId: String, action: Action, tag: String): VoipContract.View
+    fun statementListFragment(tag: String): StatementListContract.View
+    fun pdfRendererFragment(title: String, file: File, tag: String): PdfRendererContract.View
+    fun createPasscodeFragment(tag: String): PasscodeContract.View
+    fun changePasscodeFragment(tag: String): PasscodeContract.View
 }

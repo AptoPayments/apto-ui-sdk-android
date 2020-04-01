@@ -81,29 +81,29 @@ class SnackbarThemeTwo private constructor(
         }
 
         private fun findSuitableParent(view: View?): ViewGroup? {
-            var view = view
+            var tempView = view
             var fallback: ViewGroup? = null
             do {
-                if (view is CoordinatorLayout) {
+                if (tempView is CoordinatorLayout) {
                     // We've found a CoordinatorLayout, use it
-                    return view
-                } else if (view is FrameLayout) {
-                    if (view.id == android.R.id.content) {
+                    return tempView
+                } else if (tempView is FrameLayout) {
+                    if (tempView.id == android.R.id.content) {
                         // If we've hit the decor content view, then we didn't find a CoL in the
                         // hierarchy, so use it.
-                        return view
+                        return tempView
                     } else {
                         // It's not the content view but we'll use it as our fallback
-                        fallback = view
+                        fallback = tempView
                     }
                 }
 
-                if (view != null) {
+                if (tempView != null) {
                     // Else, we will loop and crawl up the view hierarchy and try to find a parent
-                    val parent = view.parent
-                    view = if (parent is View) parent else null
+                    val parent = tempView.parent
+                    tempView = if (parent is View) parent else null
                 }
-            } while (view != null)
+            } while (tempView != null)
 
             // If we reach here then we didn't find a CoL or a suitable content view so we'll fallback
             return fallback

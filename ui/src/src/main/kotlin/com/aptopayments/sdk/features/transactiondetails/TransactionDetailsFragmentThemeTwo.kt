@@ -21,6 +21,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -248,7 +249,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
                     val marginLeft = (backgroundWidth * 0.5 - iconWidth * 0.5).toInt()
                     val marginTop = (backgroundHeight * 0.4 - iconHeight * 0.5).toInt()
                     icon.setBounds(marginLeft, marginTop, iconWidth + marginLeft, iconHeight + marginTop)
-                    icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                    icon.setColorFilterCompat(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
                     val bitmap = Bitmap.createBitmap(
                         background.intrinsicWidth,
                         background.intrinsicHeight,

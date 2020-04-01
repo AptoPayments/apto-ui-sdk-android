@@ -11,6 +11,4 @@ class DateProvider {
 
     fun localDateTime(): LocalDateTime = LocalDateTime.now()
 
-    fun zonedDateTime(zone: ZoneId = ZoneId.systemDefault()) = ZonedDateTime.now(ZoneId.systemDefault())
-
 }
