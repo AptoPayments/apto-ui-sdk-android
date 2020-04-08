@@ -92,8 +92,8 @@ internal interface FragmentFactory {
     fun cardTransactionsChartFragment(cardId: String, date: LocalDate, tag: String): CardTransactionsChartContract.View
     fun webBrowserFragment(url: String, tag: String): WebBrowserContract.View
     fun notificationPreferencesFragment(cardId: String, tag: String): NotificationPreferencesContract.View
-    fun issueCardFragment(tag: String, cardApplicationId: String): IssueCardContract.View
-    fun issueCardErrorFragment(tag: String, errorCode: Int?, errorAsset: String?): IssueCardErrorContract.View
+    fun issueCardFragment(cardApplicationId: String, tag: String): IssueCardContract.View
+    fun issueCardErrorFragment(errorCode: Int?, errorAsset: String?, tag: String): IssueCardErrorContract.View
     fun transactionListFragment(
         cardId: String,
         config: TransactionListConfig,

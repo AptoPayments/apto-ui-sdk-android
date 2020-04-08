@@ -44,7 +44,7 @@ internal class IssueCardFlow (
 
     private fun presentIssueCardError(errorCode: Int?) {
         val fragment =
-            fragmentFactory.issueCardErrorFragment(ISSUE_CARD_ERROR_TAG, errorCode, actionConfiguration?.errorAsset)
+            fragmentFactory.issueCardErrorFragment(errorCode, actionConfiguration?.errorAsset, ISSUE_CARD_ERROR_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

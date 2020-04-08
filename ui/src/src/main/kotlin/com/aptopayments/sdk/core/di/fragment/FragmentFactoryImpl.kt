@@ -135,10 +135,10 @@ internal class FragmentFactoryImpl : FragmentFactory {
     override fun notificationPreferencesFragment(cardId: String, tag: String) =
         NotificationPreferencesFragmentThemeTwo.newInstance(cardId).apply { this.TAG = tag }
 
-    override fun issueCardFragment(tag: String, cardApplicationId: String) =
+    override fun issueCardFragment(cardApplicationId: String, tag: String) =
         IssueCardFragmentThemeTwo.newInstance(cardApplicationId).apply { this.TAG = tag }
 
-    override fun issueCardErrorFragment(tag: String, errorCode: Int?, errorAsset: String?) =
+    override fun issueCardErrorFragment(errorCode: Int?, errorAsset: String?, tag: String) =
         IssueCardErrorFragmentThemeTwo.newInstance(errorCode, errorAsset).apply { this.TAG = tag }
 
     override fun transactionListFragment(cardId: String, config: TransactionListConfig, tag: String) =

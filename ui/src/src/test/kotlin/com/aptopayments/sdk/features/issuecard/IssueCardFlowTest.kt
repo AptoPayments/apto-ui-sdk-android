@@ -72,7 +72,7 @@ class IssueCardFlowTest : AndroidTest() {
             mockFragmentFactory.issueCardFragment(cardApplicationId, issueCardTag)
         }.willReturn(issueCardFragmentDouble)
         given {
-            mockFragmentFactory.issueCardErrorFragment(issueCardErrorTag, 3, null)
+            mockFragmentFactory.issueCardErrorFragment(3, null, issueCardErrorTag)
         }.willReturn(issueCardErrorFragmentDouble)
 
         // When
@@ -80,6 +80,6 @@ class IssueCardFlowTest : AndroidTest() {
         issueCardFragmentDouble.delegate?.onCardIssuedFailed(3)
 
         // Then
-        verify(mockFragmentFactory).issueCardErrorFragment(issueCardErrorTag, 3, null)
+        verify(mockFragmentFactory).issueCardErrorFragment(3, null, issueCardErrorTag)
     }
 }
