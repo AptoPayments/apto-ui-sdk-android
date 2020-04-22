@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.issuecard.IssueCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/payment_successful_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="iv_error_asset,tv_issue_card_error_title,tv_issue_card_error_title,tv_description,tv_secondary_cta,tv_primary_cta"
+            app:visibileIf="@{viewModel.errorVisible}"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_error_asset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="74dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="74dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/tv_issue_card_error_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:loadFromUrl="@{viewModel.image}"
+            app:visibileIf="@{viewModel.image.length > 0}" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_issue_card_error_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_error_asset"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="@dimen/llsdk_tiny_margin"
+            app:layout_constraintBottom_toTopOf="@+id/tv_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_error_asset"
+            app:localizeBinding="@{viewModel.title}"
+            tools:text="Add more funds" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_issue_card_error_title"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/tv_secondary_cta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_issue_card_error_title"
+            app:localizeBinding="@{viewModel.description}"
+            tools:text="@string/issue_card_issue_card_error_insufficient_funds_description" />
+
+        <TextView
+            android:id="@+id/tv_secondary_cta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_description"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/tv_primary_cta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
+            tools:text="https://www.aptopayments.com/buy" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_primary_cta"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:onClick="@{() -> viewModel.retryIssueCard()}"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localizeBinding="@{viewModel.primaryCta}"
+            tools:text="Try again" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

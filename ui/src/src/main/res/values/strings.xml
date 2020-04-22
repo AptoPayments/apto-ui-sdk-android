@@ -461,6 +461,14 @@
     <string name="issue_card_issue_card_generic_error_description">There was an error while issuing your card. Please try again.</string>
     <string name="issue_card_issue_card_generic_error_primary_cta">Try again</string>
     <string name="issue_card_issue_card_generic_error_secondary_cta"></string>
+    <string name="issue_card_issue_card_error_email_sends_disabled_title">Card issuance fee</string>
+    <string name="issue_card_issue_card_error_email_sends_disabled_description">Sending funds is disabled in your account. Please contact customer support</string>
+    <string name="issue_card_issue_card_error_email_sends_disabled_primary_cta">Try again</string>
+    <string name="issue_card_issue_card_error_email_sends_disabled_secondary_cta"></string>
+    <string name="issue_card_issue_card_error_insufficient_application_limit_title">Card issuance fee</string>
+    <string name="issue_card_issue_card_error_insufficient_application_limit_description">We can\'t charge the card issuance fee. Please contact customer support.</string>
+    <string name="issue_card_issue_card_error_insufficient_application_limit_primary_cta">Try again</string>
+    <string name="issue_card_issue_card_error_insufficient_application_limit_secondary_cta"></string>
 
     <!-- Invalid funding source banner -->
     <string name="no_funding_source_title">Funding sources not found</string>

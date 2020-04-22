@@ -14,6 +14,7 @@ import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
+import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragmentThemeTwo
@@ -35,7 +36,6 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragmen
 import com.aptopayments.sdk.features.card.waitlist.WaitlistFragmentThemeTwo
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragmentThemeTwo
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFragmentThemeTwo
-import com.aptopayments.sdk.features.issuecard.IssueCardErrorFragmentThemeTwo
 import com.aptopayments.sdk.features.issuecard.IssueCardFragmentThemeTwo
 import com.aptopayments.sdk.features.kyc.KycStatusFragmentThemeTwo
 import com.aptopayments.sdk.features.maintenance.MaintenanceFragmentThemeTwo
@@ -46,7 +46,6 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentThemeTwo
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragmentThemeTwo
 import com.aptopayments.sdk.features.passcode.ChangePasscodeFragment
 import com.aptopayments.sdk.features.passcode.CreatePasscodeFragment
-import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragmentThemeTwo
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragmentThemeTwo
 import com.aptopayments.sdk.features.voip.VoipFragmentThemeTwo
@@ -135,11 +134,11 @@ internal class FragmentFactoryImpl : FragmentFactory {
     override fun notificationPreferencesFragment(cardId: String, tag: String) =
         NotificationPreferencesFragmentThemeTwo.newInstance(cardId).apply { this.TAG = tag }
 
-    override fun issueCardFragment(cardApplicationId: String, tag: String) =
-        IssueCardFragmentThemeTwo.newInstance(cardApplicationId).apply { this.TAG = tag }
-
-    override fun issueCardErrorFragment(errorCode: Int?, errorAsset: String?, tag: String) =
-        IssueCardErrorFragmentThemeTwo.newInstance(errorCode, errorAsset).apply { this.TAG = tag }
+    override fun issueCardFragment(
+        cardApplicationId: String,
+        actionConfiguration: WorkflowActionConfigurationIssueCard?,
+        tag: String
+    ) = IssueCardFragmentThemeTwo.newInstance(cardApplicationId, actionConfiguration).apply { this.TAG = tag }
 
     override fun transactionListFragment(cardId: String, config: TransactionListConfig, tag: String) =
         TransactionListFragmentThemeTwo.newInstance(cardId, config).apply { this.TAG = tag }

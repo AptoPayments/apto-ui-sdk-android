@@ -5,7 +5,6 @@ import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.ProjectConfiguration
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.transaction.Transaction
@@ -14,6 +13,7 @@ import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
+import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationContract
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
@@ -36,7 +36,6 @@ import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
 import com.aptopayments.sdk.features.issuecard.IssueCardContract
-import com.aptopayments.sdk.features.issuecard.IssueCardErrorContract
 import com.aptopayments.sdk.features.kyc.KycStatusContract
 import com.aptopayments.sdk.features.maintenance.MaintenanceContract
 import com.aptopayments.sdk.features.managecard.ManageCardContract
@@ -45,7 +44,6 @@ import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import com.aptopayments.sdk.features.passcode.PasscodeContract
-import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipContract
@@ -92,8 +90,11 @@ internal interface FragmentFactory {
     fun cardTransactionsChartFragment(cardId: String, date: LocalDate, tag: String): CardTransactionsChartContract.View
     fun webBrowserFragment(url: String, tag: String): WebBrowserContract.View
     fun notificationPreferencesFragment(cardId: String, tag: String): NotificationPreferencesContract.View
-    fun issueCardFragment(cardApplicationId: String, tag: String): IssueCardContract.View
-    fun issueCardErrorFragment(errorCode: Int?, errorAsset: String?, tag: String): IssueCardErrorContract.View
+    fun issueCardFragment(
+        cardApplicationId: String,
+        actionConfiguration: WorkflowActionConfigurationIssueCard?,
+        tag: String
+    ): IssueCardContract.View
     fun transactionListFragment(
         cardId: String,
         config: TransactionListConfig,

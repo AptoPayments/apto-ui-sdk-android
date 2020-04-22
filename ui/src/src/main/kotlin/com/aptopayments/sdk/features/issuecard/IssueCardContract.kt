@@ -11,6 +11,5 @@ interface IssueCardContract {
 
     interface Delegate : FragmentDelegate {
         fun onCardIssuedSucceeded(card: Card)
-        fun onCardIssuedFailed(errorCode: Int?)
     }
 }

@@ -1,11 +1,12 @@
 package com.aptopayments.sdk.features.issuecard
 
-import com.aptopayments.core.data.config.Branding
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
@@ -13,11 +14,18 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
 
+private const val CARD_ID = "12345"
+private const val ERROR_ASSET = "fake_asset.png"
+private const val FRAGMENT_TAG = "IssueCardFragment"
+
 class IssueCardFlowTest : AndroidTest() {
 
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockIssueCardDelegate: IssueCardContract.Delegate
-    @Mock private lateinit var mockIssueCardErrorDelegate: IssueCardErrorContract.Delegate
+    private val configurationIssueCard = WorkflowActionConfigurationIssueCard(ERROR_ASSET)
+
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockIssueCardDelegate: IssueCardContract.Delegate
 
     @Before
     override fun setUp() {
@@ -33,53 +41,56 @@ class IssueCardFlowTest : AndroidTest() {
     @Test
     fun `should use the factory to instantiate IssueCardFragment as first fragment on init`() {
         // Given
-        UIConfig.updateUIConfigFrom(Branding.createDefault())
-        val tag = "IssueCardFragment"
-        val fragmentDouble = IssueCardFragmentDouble(mockIssueCardDelegate).apply { this.TAG = tag }
+        val conf = WorkflowActionConfigurationIssueCard(ERROR_ASSET)
         val cardApplicationId = TestDataProvider.provideCardApplicationId()
+        configureFragmentFactory(cardApplicationId)
         val sut = IssueCardFlow(
-                cardApplicationId = cardApplicationId,
-                actionConfiguration = null,
-                onBack = {},
-                onFinish = {})
-        given {
-            mockFragmentFactory.issueCardFragment(cardApplicationId, tag)
-        }.willReturn(fragmentDouble)
+            cardApplicationId = cardApplicationId,
+            actionConfiguration = conf,
+            onBack = {},
+            onFinish = {})
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).issueCardFragment(cardApplicationId, tag)
+        verify(mockFragmentFactory).issueCardFragment(cardApplicationId, configurationIssueCard, FRAGMENT_TAG)
     }
 
     @Test
-    fun `should use the factory to instantiate IssueCardErrorFragment on card issue failure`() {
+    fun `when onCardIssuedSucceeded then onFinish is called with accountId`() {
         // Given
-        val issueCardTag = "IssueCardFragment"
-        val issueCardErrorTag = "IssueCardErrorFragment"
-
-        val issueCardFragmentDouble = IssueCardFragmentDouble(mockIssueCardDelegate).apply { this.TAG = issueCardTag }
-        val issueCardErrorFragmentDouble = IssueCardErrorFragmentDouble(mockIssueCardErrorDelegate).apply { this.TAG = issueCardErrorTag }
-
+        val finishMock: TestCallback = mock()
+        val card = TestDataProvider.provideCard(accountID = CARD_ID)
+        val conf = WorkflowActionConfigurationIssueCard(ERROR_ASSET)
         val cardApplicationId = TestDataProvider.provideCardApplicationId()
+        configureFragmentFactory(cardApplicationId)
         val sut = IssueCardFlow(
-                cardApplicationId = cardApplicationId,
-                actionConfiguration = null,
-                onBack = {},
-                onFinish = {})
-        given {
-            mockFragmentFactory.issueCardFragment(cardApplicationId, issueCardTag)
-        }.willReturn(issueCardFragmentDouble)
-        given {
-            mockFragmentFactory.issueCardErrorFragment(3, null, issueCardErrorTag)
-        }.willReturn(issueCardErrorFragmentDouble)
+            cardApplicationId = cardApplicationId,
+            actionConfiguration = conf,
+            onBack = {},
+            onFinish = finishMock::invoke
+        )
 
         // When
         sut.init {}
-        issueCardFragmentDouble.delegate?.onCardIssuedFailed(3)
+        sut.onCardIssuedSucceeded(card)
 
-        // Then
-        verify(mockFragmentFactory).issueCardErrorFragment(3, null, issueCardErrorTag)
+        verify(finishMock).invoke(CARD_ID)
+    }
+
+    private fun configureFragmentFactory(cardApplicationId: String) {
+        val fragmentDouble = IssueCardFragmentDouble(mockIssueCardDelegate).apply { this.TAG = FRAGMENT_TAG }
+        given {
+            mockFragmentFactory.issueCardFragment(
+                cardApplicationId = cardApplicationId,
+                actionConfiguration = configurationIssueCard,
+                tag = FRAGMENT_TAG
+            )
+        }.willReturn(fragmentDouble)
+    }
+
+    interface TestCallback {
+        operator fun invoke(value: String)
     }
 }
