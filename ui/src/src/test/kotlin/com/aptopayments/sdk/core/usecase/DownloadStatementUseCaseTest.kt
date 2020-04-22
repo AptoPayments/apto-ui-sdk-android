@@ -16,7 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZonedDateTime
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -40,7 +40,7 @@ internal class DownloadStatementUseCaseTest : UnitTest() {
 
     @Before
     fun setup() {
-        statement = spy(MonthlyStatement("1", 12, 2019, "url", LocalDateTime.now()))
+        statement = spy(MonthlyStatement("1", 12, 2019, "url", ZonedDateTime.now()))
         params = DownloadStatementUseCase.Params(statement)
         repo = spy(
             StatementRepositoryImpl(

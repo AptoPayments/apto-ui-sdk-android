@@ -10,14 +10,17 @@ import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.*
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.auth.birthdateverification.FormatOrderGenerator
+import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
+import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
+import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
 import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.utils.*
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
+import com.google.android.libraries.places.api.Places
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -47,6 +50,9 @@ internal val applicationModule = module {
     factory { CategorySpendingSorter() }
     single<IAPHelper> { (cardId: String) -> IAPHelperMock(cardId) }
     factory { IntentGenerator() }
+    factory { Places.createClient(get()) }
+    factory { PlaceFetcher(get(), get()) }
+    factory { AddressDataPointGenerator() }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

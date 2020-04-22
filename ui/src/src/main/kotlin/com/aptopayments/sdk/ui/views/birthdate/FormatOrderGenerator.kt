@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.auth.birthdateverification
+package com.aptopayments.sdk.ui.views.birthdate
 
 import android.content.Context
 import android.text.format.DateFormat

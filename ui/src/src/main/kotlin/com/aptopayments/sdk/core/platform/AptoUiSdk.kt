@@ -30,6 +30,10 @@ interface AptoUiSdkProtocol {
         extraModules: List<((MutableList<Any>) -> Any)> = listOf()
     )
 
+    fun initialize(application: Application, extraModules: List<((MutableList<Any>) -> Any)> = listOf())
+
+    fun setApiKey(apiKey: String, environment: AptoSdkEnvironment)
+
     fun startCardFlow(
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
@@ -55,9 +59,18 @@ object AptoUiSdk : AptoUiSdkProtocol {
         environment: AptoSdkEnvironment,
         extraModules: List<((MutableList<Any>) -> Any)>
     ) {
+        initialize(application, extraModules)
+        setApiKey(apiKey, environment)
+    }
+
+    override fun initialize(application: Application, extraModules: List<(MutableList<Any>) -> Any>) {
         val list = getModuleList(extraModules)
         AptoPlatform.setUiModules(list)
-        AptoPlatform.initializeWithApiKey(application, apiKey, environment)
+        AptoPlatform.initialize(application)
+    }
+
+    override fun setApiKey(apiKey: String, environment: AptoSdkEnvironment) {
+        AptoPlatform.setApiKey(apiKey, environment)
     }
 
     fun setDelegate(delegate: AptoPlatformDelegate) {

@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="iv_error_asset,tv_issue_card_error_title,tv_issue_card_error_title,tv_description,tv_secondary_cta,tv_primary_cta"
-            app:visibileIf="@{viewModel.errorVisible}"
+            app:visibleIf="@{viewModel.errorVisible}"
             tools:visibility="visible" />
 
         <ImageView
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             app:loadFromUrl="@{viewModel.image}"
-            app:visibileIf="@{viewModel.image.length > 0}" />
+            app:visibleIf="@{viewModel.image.length > 0}" />
 
         <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_issue_card_error_title"

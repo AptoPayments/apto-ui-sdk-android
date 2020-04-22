@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.transactiondetails
 
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.toTransactionDetailsFormat
+import com.aptopayments.core.extension.formatForTransactionDetails
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
@@ -12,7 +12,7 @@ internal class TransactionDetailsViewModel constructor(
 ) : BaseViewModel() {
 
     val isDeclined by lazy { transaction.state == Transaction.TransactionState.DECLINED }
-    val createdAt by lazy { transaction.createdAt.toTransactionDetailsFormat() }
+    val createdAt by lazy { transaction.createdAt.formatForTransactionDetails() }
     val addressName by lazy { calculateAddressName() }
     val mccName by lazy { transaction.merchant?.mcc?.toLocalizedString() }
     val fundingSourceName by lazy { transaction.fundingSourceName }

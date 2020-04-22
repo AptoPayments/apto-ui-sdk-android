@@ -9,9 +9,7 @@ import com.aptopayments.core.data.config.ProjectConfiguration
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.data.user.DataPoint
-import com.aptopayments.core.data.user.DataPointList
-import com.aptopayments.core.data.user.Verification
+import com.aptopayments.core.data.user.*
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
@@ -36,6 +34,12 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragmen
 import com.aptopayments.sdk.features.card.waitlist.WaitlistFragmentThemeTwo
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragmentThemeTwo
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFragmentThemeTwo
+import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressFragment
+import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateFragment
+import com.aptopayments.sdk.features.inputdata.email.CollectUserEmailFragment
+import com.aptopayments.sdk.features.inputdata.id.CollectUserIdFragment
+import com.aptopayments.sdk.features.inputdata.name.CollectUserNameSurnameFragment
+import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneFragment
 import com.aptopayments.sdk.features.issuecard.IssueCardFragmentThemeTwo
 import com.aptopayments.sdk.features.kyc.KycStatusFragmentThemeTwo
 import com.aptopayments.sdk.features.maintenance.MaintenanceFragmentThemeTwo
@@ -65,8 +69,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun inputEmailFragment(tag: String) = InputEmailFragmentThemeTwo.newInstance().apply { this.TAG = tag }
 
-    override fun birthdateVerificationFragment(primaryCredential: DataPoint, tag: String) =
-        BirthdateVerificationFragmentThemeTwo.newInstance(primaryCredential).apply { this.TAG = tag }
+    override fun birthdateVerificationFragment(verification: Verification, tag: String) =
+        BirthdateVerificationFragmentThemeTwo.newInstance(verification, tag)
 
     override fun oauthConnectFragment(config: OAuthConfig, tag: String) =
         OAuthConnectFragmentThemeTwo.newInstance(config).apply { this.TAG = tag }
@@ -162,5 +166,32 @@ internal class FragmentFactoryImpl : FragmentFactory {
     override fun createPasscodeFragment(tag: String) = CreatePasscodeFragment().apply { this.TAG = tag }
 
     override fun changePasscodeFragment(tag: String) = ChangePasscodeFragment().apply { this.TAG = tag }
+
+    override fun collectNameFragment(initialValue: NameDataPoint?, tag: String) =
+        CollectUserNameSurnameFragment.newInstance(initialValue, tag)
+
+    override fun collectEmailFragment(initialValue: EmailDataPoint?, tag: String) =
+        CollectUserEmailFragment.newInstance(initialValue, tag)
+
+    override fun collectIdDocumentFragment(
+        initialValue: IdDocumentDataPoint?,
+        config: IdDataPointConfiguration,
+        tag: String
+    ) = CollectUserIdFragment.newInstance(initialValue, config, tag)
+
+    override fun collectAddressFragment(
+        initialValue: AddressDataPoint?,
+        config: AllowedCountriesConfiguration,
+        tag: String
+    ) = CollectUserAddressFragment.newInstance(initialValue, config, tag)
+
+    override fun collectBirthdateFragment(initialValue: BirthdateDataPoint?, tag: String) =
+        CollectUserBirthdateFragment.newInstance(initialValue, tag)
+
+    override fun collectPhoneFragment(
+        initialValue: PhoneDataPoint?,
+        config: AllowedCountriesConfiguration,
+        tag: String
+    ) = CollectUserPhoneFragment.newInstance(initialValue, config, tag)
 
 }

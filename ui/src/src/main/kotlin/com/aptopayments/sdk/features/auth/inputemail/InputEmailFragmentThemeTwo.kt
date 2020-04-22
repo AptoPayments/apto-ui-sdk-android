@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
+import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
@@ -34,7 +35,7 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
 
     override fun onPresented() {
         delegate?.configureStatusBar()
-        et_email.requestFocus()
+        et_email?.requestFocus()
         showKeyboard()
     }
 
@@ -59,11 +60,8 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     }
 
     private fun setupToolBar() {
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = "",
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+        delegate?.configureToolbar(tb_llsdk_toolbar, "", BaseActivity.BackButtonMode.Back(null))
     }
 
     override fun setupListeners() {
@@ -87,19 +85,24 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     override fun setupViewModel() {
         viewModel.apply {
             observeNotNullable(enableNextButton, ::updateContinueButtonState)
-            observe(state, ::updateProgressState)
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
             observe(verificationData, ::updateVerificationState)
-            failure(failure) {
-                hideLoading()
-                handleFailure(it)
+            failure(failure) { handleFailure(it) }
+        }
+    }
+
+    override fun handleFailure(failure: Failure?) {
+        when (failure) {
+            is Failure.ServerError -> {
+                notify(failure.errorMessage())
             }
+            else -> super.handleFailure(failure)
         }
     }
 
     private fun updateVerificationState(verification: Verification?) {
         verification?.verificationDataPoint = et_email.text.toString()
         verification?.let {
-            hideLoading()
             if (it.status == VerificationStatus.PENDING) {
                 hideKeyboard()
                 delegate?.onEmailVerificationStarted(verification)
@@ -107,16 +110,7 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
         }
     }
 
-    private fun updateProgressState(state: State?) {
-        if (state == State.IN_PROGRESS) {
-            showLoading()
-        } else {
-            hideLoading()
-        }
-    }
-
     private fun handleContinueButtonClick() {
-        showLoading()
         hideKeyboard()
         viewModel.startVerificationUseCase(et_email.text.toString())
     }

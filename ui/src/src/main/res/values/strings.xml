@@ -180,10 +180,6 @@
     <string name="address_housing_type_header">Residence</string>
     <string name="address_housing_type_hint">Select a housing type&#8230;</string>
     <string name="address_housing_type_error">Please select a valid housing type.</string>
-    <string name="geocoding_google_maps_api_key">AIzaSyBQuKFxmTO8gmxBwnXZlgG3TJY50KpbS-0</string>
-    <string name="geocoding_google_maps_api_url">https://maps.googleapis.com/maps/api/place/details/json</string>
-    <string name="google_places_autocomplete_api_url">https://maps.googleapis.com/maps/api/place/autocomplete/json</string>
-    <string name="google_places_autocomplete_api_key">AIzaSyAj21pmvNCyCzFqYq2D3nL4FwYPCzpHwRA</string>
 
     <!-- Apartment -->
     <string name="apartment_title">Contact information</string>
@@ -700,4 +696,29 @@
     <string name="biometric_change_pin_success_title">Congratulations</string>
     <string name="biometric_change_pin_success_message">Your passcode has been changed successfully!</string>
 
+    <string name="collect_user_data_personal_info_title">First and Last Name 👋</string>
+    <string name="collect_user_data_personal_info_subtitle">Please enter your first and last names</string>
+    <string name="collect_user_data_personal_info_first_name_title">First Name</string>
+    <string name="collect_user_data_personal_info_last_name_title">Last Name</string>
+    <string name="collect_user_data_personal_info_call_to_action">Next</string>
+    <string name="collect_user_data_personal_info_email_placeholder">your@email.com</string>
+    <string name="collect_user_data_personal_info_email_title">Your Email ✉️</string>
+    <string name="collect_user_data_personal_info_email_subtitle">Please enter your email address</string>
+    <string name="birthday_collector_birthdate_title">Your Birthdate 🗓</string>
+    <string name="birthday_collector_birthdate_subtitle">Please provide your date of birth</string>
+    <string name="birthday_collector_id_document_title">Verify your ID</string>
+    <string name="birthday_collector_id_document_subtitle">Please provide your ID details</string>
+    <string name="birthday_collector_id_document_country_label">Issued By</string>
+    <string name="birthday_collector_id_document_type_label">ID Type</string>
+    <string name="birthday_collector_id_document_number_label">ID Details</string>
+    <string name="birthday_collector_id_document_type_ssn">SSN</string>
+    <string name="birthday_collector_id_document_type_identity_card">Identity card</string>
+    <string name="birthday_collector_id_document_type_passport">Passport</string>
+    <string name="birthday_collector_id_document_type_drivers_license">Driver\'s license</string>
+    <string name="collect_user_data_address_title">Your Address 🏠</string>
+    <string name="collect_user_data_address_subtitle">Please enter your current title</string>
+    <string name="collect_user_data_address_address_placeholder">Address</string>
+    <string name="collect_user_data_address_apt_unit_placeholder">Apartment number (optional)</string>
+    <string name="collect_user_data_phone_title">Your Phone Number 📲</string>
+    <string name="collect_user_data_phone_subtitle">Please enter your phone number</string>
 </resources>

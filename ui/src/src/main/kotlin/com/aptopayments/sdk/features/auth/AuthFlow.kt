@@ -1,12 +1,9 @@
 package com.aptopayments.sdk.features.auth
 
-import androidx.annotation.VisibleForTesting
-import com.aptopayments.core.data.config.AuthCredential
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
-import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
@@ -21,74 +18,40 @@ import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val INPUT_PHONE_TAG = "InputPhoneFragment"
 private const val PHONE_VERIFICATION_TAG = "PhoneVerificationFragment"
 private const val EMAIL_VERIFICATION_TAG = "EmailVerificationFragment"
 private const val BIRTHDATE_VERIFICATION_TAG = "BirthdateVerificationFragment"
 private const val INPUT_EMAIL_TAG = "InputEmailFragment"
-private const val AUTH_TYPE_EMAIL = "email"
-private const val AUTH_TYPE_PHONE = "phone"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
-internal class AuthFlow (
-        val contextConfiguration: ContextConfiguration,
-        var onBack: (Unit) -> Unit,
-        var onFinish: (userToken: String) -> Unit
+internal class AuthFlow(
+    val contextConfiguration: ContextConfiguration,
+    var onBack: (Unit) -> Unit,
+    var onFinish: (userToken: String) -> Unit
 ) : Flow(), InputPhoneContract.Delegate, InputEmailContract.Delegate, PhoneVerificationContract.Delegate,
-        EmailVerificationContract.Delegate, BirthdateVerificationContract.Delegate, KoinComponent {
+    EmailVerificationContract.Delegate, BirthdateVerificationContract.Delegate, KoinComponent {
 
     val analyticsManager: AnalyticsServiceContract by inject()
     private var primaryVerification: Verification? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        when (contextConfiguration.projectConfiguration.authCredential) {
-            AuthCredential.PHONE -> {
-                val fragment = fragmentFactory.inputPhoneFragment(
-                        contextConfiguration.projectConfiguration.allowedCountries,
-                        INPUT_PHONE_TAG)
-                fragment.delegate = this
-                setStartElement(element = fragment as FlowPresentable)
-            }
-            AuthCredential.EMAIL -> {
-                val fragment = fragmentFactory.inputEmailFragment(INPUT_EMAIL_TAG)
-                fragment.delegate = this
-                setStartElement(fragment as FlowPresentable)
-            }
-            else -> {
-                val fragment = fragmentFactory.inputPhoneFragment(
-                    contextConfiguration.projectConfiguration.allowedCountries,
-                    INPUT_PHONE_TAG
-                )
-                fragment.delegate = this
-                setStartElement(element = fragment as FlowPresentable)
-            }
+        val fragment = when (contextConfiguration.projectConfiguration.primaryAuthCredential) {
+            DataPoint.Type.EMAIL -> createInputEmailFragment() as FlowPresentable
+            else -> createPhoneInputFragment() as FlowPresentable
         }
+        setStartElement(fragment)
         onInitComplete(Either.Right(Unit))
     }
 
     override fun restoreState() {
-        (fragmentWithTag(INPUT_PHONE_TAG) as? InputPhoneContract.View)?.let {
-            it.delegate = this
-        }
-        (fragmentWithTag(INPUT_EMAIL_TAG) as? InputEmailContract.View)?.let {
-            it.delegate = this
-        }
-        (fragmentWithTag(PHONE_VERIFICATION_TAG) as? PhoneVerificationContract.View)?.let {
-            it.delegate = this
-        }
-        (fragmentWithTag(BIRTHDATE_VERIFICATION_TAG) as? BirthdateVerificationContract.View)?.let {
-            it.delegate = this
-        }
-        (fragmentWithTag(EMAIL_VERIFICATION_TAG) as? EmailVerificationContract.View)?.let {
-            it.delegate = this
-        }
+        (fragmentWithTag(INPUT_PHONE_TAG) as? InputPhoneContract.View)?.let { it.delegate = this }
+        (fragmentWithTag(INPUT_EMAIL_TAG) as? InputEmailContract.View)?.let { it.delegate = this }
+        (fragmentWithTag(PHONE_VERIFICATION_TAG) as? PhoneVerificationContract.View)?.let { it.delegate = this }
+        (fragmentWithTag(BIRTHDATE_VERIFICATION_TAG) as? BirthdateVerificationContract.View)?.let { it.delegate = this }
+        (fragmentWithTag(EMAIL_VERIFICATION_TAG) as? EmailVerificationContract.View)?.let { it.delegate = this }
     }
 
-    //
-    // Input Phone
-    //
     override fun onBackFromInputPhone() = onBack(Unit)
 
     override fun onPhoneVerificationStarted(verification: Verification) {
@@ -97,9 +60,6 @@ internal class AuthFlow (
         push(fragment as BaseFragment)
     }
 
-    //
-    // Input Email
-    //
     override fun onBackFromInputEmail() = onBack(Unit)
 
     override fun onEmailVerificationStarted(verification: Verification) {
@@ -108,74 +68,44 @@ internal class AuthFlow (
         push(fragment as BaseFragment)
     }
 
-    //
-    // Verify Phone
-    //
     override fun onBackFromPhoneVerification() = popFragment()
 
-    override fun onPhoneVerificationPassed(dataPoint: DataPoint) {
-        dataPoint.verification?.let { verification ->
-            verification.secondaryCredential?.let {
-                popFragment()
-                primaryVerification = verification
-                if (it.status == VerificationStatus.PASSED) {
-                    loginUser(verification, it)
-                } else {
-                    if (it.verificationType == AUTH_TYPE_EMAIL) {
-                        val fragment = fragmentFactory.inputEmailFragment(INPUT_EMAIL_TAG)
-                        fragment.delegate = this
-                        setStartElement(fragment as FlowPresentable)
-                    } else {
-                        val fragment =
-                            fragmentFactory.birthdateVerificationFragment(dataPoint, BIRTHDATE_VERIFICATION_TAG)
-                        fragment.delegate = this
-                        push(fragment as BaseFragment)
-                    }
-                }
-            } ?: createUser(dataPoint)
-        }
-    }
+    override fun onPhoneVerificationPassed(dataPoint: DataPoint) = onAuthStepPassed(dataPoint)
 
-    //
-    // Verify Email
-    //
     override fun onBackFromEmailVerification() = popFragment()
 
-    override fun onEmailVerificationPassed(dataPoint: DataPoint) {
-        dataPoint.verification?.let { verification ->
-            verification.secondaryCredential?.let {
-                popFragment()
-                primaryVerification = verification
-                if (it.status == VerificationStatus.PASSED) {
-                    loginUser(verification, it)
-                } else {
-                    if (it.verificationType == AUTH_TYPE_PHONE) {
-                        val fragment = fragmentFactory.inputPhoneFragment(
-                            contextConfiguration.projectConfiguration.allowedCountries,
-                            INPUT_PHONE_TAG
-                        )
-                        fragment.delegate = this
-                        setStartElement(fragment as FlowPresentable)
-                    } else {
-                        val fragment =
-                            fragmentFactory.birthdateVerificationFragment(dataPoint, BIRTHDATE_VERIFICATION_TAG)
-                        fragment.delegate = this
-                        push(fragment as BaseFragment)
-                    }
-                }
-            } ?: createUser(dataPoint)
+    override fun onEmailVerificationPassed(dataPoint: DataPoint) = onAuthStepPassed(dataPoint)
+
+    override fun onBackFromBirthdateVerification() = popFragment()
+
+    override fun onBirthdateVerificationPassed(dataPoint: DataPoint) = onAuthStepPassed(dataPoint)
+
+    private fun onAuthStepPassed(dataPoint: DataPoint) {
+        if (dataPoint.getType() == contextConfiguration.projectConfiguration.secondaryAuthCredential) {
+            loginUser(primaryVerification!!, dataPoint.verification!!)
+        } else {
+            primaryVerification = dataPoint.verification
+            onNextTapped(dataPoint)
         }
     }
 
-    //
-    // Verify Birthdate
-    //
-    override fun onBackFromBirthdateVerification() = popFragment()
-
-    override fun onBirthdateVerificationPassed(primaryCredentialVerification: Verification, birthdateVerification: Verification) {
-        primaryVerification?.let { primaryVerification ->
-            loginUser(primaryVerification, birthdateVerification)
+    private fun onNextTapped(dataPoint: DataPoint) {
+        val secondary = dataPoint.verification?.secondaryCredential
+        if (secondary == null) {
+            createUser(dataPoint)
+        } else {
+            launchSecondFactorAuthentication(secondary.verificationType)
         }
+    }
+
+    private fun launchSecondFactorAuthentication(type: String) {
+        val fragment = when (type.toUpperCase()) {
+            DataPoint.Type.EMAIL.toString() -> createInputEmailFragment() as BaseFragment
+            DataPoint.Type.BIRTHDATE.toString() -> createBirthdateVerificationFragment(primaryVerification!!) as BaseFragment
+            DataPoint.Type.PHONE.toString() -> createPhoneInputFragment() as BaseFragment
+            else -> createInputEmailFragment() as BaseFragment
+        }
+        push(fragment)
     }
 
     //
@@ -201,5 +131,27 @@ internal class AuthFlow (
                 onFinish(user.token)
             }
         }
+    }
+
+    private fun createInputEmailFragment(): InputEmailContract.View {
+        val fragment = fragmentFactory.inputEmailFragment(INPUT_EMAIL_TAG)
+        fragment.delegate = this
+        return fragment
+    }
+
+    private fun createPhoneInputFragment(): InputPhoneContract.View {
+        val fragment = fragmentFactory.inputPhoneFragment(
+            contextConfiguration.projectConfiguration.allowedCountries,
+            INPUT_PHONE_TAG
+        )
+        fragment.delegate = this
+        return fragment
+    }
+
+    private fun createBirthdateVerificationFragment(verification: Verification): BirthdateVerificationContract.View {
+        val fragment =
+            fragmentFactory.birthdateVerificationFragment(verification, BIRTHDATE_VERIFICATION_TAG)
+        fragment.delegate = this
+        return fragment
     }
 }

@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.features.auth.birthdateverification
+package com.aptopayments.sdk.ui.views.birthdate
 
 private const val DAY_OF_MONTH_REGEX = "(0?[1-9]|[12][0-9]|3[01])"
 private const val MONTH_OF_YEAR_REGEX = "(0?[1-9]|1[012])"

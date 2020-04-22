@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
+import com.aptopayments.core.extension.formatForTransactionList
 import com.aptopayments.core.extension.toCapitalized
-import com.aptopayments.core.extension.toTransactionListFormat
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.data.transaction.iconResource
 import com.aptopayments.sdk.core.extension.hide
@@ -70,7 +70,7 @@ internal class TransactionListAdapter(
                 viewHolder.mccIcon?.setColorFilter(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
             }
             transaction.transactionDescription?.let { viewHolder.transactionDescriptionView?.setText(it.toCapitalized()) }
-            viewHolder.transactionDateView?.text = transaction.createdAt.toTransactionListFormat()
+            viewHolder.transactionDateView?.text = transaction.createdAt.formatForTransactionList()
             transaction.localAmount?.let { viewHolder.transactionAmountView?.setText(transaction.getLocalAmountRepresentation()) }
             transaction.nativeBalance?.let { viewHolder.transactionNativeAmountView?.setText(transaction.getNativeBalanceRepresentation()) }
             if (isLastPositionOfSection(position)) viewHolder.transactionRowSeparator?.hide()

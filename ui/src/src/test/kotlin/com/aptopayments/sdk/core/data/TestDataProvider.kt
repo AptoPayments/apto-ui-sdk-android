@@ -8,10 +8,10 @@ import com.aptopayments.core.data.oauth.OAuthAttemptStatus
 import com.aptopayments.core.data.oauth.OAuthUserDataUpdate
 import com.aptopayments.core.data.oauth.OAuthUserDataUpdateResult
 import com.aptopayments.core.data.stats.CategorySpending
+import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.DataPointList
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
-import com.aptopayments.core.data.workflowaction.BalanceType
 import com.aptopayments.sdk.features.oauth.OAuthConfig
 import org.mockito.Mockito
 import java.net.URL
@@ -42,7 +42,7 @@ class TestDataProvider {
                         supportEmailAddress = "",
                         trackerAccessToken = "",
                         isTrackerActive = false,
-                        authCredential = AuthCredential.PHONE)
+                        primaryAuthCredential = DataPoint.Type.PHONE)
         )
 
         fun provideProjectBranding() = Branding.createDefault()
@@ -60,7 +60,7 @@ class TestDataProvider {
                         supportEmailAddress = "",
                         trackerAccessToken = "",
                         isTrackerActive = false,
-                        authCredential = AuthCredential.EMAIL)
+                        primaryAuthCredential = DataPoint.Type.EMAIL)
         )
 
         fun provideOauthConfig() = OAuthConfig(
@@ -73,7 +73,7 @@ class TestDataProvider {
         )
 
         fun provideAllowedBalanceType() = AllowedBalanceType(
-                balanceType= BalanceType.COINBASE,
+                balanceType= "type",
                 baseUri = URL("http://www.aptopayments.com"))
 
         fun provideOAuthUserData() = OAuthUserDataUpdate(

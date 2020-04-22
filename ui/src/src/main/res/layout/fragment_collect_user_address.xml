@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.inputdata.address.CollectUserAddressViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/collect_address_title"
+            style="@style/ThemeTwo.TextHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_llsdk_toolbar_layout"
+            app:localize="@string/collect_user_data_address_title" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/collect_address_subtitle"
+            style="@style/ThemeTwo.TextHeader"
+            android:layout_marginTop="4sp"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collect_address_title"
+            app:localize="collect_user_data_address_subtitle" />
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingTop="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/continue_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collect_address_subtitle">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/collect_address_search_container"
+                    style="@style/ThemeTwo.TextInput"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:background="@drawable/rounded_corners"
+                    android:elevation="2dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/collect_address_search_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:gravity="center_vertical">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/collect_address_search_edit"
+                            style="@style/TextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:completionThreshold="3"
+                            android:inputType="textPostalAddress"
+                            android:nextFocusForward="@+id/et_last_name"
+                            android:text="@={viewModel.searchText}"
+                            tools:hint="@string/collect_user_data_address_address_placeholder" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/collect_address_optional_container"
+                    style="@style/ThemeTwo.TextInput"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:background="@drawable/rounded_corners"
+                    android:elevation="2dp"
+                    app:visibleIf="@{viewModel.optionalVisible}"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/collect_address_optional_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/collect_address_optional_edit"
+                            style="@style/TextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:inputType="textCapWords"
+                            android:maxLength="60"
+                            android:nextFocusForward="@+id/et_last_name"
+                            android:text="@={viewModel.optionalText}"
+                            app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
+                            tools:hint="@string/collect_user_data_address_apt_unit_placeholder"
+                            app:requestFocus="@{viewModel.optionalVisible}"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <include
+            android:id="@+id/search_powered_by_google"
+            layout="@layout/powered_by_google"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/continue_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibleIf="@{viewModel.showPoweredByGoogle}" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/continue_button"
+            style="@style/ThemeTwo.ContinueButton"
+            android:enabled="@{viewModel.continueEnabled}"
+            android:onClick="@{() -> viewModel.continueClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scroll"
+            app:localize="collect_user_data_personal_info_call_to_action" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

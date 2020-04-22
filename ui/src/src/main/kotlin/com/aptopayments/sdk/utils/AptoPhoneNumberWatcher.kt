@@ -7,9 +7,8 @@ import android.text.Selection
 import com.google.i18n.phonenumbers.AsYouTypeFormatter
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 
-class AptoPhoneNumberWatcher
-
-private constructor(countryCode: String) : PhoneNumberFormattingTextWatcher() {
+class AptoPhoneNumberWatcher(countryCode: String, private val listener: ValidInputListener) :
+    PhoneNumberFormattingTextWatcher() {
 
     private var defaultCountryCode = "GB"
     private var regionCode: String
@@ -20,7 +19,6 @@ private constructor(countryCode: String) : PhoneNumberFormattingTextWatcher() {
     private var mStopFormatting: Boolean = false
 
     private val phoneNumberUtil = PhoneNumberUtil.getInstance()
-    private var mListener: ValidInputListener? = null
     private val mFormatter: AsYouTypeFormatter
 
     var countryCode: String = defaultCountryCode
@@ -31,12 +29,8 @@ private constructor(countryCode: String) : PhoneNumberFormattingTextWatcher() {
             onTextChanged(currentNumber, 0, 0, 0)
         }
 
-    constructor(countryCode: String, listener: ValidInputListener?) : this(countryCode) {
-        mListener = listener
-    }
-
     init {
-        this.countryCode = if (!countryCode.isEmpty()) countryCode else defaultCountryCode
+        this.countryCode = if (countryCode.isNotEmpty()) countryCode else defaultCountryCode
         mFormatter = phoneNumberUtil.getAsYouTypeFormatter(countryCode)
         countryCodeForRegion = phoneNumberUtil.getCountryCodeForRegion(countryCode)
         regionCode = if (countryCodeForRegion != 1) "+$countryCodeForRegion " else ""
@@ -64,10 +58,10 @@ private constructor(countryCode: String) : PhoneNumberFormattingTextWatcher() {
         try {
             currentNumber = s
             val phoneNumber = phoneNumberUtil.parse(s, countryCode)
-            mListener?.onValidInput(phoneNumber.countryCode == countryCodeForRegion
+            listener.onValidInput(phoneNumber.countryCode == countryCodeForRegion
                     && phoneNumberUtil.isValidNumber(phoneNumber))
         } catch (exception: Throwable) {
-            mListener?.onValidInput(false)
+            listener.onValidInput(false)
         }
     }
 
@@ -104,8 +98,7 @@ private constructor(countryCode: String) : PhoneNumberFormattingTextWatcher() {
         if (s.startsWith(regionCode)) {
             s.replace(0, regionCode.length, "")
             return regionCode.length
-        }
-        else {
+        } else {
             val trimmed = regionCode.trim()
             if (s.startsWith(trimmed)) {
                 s.replace(0, trimmed.length, "")

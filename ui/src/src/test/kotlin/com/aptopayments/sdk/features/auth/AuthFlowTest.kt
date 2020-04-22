@@ -24,7 +24,7 @@ import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.Spy
 
-class AuthFlowTest : AndroidTest() {
+internal class AuthFlowTest : AndroidTest() {
 
     private lateinit var sut: AuthFlow
     @Mock
@@ -175,18 +175,19 @@ class AuthFlowTest : AndroidTest() {
         val tag = "BirthdateVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        mockDataPoint = PhoneDataPoint(verification = Verification("", "phone",
-                VerificationStatus.FAILED, "", Verification("", "birthday")))
+        val verification = Verification("", "phone",
+                VerificationStatus.FAILED, "", Verification("", "birthdate"))
+        mockDataPoint = PhoneDataPoint(verification = verification)
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.birthdateVerificationFragment(mockDataPoint, tag)
+            mockFragmentFactory.birthdateVerificationFragment(verification, tag)
         }.willReturn(fragmentBirthdayDouble)
 
         // When
         sut.onPhoneVerificationPassed(mockDataPoint)
 
         // Then
-        verify(mockFragmentFactory).birthdateVerificationFragment(mockDataPoint, tag)
+        verify(mockFragmentFactory).birthdateVerificationFragment(verification, tag)
     }
 
     @Test
@@ -196,17 +197,18 @@ class AuthFlowTest : AndroidTest() {
         val tag = "BirthdateVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        mockDataPoint = PhoneDataPoint(verification = Verification("", "email",
-                VerificationStatus.FAILED, "", Verification("", "birthday")))
+        val verification = Verification("", "email",
+            VerificationStatus.FAILED, "", Verification("", "birthdate"))
+        mockDataPoint = PhoneDataPoint(verification = verification)
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.birthdateVerificationFragment(mockDataPoint, tag)
+            mockFragmentFactory.birthdateVerificationFragment(verification, tag)
         }.willReturn(fragmentBirthdayDouble)
 
         // When
         sut.onEmailVerificationPassed(mockDataPoint)
 
         // Then
-        verify(mockFragmentFactory).birthdateVerificationFragment(mockDataPoint, tag)
+        verify(mockFragmentFactory).birthdateVerificationFragment(verification, tag)
     }
 }

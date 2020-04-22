@@ -9,6 +9,7 @@ import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFlow
+import com.aptopayments.sdk.features.inputdata.CollectUserDataFlow
 import com.aptopayments.sdk.features.issuecard.IssueCardFlow
 import com.aptopayments.sdk.features.selectbalancestore.SelectBalanceStoreFlow
 import java.lang.reflect.Modifier
@@ -75,6 +76,7 @@ internal class NewCardFlow (
                 WorkflowActionType.SELECT_BALANCE_STORE -> initBalanceStoreFlow(cardApplication, workflowAction, onComplete)
                 WorkflowActionType.SHOW_DISCLAIMER -> initDisclaimerFlow(cardApplication, workflowAction, onComplete)
                 WorkflowActionType.ISSUE_CARD -> initIssueCardFlow(cardApplication, workflowAction, onComplete)
+                WorkflowActionType.COLLECT_USER_DATA -> initCollectUserDataFlow(workflowAction, onComplete)
                 else -> {}
             }
         }
@@ -141,6 +143,26 @@ internal class NewCardFlow (
         flow.init { initResult ->
             initResult.either({ onComplete(Either.Left(it)) }) {
                 onComplete(Either.Right(flow))
+            }
+        }
+    }
+
+    //
+    // Collect User Data
+    //
+    private fun initCollectUserDataFlow(
+        workflowAction: WorkflowAction,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
+
+
+        val actionConfiguration = workflowAction.configuration as? WorkflowActionCollectUserData
+        actionConfiguration?.let {
+            val flow = CollectUserDataFlow(actionConfiguration, { onBack }, { showNextFlow() })
+            flow.init { initResult ->
+                initResult.either({ onComplete(Either.Left(it)) }) {
+                    onComplete(Either.Right(flow))
+                }
             }
         }
     }

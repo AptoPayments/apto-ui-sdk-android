@@ -13,6 +13,9 @@ import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.OAuthFlow
 import java.lang.reflect.Modifier
 
+private const val CUSTODIAN_WALLET_FUNDING_SOURCE = "custodian_wallet"
+private const val OAUTH_CREDENTIAL_TYPE = "oauth"
+
 @VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AddBalanceFlow (
         val allowedBalanceTypes: List<AllowedBalanceType>,
@@ -51,14 +54,12 @@ internal class AddBalanceFlow (
                 config = config,
                 onBack = { onBack(Unit) },
                 onFinish = { oauthAttempt ->
-                    val fundingSourceType = "custodian_wallet"
-                    val custodianType = allowedBalanceTypes.firstOrNull()?.balanceType?.name ?: "coinbase"
-                    val credentialType = "oauth"
+                    val custodianType = allowedBalanceTypes.firstOrNull()?.balanceType ?: ""
                     AptoPlatform.addCardFundingSource(
                             cardId = cardID,
-                            fundingSourceType = fundingSourceType,
+                            fundingSourceType = CUSTODIAN_WALLET_FUNDING_SOURCE,
                             custodianType = custodianType,
-                            credentialType = credentialType,
+                            credentialType = OAUTH_CREDENTIAL_TYPE,
                             tokenId = oauthAttempt.tokenId) { result ->
                         result.either({ failure -> handleAddBalanceFailure(failure) }, { balance ->
                             hideLoading()

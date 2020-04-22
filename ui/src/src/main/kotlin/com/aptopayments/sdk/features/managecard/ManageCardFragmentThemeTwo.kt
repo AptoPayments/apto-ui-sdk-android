@@ -36,10 +36,11 @@ import kotlinx.android.synthetic.main.include_toolbar_two.*
 import kotlinx.android.synthetic.main.include_transaction_list_header.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.temporal.ChronoUnit
 import java.lang.reflect.Modifier
-import java.util.*
 
-private const val FIVE_SECONDS = 5000
+private const val FIVE_SECONDS = 5
 private const val CARD_ID_KEY = "CARD_ID"
 private const val REQUEST_CODE_PUSH_PROVISIONING = 1100
 
@@ -54,6 +55,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
     private var mLastClickTime: Long = 0
     private var clicksAllowed = true
+    private var previousMessageShownAt = LocalDateTime.of(2010, 1, 1, 0, 0, 0)
 
     override fun layoutId(): Int = R.layout.fragment_manage_card_theme_two
 
@@ -159,16 +161,16 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         tv_no_transactions.goneIf(!showAddToGooglePay)
     }
 
-    private var previousMessageShownAt = 0L
     private fun handleBalance(balance: Balance?) {
         if (viewModel.balanceLoaded
                 && (balance == null || balance.state == Balance.BalanceState.INVALID)) {
-            val duration = FIVE_SECONDS
-            if (Date().time - previousMessageShownAt < duration) return
-            previousMessageShownAt = Date().time
-            notify("invalid_funding_source_message".localized(), MessageBanner.MessageType.ERROR)
-        }
-        else {
+            if (previousMessageShownAt.until(LocalDateTime.now(), ChronoUnit.SECONDS) < FIVE_SECONDS) {
+                return
+            } else {
+                previousMessageShownAt = LocalDateTime.now()
+                notify("invalid_funding_source_message".localized(), MessageBanner.MessageType.ERROR)
+            }
+        } else {
             bv_balance_view.set(balance)
             bv_balance_view.setOnClickListener { onBalanceClicked() }
         }

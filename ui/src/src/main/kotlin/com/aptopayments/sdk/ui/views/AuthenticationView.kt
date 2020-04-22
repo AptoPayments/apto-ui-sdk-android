@@ -5,7 +5,6 @@ import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
@@ -20,6 +19,7 @@ import com.aptopayments.sdk.core.usecase.VerifyPasscodeUseCase
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_BIOMETRICS
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_PIN
+import com.aptopayments.sdk.utils.shake
 import kotlinx.android.synthetic.main.view_authentication.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -174,7 +174,7 @@ internal class AuthenticationView @JvmOverloads constructor(
     }
 
     private fun pinEnteredWrong() {
-        secret_pin_view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+        secret_pin_view.shake()
         secret_pin_view.clean()
         delegate?.onAuthPinFailed()
     }

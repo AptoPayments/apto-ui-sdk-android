@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.passcode
 
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.animation.AnimationUtils
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
@@ -14,6 +13,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
+import com.aptopayments.sdk.utils.shake
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_passcode.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -54,7 +54,7 @@ internal abstract class PasscodeFragment : BaseFragment(), PasscodeContract.View
     }
 
     private fun wrongPin() {
-        pin_view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+        pin_view.shake()
         pin_view.text?.clear()
         notify(
             "biometric_create_pin_error_title".localized(),

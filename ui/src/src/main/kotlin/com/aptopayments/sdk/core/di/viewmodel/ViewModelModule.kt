@@ -4,6 +4,7 @@ import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
+import com.aptopayments.core.data.user.*
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
@@ -23,6 +24,12 @@ import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
 import com.aptopayments.sdk.features.disclaimer.DisclaimerViewModel
+import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressViewModel
+import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateViewModel
+import com.aptopayments.sdk.features.inputdata.email.CollectUserEmailViewModel
+import com.aptopayments.sdk.features.inputdata.id.CollectUserIdViewModel
+import com.aptopayments.sdk.features.inputdata.name.CollectUserNameViewModel
+import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneViewModel
 import com.aptopayments.sdk.features.issuecard.IssueCardViewModel
 import com.aptopayments.sdk.features.kyc.KycStatusViewModel
 import com.aptopayments.sdk.features.maintenance.MaintenanceViewModel
@@ -39,38 +46,46 @@ import org.koin.dsl.module
 import org.threeten.bp.LocalDate
 
 val viewModelModule = module {
-    viewModel { InputPhoneViewModel(analyticsManager = get()) }
-    viewModel { InputEmailViewModel(analyticsManager = get()) }
-    viewModel { OAuthConnectViewModel(analyticsManager = get()) }
-    viewModel { OAuthVerifyViewModel(analyticsManager = get()) }
-    viewModel { VerificationViewModel(analyticsManager = get()) }
-    viewModel { BirthdateVerificationViewModel(get(), get()) }
-    viewModel { FundingSourcesViewModel(analyticsManager = get()) }
-    viewModel { KycStatusViewModel(analyticsManager = get()) }
-    single { FetchTransactionsTaskQueue(aptoPlatformProtocol = get()) }
+    viewModel { InputPhoneViewModel(get(), get()) }
+    viewModel { InputEmailViewModel(get()) }
+    viewModel { OAuthConnectViewModel(get()) }
+    viewModel { OAuthVerifyViewModel(get()) }
+    viewModel { VerificationViewModel(get()) }
+    viewModel { (verification: Verification) -> BirthdateVerificationViewModel(verification, get(), get()) }
+    viewModel { FundingSourcesViewModel(get()) }
+    viewModel { KycStatusViewModel(get()) }
+    single { FetchTransactionsTaskQueue(get()) }
     viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get()) }
-    viewModel { ActivatePhysicalCardViewModel(analyticsManager = get()) }
-    viewModel { ActivatePhysicalCardSuccessViewModel(analyticsManager = get()) }
+    viewModel { ActivatePhysicalCardViewModel(get()) }
+    viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
     viewModel { (card: Card, cardProduct: CardProduct) ->
         CardSettingsViewModel(card, cardProduct, get(), get(), get())
     }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
     viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
-    viewModel { NoNetworkViewModel(analyticsManager = get()) }
+    viewModel { NoNetworkViewModel(get()) }
     viewModel { MaintenanceViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
-    viewModel { DisclaimerViewModel(analyticsManager = get()) }
+    viewModel { DisclaimerViewModel(get()) }
     viewModel { (cardApplicationId: String, actionConfiguration : WorkflowActionConfigurationIssueCard?) ->
         IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get())
     }
-    viewModel { TransactionListViewModel(analyticsManager = get()) }
-    viewModel { WaitlistViewModel(analyticsManager = get()) }
-    viewModel { SetPinViewModel(analyticsManager = get()) }
-    viewModel { ConfirmPinViewModel(analyticsManager = get()) }
-    viewModel { VoipViewModel(analyticsManager = get(), voipHandler = get()) }
+    viewModel { TransactionListViewModel(get()) }
+    viewModel { WaitlistViewModel(get()) }
+    viewModel { SetPinViewModel(get()) }
+    viewModel { ConfirmPinViewModel(get()) }
+    viewModel { VoipViewModel(get(), get()) }
     viewModel { StatementListViewModel(get()) }
     viewModel { CreatePasscodeViewModel(get()) }
     viewModel { ChangePasscodeViewModel(get(), get()) }
+    viewModel { (initialValue: NameDataPoint?) -> CollectUserNameViewModel(initialValue, get()) }
+    viewModel { (initialValue: EmailDataPoint?) -> CollectUserEmailViewModel(initialValue, get()) }
+    viewModel { (initialValue: IdDocumentDataPoint?, config: IdDataPointConfiguration) ->
+        CollectUserIdViewModel(initialValue, config, get())
+    }
+    viewModel { (initialValue: AddressDataPoint?) -> CollectUserAddressViewModel(initialValue, get(), get(), get()) }
+    viewModel { CollectUserBirthdateViewModel(get()) }
+    viewModel { CollectUserPhoneViewModel(get()) }
 }

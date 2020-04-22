@@ -6,7 +6,6 @@ import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class InputEmailViewModel constructor(
@@ -14,18 +13,17 @@ internal class InputEmailViewModel constructor(
 ) : BaseViewModel() {
 
     var enableNextButton: MutableLiveData<Boolean> = MutableLiveData(false)
-    var state: MutableLiveData<State> = MutableLiveData()
     var verificationData: MutableLiveData<Verification> = MutableLiveData()
 
     fun startVerificationUseCase(emailInput: String) {
-        state.postValue(State.IN_PROGRESS)
+        showLoading()
         AptoPlatform.startEmailVerification(emailInput) {
             it.either(::handleFailure, ::handleVerification)
         }
     }
 
     fun handleVerification(verification: Verification) {
-        state.postValue(State.COMPLETED)
+        hideLoading()
         if (verification.status == VerificationStatus.PENDING) {
             verificationData.postValue(verification)
         }

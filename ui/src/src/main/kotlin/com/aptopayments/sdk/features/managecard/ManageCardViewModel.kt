@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.managecard
 
-import android.annotation.SuppressLint
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
@@ -15,7 +14,6 @@ import com.aptopayments.core.data.card.Money
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
@@ -28,9 +26,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
+import org.threeten.bp.format.DateTimeFormatter
 import java.lang.reflect.Modifier
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.ArrayList
 
 private const val ROWS_PER_PAGE = 20
 
@@ -68,8 +66,7 @@ internal class ManageCardViewModel constructor(
     private var lastTransactionId: String? = null
     private var cardInfoRetrieved = false
     var balanceLoaded = false
-    @SuppressLint("SimpleDateFormat")
-    private val dateFormatter = SimpleDateFormat("MMMM, yyyy")
+    private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
 
     init {
         startIapHelper()
@@ -241,7 +238,7 @@ internal class ManageCardViewModel constructor(
             return transactionList
         }
 
-        if (currentTransactions.isEmpty() || transactionList.last().createdAt.after(currentTransactions.first().createdAt)) {
+        if (currentTransactions.isEmpty() || transactionList.last().createdAt.isAfter(currentTransactions.first().createdAt)) {
             transactions.postValue(transactionList)
             return transactionList
         }
@@ -249,7 +246,7 @@ internal class ManageCardViewModel constructor(
         // Background refresh
         var newTransactionIndex = 0
         val topCachedTransactionDate = currentTransactions.first().createdAt
-        while (newTransactionIndex<transactionList.size && transactionList[newTransactionIndex].createdAt.after(topCachedTransactionDate)) {
+        while (newTransactionIndex<transactionList.size && transactionList[newTransactionIndex].createdAt.isAfter(topCachedTransactionDate)) {
             currentTransactions.add(0, transactionList[newTransactionIndex])
             newTransactionIndex++
         }
@@ -277,19 +274,19 @@ internal class ManageCardViewModel constructor(
         var transactionYear = -1
         var transactionMonth = -1
         if (skipFirstHeader) {
-            val (month, year) = newTransactions.first().createdAt.getMonthYear()
-            transactionMonth = month
-            transactionYear = year
+            val date = newTransactions.first().createdAt
+            transactionMonth = date.monthValue
+            transactionYear = date.year
         }
 
         var currentTransactionYear: Int
         var currentTransactionMonth: Int
         newTransactions.forEach{
-            val (month, year) = it.createdAt.getMonthYear()
-            currentTransactionMonth = month
-            currentTransactionYear = year
+            val date = it.createdAt
+            currentTransactionMonth = date.monthValue
+            currentTransactionYear = date.year
             if (transactionYear != currentTransactionYear || transactionMonth != currentTransactionMonth) {
-                result.add(TransactionListItem.SectionHeader(dateFormatter.format(it.createdAt)))
+                result.add(TransactionListItem.SectionHeader(it.createdAt.format(dateFormatter)))
                 transactionYear = currentTransactionYear
                 transactionMonth = currentTransactionMonth
             }
@@ -304,9 +301,10 @@ internal class ManageCardViewModel constructor(
             val lastCurrentTransaction = currentTransactionItems.findLast {
                 it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
             } as TransactionListItem.TransactionRow
-            val (currentMonth, currentYear) = lastCurrentTransaction.transaction.createdAt.getMonthYear()
-            val (newTransactionMonth, newTransactionYear) = newTransactions.first().createdAt.getMonthYear()
-            val skipFirstHeader = currentMonth == newTransactionMonth && currentYear == newTransactionYear
+            val currentDate = lastCurrentTransaction.transaction.createdAt
+            val newTransactionDate = newTransactions.first().createdAt
+            val skipFirstHeader = currentDate.monthValue == newTransactionDate.monthValue &&
+                    currentDate.year == newTransactionDate.year
             currentTransactionItems.addAll(buildItems(newTransactions, skipFirstHeader = skipFirstHeader))
             transactionListItems.postValue(currentTransactionItems)
             return

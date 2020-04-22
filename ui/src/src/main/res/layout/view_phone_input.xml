@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+    android:layout_marginBottom="@dimen/_24sdp"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/country_code_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="9dp"
+        app:ccp_autoDetectCountry="false"
+        app:ccp_clickable="true"
+        app:ccp_showNameCode="false" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_phone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/llsdk_title_bottom_margin"
+            android:background="@android:color/transparent"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:textColor="@color/title_color"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_size_large" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</merge>
+
+

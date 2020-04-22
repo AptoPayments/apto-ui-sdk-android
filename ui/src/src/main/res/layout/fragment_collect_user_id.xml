@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.inputdata.id.CollectUserIdViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_id_header"
+            style="@style/ThemeTwo.TextHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_llsdk_toolbar_layout"
+            app:localize="@string/birthday_collector_id_document_title" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_id_label"
+            style="@style/ThemeTwo.TextHeader"
+            android:layout_marginTop="4sp"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_id_header"
+            app:localize="birthday_collector_id_document_subtitle" />
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingTop="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/continue_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_id_label">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:orientation="vertical">
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/collect_id_country_title"
+                    style="@style/ThemeTwo.FormField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:visibleIf="@{viewModel.countryList.size > 1}"
+                    app:localize="@string/birthday_collector_id_document_country_label" />
+
+                <FrameLayout
+                    android:id="@+id/country_container"
+                    style="@style/ThemeTwo.TextInput"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:background="@drawable/rounded_corners"
+                    android:elevation="2dp"
+                    app:visibleIf="@{viewModel.countryList.size > 1}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/country_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:nextFocusForward="@+id/collect_id_type_spinner"
+                        app:items="@{viewModel.countryList}"
+                        app:itemSelected="@={viewModel.selectedCountry}" />
+                </FrameLayout>
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/collect_id_type_title"
+                    style="@style/ThemeTwo.FormField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:localize="@string/birthday_collector_id_document_type_label" />
+
+                <FrameLayout
+                    android:id="@+id/collect_id_type_container"
+                    style="@style/ThemeTwo.TextInput"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:background="@drawable/rounded_corners"
+                    android:elevation="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/collect_id_type_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:nextFocusForward="@+id/collect_id_number_til" />
+                </FrameLayout>
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/collect_id_number_title"
+                    style="@style/ThemeTwo.FormField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:localize="birthday_collector_id_document_number_label" />
+
+                <FrameLayout
+                    android:id="@+id/collect_id_number_container"
+                    style="@style/ThemeTwo.TextInput"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:background="@drawable/rounded_corners"
+                    android:elevation="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/collect_id_number_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/collect_id_number_edittext"
+                            style="@style/TextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:inputType="textPostalAddress"
+                            app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
+                            android:text="@={viewModel.number}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/continue_button"
+            style="@style/ThemeTwo.ContinueButton"
+            android:enabled="@{viewModel.continueEnabled}"
+            android:onClick="@{() -> viewModel.continueClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="collect_user_data_personal_info_call_to_action" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

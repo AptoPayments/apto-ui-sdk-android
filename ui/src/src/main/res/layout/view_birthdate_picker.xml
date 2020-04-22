@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/container"
+        style="@style/ThemeTwo.TextInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+        android:layout_below="@id/tv_verification_code_header"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_corners"
+        android:elevation="2dp">
+
+        <ViewStub
+            android:id="@+id/stub_dmy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+            android:layout="@layout/birthdate_validator_dmy"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/stub_mdy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+            android:layout="@layout/birthdate_validator_mdy"
+            tools:visibility="gone" />
+
+        <ViewStub
+            android:id="@+id/stub_ymd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
+            android:layout="@layout/birthdate_validator_ymd"
+            tools:visibility="gone" />
+    </FrameLayout>
+</merge>
+

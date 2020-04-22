@@ -1,8 +1,9 @@
 package com.aptopayments.sdk.utils
 
-import com.aptopayments.core.extension.add
-import java.util.*
-import java.util.concurrent.*
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.temporal.ChronoUnit
+import java.util.Timer
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 
 const val DELAY = 0L
@@ -13,10 +14,10 @@ class CountDown {
     private var timer: Timer? = null
 
     fun start(seconds: Int, fireBlock: (Int) -> Unit, endBlock: (Unit) -> Unit) {
-        val finishTime = Date().add(Calendar.SECOND, seconds)
+        val finishTime = LocalDateTime.now().plusSeconds(seconds.toLong())
         timer = Timer()
         timer?.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
-            val diffInMs = finishTime.time - Date().time
+            val diffInMs = LocalDateTime.now().until(finishTime, ChronoUnit.SECONDS)
             val diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMs)
             if (diffInSec <= 0) {
                 stop()

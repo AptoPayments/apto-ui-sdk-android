@@ -1,18 +1,16 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.getMonthYear
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.core.repository.transaction.TransactionListFilters
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.managecard.TransactionListItem
 import org.threeten.bp.LocalDate
-import java.text.SimpleDateFormat
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.ArrayList
 import java.util.Locale
 
@@ -55,8 +53,7 @@ internal class TransactionListViewModel constructor(
                 startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase(Locale.US))
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private val dateFormatter = SimpleDateFormat("MMMM, yyyy")
+    private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
     private var currentYear = 0
     private var currentMonth = 0
     private fun handleTransactions(transactionList: List<Transaction>, clearCurrent: Boolean) {
@@ -66,7 +63,8 @@ internal class TransactionListViewModel constructor(
                 if (clearCurrent) { currentYear = 0; currentMonth = 0; ArrayList() }
                 else transactionListItems.value as ArrayList<TransactionListItem>
         transactionList.forEach { transaction ->
-            val (month, year) = transaction.createdAt.getMonthYear()
+            val month = transaction.createdAt.monthValue
+            val year = transaction.createdAt.year
             if (month != currentMonth || year != currentYear) {
                 items.add(TransactionListItem.SectionHeader(dateFormatter.format(transaction.createdAt)))
                 currentMonth = month

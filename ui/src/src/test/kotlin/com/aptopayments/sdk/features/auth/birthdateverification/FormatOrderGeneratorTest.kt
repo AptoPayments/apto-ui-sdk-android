@@ -1,10 +1,12 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
 import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.ui.views.birthdate.DateFormatOrder
+import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
-import java.util.*
+import java.util.Locale
 import kotlin.test.assertEquals
 
 internal class FormatOrderGeneratorTest : AndroidTest() {

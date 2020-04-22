@@ -1,43 +1,39 @@
 package com.aptopayments.sdk.features.auth.inputphone
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
-import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 internal class InputPhoneViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel(), CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default
+    private val analyticsManager: AnalyticsServiceContract,
+    private val aptoPlatform: AptoPlatformProtocol
+) : BaseViewModel() {
 
-    var enableNextButton: MutableLiveData<Boolean> = MutableLiveData()
-    var state:  MutableLiveData<State> = MutableLiveData()
-    var verificationData: MutableLiveData<Verification> = MutableLiveData()
-    lateinit var phoneNumber: PhoneNumber
-    private val phoneNumberUtil = PhoneNumberUtil.getInstance()
+    private var phoneNumber = ""
+    private var countryCode = ""
+    private val _enableNextButton = MutableLiveData(false)
+    val enableNextButton = _enableNextButton as LiveData<Boolean>
+    val verificationData = MutableLiveData<Verification?>(null)
 
-    fun startVerificationUseCase(phoneNumberInput: String, countryCode: String) = launch {
-        state.postValue(State.IN_PROGRESS)
-        val parsedPhoneNumber = phoneNumberUtil.parse(phoneNumberInput, countryCode)
-        phoneNumber = PhoneNumber(parsedPhoneNumber.countryCode.toString(), parsedPhoneNumber.nationalNumber.toString())
-        AptoPlatform.startPhoneVerification(phoneNumber) {
-            it.either(::handleFailure, ::handleVerification)
+    fun onContinueClicked() {
+        showLoading()
+        val parsedPhoneNumber = PhoneNumberUtil.getInstance().parse(phoneNumber, countryCode)
+        val phoneNumber =
+            PhoneNumber(parsedPhoneNumber.countryCode.toString(), parsedPhoneNumber.nationalNumber.toString())
+        aptoPlatform.startPhoneVerification(phoneNumber) { result ->
+            result.either(::handleFailure) { handleVerification(it, phoneNumber) }
         }
     }
 
-    fun handleVerification(verification: Verification) {
-        state.postValue(State.COMPLETED)
+    private fun handleVerification(verification: Verification, phoneNumber: PhoneNumber) {
+        hideLoading()
         if (verification.status == VerificationStatus.PENDING) {
             verification.verificationDataPoint = phoneNumber.toStringRepresentation()
             verificationData.postValue(verification)
@@ -45,4 +41,13 @@ internal class InputPhoneViewModel constructor(
     }
 
     fun viewLoaded() = analyticsManager.track(Event.AuthInputPhone)
+
+    fun onPhoneChanged(phoneNumber: String, valid: Boolean) {
+        this.phoneNumber = phoneNumber
+        _enableNextButton.value = valid
+    }
+
+    fun onCountryChanged(countryCode: String) {
+        this.countryCode = countryCode
+    }
 }

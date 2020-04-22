@@ -8,9 +8,7 @@ import com.aptopayments.core.data.config.ProjectConfiguration
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.data.user.DataPoint
-import com.aptopayments.core.data.user.DataPointList
-import com.aptopayments.core.data.user.Verification
+import com.aptopayments.core.data.user.*
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
@@ -35,6 +33,12 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListContrac
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
+import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressContract
+import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateContract
+import com.aptopayments.sdk.features.inputdata.email.CollectUserEmailContract
+import com.aptopayments.sdk.features.inputdata.id.CollectUserIdContract
+import com.aptopayments.sdk.features.inputdata.name.CollectUserNameSurnameContract
+import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneContract
 import com.aptopayments.sdk.features.issuecard.IssueCardContract
 import com.aptopayments.sdk.features.kyc.KycStatusContract
 import com.aptopayments.sdk.features.maintenance.MaintenanceContract
@@ -59,7 +63,7 @@ internal interface FragmentFactory {
     fun inputEmailFragment(tag: String): InputEmailContract.View
     fun phoneVerificationFragment(verification: Verification, tag: String): PhoneVerificationContract.View
     fun emailVerificationFragment(verification: Verification, tag: String): EmailVerificationContract.View
-    fun birthdateVerificationFragment(primaryCredential: DataPoint, tag: String): BirthdateVerificationContract.View
+    fun birthdateVerificationFragment(verification: Verification, tag: String): BirthdateVerificationContract.View
     fun kycStatusFragment(kycStatus: KycStatus, cardID: String, tag: String): KycStatusContract.View
     fun noNetworkFragment(tag: String): NoNetworkContract.View
     fun maintenanceFragment(tag: String): MaintenanceContract.View
@@ -109,4 +113,23 @@ internal interface FragmentFactory {
     fun pdfRendererFragment(title: String, file: File, tag: String): PdfRendererContract.View
     fun createPasscodeFragment(tag: String): PasscodeContract.View
     fun changePasscodeFragment(tag: String): PasscodeContract.View
+    fun collectNameFragment(initialValue: NameDataPoint?, tag: String): CollectUserNameSurnameContract.View
+    fun collectEmailFragment(initialValue: EmailDataPoint?, tag: String): CollectUserEmailContract.View
+    fun collectIdDocumentFragment(
+        initialValue: IdDocumentDataPoint?,
+        config: IdDataPointConfiguration,
+        tag: String
+    ): CollectUserIdContract.View
+    fun collectAddressFragment(
+        initialValue: AddressDataPoint?,
+        config: AllowedCountriesConfiguration,
+        tag: String
+    ): CollectUserAddressContract.View
+    fun collectBirthdateFragment(initialValue: BirthdateDataPoint?, tag: String): CollectUserBirthdateContract.View
+    fun collectPhoneFragment(
+        initialValue: PhoneDataPoint?,
+        config: AllowedCountriesConfiguration,
+        tag: String
+    ): CollectUserPhoneContract.View
+
 }

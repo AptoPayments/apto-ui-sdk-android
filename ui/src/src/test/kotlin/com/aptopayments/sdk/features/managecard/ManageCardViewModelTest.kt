@@ -18,7 +18,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Spy
-import java.util.*
+import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -45,7 +45,7 @@ class ManageCardViewModelTest : AndroidTest() {
         }
         sut = ManageCardViewModel(TestDataProvider.provideCardId(), fetchTransactionsTaskQueue, analyticsManager, aptoUiSdkProtocol)
         `when`(mockCard.isWaitlisted).thenReturn(EXPECTED_WAITLIST_VALUE)
-        `when`(mockTransaction.createdAt).thenReturn(Date())
+        `when`(mockTransaction.createdAt).thenReturn(ZonedDateTime.now())
         `when`(mockTransaction.transactionId).thenReturn("")
     }
 
@@ -120,9 +120,7 @@ class ManageCardViewModelTest : AndroidTest() {
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, 1)
-        `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
+        `when`(newMockTransaction.createdAt).thenReturn(ZonedDateTime.now().plusMonths(1))
         newTransactions.add(newMockTransaction)
 
         val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
@@ -149,9 +147,8 @@ class ManageCardViewModelTest : AndroidTest() {
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.YEAR, 1)
-        `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
+        val date = ZonedDateTime.now().plusYears(1)
+        `when`(newMockTransaction.createdAt).thenReturn(date)
         newTransactions.add(newMockTransaction)
 
         val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
@@ -199,9 +196,8 @@ class ManageCardViewModelTest : AndroidTest() {
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
         val newMockTransaction: Transaction = mock(Transaction::class.java)
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, 1)
-        `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
+        val date = ZonedDateTime.now().plusMonths(1)
+        `when`(newMockTransaction.createdAt).thenReturn(date)
         newTransactions.add(newMockTransaction)
         newTransactions.add(mockTransaction)
 
@@ -279,9 +275,8 @@ class ManageCardViewModelTest : AndroidTest() {
         sut.transactions.observeForever(transactionsObserver)
         val currentTransactions: MutableList<Transaction> = mutableListOf()
         val currentMockTransaction: Transaction = mock(Transaction::class.java)
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, 1)
-        `when`(currentMockTransaction.createdAt).thenReturn(calendar.time)
+        val date = ZonedDateTime.now().plusMonths(1)
+        `when`(currentMockTransaction.createdAt).thenReturn(date)
         currentTransactions.add(currentMockTransaction)
         currentTransactions.add(mockTransaction)
         sut.transactions.value = currentTransactions
@@ -305,9 +300,8 @@ class ManageCardViewModelTest : AndroidTest() {
         val currentTransactions: MutableList<Transaction> = mutableListOf()
         currentTransactions.add(mockTransaction)
         val newMockTransaction: Transaction = mock(Transaction::class.java)
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, 1)
-        `when`(newMockTransaction.createdAt).thenReturn(calendar.time)
+        val date = ZonedDateTime.now().plusMonths(1)
+        `when`(newMockTransaction.createdAt).thenReturn(date)
         sut.transactions.value = currentTransactions
         val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(newMockTransaction)

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -25,7 +24,7 @@
         app:localize="auth_verify_birthdate_title" />
 
     <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_verification_code_header"
+        android:id="@+id/tv_birthdate_subtitle"
         style="@style/ThemeTwo.TextHeader"
         android:layout_below="@id/tv_birthdate_title"
         android:lineSpacingExtra="3sp"
@@ -35,41 +34,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_birthdate_title"
         app:localize="auth_verify_birthdate_explanation" />
 
-    <FrameLayout
-        android:id="@+id/container"
-        style="@style/ThemeTwo.TextInput"
+    <com.aptopayments.sdk.ui.views.birthdate.BirthdateView
+        android:id="@+id/birthdate_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-        android:layout_below="@id/tv_verification_code_header"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_corners"
-        android:elevation="2dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_verification_code_header">
-
-        <ViewStub
-            android:id="@+id/stub_dmy"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-            android:layout="@layout/birthdate_validator_dmy"
-            tools:visibility="visible" />
-
-        <ViewStub
-            android:id="@+id/stub_mdy"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-            android:layout="@layout/birthdate_validator_mdy"
-            tools:visibility="gone" />
-
-        <ViewStub
-            android:id="@+id/stub_ymd"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
-            android:layout="@layout/birthdate_validator_ymd"
-            tools:visibility="gone" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tv_birthdate_subtitle" />
 
     <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/continue_button"
@@ -77,6 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:localize="auth_verify_birthdate_call_to_action_title" />
+        app:localize="auth_verify_birthdate_call_to_action_title"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

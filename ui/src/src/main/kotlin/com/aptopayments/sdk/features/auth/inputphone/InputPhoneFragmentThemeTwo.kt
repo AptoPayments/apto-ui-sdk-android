@@ -1,24 +1,16 @@
 package com.aptopayments.sdk.features.auth.inputphone
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.TextUtils
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.user.Verification
-import com.aptopayments.core.data.user.VerificationStatus
-import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.observeNotNullable
+import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.core.ui.State
-import com.aptopayments.sdk.utils.AptoPhoneNumberWatcher
-import com.aptopayments.sdk.utils.ValidInputListener
-import com.aptopayments.sdk.utils.disableCountryPicker
+import com.aptopayments.sdk.ui.views.PhoneInputView
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_phone_input_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -27,12 +19,9 @@ import java.io.Serializable
 
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
 
-@VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
 internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.View {
 
     override var delegate: InputPhoneContract.Delegate? = null
-    private lateinit var validator: ValidInputListener
-    private lateinit var aptoPhoneNumberWatcher: AptoPhoneNumberWatcher
     private val viewModel: InputPhoneViewModel by viewModel()
     private lateinit var allowedCountriesList: List<Country>
 
@@ -47,118 +36,69 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
 
     override fun onPresented() {
         delegate?.configureStatusBar()
-        et_phone?.requestFocus()
+        phone_input?.requestPhoneFocus()
         showKeyboard()
     }
 
     override fun setupUI() {
         applyFontsAndColors()
-        configureInputPhoneView()
+        setupViews()
         setupToolBar()
+    }
+
+    private fun setupViews() {
+        phone_input.delegate = object : PhoneInputView.Delegate {
+            override fun onPhoneInputChanged(phoneNumber: String, valid: Boolean) {
+                viewModel.onPhoneChanged(phoneNumber, valid)
+            }
+
+            override fun onCountryChanged(countryCode: String) {
+                viewModel.onCountryChanged(countryCode)
+            }
+        }
+        phone_input.setAllowedCountriesIsoCode(allowedCountriesList.map { it.isoCode })
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()
 
-    @SuppressLint("SetTextI18n")
     private fun applyFontsAndColors() {
-        et_phone.hint = "auth_input_phone_hint".localized()
-        country_code_picker.contentColor = UIConfig.textSecondaryColor
-
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_phone_header)
             customizeFormLabel(tv_phone_label)
             customizeSubmitButton(continue_button)
-            customizeRoundedBackground(phone_in)
-            customizeEditText(et_phone)
+            customizeRoundedBackground(phone_input)
         }
-    }
-
-    private fun configureInputPhoneView() {
-        val allowedCountriesArrayList = ArrayList<String>()
-        for (country in allowedCountriesList.listIterator()) {
-            allowedCountriesArrayList.add(country.isoCode)
-        }
-        country_code_picker.setDefaultCountryUsingNameCode(allowedCountriesArrayList[0])
-        country_code_picker.resetToDefaultCountry()
-        country_code_picker.setCustomMasterCountries(TextUtils.join(",", allowedCountriesArrayList))
-        country_code_picker.setDialogBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
-        country_code_picker.setDialogSearchEditTextTintColor(UIConfig.textPrimaryColor)
-        country_code_picker.setDialogTextColor(UIConfig.textPrimaryColor)
-        disableCountryPicker(allowedCountriesList.size == 1, country_code_picker)
     }
 
     private fun setupToolBar() {
         tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        delegate?.configureToolbar(tb_llsdk_toolbar, null, BaseActivity.BackButtonMode.Back(null))
     }
 
     override fun setupListeners() {
         super.setupListeners()
-
-        validator = object : ValidInputListener {
-            override fun onValidInput(isValid: Boolean) {
-                updateButtonState(isValid)
-            }
-        }
-        aptoPhoneNumberWatcher = AptoPhoneNumberWatcher(allowedCountriesList[0].isoCode, validator)
-        et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
-        country_code_picker.setOnCountryChangeListener {
-            country_code_picker?.let {
-                updatePhoneNumberWatcher(it.selectedCountryNameCode)
-            }
-        }
-        continue_button.apply {
-            isEnabled = false
-            setOnClickListener { handleButtonClick() }
-        }
-    }
-
-    private fun updateButtonState(continueButtonEnabled: Boolean?) {
-        continueButtonEnabled?.let {
-            continue_button.isEnabled = continueButtonEnabled
-        }
+        continue_button.setOnClickListener { onContinueButtonClicked() }
     }
 
     override fun setupViewModel() {
         viewModel.apply {
-            observe(enableNextButton, ::updateButtonState)
-            observe(state, ::updateProgressState)
-            observe(verificationData, ::updateVerificationState)
-            failure(failure) { handleFailure(it) }
+            observeNotNullable(enableNextButton) { continue_button.isEnabled = it }
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
+            observeNullable(verificationData, ::updateVerificationState)
+            observeNullable(failure) { handleFailure(it) }
         }
-    }
-
-    private fun updatePhoneNumberWatcher(countryCode: String?) = countryCode?.let {
-        aptoPhoneNumberWatcher.countryCode = countryCode
-        et_phone.addTextChangedListener(aptoPhoneNumberWatcher)
     }
 
     private fun updateVerificationState(verification: Verification?) {
         verification?.let {
-            hideLoading()
-            if (it.status == VerificationStatus.PENDING) {
-                hideKeyboard()
-                delegate?.onPhoneVerificationStarted(verification)
-            }
+            delegate?.onPhoneVerificationStarted(verification)
         }
     }
 
-    private fun updateProgressState(state: State?) {
-        val isInProgress = state == State.IN_PROGRESS
-        if (isInProgress) showLoading() else hideLoading()
-    }
-
-    private fun handleButtonClick() {
-        val phoneNumber = et_phone.text.toString()
-        val countryCode = aptoPhoneNumberWatcher.countryCode
-        showLoading()
+    private fun onContinueButtonClicked() {
         hideKeyboard()
-        viewModel.startVerificationUseCase(phoneNumber, countryCode)
+        viewModel.onContinueClicked()
     }
 
     override fun onBackPressed() {
@@ -172,12 +112,7 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
             this.arguments = Bundle().apply { putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountries as Serializable) }
         }
 
-        private fun listOrDefault(allowedCountriesList: List<Country>): List<Country> {
-            return if (allowedCountriesList.isNotEmpty()) allowedCountriesList else {
-                val defaultCountryList = ArrayList<Country>()
-                defaultCountryList.add(Country("US"))
-                defaultCountryList
-            }
-        }
+        private fun listOrDefault(allowedCountriesList: List<Country>) =
+            allowedCountriesList.ifEmpty { listOf(Country("US")) }
     }
 }

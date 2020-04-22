@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
+import com.aptopayments.core.extension.formatForTransactionList
 import com.aptopayments.core.extension.toCapitalized
-import com.aptopayments.core.extension.toTransactionListFormat
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.data.transaction.iconResource
 import com.aptopayments.sdk.core.extension.invisibleIf
@@ -198,7 +198,7 @@ internal open class TransactionListAdapter(
             }
 
             val declinedHeader = transaction.state.toLocalizedString()
-            val date = transaction.createdAt.toTransactionListFormat()
+            val date = transaction.createdAt.formatForTransactionList()
             view.tv_transaction_description.text = "$declinedHeader $date"
 
             view.tv_transaction_amount.setTextColor(UIConfig.uiErrorColor)
@@ -211,7 +211,7 @@ internal open class TransactionListAdapter(
                 view.iv_icon.setBackgroundResource(R.drawable.circle)
                 view.iv_icon.background?.setTint(UIConfig.uiTertiaryColor)
             }
-            view.tv_transaction_description.text = transaction.createdAt.toTransactionListFormat()
+            view.tv_transaction_description.text = transaction.createdAt.formatForTransactionList()
             view.tv_transaction_amount.setTextColor(UIConfig.textPrimaryColor)
         }
     }

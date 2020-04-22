@@ -8,11 +8,15 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.AfterClass
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 import org.mockito.Mock
-import java.util.*
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
+import java.util.TimeZone
 
 private const val representation = "$ 10.11"
 private const val DOLLAR = "$"
@@ -46,7 +50,6 @@ internal class TransactionDetailsViewModelTest : UnitTest(){
         sut = TransactionDetailsViewModel(transaction, analyticsManager)
     }
 
-
     @Test
     fun `when viewLoaded then track is called`() {
         sut.viewLoaded()
@@ -74,10 +77,11 @@ internal class TransactionDetailsViewModelTest : UnitTest(){
 
     @Test
     fun `createdAt is correctly formatted`() {
-        val year = 2020
-        whenever(transaction.createdAt).thenReturn(Date(year -1900,1,14, 17,22))
+        val date = ZonedDateTime.of(2020, 2, 14, 17, 22, 0, 0, ZoneOffset.UTC)
 
-        assertEquals(sut.createdAt, "Feb 14, 2020 5:22 PM")
+        whenever(transaction.createdAt).thenReturn(date)
+
+        assertEquals(sut.createdAt, "Feb 14, 2020 7:22 PM")
     }
 
     @Test
@@ -226,5 +230,22 @@ internal class TransactionDetailsViewModelTest : UnitTest(){
     private fun configureLocalAmountCurrency(currency: String) {
         whenever(transaction.localAmount).thenReturn(localAmount)
         whenever(localAmount.currency).thenReturn(currency)
+    }
+
+    companion object {
+        private lateinit var timezone: TimeZone
+
+        @BeforeClass
+        @JvmStatic
+        fun beforeClass() {
+            timezone = TimeZone.getDefault()
+            TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"))
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun afterClass() {
+            TimeZone.setDefault(timezone)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
+import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.sdk.core.platform.FragmentDelegate
 
@@ -10,7 +11,7 @@ internal interface BirthdateVerificationContract {
     }
 
     interface Delegate : FragmentDelegate {
-        fun onBirthdateVerificationPassed(primaryCredentialVerification: Verification, birthdateVerification: Verification)
+        fun onBirthdateVerificationPassed(dataPoint: DataPoint)
         fun onBackFromBirthdateVerification()
     }
 }

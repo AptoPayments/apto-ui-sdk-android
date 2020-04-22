@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.auth.verification
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.animation.AnimationUtils
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPoint
 import com.aptopayments.core.data.user.EmailDataPoint
@@ -20,6 +19,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
+import com.aptopayments.sdk.utils.shake
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_verification_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -73,6 +73,7 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
 
     private fun applyFontsAndColors() {
         tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
+        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_verification_code_title)
@@ -128,7 +129,7 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
                             "auth_verify_email_error_wrong_code_title".localized(),
                             "auth_verify_email_error_wrong_code_message".localized()
                         )
-                        apto_pin_view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                        apto_pin_view.shake()
                         apto_pin_view.text?.clear()
                         apto_pin_view.clearFocus()
                     }

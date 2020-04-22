@@ -11,7 +11,7 @@
     <style name="AppTheme.Translucent" parent="AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -106,6 +106,19 @@
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginTop">@dimen/llsdk_title_bottom_margin</item>
+    </style>
+
+    <style name="TextInputEditText">
+        <item name="background">@android:color/transparent</item>
+        <item name="android:layout_marginBottom">@dimen/llsdk_title_bottom_margin</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:maxLength">60</item>
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
+    </style>
+
+    <style name="TextInputEditText.Name" parent="TextInputEditText">
+        <item name="android:inputType">textCapWords|textNoSuggestions</item>
     </style>
 
     <style name="ThemeTwo.ContinueButton" parent="ThemeTwo">

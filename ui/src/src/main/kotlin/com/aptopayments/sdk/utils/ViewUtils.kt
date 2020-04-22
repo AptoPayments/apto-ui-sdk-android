@@ -3,12 +3,10 @@ package com.aptopayments.sdk.utils
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
-import com.hbb20.CountryCodePicker
 
 object ViewUtils {
 
@@ -59,15 +57,3 @@ object ViewUtils {
     }
 }
 
-fun runOnUiThreadAfter(delay: Long, activity: Activity?, process: () -> Unit) {
-    Handler().postDelayed({
-        activity?.runOnUiThread { Runnable {
-            process()
-        } }
-    }, delay)
-}
-
-fun disableCountryPicker(disable: Boolean, countryCodePicker: CountryCodePicker) {
-    countryCodePicker.setCcpClickable(!disable)
-    if (disable) countryCodePicker.setArrowSize(1)
-}

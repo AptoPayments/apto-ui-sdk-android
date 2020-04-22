@@ -4,7 +4,6 @@ import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.MCC.Icon.FOOD
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.ISO8601
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.nhaarman.mockitokotlin2.given
@@ -13,6 +12,8 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Spy
 import org.threeten.bp.LocalDate
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -32,7 +33,7 @@ class TransactionListViewModelTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         sut = TransactionListViewModel(analyticsManager)
-        given { mockTransaction.createdAt }.willReturn(ISO8601.parseDate("2019-01-15"))
+        given { mockTransaction.createdAt }.willReturn(ZonedDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC))
     }
 
     @Test
