@@ -1,18 +1,17 @@
 package com.aptopayments.sdk.ui.views
 
 import android.animation.ArgbEvaluator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
 import android.widget.RelativeLayout
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.card.Money
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.fundingsources.Balance
+import com.aptopayments.core.extension.localized
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.interpolateTextSize
 import com.aptopayments.sdk.core.extension.loadFromUrl
-import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.view_balance_view_theme_two.view.*
 import java.net.URL
@@ -27,7 +26,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         setupUI()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupUI() {
         setupTheme()
     }

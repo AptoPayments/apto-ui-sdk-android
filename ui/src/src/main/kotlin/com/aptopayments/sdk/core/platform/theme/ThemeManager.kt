@@ -19,7 +19,7 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.config.UITheme
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.google.android.material.appbar.AppBarLayout
 
@@ -80,6 +80,12 @@ interface ThemeManager {
                 item.icon = icon
             }
         }
+
+    fun customizeMenuLayoutImage(layoutContainer: ViewGroup) {
+        layoutContainer.findViewById<ImageView>(R.id.menu_image)?.let {
+            DrawableCompat.setTint(it.drawable, UIConfig.iconTertiaryColor)
+        }
+    }
 }
 
 fun themeManager(): ThemeManager {

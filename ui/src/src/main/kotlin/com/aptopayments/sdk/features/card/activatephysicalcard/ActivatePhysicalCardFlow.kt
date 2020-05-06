@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.exception.Failure
@@ -14,12 +13,10 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivateP
 import com.aptopayments.sdk.features.card.setpin.SetPinFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.MessageBanner
-import java.lang.reflect.Modifier
 
 private const val ACTIVATE_PHYSICAL_CARD_TAG = "ActivatePhysicalCardFragment"
 private const val ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG = "ActivatePhysicalCardSuccessFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ActivatePhysicalCardFlow (
         var card: Card,
         var onBack: (Unit) -> Unit,

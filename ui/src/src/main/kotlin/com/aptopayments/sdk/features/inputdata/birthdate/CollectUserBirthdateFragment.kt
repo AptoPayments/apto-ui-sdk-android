@@ -5,8 +5,9 @@ import android.view.View
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.BirthdateDataPoint
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.birthdate.BirthdateView
@@ -42,7 +43,7 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
     private fun hasBirthdateSet() = initialValue?.birthdate != null && birthdate_view.getDate() == null
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
     }
 
     override fun setupViewModel() {
@@ -92,8 +93,12 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(tb_llsdk_toolbar, null, BaseActivity.BackButtonMode.Back(null))
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder()
+                .setPrimaryColors()
+                .build()
+        )
     }
 
     companion object {

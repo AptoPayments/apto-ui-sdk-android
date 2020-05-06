@@ -1,12 +1,8 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.PorterDuff
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Switch
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.FeatureType.*
@@ -34,13 +30,11 @@ import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
-import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
 private const val CARD_PRODUCT_KEY = "CARD_PRODUCT"
 private const val PROJECT_CONFIGURATION_KEY = "PROJECT_CONFIGURATION"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContract.View {
 
     private lateinit var card: Card
@@ -62,9 +56,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun onPresented() {
         super.onPresented()
-        activity?.window?.let {
-            themeManager().customizeSecondaryNavigationStatusBar(it)
-        }
+        customizeSecondaryNavigationStatusBar()
     }
 
     override fun setupViewModel() {
@@ -179,9 +171,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_toolbar_title.text = "card_settings.settings.title".localized()
+        tv_toolbar_title.localizedText = "card_settings.settings.title"
         (rl_settings as SectionHeaderViewTwo).set(
                 title = "card_settings.settings.settings.title".localized()
         )

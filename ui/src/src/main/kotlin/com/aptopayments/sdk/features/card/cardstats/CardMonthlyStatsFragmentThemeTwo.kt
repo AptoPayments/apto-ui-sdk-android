@@ -1,21 +1,14 @@
 package com.aptopayments.sdk.features.card.cardstats
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.widget.TextView
-import androidx.annotation.VisibleForTesting
 import androidx.viewpager2.widget.ViewPager2
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.invisibleIf
-import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.extension.yearToString
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.fragment_card_monthly_stats.*
@@ -23,11 +16,9 @@ import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
-import java.lang.reflect.Modifier
 
 private const val CARD_ID_KEY = "CARD_ID"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlyStatsContract.View,
     CardMonthlyStatsAdapter.Delegate {
 
@@ -53,11 +44,6 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun setupUI() {
         with(themeManager()) {
             customizeTimestamp(title_previous_month)
@@ -68,15 +54,18 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarSecondaryColor)
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = "stats.monthly_spending.title".localized()
-                .replace("<<YEAR>>", LocalDate.now().yearToString()),
-            backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder()
+                .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
+                .title(getToolbarTitle())
+                .setSecondaryColors()
+                .build()
         )
     }
+
+    private fun getToolbarTitle() = "stats.monthly_spending.title".localized()
+        .replace("<<YEAR>>", LocalDate.now().yearToString())
 
     override fun setupViewModel() {
         viewModel.apply { failure(failure) { handleFailure(it) } }

@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.disclaimer
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.workflowaction.WorkflowAction
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationShowDisclaimer
@@ -12,11 +11,9 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import org.json.JSONObject
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val DISCLAIMER_TAG = "DisclaimerFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class DisclaimerFlow (
         private var actionConfiguration: WorkflowActionConfigurationShowDisclaimer,
         private var workflowAction: WorkflowAction,

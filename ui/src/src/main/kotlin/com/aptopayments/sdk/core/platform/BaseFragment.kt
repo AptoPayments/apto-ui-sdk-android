@@ -2,10 +2,8 @@ package com.aptopayments.sdk.core.platform
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
@@ -17,11 +15,9 @@ import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.ViewUtils
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val TAG_KEY = "APTO_TAG_KEY"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponent {
 
     abstract fun layoutId(): Int
@@ -40,7 +36,6 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        setHasOptionsMenu(true)
         return inflater.inflate(layoutId(), container, false)
     }
 
@@ -81,14 +76,6 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     internal fun requestPermission(permission: String, onResult: (Boolean) -> Unit) =
             (activity as? BaseActivity)?.requestPermission(permission, onResult)
-
-    internal fun refreshMenuOptions() = (activity as? BaseActivity)?.invalidateOptionsMenu()
-
-    internal fun setupMenuItem(menu: Menu?, id: Int) {
-        menu?.findItem(id)?.actionView?.setOnClickListener {
-            menu.performIdentifierAction(id, 0)
-        }
-    }
 
     internal fun firstTimeCreated(savedInstanceState: Bundle?) = savedInstanceState == null
 
@@ -135,5 +122,13 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     private fun setBackground() {
         view?.setBackgroundColor(backgroundColor())
+    }
+
+    fun customizePrimaryNavigationStatusBar() {
+        activity?.window?.let { themeManager().customizeStatusBar(it) }
+    }
+
+    fun customizeSecondaryNavigationStatusBar() {
+        activity?.window?.let { themeManager().customizeSecondaryNavigationStatusBar(it) }
     }
 }

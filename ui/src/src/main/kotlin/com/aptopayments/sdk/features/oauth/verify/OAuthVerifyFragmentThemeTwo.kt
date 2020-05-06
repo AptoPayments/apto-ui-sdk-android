@@ -1,14 +1,9 @@
 package com.aptopayments.sdk.features.oauth.verify
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.VisibleForTesting
 import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPointList
@@ -17,21 +12,19 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_verify_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import kotlinx.android.synthetic.main.layout_menu_update_personal_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val DATA_POINTS_KEY = "DATA_POINTS"
 private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
 private const val TOKEN_ID_KEY = "OAUTH_TOKEN_ID"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_verify_theme_two
@@ -40,7 +33,6 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     private lateinit var dataPoints: DataPointList
     private lateinit var allowedBalanceType: AllowedBalanceType
     private lateinit var tokenId: String
-    private var menu: Menu? = null
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
@@ -51,27 +43,15 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_update_personal_details, menu)
-        setupMenuItem(menu, R.id.menu_update_personal_details)
-        if(this.menu == null) this.menu = menu
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_update_personal_details) {
-            showLoading()
-            viewModel.retrieveUpdatedUserData(allowedBalanceType, tokenId) {
-                it.userData?.let { dataPointList -> dataPoints = dataPointList }
-                hideLoading()
-            }
-            return true
+    private fun onUpdatePersonalDetails() {
+        showLoading()
+        viewModel.retrieveUpdatedUserData(allowedBalanceType, tokenId) {
+            it.userData?.let { dataPointList -> dataPoints = dataPointList }
+            hideLoading()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun setupViewModel() {
@@ -120,12 +100,16 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        tb_llsdk_toolbar?.apply {
+            inflateMenu(R.menu.menu_update_personal_details)
+            menu_container_update_personal.setOnClickListener { onUpdatePersonalDetails() }
+            configure(
+                activity,
+                ToolbarConfiguration.Builder()
+                    .backgroundColor(UIConfig.uiNavigationPrimaryColor)
+                    .build()
+            )
+        }
     }
 
     private fun setupTheme() {
@@ -155,16 +139,14 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
         tv_delivery_address_instructions.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun styleMenuItem() {
         tb_llsdk_toolbar.post {
             tb_llsdk_toolbar.findViewById<TextView>(R.id.tv_menu_update_personal_details)?.let {
                 themeManager().customizeMenuItem(it)
-                it.text = "select_balance_store_oauth_confirm_refresh_title".localized()
                 it.setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
                 it.setTextColor(UIConfig.textButtonColor)
             }
-            tb_llsdk_toolbar.findViewById<ImageView>(R.id.iv_menu_refresh)?.let {
+            tb_llsdk_toolbar.findViewById<ImageView>(R.id.menu_image)?.let {
                 DrawableCompat.setTint(it.drawable, UIConfig.uiPrimaryColor)
             }
         }

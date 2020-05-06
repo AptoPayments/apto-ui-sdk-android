@@ -1,16 +1,13 @@
 package com.aptopayments.sdk.features.kyc
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
-import java.lang.reflect.Modifier
 
 private const val KYC_STATUS_TAG = "KycStatusFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class KycStatusFlow(
         var card: Card,
         var onClose: (Unit) -> Unit,

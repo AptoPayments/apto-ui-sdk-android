@@ -1,15 +1,16 @@
 package com.aptopayments.sdk.features.transactiondetails
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,6 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
@@ -34,14 +34,12 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_transaction_details_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.lang.reflect.Modifier
 import kotlin.math.abs
 
 private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
 private const val TRANSACTION_KEY = "TRANSACTION"
 private const val ZOOM = 16f
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionDetailsContract.View, OnMapReadyCallback {
 
     override var delegate: TransactionDetailsContract.Delegate? = null
@@ -53,18 +51,8 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun setUpArguments() {
         transaction = arguments!![TRANSACTION_KEY] as Transaction
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -114,7 +102,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
 
     override fun onPresented() {
         super.onPresented()
-        delegate?.configureSecondaryStatusBar()
+        customizeSecondaryNavigationStatusBar()
     }
 
     override fun setupViewModel() {
@@ -203,11 +191,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     }
 
     private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
-        )
+        toolbar.configure(activity, ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor)).build())
         toolbar.bringToFront()
     }
 
@@ -285,7 +269,6 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     private fun getArrowDrawable() =
         if (ll_expandable_section.isShown) R.drawable.ic_arrow_drop_up_black_24dp else R.drawable.ic_arrow_drop_down_black_24dp
 
-    @SuppressLint("SetTextI18n")
     fun setupTexts() {
         setAddressName()
         tv_transaction_description.text = viewModel.createdAt

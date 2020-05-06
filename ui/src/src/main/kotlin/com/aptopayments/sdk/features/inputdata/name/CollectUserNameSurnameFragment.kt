@@ -7,8 +7,9 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.NameDataPoint
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseActivity.BackButtonMode
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserNameBinding
@@ -86,13 +87,7 @@ internal class CollectUserNameSurnameFragment : BaseBindingFragment<FragmentColl
     }
 
     private fun setupToolBar(toolbar: Toolbar) {
-        toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
-        toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = toolbar,
-            title = "",
-            backButtonMode = BackButtonMode.Back(null)
-        )
+        toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupViewModel() {

@@ -1,13 +1,12 @@
 package com.aptopayments.sdk.ui.fragments.pdf
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.BackButtonMode
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.FileSharer
@@ -27,7 +26,6 @@ internal class PdfRendererFragment : BaseFragment(),
     private lateinit var file: File
     private lateinit var title: String
     private val fileSharer: FileSharer by inject()
-    private var menu: Menu? = null
 
     override fun layoutId() = R.layout.fragment_pdf_renderer
 
@@ -60,29 +58,20 @@ internal class PdfRendererFragment : BaseFragment(),
         setUpToolbar()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_pdf_renderer, menu)
-        setupMenuItem(menu, R.id.menu_pdf_share)
-        this.menu = menu
-        tintMenuItem()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     private fun tintMenuItem() {
-        menu?.let {
+        tb_llsdk_toolbar?.menu?.let {
             themeManager().customizeMenuImage(it.findItem(R.id.menu_pdf_share))
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+     private fun onMenuItemSelected(item: MenuItem) : Boolean{
+        return when (item.itemId) {
             R.id.menu_pdf_share -> {
                 share(file)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun share(file: File) {
@@ -92,14 +81,17 @@ internal class PdfRendererFragment : BaseFragment(),
     }
 
     private fun setUpToolbar() {
-        val toolbar = tb_llsdk_toolbar as Toolbar
-        toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarSecondaryColor)
-        delegate?.configureToolbar(
-            tb_llsdk_toolbar,
-            title,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
+        tb_llsdk_toolbar?.apply {
+            inflateMenu(R.menu.menu_pdf_renderer)
+            setOnMenuItemClickListener { onMenuItemSelected(it) }
+            tintMenuItem()
+        }
+        tb_llsdk_toolbar.configure(activity,
+            ToolbarConfiguration.Builder()
+                .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
+                .title(title)
+                .setSecondaryColors()
+                .build()
         )
     }
 

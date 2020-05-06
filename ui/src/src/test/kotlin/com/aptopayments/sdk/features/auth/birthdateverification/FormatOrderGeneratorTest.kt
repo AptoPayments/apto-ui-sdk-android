@@ -3,9 +3,8 @@ package com.aptopayments.sdk.features.auth.birthdateverification
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.ui.views.birthdate.DateFormatOrder
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
-import org.junit.AfterClass
-import org.junit.BeforeClass
 import org.junit.Test
+import org.robolectric.annotation.Config
 import java.util.Locale
 import kotlin.test.assertEquals
 
@@ -13,64 +12,41 @@ internal class FormatOrderGeneratorTest : AndroidTest() {
 
     val sut = FormatOrderGenerator(context())
 
-    @Test
+    @Test @Config(qualifiers = "en-rGB")
     fun whenUkThenDMY() {
-        Locale.setDefault(Locale.UK)
-
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.DMY)
     }
 
-    @Test
+    @Test @Config(qualifiers = "es-rES")
     fun whenSpainThenDMY() {
-        Locale.setDefault(Locale.forLanguageTag("es-ES"))
-
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.DMY)
     }
 
-    @Test
+    @Test @Config(qualifiers = "en-rUS")
     fun whenUsaThenMDY() {
-        Locale.setDefault(Locale.US)
 
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.MDY)
     }
 
-    @Test
+    @Test @Config(qualifiers = "ja-rJP")
     fun whenJapanThenYMD() {
-        Locale.setDefault(Locale.JAPAN)
-
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.YMD)
     }
 
-    @Test
+    @Test @Config(qualifiers = "zh-rCN")
     fun whenChinaThenYMD() {
         Locale.setDefault(Locale.CHINA)
 
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.YMD)
-    }
-
-    companion object {
-        private lateinit var configuredLocale: Locale
-
-        @BeforeClass
-        @JvmStatic
-        fun beforeClass() {
-            configuredLocale = Locale.getDefault()
-        }
-
-        @AfterClass
-        @JvmStatic
-        fun afterClass() {
-            Locale.setDefault(configuredLocale)
-        }
     }
 }

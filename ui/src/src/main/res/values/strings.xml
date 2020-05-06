@@ -110,7 +110,7 @@
 
     <!-- Physical Card Activation Success -->
     <string name="manage_card_get_pin_nue_title">Congratulations!</string>
-    <string name="manage_card_get_pin_nue_explanation">Your physical Shift Card has been enabled. We\'ve set a random PIN code for your card.</string>
+    <string name="manage_card_get_pin_nue_explanation">Your physical Apto Card has been enabled. We\'ve set a random PIN code for your card.</string>
     <string name="manage_card_get_pin_nue_call_to_action_title">Get my PIN</string>
     <string name="manage_card_get_pin_nue_footer">PIN is obtained via phone call and charge may be applied by your mobile network operator.</string>
 
@@ -279,7 +279,7 @@
 
     <!-- get pin screen -->
     <string name="get_pin_title">Congratulations!</string>
-    <string name="get_pin_subtitle">Your physical Shift Card has been enabled. We\'ve set a random PIN code for your card.</string>
+    <string name="get_pin_subtitle">Your physical Apto Card has been enabled. We\'ve set a random PIN code for your card.</string>
     <string name="get_pin_button">GET MY PIN</string>
     <string name="get_pin_disclaimer">PIN is obtained via phone call and charges may be applied by your mobile network operator.</string>
 
@@ -408,7 +408,7 @@
     <string name="manage_card_kyc_state_rejected">Your application has been rejected.</string>
     <string name="manage_card_kyc_state_temporary_error">Thank you for your application.\nWe are reviewing your information.\nWe will be in touch via email momentarily.</string>
     <string name="manage_card_kyc_call_to_action_title">Refresh</string>
-    <string name="manage_card_kyc_footer">Have questions? Please contact &lt;a href="mailto:support@shiftpayments.com">Customer Support&lt;/a></string>
+    <string name="manage_card_kyc_footer">Have questions? Please contact &lt;a href="mailto:support@aptopayments.com">Customer Support&lt;/a></string>
     <string name="account_management_funding_source_added">Funding source added</string>
 
     <!-- Manage Card screen -->
@@ -480,7 +480,7 @@
 
     <!-- Enable physical card banner -->
     <string name="enable_physical_card_title">Enable your physical card</string>
-    <string name="enable_physical_card_body">Received your physical Shift Card? Nice! Tap here to enable it.</string>
+    <string name="enable_physical_card_body">Received your physical Apto Card? Nice! Tap here to enable it.</string>
     <string name="enable_physical_card_accept">Enable now</string>
     <string name="account_settings_help_title">Support</string>
     <string name="account_settings_help_contact_support_title"><![CDATA[Help & info]]></string>

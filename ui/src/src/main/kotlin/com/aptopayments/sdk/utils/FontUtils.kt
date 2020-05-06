@@ -3,7 +3,7 @@ package com.aptopayments.sdk.utils
 import android.graphics.Typeface
 import java.util.*
 
-object FontsUtil {
+internal object FontsUtil {
 
     private val mFontsMap = HashMap<FontType, Typeface>()
 

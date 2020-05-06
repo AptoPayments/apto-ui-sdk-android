@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -9,12 +8,10 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
-import java.lang.reflect.Modifier
 
 private const val TRANSACTION_LIST_TAG = "TransactionListFragment"
 private const val TRANSACTION_DETAILS_TAG = "TransactionDetailsFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class TransactionListFlow(
         private val cardId: String,
         private val config: TransactionListConfig,

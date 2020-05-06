@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.cardstats
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.exception.Failure
@@ -15,12 +14,10 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListFlow
 import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
 import org.koin.core.inject
 import org.threeten.bp.LocalDate
-import java.lang.reflect.Modifier
 
 private const val CARD_MONTHLY_STATS_TAG = "CardMonthlyStatsFragment"
 private const val PDF_RENDERER_TAG = "PdfRendererFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardStatsFlow (
         var cardId: String,
         var onBack: () -> Unit,

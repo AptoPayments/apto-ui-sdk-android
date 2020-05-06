@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.account
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
@@ -17,12 +16,10 @@ import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.utils.MessageBanner
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val ACCOUNT_SETTINGS_TAG = "AccountSettingsFragment"
 private const val NOTIFICATION_PREFERENCES_TAG = "NotificationPreferencesFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AccountSettingsFlow(
         private val cardId: String,
         private val contextConfiguration: ContextConfiguration,

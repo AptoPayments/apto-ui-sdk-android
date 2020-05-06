@@ -1,26 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_container_update_personal"
     android:layout_width="wrap_content"
     android:layout_height="32dp"
     android:orientation="horizontal"
     android:paddingEnd="10dp">
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_menu_update_personal_details"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_corners"
-        tools:backgroundTint="@color/colorPrimary"
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:textAlignment="center"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        app:localize="select_balance_store_oauth_confirm_refresh_title"
+        tools:backgroundTint="@color/colorPrimary" />
 
     <ImageView
-        android:id="@+id/iv_menu_refresh"
+        android:id="@+id/menu_image"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"

@@ -1,14 +1,10 @@
 package com.aptopayments.sdk.features.card.setpin
 
-import android.annotation.SuppressLint
-import android.view.Menu
-import android.view.MenuInflater
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.TextInputWatcher
@@ -17,11 +13,9 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_set_pin_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val PIN_CHARACTERS = 4
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
 
     private val viewModel: SetPinViewModel by viewModel()
@@ -37,13 +31,8 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         pin_view.text?.clear()
         pin_view.requestFocus()
         showKeyboard()
@@ -55,10 +44,9 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         setupToolBar()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
-        tv_set_pin_title.text = "manage_card.set_pin.title".localized()
-        tv_set_pin_explanation.text = "manage_card.set_pin.explanation".localized()
+        tv_set_pin_title.localizedText = "manage_card.set_pin.title"
+        tv_set_pin_explanation.localizedText = "manage_card.set_pin.explanation"
     }
 
     private fun setupTheme() {
@@ -69,10 +57,7 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         }
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Close(null))
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()

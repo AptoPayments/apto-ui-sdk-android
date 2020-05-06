@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/llsdk_toolbar_height"
         android:minHeight="?attr/actionBarSize"
-        app:theme="@style/AppTheme.Toolbar"
         app:popupTheme="?attr/llsdk_toolbarPopupTheme" />
 
 </com.google.android.material.appbar.AppBarLayout>

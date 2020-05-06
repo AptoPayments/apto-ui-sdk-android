@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.card.activatephysicalcard.activate
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.ActivatePhysicalCardResult
 import com.aptopayments.core.data.card.ActivatePhysicalCardResultType
 import com.aptopayments.core.data.card.Card
@@ -11,8 +10,9 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.TextInputWatcher
@@ -21,12 +21,10 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val PIN_CHARACTERS = 6
 private const val CARD_KEY = "CARD"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePhysicalCardContract.View {
 
     private val viewModel: ActivatePhysicalCardViewModel by viewModel()
@@ -47,13 +45,8 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         apto_pin_view.requestFocus()
         showKeyboard()
     }
@@ -71,11 +64,7 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
         }
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()

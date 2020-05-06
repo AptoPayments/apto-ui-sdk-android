@@ -1,16 +1,13 @@
 package com.aptopayments.sdk.features.voip
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
-import java.lang.reflect.Modifier
 
 private const val VOIP_TAG = "VoipFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class VoipFlow (
         val cardId: String,
         val action: Action,

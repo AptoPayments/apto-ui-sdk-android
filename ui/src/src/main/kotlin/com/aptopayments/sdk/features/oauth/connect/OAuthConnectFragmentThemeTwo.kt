@@ -2,9 +2,6 @@ package com.aptopayments.sdk.features.oauth.connect
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.Menu
-import android.view.MenuInflater
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.data.oauth.OAuthAttemptStatus.FAILED
@@ -12,9 +9,10 @@ import com.aptopayments.core.data.oauth.OAuthAttemptStatus.PASSED
 import com.aptopayments.core.data.workflowaction.AllowedBalanceType
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.loadFromUrl
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.oauth.OAuthConfig
@@ -24,7 +22,6 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_connect_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 import java.net.URL
 
 private const val TITLE_KEY = "TITLE"
@@ -35,7 +32,6 @@ private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
 private const val ASSET_URL_KEY = "ASSET_URL"
 private const val ERROR_MESSAGE_KEYS_KEY = "ERROR_MESSAGE_KEYS"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_connect_theme_two
@@ -53,11 +49,6 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun setUpArguments() {
         title = arguments!![TITLE_KEY] as String
         explanation = arguments!![EXPLANATION_KEY] as String
@@ -68,11 +59,6 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
         errorMessageKeys = arguments!![ERROR_MESSAGE_KEYS_KEY] as? List<String>
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun setupViewModel() {
         viewModel.apply {
             failure(failure) { handleFailure(it) }
@@ -80,7 +66,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
     }
 
     override fun onResume() {
@@ -112,12 +98,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     private fun setupTexts() {

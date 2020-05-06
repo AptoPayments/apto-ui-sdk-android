@@ -8,8 +8,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.BackButtonMode
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.platform.BaseActivity.BackButtonMode.Back
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.managecard.EndlessRecyclerViewScrollListener
 import com.aptopayments.sdk.features.managecard.TransactionListItem
@@ -21,7 +23,6 @@ import java.lang.reflect.Modifier
 private const val CARD_KEY = "CARD"
 private const val CONFIG_KEY = "CONFIG"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionListContract.View,
         TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
     override var delegate: TransactionListContract.Delegate? = null
@@ -29,7 +30,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     override fun layoutId(): Int = R.layout.transaction_list_fragment_theme_two
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: TransactionListViewModel by viewModel()
+    private val viewModel: TransactionListViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var cardId: String
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var config: TransactionListConfig
     private lateinit var transactionListAdapter: TransactionListAdapter
@@ -59,13 +60,13 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        val title = config.mcc.toLocalizedString()
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = title,
-                backButtonMode = Back(title = null, color = UIConfig.textTopBarSecondaryColor)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder()
+                .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
+                .title(config.mcc.toLocalizedString())
+                .setSecondaryTertiaryColors()
+                .build()
         )
     }
 

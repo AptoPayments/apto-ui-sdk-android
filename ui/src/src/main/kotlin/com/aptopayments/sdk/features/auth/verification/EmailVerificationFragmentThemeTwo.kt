@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.auth.verification
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.DataPoint
@@ -9,11 +8,7 @@ import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.goneIf
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.visibleIf
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
@@ -45,7 +40,7 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         apto_pin_view?.requestFocus()
         showKeyboard()
     }
@@ -66,14 +61,11 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
 
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.EMAIL)
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
         tv_email_label.text = emailAddress
     }
 
     private fun applyFontsAndColors() {
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_verification_code_title)
@@ -85,11 +77,8 @@ internal class EmailVerificationFragmentThemeTwo : BaseFragment(), EmailVerifica
         }
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
-        toolbar = tb_llsdk_toolbar,
-        title = "",
-        backButtonMode = BaseActivity.BackButtonMode.Back(null)
-    )
+    private fun setupToolBar() =
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
 
     override fun setupListeners() {
         super.setupListeners()

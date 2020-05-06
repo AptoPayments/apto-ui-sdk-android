@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.maintenance
 
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.sdk.R
@@ -11,9 +10,7 @@ import com.aptopayments.sdk.core.ui.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_maintenance_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class MaintenanceFragmentThemeTwo : BaseFragment(), MaintenanceContract.View {
 
     private val networkHandler: NetworkHandler by inject()

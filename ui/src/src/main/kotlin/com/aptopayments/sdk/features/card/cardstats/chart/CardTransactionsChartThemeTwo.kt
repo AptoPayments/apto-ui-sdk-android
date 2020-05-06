@@ -6,7 +6,6 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aptopayments.core.data.card.Money
@@ -33,10 +32,8 @@ import kotlinx.android.synthetic.main.fragment_transactions_chart_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
-import java.lang.reflect.Modifier
 import java.util.Locale
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
         OnChartValueSelectedListener,
     CategoryListAdapter.Delegate {

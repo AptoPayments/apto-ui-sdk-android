@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.voip
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -9,23 +8,23 @@ import android.inputmethodservice.Keyboard
 import android.inputmethodservice.KeyboardView
 import android.media.AudioManager
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.hide
+import com.aptopayments.sdk.core.extension.observeNullable
+import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.fragment_voip_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val CARD_ID_KEY = "CARD_ID"
 private const val ACTION_KEY = "ACTION"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, KeyboardView.OnKeyboardActionListener {
 
     override var delegate: VoipContract.Delegate? = null
@@ -107,7 +106,6 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
         setupKeyboard()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTheme() {
         setActionTitle()
         with(themeManager()) {
@@ -148,14 +146,12 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
 
     private fun convertFromAsciiToString(ascii: Int) = ascii.toChar().toString()
 
-    @SuppressLint("SetTextI18n")
     private fun showNotInitiatedState() {
         tv_title.localizedText = "manage_card.get_pin_voip.title"
         tv_description.localizedText = "manage_card.get_pin_voip.message"
         updateCallActionButtonState(isCallEstablished = false)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun showRingingState() {
         tv_title.localizedText = "manage_card.get_pin_voip.title"
         tv_description.localizedText = "manage_card.get_pin_voip.message"

@@ -98,12 +98,10 @@ object AptoUiSdk : AptoUiSdkProtocol {
         flow.init { result ->
             result.either({
                 onError?.invoke(it)
-                Unit
             }) {
                 from.startActivity(CardActivity.callingIntent(from))
                 from.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 onSuccess?.invoke()
-                Unit
             }
         }
     }

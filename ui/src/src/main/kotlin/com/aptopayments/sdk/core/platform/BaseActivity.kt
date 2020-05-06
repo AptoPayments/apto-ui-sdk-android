@@ -3,11 +3,8 @@ package com.aptopayments.sdk.core.platform
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.animation.AnimationUtils
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.aptopayments.core.data.config.UIConfig
@@ -56,65 +53,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     internal fun showKeyboard()  = ViewUtils.showKeyboard(this)
 
-    fun configureStatusBar() {
-        window?.let { themeManager().customizeStatusBar(it) }
-    }
-
-    fun configureSecondaryStatusBar() {
-        window?.let { themeManager().customizeSecondaryNavigationStatusBar(it) }
-    }
-
-    fun configureToolbar(
-            toolbar: Toolbar,
-            title: String?,
-            backButtonMode: BackButtonMode) {
-        if (supportActionBar != toolbar) {
-            setSupportActionBar(toolbar)
-        }
-        when (backButtonMode) {
-            is BackButtonMode.Back -> {
-                if (backButtonMode.title.isNullOrEmpty()) {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    val closeIcon = getDrawable(R.drawable.ic_nav_back_icon)
-                    closeIcon?.setColorFilterCompat(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
-                    supportActionBar?.setHomeAsUpIndicator(closeIcon)
-                }
-                // TODO: Handle the case where's there's a title to be shown as back button
-            }
-            is BackButtonMode.Close -> {
-                if (backButtonMode.title.isNullOrEmpty()) {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    val closeIcon = getDrawable(R.drawable.ic_close)
-                    closeIcon?.setColorFilterCompat(backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
-                    supportActionBar?.setHomeAsUpIndicator(closeIcon)
-                }
-                // TODO: Handle the case where's there's a title to be shown as close button
-            }
-            // TODO: Handle the "None" case
-        }
-        supportActionBar?.title = title
-    }
-
     override fun onBackPressed() {
         if (isLoading) return
         (supportFragmentManager.findFragmentById(
                 R.id.fragmentContainer) as? BaseFragment)?.onBackPressed() ?: super.onBackPressed()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                this.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    sealed class BackButtonMode {
-        class Back(val title: String?, @ColorInt val color: Int = UIConfig.textTopBarPrimaryColor) : BackButtonMode()
-        class Close(val title: String?, @ColorInt val color: Int = UIConfig.textTopBarPrimaryColor) : BackButtonMode()
-        object None : BackButtonMode()
     }
 
     internal fun checkPermission(permission: String): Int {

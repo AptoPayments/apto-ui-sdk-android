@@ -1,18 +1,15 @@
 package com.aptopayments.sdk.features.card.setpin
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
-import java.lang.reflect.Modifier
 
 private const val SET_PIN_TAG = "SetPinFragment"
 private const val CONFIRM_PIN_TAG = "ConfirmPinFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class SetPinFlow (
         var cardId: String,
         var onBack: (Unit) -> Unit,

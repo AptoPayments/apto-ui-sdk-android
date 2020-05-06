@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.disclaimer
 
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.core.extension.localized
@@ -13,11 +12,9 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import kotlinx.android.synthetic.main.fragment_disclaimer_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val CONTENT_KEY = "CONTENT"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.View,
         ContentPresenterContract.ViewActions {
     private lateinit var content: Content

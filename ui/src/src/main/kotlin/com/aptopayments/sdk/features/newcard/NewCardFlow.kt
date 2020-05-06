@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.newcard
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.CardApplication
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.workflowaction.*
@@ -12,9 +11,7 @@ import com.aptopayments.sdk.features.disclaimer.DisclaimerFlow
 import com.aptopayments.sdk.features.inputdata.CollectUserDataFlow
 import com.aptopayments.sdk.features.issuecard.IssueCardFlow
 import com.aptopayments.sdk.features.selectbalancestore.SelectBalanceStoreFlow
-import java.lang.reflect.Modifier
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class NewCardFlow (
         val cardProductId: String,
         val onBack: (Unit) -> Unit,

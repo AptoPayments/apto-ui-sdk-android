@@ -23,8 +23,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.graphics.ColorUtils
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
 import com.aptopayments.sdk.core.extension.setColor
 import com.aptopayments.sdk.core.ui.StatusBarUtil

@@ -20,7 +20,6 @@ import com.aptopayments.sdk.features.oauth.OAuthVerifyFlow
 import org.koin.core.inject
 import java.lang.reflect.Modifier
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class SelectBalanceStoreFlow (
         var actionConfiguration: WorkflowActionConfigurationSelectBalanceStore,
         var cardApplicationId: String,
@@ -28,8 +27,8 @@ internal class SelectBalanceStoreFlow (
         var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow() {
 
-    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
-    val analyticsManager: AnalyticsServiceContract by inject()
+    private val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+    private val analyticsManager: AnalyticsServiceContract by inject()
     private lateinit var verifyFlow: OAuthVerifyFlow
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {

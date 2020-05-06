@@ -2,9 +2,8 @@ package com.aptopayments.sdk.features.nonetwork
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.network.ApiCatalog
+import com.aptopayments.core.network.ApiKeyProvider
 import com.aptopayments.core.network.NetworkHandler
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -14,16 +13,14 @@ import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_no_network_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 import java.net.URI
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.scheduleAtFixedRate
 
 const val DELAY = 5000L
 const val PERIOD = 5000L
 const val PORT = 443
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View {
 
     override fun layoutId() = R.layout.fragment_no_network_theme_two
@@ -44,7 +41,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
 
     override fun onStart() {
         super.onStart()
-        val uri = URI(ApiCatalog.environment.baseUrl)
+        val uri = URI(ApiKeyProvider.environment.baseUrl)
         timer = Timer()
         timer.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
             networkHandler.checkNetworkReachability(uri.host, PORT)

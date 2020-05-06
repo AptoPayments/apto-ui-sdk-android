@@ -1,23 +1,19 @@
 package com.aptopayments.sdk.features.contentpresenter
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.content.Content
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.BackButtonMode
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.platform.BaseFragment
-import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.fragment_content_presenter_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
-import java.lang.reflect.Modifier
 
 private const val CONTENT_KEY = "CONTENT"
 private const val TITLE_KEY = "TITLE"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresenterContract.View {
     private lateinit var content: Content
     private lateinit var title: String
@@ -34,11 +30,6 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
     }
 
     override fun setupViewModel() {
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun setupUI() {
@@ -70,16 +61,17 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
 
     private fun setupTheme() {
         vw_content_presenter.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
-        activity?.window?.let { themeManager().customizeSecondaryNavigationStatusBar(it) }
+        customizeSecondaryNavigationStatusBar()
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = title,
-                backButtonMode = BaseActivity.BackButtonMode.Close(null, UIConfig.iconTertiaryColor)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder()
+                .backButtonMode(BackButtonMode.Close(UIConfig.iconTertiaryColor))
+                .title(title)
+                .setSecondaryTertiaryColors()
+                .build()
         )
     }
 

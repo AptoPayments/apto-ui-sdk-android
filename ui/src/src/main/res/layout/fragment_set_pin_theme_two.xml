@@ -9,12 +9,12 @@
         android:id="@+id/tb_llsdk_toolbar_layout"
         layout="@layout/include_toolbar_two" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_set_pin_title"
         style="@style/ThemeTwo.TextHeader"
         android:layout_marginTop="@dimen/llsdk_phone_input_wrapper_height" />
 
-    <TextView
+    <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/tv_set_pin_explanation"
         style="@style/ThemeTwo.TextInput"
         android:layout_below="@+id/tv_set_pin_title"

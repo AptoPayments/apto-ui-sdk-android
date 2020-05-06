@@ -2,7 +2,6 @@ package com.aptopayments.sdk.core.platform.flow
 
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
@@ -22,7 +21,6 @@ import org.koin.core.inject
 import java.lang.ref.WeakReference
 import java.lang.reflect.Modifier
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal interface FlowPresentable {
     fun startFragment(): BaseFragment?
     fun lastFragment(): BaseFragment?
@@ -31,7 +29,6 @@ internal interface FlowPresentable {
     fun onPresented()
 }
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal abstract class Flow : FlowPresentable, KoinComponent {
 
     val fragmentFactory: FragmentFactory by inject()
@@ -196,15 +193,6 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
             themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
         }
     }
-
-    fun configureStatusBar() = (rootActivity() as? BaseActivity)?.configureStatusBar() ?: Unit
-
-    fun configureSecondaryStatusBar() = (rootActivity() as? BaseActivity)?.configureSecondaryStatusBar() ?: Unit
-
-    fun configureToolbar(toolbar: Toolbar,
-                         title: String?,
-                         backButtonMode: BaseActivity.BackButtonMode) =
-            (rootActivity() as? BaseActivity)?.configureToolbar(toolbar, title, backButtonMode) ?: Unit
 
     protected fun notify(title: String, message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) {
         rootActivity()?.let { activity ->

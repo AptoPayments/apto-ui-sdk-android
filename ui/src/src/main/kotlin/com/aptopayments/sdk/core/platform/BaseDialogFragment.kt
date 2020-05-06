@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.aptopayments.core.exception.Failure
@@ -14,11 +13,9 @@ import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import org.koin.android.ext.android.inject
-import java.lang.reflect.Modifier
 
 private const val TAG_KEY = "APTO_TAG_KEY"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal abstract class BaseDialogFragment : DialogFragment() {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()

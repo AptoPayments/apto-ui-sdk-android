@@ -1,13 +1,12 @@
 package com.aptopayments.sdk.features.passcode
 
-import android.view.Menu
-import android.view.MenuInflater
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.extension.visibleIf
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.card.CardActivity
@@ -64,13 +63,8 @@ internal abstract class PasscodeFragment : BaseFragment(), PasscodeContract.View
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         pin_view.requestFocus()
         showKeyboard()
     }
@@ -99,12 +93,7 @@ internal abstract class PasscodeFragment : BaseFragment(), PasscodeContract.View
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     fun onPinEntered(currentPin: String) {

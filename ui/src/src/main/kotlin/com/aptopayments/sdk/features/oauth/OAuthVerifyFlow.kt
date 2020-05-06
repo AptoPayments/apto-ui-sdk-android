@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.oauth
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.data.user.DataPointList
@@ -12,11 +11,9 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 private const val OAUTH_VERIFY_TAG = "OAuthVerifyFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthVerifyFlow(
         val allowedBalanceType: AllowedBalanceType,
         val oauthAttempt: OAuthAttempt,

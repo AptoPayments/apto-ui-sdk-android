@@ -1,27 +1,24 @@
 package com.aptopayments.sdk.features.selectcountry
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_country_picker_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import java.io.Serializable
-import java.lang.reflect.Modifier
 import kotlin.properties.Delegates
 
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelectorContract.View,
         CountryListAdapter.Delegate {
     // Wrapper class required to be able to use Delegates.observable because the Delegates do not support null as the
@@ -86,7 +83,6 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
         tv_country_selector_header.text = delegate?.getCountrySelectorTitle()
         tv_country_selector_description.text = delegate?.getCountrySelectorDescription()
@@ -94,11 +90,7 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
     }
 
     private fun setupToolBar() {
-        delegate?.configureToolbar(
-                toolbar = tb_llsdk_toolbar,
-                title = null,
-                backButtonMode = BaseActivity.BackButtonMode.Back(null)
-        )
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
     }
 
     private fun setupRecyclerView() {

@@ -1,9 +1,6 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard.success
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.FeatureStatus
 import com.aptopayments.core.data.card.FeatureType
@@ -11,22 +8,16 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.remove
-import com.aptopayments.sdk.core.extension.show
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card_success_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val CARD_KEY = "CARD"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), ActivatePhysicalCardSuccessContract.View {
 
     private val viewModel: ActivatePhysicalCardSuccessViewModel by viewModel()
@@ -48,11 +39,6 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun handleFailure(failure: Failure?) {
         when (failure) {
             is NoTelephonyError -> {
@@ -68,7 +54,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
     }
 
     override fun setupUI() {
@@ -87,11 +73,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
         }
     }
 
-    private fun setupToolBar() = delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Close(null)
-    )
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()

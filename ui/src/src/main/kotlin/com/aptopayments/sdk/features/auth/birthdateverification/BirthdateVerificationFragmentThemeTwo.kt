@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.birthdate.BirthdateView
@@ -17,11 +17,9 @@ import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
-import java.lang.reflect.Modifier
 
 const val BIRTHDATE_VERIFICATION_BUNDLE = "birthdateVerificationBundle"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), BirthdateVerificationContract.View {
 
     override var delegate: BirthdateVerificationContract.Delegate? = null
@@ -37,7 +35,7 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
     }
 
     override fun setupViewModel() {
@@ -82,11 +80,9 @@ internal class BirthdateVerificationFragmentThemeTwo : BaseFragment(), Birthdate
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder().setPrimaryColors().build()
         )
     }
 

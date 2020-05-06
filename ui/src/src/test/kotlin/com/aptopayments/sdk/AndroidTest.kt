@@ -20,8 +20,7 @@ import org.robolectric.annotation.Config
  * @see UnitTest
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(application = AndroidTest.ApplicationStub::class,
-        sdk = [27])
+@Config(application = AndroidTest.ApplicationStub::class, sdk = [28])
 abstract class AndroidTest : AutoCloseKoinTest() {
 
     @Suppress("LeakingThis")

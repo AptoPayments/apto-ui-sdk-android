@@ -1,9 +1,7 @@
 package com.aptopayments.sdk.features.kyc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.KycStatus
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.extension.localized
@@ -16,12 +14,10 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
 import kotlinx.android.synthetic.main.fragment_kyc_status_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val KYC_STATUS_PARAMETER_KEY = "kyc_status"
 private const val CARD_ID_PARAMETER_KEY = "card_id"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View {
 
     override fun layoutId() = R.layout.fragment_kyc_status_theme_two
@@ -71,7 +67,6 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
         tv_kyc_footer.text = StringUtils.parseHtmlLinks("manage_card_kyc_footer".localized())
         tv_kyc_footer.movementMethod = LinkMovementMethod.getInstance()
@@ -89,7 +84,6 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateKycLabel() {
         val text = when (kycStatus) {
             KycStatus.REJECTED -> "manage_card.kyc.state.rejected"

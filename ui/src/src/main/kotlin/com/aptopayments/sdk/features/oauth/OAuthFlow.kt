@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.oauth
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.oauth.OAuthAttempt
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -10,12 +9,10 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
-import java.lang.reflect.Modifier
 
 private const val OAUTH_CONNECT_TAG = "OAuthConnectFragment"
 private const val WEB_BROWSER_TAG = "WebBrowserFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class OAuthFlow(
         val config: OAuthConfig,
         var onBack: (Unit) -> Unit,

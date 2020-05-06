@@ -24,7 +24,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerInside" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_native_content_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:gravity="center"
             tools:text="You're on top of the list" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_native_content_description_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:gravity="center"
             tools:text="Very soon you'll be able to spend your crypto" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_native_content_description_secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

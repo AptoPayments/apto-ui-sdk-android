@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 
-class SendEmailUtil(private val targetEmail: String = "support@shiftpayments.com",
+class SendEmailUtil(private val targetEmail: String = "support@aptopayments.com",
                     private val subject: String? = null,
                     private val body: String? = null) {
 

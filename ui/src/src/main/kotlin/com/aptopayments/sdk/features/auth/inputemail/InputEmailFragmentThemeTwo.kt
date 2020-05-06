@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.auth.inputemail
 
-import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.annotation.VisibleForTesting
@@ -10,13 +9,9 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.utils.StringUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_input_theme_two.*
@@ -34,12 +29,11 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         et_email?.requestFocus()
         showKeyboard()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun setupUI() {
         setupToolBar()
         applyFontsAndColors()
@@ -49,7 +43,6 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     override fun viewLoaded() = viewModel.viewLoaded()
 
     private fun applyFontsAndColors()   {
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_email_header)
@@ -60,8 +53,7 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(tb_llsdk_toolbar, "", BaseActivity.BackButtonMode.Back(null))
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupListeners() {

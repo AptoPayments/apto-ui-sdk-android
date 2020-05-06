@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.addbalance
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.data.card.SelectBalanceStoreResult
 import com.aptopayments.core.data.card.SelectBalanceStoreResult.Type.INVALID
 import com.aptopayments.core.data.fundingsources.Balance
@@ -11,12 +10,10 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.oauth.OAuthConfig
 import com.aptopayments.sdk.features.oauth.OAuthFlow
-import java.lang.reflect.Modifier
 
 private const val CUSTODIAN_WALLET_FUNDING_SOURCE = "custodian_wallet"
 private const val OAUTH_CREDENTIAL_TYPE = "oauth"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AddBalanceFlow (
         val allowedBalanceTypes: List<AllowedBalanceType>,
         val cardID: String,

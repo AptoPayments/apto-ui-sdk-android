@@ -1,11 +1,8 @@
 package com.aptopayments.sdk.core.usecase
 
-import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
-import java.lang.reflect.Modifier
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal abstract class UseCase<out Type, in Params> where Type : Any {
 
     abstract fun run(params: Params): Either<Failure, Type>

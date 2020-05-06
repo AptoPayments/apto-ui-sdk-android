@@ -8,7 +8,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import com.aptopayments.core.data.content.Content
-import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.extension.show
@@ -62,7 +61,6 @@ class ContentPresenterView @JvmOverloads constructor(
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun showNativeContent(content: Content.Native) {
         vw_native_content.delegate = this
         if (isSmallScreen(context)) {
@@ -74,9 +72,9 @@ class ContentPresenterView @JvmOverloads constructor(
         } else {
             vw_native_content.content = content
         }
-        tv_native_content_title.text = "disclaimer.native_content.title".localized()
-        tv_native_content_description_main.text = "disclaimer.native_content.description.main".localized()
-        tv_native_content_description_secondary.text = "disclaimer.native_content.description.secondary".localized()
+        tv_native_content_title.localizedText = "disclaimer.native_content.title"
+        tv_native_content_description_main.localizedText = "disclaimer.native_content.description.main"
+        tv_native_content_description_secondary.localizedText = "disclaimer.native_content.description.secondary"
 
         wb_content_web.remove()
         tv_content_text.remove()

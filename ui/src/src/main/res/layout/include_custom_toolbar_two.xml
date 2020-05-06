@@ -22,7 +22,7 @@
             android:paddingRight="8dp"
             android:src="@drawable/ic_close" />
 
-        <TextView
+        <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/tv_toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

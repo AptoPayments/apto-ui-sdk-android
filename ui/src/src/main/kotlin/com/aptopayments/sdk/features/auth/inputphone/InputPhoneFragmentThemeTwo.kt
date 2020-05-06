@@ -5,9 +5,10 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.extension.observeNullable
-import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.PhoneInputView
@@ -35,7 +36,7 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         phone_input?.requestPhoneFocus()
         showKeyboard()
     }
@@ -72,8 +73,7 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(tb_llsdk_toolbar, null, BaseActivity.BackButtonMode.Back(null))
+        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build())
     }
 
     override fun setupListeners() {

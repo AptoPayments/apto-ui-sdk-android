@@ -1,10 +1,8 @@
 package com.aptopayments.sdk.features.card.account
 
-import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.Switch
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.config.ContextConfiguration
 import com.aptopayments.core.data.config.UIConfig
@@ -24,11 +22,9 @@ import kotlinx.android.synthetic.main.include_custom_toolbar_two.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
-import java.lang.reflect.Modifier
 
 const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettingsContract.View {
 
     override var delegate: AccountSettingsContract.Delegate? = null
@@ -109,10 +105,9 @@ internal class AccountSettingsFragmentThemeTwo : BaseFragment(), AccountSettings
         val toolbar = tb_llsdk_custom_toolbar as Toolbar
         toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
         iv_close_button.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
-        tv_toolbar_title.text = "account_settings.settings.title".localized()
+        tv_toolbar_title.localizedText = "account_settings.settings.title"
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupTexts() {
         (rl_security as SectionHeaderViewTwo).set("account_settings_security_title".localized())
         (rl_fingerprint as SectionSwitchViewTwo).apply {

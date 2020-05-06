@@ -10,11 +10,7 @@ import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.hide
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.show
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
@@ -31,13 +27,12 @@ import java.lang.reflect.Modifier
 private const val VERIFICATION_BUNDLE = "verificationBundle"
 private const val PIN_CHARACTERS = 6
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerificationContract.View {
 
     override var delegate: PhoneVerificationContract.Delegate? = null
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) val viewModel: VerificationViewModel by viewModel()
+    private val viewModel: VerificationViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var verification: Verification
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var phoneNumber: String
+    private lateinit var phoneNumber: String
 
     override fun layoutId() = R.layout.fragment_verification_theme_two
 
@@ -49,7 +44,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     }
 
     override fun onPresented() {
-        delegate?.configureStatusBar()
+        customizePrimaryNavigationStatusBar()
         apto_pin_view?.requestFocus()
         showKeyboard()
     }
@@ -83,11 +78,9 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = null,
-            backButtonMode = BaseActivity.BackButtonMode.Back(null)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
         )
     }
 

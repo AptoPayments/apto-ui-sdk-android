@@ -16,7 +16,6 @@ import java.lang.reflect.Modifier
 
 private const val COUNTRY_SELECTOR_TAG = "CountrySelectorFragment"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class CardProductSelectorFlow (
         val onBack: (Unit) -> Unit,
         val onFinish: (cardProductId: String) -> Unit

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.aptopayments.sdk.R
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.BackButtonMode
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.appbar.AppBarLayout
@@ -66,13 +68,7 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     }
 
     private fun setupToolbar(title: String? = null) {
-        tb_llsdk_toolbar?.let {
-            delegate?.configureToolbar(
-                    toolbar = it,
-                    title = title,
-                    backButtonMode = BaseActivity.BackButtonMode.Close(null)
-            )
-        }
+        tb_llsdk_toolbar?.configure(activity, ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Close()).title(title).build())
     }
 
     private fun setupWebView() {

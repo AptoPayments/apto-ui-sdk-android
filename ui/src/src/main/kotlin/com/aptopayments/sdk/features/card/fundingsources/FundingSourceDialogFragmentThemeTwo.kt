@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.Window
-import androidx.annotation.VisibleForTesting
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,12 +20,10 @@ import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.utils.MessageBanner
 import kotlinx.android.synthetic.main.fragment_funding_sources_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val ACCOUNT_ID_KEY = "ACCOUNT_ID"
 private const val SELECTED_BALANCE_ID_KEY = "SELECTED_BALANCE_ID"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), FundingSourceContract.View,
         FundingSourceAdapter.Delegate {
 

@@ -1,32 +1,24 @@
 package com.aptopayments.sdk.features.card.notificationpreferences
 
-import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View.VISIBLE
-import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.user.notificationpreferences.NotificationChannel
 import com.aptopayments.core.data.user.notificationpreferences.NotificationGroup
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.platform.BaseActivity
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_notification_preferences_theme_two.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.reflect.Modifier
 
 private const val CARD_ID_PARAMETER_KEY = "card_id"
 
-@VisibleForTesting(otherwise = Modifier.PROTECTED)
 internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), NotificationPreferencesContract.View {
 
     private val viewModel: NotificationPreferencesViewModel by viewModel()
@@ -51,11 +43,6 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
                 handleFailure(it)
             }
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onPresented() {
@@ -185,14 +172,12 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setPushOrEmailHeader() {
         tv_notifications_header.localizedText = "notification_preferences.send_push_email.title"
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
         setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_mail)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setPushOrSmsHeader() {
         tv_notifications_header.localizedText = "notification_preferences.send_push_sms.title"
         setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
@@ -212,12 +197,13 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-        tb_llsdk_toolbar.setTitleTextColor(UIConfig.iconTertiaryColor)
-        delegate?.configureToolbar(
-            toolbar = tb_llsdk_toolbar,
-            title = "notification_preferences.title".localized(),
-            backButtonMode = BaseActivity.BackButtonMode.Back(null, UIConfig.textTopBarSecondaryColor)
+        tb_llsdk_toolbar.configure(
+            activity,
+            ToolbarConfiguration.Builder()
+                .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
+                .title("notification_preferences.title".localized())
+                .setSecondaryTertiaryColors()
+                .build()
         )
     }
 
