@@ -7,9 +7,10 @@ import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase.Params
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.repository.RemoteCardDetailsRepository
 
-internal class FetchRemoteCardDetailsUseCase(private val localCardDetailsRepository: LocalCardDetailsRepository,
-                                             private val remoteCardDetailsRepository: RemoteCardDetailsRepository) :
-    UseCaseAsync<CardDetails, Params>() {
+internal class FetchRemoteCardDetailsUseCase(
+    private val localCardDetailsRepository: LocalCardDetailsRepository,
+    private val remoteCardDetailsRepository: RemoteCardDetailsRepository
+) : UseCaseAsync<CardDetails, Params>() {
 
     override suspend fun run(params: Params): Either<Failure, CardDetails> {
         val details = remoteCardDetailsRepository.fetch(params.cardId)
@@ -17,7 +18,7 @@ internal class FetchRemoteCardDetailsUseCase(private val localCardDetailsReposit
         return details
     }
 
-    data class Params (
+    data class Params(
         val cardId: String
     )
 }

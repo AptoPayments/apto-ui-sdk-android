@@ -1,12 +1,10 @@
 package com.aptopayments.sdk.features.managecard
 
-import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.sdk.core.platform.BaseFragment
 
 internal class ManageCardFragmentDouble(override var delegate: ManageCardContract.Delegate?) :
-        BaseFragment(),
-        ManageCardContract.View
-{
+    BaseFragment(),
+    ManageCardContract.View {
     override fun refreshTransactions() {}
     override fun refreshCardData() {}
     override fun refreshBalance() {}

@@ -15,7 +15,7 @@ import com.aptopayments.sdk.utils.CountDown
 const val COUNTDOWN_TIME = 45
 
 internal class VerificationViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
     var verification: MutableLiveData<Verification> = MutableLiveData()
     var pinEntryState: MutableLiveData<PINEntryState> = MutableLiveData()
@@ -27,7 +27,7 @@ internal class VerificationViewModel constructor(
         startCountDown()
     }
 
-    fun restartVerification(onComplete: (Either<Failure, Unit>) -> Unit){
+    fun restartVerification(onComplete: (Either<Failure, Unit>) -> Unit) {
         verification.value?.let { verification ->
             AptoPlatform.restartVerification(verification) { restartResult ->
                 restartResult.either(::handleFailure) { verification ->
@@ -52,9 +52,10 @@ internal class VerificationViewModel constructor(
     private fun handleVerification(verification: Verification, onComplete: (Either<Failure, Verification>) -> Unit) {
         this.verification.postValue(verification)
         when (verification.status) {
-            VerificationStatus.FAILED -> { showExpiredPin() }
-            VerificationStatus.PASSED -> { stopCountDown() }
-            VerificationStatus.PENDING -> {}
+            VerificationStatus.FAILED -> showExpiredPin()
+            VerificationStatus.PASSED -> stopCountDown()
+            VerificationStatus.PENDING -> {
+            }
         }
         onComplete(Either.Right(verification))
     }
@@ -62,13 +63,9 @@ internal class VerificationViewModel constructor(
     private fun startCountDown() {
         resendButtonState.postValue(ResendButtonState.Waiting(pendingSeconds = COUNTDOWN_TIME))
         countDown.start(
-                seconds = COUNTDOWN_TIME,
-                fireBlock = { pendingSeconds ->
-                    showCountdownState(pendingSeconds)
-                },
-                endBlock = {
-                    showResendEnabledState()
-                }
+            seconds = COUNTDOWN_TIME,
+            fireBlock = { pendingSeconds -> showCountdownState(pendingSeconds) },
+            endBlock = { showResendEnabledState() }
         )
     }
 

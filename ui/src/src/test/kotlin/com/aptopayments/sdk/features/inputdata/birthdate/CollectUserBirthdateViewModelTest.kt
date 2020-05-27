@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.threeten.bp.LocalDate
-import org.threeten.bp.ZoneId
 
 class CollectUserBirthdateViewModelTest : UnitTest() {
     @Rule

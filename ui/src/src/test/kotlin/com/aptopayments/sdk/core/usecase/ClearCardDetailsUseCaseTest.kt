@@ -29,5 +29,4 @@ internal class ClearCardDetailsUseCaseTest : UnitTest() {
         result.isRight shouldEqual true
         result.either({}, { it shouldBe Unit })
     }
-
 }

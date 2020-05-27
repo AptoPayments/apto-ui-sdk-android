@@ -25,12 +25,9 @@ class AptoTextView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 } else {
                     localize.localized()
                 }
-
             }
-
             typedArray.recycle()
         }
-
     }
 
     private fun localizeAndSet(value: String) {

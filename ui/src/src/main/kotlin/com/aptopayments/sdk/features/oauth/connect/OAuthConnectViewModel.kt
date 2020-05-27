@@ -13,14 +13,17 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 internal class OAuthConnectViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default
 
     var oauthAttempt: MutableLiveData<OAuthAttempt> = MutableLiveData()
 
-    fun startOAuthAuthentication(allowedBalanceType: AllowedBalanceType, callback: (oauthAttempt: OAuthAttempt) -> Unit) = launch {
+    fun startOAuthAuthentication(
+        allowedBalanceType: AllowedBalanceType,
+        callback: (oauthAttempt: OAuthAttempt) -> Unit
+    ) = launch {
         analyticsManager.track(Event.SelectBalanceStoreLoginConnectTap)
         AptoPlatform.startOauthAuthentication(allowedBalanceType) { result ->
             result.either(::handleFailure) { oauthAttemptResult ->

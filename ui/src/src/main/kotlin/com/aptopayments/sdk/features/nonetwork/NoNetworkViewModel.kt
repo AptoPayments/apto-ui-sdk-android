@@ -5,11 +5,10 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class NoNetworkViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     fun viewLoaded() {
         analyticsManager.track(Event.NoNetwork)
     }
-
 }

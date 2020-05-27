@@ -21,6 +21,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var authStateProvider: AuthStateProvider
+
     @Mock
     private lateinit var authenticationRepo: AuthenticationRepository
 
@@ -91,7 +92,6 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
         assertRightEitherIsEqualTo(result, true)
     }
 
-
     private fun configureAuthTimeInvalid(authTimeInvalid: Boolean) {
         given(authenticationRepo.isAuthTimeInvalid()).willReturn(authTimeInvalid)
     }
@@ -156,5 +156,4 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
     private fun configureCardOptions(authenticateOnStartup: Boolean) {
         AptoUiSdk.cardOptions = CardOptions(authenticateOnStartup = authenticateOnStartup)
     }
-
 }

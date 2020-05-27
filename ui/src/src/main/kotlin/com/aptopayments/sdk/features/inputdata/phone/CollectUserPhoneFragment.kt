@@ -86,7 +86,7 @@ internal class CollectUserPhoneFragment : BaseFragment(),
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupViewModel() {

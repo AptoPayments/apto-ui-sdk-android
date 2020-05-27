@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.auth.birthdateverification
 
 import com.aptopayments.core.data.user.DataPoint
-import com.aptopayments.core.data.user.Verification
 import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 internal interface BirthdateVerificationContract {

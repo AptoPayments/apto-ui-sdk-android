@@ -1,4 +1,4 @@
-package com.aptopayments.sdk.core.data.transaction
+package com.aptopayments.sdk.core.extension
 
 import com.aptopayments.sdk.R
 import com.aptopayments.core.data.transaction.MCC

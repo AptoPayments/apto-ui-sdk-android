@@ -9,17 +9,18 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 private const val KYC_STATUS_TAG = "KycStatusFragment"
 
 internal class KycStatusFlow(
-        var card: Card,
-        var onClose: (Unit) -> Unit,
-        var onKycPassed: (Unit) -> Unit
+    var card: Card,
+    var onClose: (Unit) -> Unit,
+    var onKycPassed: (Unit) -> Unit
 ) : Flow(), KycStatusContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         // We can assume that the card has a kyc status here.
         val fragment = fragmentFactory.kycStatusFragment(
-                kycStatus = card.kycStatus!!,
-                cardID = card.accountID,
-                tag = KYC_STATUS_TAG)
+            kycStatus = card.kycStatus!!,
+            cardID = card.accountID,
+            tag = KYC_STATUS_TAG
+        )
         fragment.delegate = this
         setStartElement(element = fragment as BaseFragment)
         onInitComplete(Either.Right(Unit))

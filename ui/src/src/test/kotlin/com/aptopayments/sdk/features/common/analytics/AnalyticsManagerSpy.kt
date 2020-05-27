@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.features.common.analytics
 
-import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.core.analytics.Event
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import org.json.JSONObject
 
 class AnalyticsManagerSpy : AnalyticsServiceContract {
 
-    var initializeCalled = false
-    var accessTokenPassed: String? = ""
+    private var initializeCalled = false
+    private var accessTokenPassed: String? = ""
     override fun initialize(accessToken: String) {
         initializeCalled = true
         accessTokenPassed = accessToken
@@ -15,7 +15,7 @@ class AnalyticsManagerSpy : AnalyticsServiceContract {
 
     var trackCalled = false
     var lastEvent: Event? = null
-    var lastProperties: JSONObject? = null
+    private var lastProperties: JSONObject? = null
     override fun track(event: Event, properties: JSONObject?) {
         trackCalled = true
         lastEvent = event

@@ -19,22 +19,26 @@ import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class CardProductSelectorFlowTest: AndroidTest() {
+class CardProductSelectorFlowTest : AndroidTest() {
 
     private lateinit var sut: CardProductSelectorFlow
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockDelegate: CountrySelectorContract.Delegate
-    @Mock private lateinit var mockAptoPlatform: AptoPlatform
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockDelegate: CountrySelectorContract.Delegate
+    @Mock
+    private lateinit var mockAptoPlatform: AptoPlatform
+
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
@@ -53,9 +57,9 @@ class CardProductSelectorFlowTest: AndroidTest() {
         mockCardProducts.add(mock())
         mockCardProducts.add(mock())
         sut = CardProductSelectorFlow(onBack = {}, onFinish = {})
-        Mockito.`when`(mockAptoPlatform.fetchCardProducts(TestDataProvider.anyObject())).thenAnswer { invocation ->
+        whenever(mockAptoPlatform.fetchCardProducts(TestDataProvider.anyObject())).thenAnswer { invocation ->
             (invocation.arguments[0] as (Either<Failure, List<CardProductSummary>>) -> Unit)
-                    .invoke(Either.Right(mockCardProducts))
+                .invoke(Either.Right(mockCardProducts))
         }
     }
 

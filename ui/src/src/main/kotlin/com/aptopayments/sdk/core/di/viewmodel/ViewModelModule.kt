@@ -3,8 +3,8 @@ package com.aptopayments.sdk.core.di.viewmodel
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.core.data.user.*
+import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
@@ -69,8 +69,8 @@ val viewModelModule = module {
     viewModel { AccountSettingsViewModel(get(), get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(get()) }
-    viewModel { (cardApplicationId: String, actionConfiguration : WorkflowActionConfigurationIssueCard?) ->
-        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get())
+    viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->
+        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get())
     }
     viewModel { TransactionListViewModel(get()) }
     viewModel { WaitlistViewModel(get()) }

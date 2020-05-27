@@ -32,7 +32,7 @@ internal class CardFlow : Flow(), KoinComponent {
     private val networkHandler: NetworkHandler by inject()
     val analyticsManager: AnalyticsServiceContract by inject()
     private val statementRepository: StatementRepository by inject()
-    private val shouldCreatePasscodeUseCase : ShouldCreatePasscodeUseCase by inject()
+    private val shouldCreatePasscodeUseCase: ShouldCreatePasscodeUseCase by inject()
 
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
@@ -42,7 +42,7 @@ internal class CardFlow : Flow(), KoinComponent {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         subscribeToNetworkAvailabilityEvent()
         subscribeToMaintenanceModeEvent()
-        if (networkHandler.isConnected != true) {
+        if (!networkHandler.isConnected) {
             val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
             setStartElement(fragment as BaseFragment)
             noNetworkFragmentShown = true
@@ -71,17 +71,15 @@ internal class CardFlow : Flow(), KoinComponent {
                     }
                 }
                 if (!aptoPlatformProtocol.userTokenPresent()) {
-                    initAuthFlow (onInitComplete)
+                    initAuthFlow(onInitComplete)
                 } else {
                     initNewOrExistingCardFlow { initResult ->
                         initResult.either({ failure ->
                             when (failure) {
-                                is Failure.UserSessionExpired -> {
-                                    initAuthFlow (onInitComplete)
-                                }
-                                else -> {onInitComplete(Either.Left(failure))}
+                                is Failure.UserSessionExpired -> initAuthFlow(onInitComplete)
+                                else -> onInitComplete(Either.Left(failure))
                             }
-                        }, { flow -> onInitComplete (Either.Right(flow)) })
+                        }, { flow -> onInitComplete(Either.Right(flow)) })
                     }
                 }
             })
@@ -111,9 +109,9 @@ internal class CardFlow : Flow(), KoinComponent {
     //
     private fun initAuthFlow(onInitComplete: (Either<Failure, Flow>) -> Unit) {
         val flow = AuthFlow(
-                contextConfiguration = contextConfiguration,
-                onBack = { rootActivity()?.finish() },
-                onFinish = { showNewOrExistingCardFlow() }
+            contextConfiguration = contextConfiguration,
+            onBack = { rootActivity()?.finish() },
+            onFinish = { showNewOrExistingCardFlow() }
         )
         flow.init { initResult ->
             initResult.either({ onInitComplete(Either.Left(it)) }, { onInitComplete(Either.Right(flow)) })
@@ -125,8 +123,8 @@ internal class CardFlow : Flow(), KoinComponent {
     //
     private fun initCardProductSelectorFlow(onComplete: (Either<Failure, Flow>) -> Unit) {
         val flow = CardProductSelectorFlow(
-                onBack = { rootActivity()?.finish() },
-                onFinish = { cardProductId -> initNewCardFlow(cardProductId) }
+            onBack = { rootActivity()?.finish() },
+            onFinish = { cardProductId -> initNewCardFlow(cardProductId) }
         )
         flow.init { initResult ->
             initResult.either({ onComplete(Either.Left(it)) }) {
@@ -140,9 +138,9 @@ internal class CardFlow : Flow(), KoinComponent {
     //
     private fun initNewCardFlow(cardProductId: String) {
         val flow = NewCardFlow(
-                cardProductId = cardProductId,
-                onBack = { rootActivity()?.finish() },
-                onFinish = { cardId -> showSetLoginPinFlow(cardId) }
+            cardProductId = cardProductId,
+            onBack = { rootActivity()?.finish() },
+            onFinish = { cardId -> showSetLoginPinFlow(cardId) }
         )
         showLoading()
         flow.init { initResult ->
@@ -182,8 +180,7 @@ internal class CardFlow : Flow(), KoinComponent {
                 val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
                 push(fragment as BaseFragment)
                 noNetworkFragmentShown = true
-            }
-            else if (available && noNetworkFragmentShown) {
+            } else if (available && noNetworkFragmentShown) {
                 popFragment()
                 noNetworkFragmentShown = false
                 if (!initialized) {
@@ -251,5 +248,4 @@ internal class CardFlow : Flow(), KoinComponent {
             }
         }
     }
-
 }

@@ -51,8 +51,7 @@ class ContentPresenterView @JvmOverloads constructor(
     private fun updateContent() {
         // This is needed because content is mutable and the compiler complain when we try to use
         // it the is cases about a possible value change
-        val currentContent = content
-        when(currentContent) {
+        when (val currentContent = content) {
             is Content.Markdown -> showMarkdown(currentContent.markdown)
             is Content.PlainText -> showPlainText(currentContent.text)
             is Content.Web -> showWebPage(currentContent.url.toString())

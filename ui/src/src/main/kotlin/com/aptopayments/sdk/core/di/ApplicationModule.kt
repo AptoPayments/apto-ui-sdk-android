@@ -10,7 +10,6 @@ import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.*
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
 import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
@@ -18,6 +17,7 @@ import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
 import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
+import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import com.aptopayments.sdk.utils.*
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.google.android.libraries.places.api.Places
@@ -28,6 +28,7 @@ import org.koin.dsl.module
 private const val PREF_FILE_NAME = "com.aptopayments.sdk.sharedPreference"
 
 internal val applicationModule = module {
+    factory<StringProvider> { StringProviderImpl(androidApplication()) }
     factory<CoroutineDispatcherProvider> { ProductionDispatchers() }
     single<AuthStateProvider> { AuthStateProviderImpl() }
     single<FragmentFactory> { FragmentFactoryImpl() }
@@ -53,6 +54,7 @@ internal val applicationModule = module {
     factory { Places.createClient(get()) }
     factory { PlaceFetcher(get(), get()) }
     factory { AddressDataPointGenerator() }
+    factory<IssueCardAdditionalFieldsRepository> { IssueCardAdditionalFieldsRepositoryImpl }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

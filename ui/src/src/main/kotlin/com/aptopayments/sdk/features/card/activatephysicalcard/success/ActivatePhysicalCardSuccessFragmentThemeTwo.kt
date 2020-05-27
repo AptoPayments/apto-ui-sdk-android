@@ -64,7 +64,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_title)
             customizeRegularTextLabel(tv_description)
@@ -73,7 +73,7 @@ internal class ActivatePhysicalCardSuccessFragmentThemeTwo : BaseFragment(), Act
         }
     }
 
-    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()

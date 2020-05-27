@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val CONTENT_KEY = "CONTENT"
 
 internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.View,
-        ContentPresenterContract.ViewActions {
+    ContentPresenterContract.ViewActions {
     private lateinit var content: Content
     private val viewModel: DisclaimerViewModel by viewModel()
 

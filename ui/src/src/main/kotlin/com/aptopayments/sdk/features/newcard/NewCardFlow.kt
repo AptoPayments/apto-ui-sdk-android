@@ -12,10 +12,10 @@ import com.aptopayments.sdk.features.inputdata.CollectUserDataFlow
 import com.aptopayments.sdk.features.issuecard.IssueCardFlow
 import com.aptopayments.sdk.features.selectbalancestore.SelectBalanceStoreFlow
 
-internal class NewCardFlow (
-        val cardProductId: String,
-        val onBack: (Unit) -> Unit,
-        val onFinish: (cardId: String) -> Unit
+internal class NewCardFlow(
+    val cardProductId: String,
+    val onBack: (Unit) -> Unit,
+    val onFinish: (cardId: String) -> Unit
 ) : Flow() {
 
     private var cardApplication: CardApplication? = null
@@ -70,11 +70,16 @@ internal class NewCardFlow (
     private fun initFlowFor(cardApplication: CardApplication, onComplete: (Either<Failure, Flow>) -> Unit) {
         cardApplication.nextAction?.let { workflowAction ->
             when (workflowAction.actionType) {
-                WorkflowActionType.SELECT_BALANCE_STORE -> initBalanceStoreFlow(cardApplication, workflowAction, onComplete)
+                WorkflowActionType.SELECT_BALANCE_STORE -> initBalanceStoreFlow(
+                    cardApplication,
+                    workflowAction,
+                    onComplete
+                )
                 WorkflowActionType.SHOW_DISCLAIMER -> initDisclaimerFlow(cardApplication, workflowAction, onComplete)
                 WorkflowActionType.ISSUE_CARD -> initIssueCardFlow(cardApplication, workflowAction, onComplete)
                 WorkflowActionType.COLLECT_USER_DATA -> initCollectUserDataFlow(workflowAction, onComplete)
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -83,15 +88,16 @@ internal class NewCardFlow (
     // Select Balance Store Flow
     //
     private fun initBalanceStoreFlow(
-            cardApplication: CardApplication,
-            workflowAction: WorkflowAction,
-            onComplete: (Either<Failure, Flow>) -> Unit) {
+        cardApplication: CardApplication,
+        workflowAction: WorkflowAction,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
         (workflowAction.configuration as? WorkflowActionConfigurationSelectBalanceStore)?.let { actionConfiguration ->
             val flow = SelectBalanceStoreFlow(
-                    actionConfiguration = actionConfiguration,
-                    cardApplicationId = cardApplication.id,
-                    onBack = { onBack(Unit) },
-                    onFinish = { showNextFlow() }
+                actionConfiguration = actionConfiguration,
+                cardApplicationId = cardApplication.id,
+                onBack = { onBack(Unit) },
+                onFinish = { showNextFlow() }
             )
             flow.init { initResult ->
                 initResult.either({ onComplete(Either.Left(it)) }) {
@@ -105,17 +111,18 @@ internal class NewCardFlow (
     // Disclaimer
     //
     private fun initDisclaimerFlow(
-            cardApplication: CardApplication,
-            workflowAction: WorkflowAction,
-            onComplete: (Either<Failure, Flow>) -> Unit) {
+        cardApplication: CardApplication,
+        workflowAction: WorkflowAction,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
         (workflowAction.configuration as? WorkflowActionConfigurationShowDisclaimer)?.let { actionConfiguration ->
             val flow = DisclaimerFlow(
-                    actionConfiguration = actionConfiguration,
-                    workflowAction = workflowAction,
-                    workflowObjectId = cardApplication.workflowObjectId,
-                    cardApplicationId = cardApplication.id,
-                    onBack = { onBack },
-                    onAccept = { showNextFlow() }
+                actionConfiguration = actionConfiguration,
+                workflowAction = workflowAction,
+                workflowObjectId = cardApplication.workflowObjectId,
+                cardApplicationId = cardApplication.id,
+                onBack = { onBack },
+                onAccept = { showNextFlow() }
             )
             flow.init { initResult ->
                 initResult.either({ onComplete(Either.Left(it)) }) {
@@ -128,8 +135,11 @@ internal class NewCardFlow (
     //
     // Issue card
     //
-    private fun initIssueCardFlow(cardApplication: CardApplication, workflowAction: WorkflowAction,
-                                  onComplete: (Either<Failure, Flow>) -> Unit) {
+    private fun initIssueCardFlow(
+        cardApplication: CardApplication,
+        workflowAction: WorkflowAction,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
         val actionConfiguration = workflowAction.configuration as? WorkflowActionConfigurationIssueCard
         val flow = IssueCardFlow(
             actionConfiguration = actionConfiguration,
@@ -151,8 +161,6 @@ internal class NewCardFlow (
         workflowAction: WorkflowAction,
         onComplete: (Either<Failure, Flow>) -> Unit
     ) {
-
-
         val actionConfiguration = workflowAction.configuration as? WorkflowActionCollectUserData
         actionConfiguration?.let {
             val flow = CollectUserDataFlow(actionConfiguration, { onBack }, { showNextFlow() })

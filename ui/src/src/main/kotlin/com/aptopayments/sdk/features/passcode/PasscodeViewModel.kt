@@ -64,7 +64,6 @@ internal abstract class PasscodeViewModel(protected val analyticsManager: Analyt
         fun getTitle(): String
         fun onPasscode(value: String)
         fun onBack()
-
     }
 
     abstract inner class SetState : State {

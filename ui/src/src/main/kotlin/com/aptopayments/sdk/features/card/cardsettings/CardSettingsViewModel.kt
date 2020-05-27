@@ -159,5 +159,4 @@ internal class CardSettingsViewModel constructor(
 
     private fun shouldShowAddToGooglePay() =
         aptoUiSdk.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites()
-
 }

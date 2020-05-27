@@ -1,11 +1,11 @@
 package com.aptopayments.sdk.utils.deeplinks
 
-import android.content.Context
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.utils.StringProvider
 
-abstract class DeepLinkIntentGenerator(context: Context) {
+abstract class DeepLinkIntentGenerator(stringProvider: StringProvider) {
 
-    private val scheme = context.getString(R.string.apto_deep_link_scheme)
+    private val scheme = stringProvider.provide(R.string.apto_deep_link_scheme)
     abstract val host: String
 
     protected val parameters = mutableMapOf<String, String>()
@@ -19,5 +19,4 @@ abstract class DeepLinkIntentGenerator(context: Context) {
             separator = "&",
             prefix = "?"
         ) { element -> "${element.first}=${element.second}" }
-
 }

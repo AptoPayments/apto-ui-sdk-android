@@ -15,7 +15,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -163,16 +162,17 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when address was correct but second time place returned null then continue is not enabled`() = runBlockingTest {
-        val sut = CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
-        configureCorrectCase()
-        whenever(placeFetcher.fetchPlace(PLACE_ID)).thenReturn(null)
+    fun `when address was correct but second time place returned null then continue is not enabled`() =
+        runBlockingTest {
+            val sut = CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
+            configureCorrectCase()
+            whenever(placeFetcher.fetchPlace(PLACE_ID)).thenReturn(null)
 
-        sut.onAddressClicked(PLACE_ID)
-        sut.onAddressClicked(PLACE_ID_2)
+            sut.onAddressClicked(PLACE_ID)
+            sut.onAddressClicked(PLACE_ID_2)
 
-        assertFalse(sut.continueEnabled.getOrAwaitValue())
-    }
+            assertFalse(sut.continueEnabled.getOrAwaitValue())
+        }
 
     @Test
     fun `when address set and continue clicked then generator called correctly`() = runBlockingTest {
@@ -208,14 +208,15 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when addressDataPoint is set in constructor and continue clicked then that object is fired in event`() = runBlockingTest {
-        val initialValue = AddressDataPoint(STREET_ONE, STREET_TWO, LOCALITY, REGION, POSTAL_CODE, COUNTRY)
-        val sut = CollectUserAddressViewModel(initialValue, analyticsManager, addressGenerator, placeFetcher)
+    fun `when addressDataPoint is set in constructor and continue clicked then that object is fired in event`() =
+        runBlockingTest {
+            val initialValue = AddressDataPoint(STREET_ONE, STREET_TWO, LOCALITY, REGION, POSTAL_CODE, COUNTRY)
+            val sut = CollectUserAddressViewModel(initialValue, analyticsManager, addressGenerator, placeFetcher)
 
-        sut.continueClicked()
+            sut.continueClicked()
 
-        assertEquals(initialValue, sut.continueClicked.getOrAwaitValue())
-    }
+            assertEquals(initialValue, sut.continueClicked.getOrAwaitValue())
+        }
 
     private suspend fun configureCorrectCase() {
         whenever(placeFetcher.fetchPlace(PLACE_ID)).thenReturn(place)

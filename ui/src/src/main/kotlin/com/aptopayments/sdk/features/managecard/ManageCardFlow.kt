@@ -39,33 +39,40 @@ private const val FUNDING_SOURCE_DIALOG_TAG = "FundingSourceDialogFragment"
 private const val CONTENT_PRESENTER_TAG = "ContentPresenterFragment"
 private const val WAITLIST_TAG = "WaitlistFragment"
 
-internal class ManageCardFlow (
-        val cardId: String,
-        val contextConfiguration: ContextConfiguration,
-        var onClose: (Unit) -> Unit
+internal class ManageCardFlow(
+    val cardId: String,
+    val contextConfiguration: ContextConfiguration,
+    var onClose: (Unit) -> Unit
 ) : Flow(), ManageCardContract.Delegate, FundingSourceContract.Delegate, CardSettingsContract.Delegate,
     ContentPresenterContract.Delegate, TransactionDetailsContract.Delegate, WaitlistContract.Delegate {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     val manageCardFragment: ManageCardContract.View?
         get() = fragmentWithTag(MANAGE_CARD_TAG) as? ManageCardContract.View
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
             result.either({ onInitComplete(Either.Left(it)) }, { card ->
-                when(card.kycStatus) {
+                when (card.kycStatus) {
                     KycStatus.PASSED -> {
                         if (card.isWaitlisted == true) {
                             card.cardProductID?.let {
                                 aptoPlatformProtocol.fetchCardProduct(it, true) { getCardProductResult ->
-                                    getCardProductResult.either({ onInitComplete(Either.Left(ManageCardInitFailure())) }, { cardProduct ->
-                                        val fragment =
-                                            fragmentFactory.waitlistFragment(card.accountID, cardProduct, WAITLIST_TAG)
-                                        fragment.delegate = this
-                                        setStartElement(fragment as BaseFragment)
-                                        onInitComplete(Either.Right(Unit))
-                                    })
+                                    getCardProductResult.either(
+                                        { onInitComplete(Either.Left(ManageCardInitFailure())) },
+                                        { cardProduct ->
+                                            val fragment =
+                                                fragmentFactory.waitlistFragment(
+                                                    card.accountID,
+                                                    cardProduct,
+                                                    WAITLIST_TAG
+                                                )
+                                            fragment.delegate = this
+                                            setStartElement(fragment as BaseFragment)
+                                            onInitComplete(Either.Right(Unit))
+                                        })
                                 }
                             } ?: onInitComplete(Either.Left(ManageCardInitFailure()))
                         } else {
@@ -106,7 +113,7 @@ internal class ManageCardFlow (
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun showManageCardFragment() {
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
             result.either(::handleFailure) { card ->
                 val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
                 fragment.delegate = this
@@ -138,7 +145,7 @@ internal class ManageCardFlow (
 
     override fun onAddFundingSource(selectedBalanceID: String?) {
         popDialogFragmentWithTag(FUNDING_SOURCE_DIALOG_TAG)
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
             result.either(::handleFailure) { card ->
                 initAddBalanceFlow(card, selectedBalanceID)
             }
@@ -178,7 +185,7 @@ internal class ManageCardFlow (
 
     private fun refreshCard() {
         showLoading()
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = true) { result ->
+        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = true) { result ->
             result.either(::handleFailure) {
                 manageCardFragment?.refreshBalance()
                 hideLoading()
@@ -192,12 +199,12 @@ internal class ManageCardFlow (
     //
     override fun onAccountSettingsTapped() {
         val flow = AccountSettingsFlow(
-                cardId = cardId,
-                contextConfiguration = contextConfiguration,
-                onClose = { popFlow(animated = true) }
+            cardId = cardId,
+            contextConfiguration = contextConfiguration,
+            onClose = { popFlow(animated = true) }
         )
         flow.init { initResult ->
-            initResult.either(::handleFailure) { push(flow = flow)}
+            initResult.either(::handleFailure) { push(flow = flow) }
         }
     }
 
@@ -207,9 +214,9 @@ internal class ManageCardFlow (
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun initKycFlow(card: Card, onInitComplete: (Either<Failure, Flow>) -> Unit) {
         val flow = KycStatusFlow(
-                card = card,
-                onClose = onClose,
-                onKycPassed = { showManageCardFragment() }
+            card = card,
+            onClose = onClose,
+            onKycPassed = { showManageCardFragment() }
         )
         flow.init { initResult ->
             initResult.either({ onInitComplete(Either.Left(it)) }) {
@@ -223,15 +230,15 @@ internal class ManageCardFlow (
     //
     override fun onActivatePhysicalCardTapped(card: Card) {
         val flow = ActivatePhysicalCardFlow(
-                card = card,
-                onBack = { popFlow(animated = true) },
-                onFinish = { popFlow(animated = true) },
-                onPhysicalCardActivated = {
-                    manageCardFragment?.refreshCardData()
-                }
+            card = card,
+            onBack = { popFlow(animated = true) },
+            onFinish = { popFlow(animated = true) },
+            onPhysicalCardActivated = {
+                manageCardFragment?.refreshCardData()
+            }
         )
         flow.init { initResult ->
-            initResult.either(::handleFailure) { push(flow = flow)}
+            initResult.either(::handleFailure) { push(flow = flow) }
         }
     }
 
@@ -245,10 +252,11 @@ internal class ManageCardFlow (
                 hideLoading()
                 it.either(::handleFailure) { cardProduct ->
                     val fragment = fragmentFactory.cardSettingsFragment(
-                            card = card,
-                            cardProduct = cardProduct,
-                            projectConfiguration = contextConfiguration.projectConfiguration,
-                            tag = CARD_SETTINGS_TAG)
+                        card = card,
+                        cardProduct = cardProduct,
+                        projectConfiguration = contextConfiguration.projectConfiguration,
+                        tag = CARD_SETTINGS_TAG
+                    )
                     fragment.delegate = this
                     push(fragment as BaseFragment)
                 }
@@ -271,7 +279,7 @@ internal class ManageCardFlow (
     override fun onCloseTapped() = popFragment()
 
     override fun showMailComposer(recipient: String, subject: String?, body: String?) {
-        rootActivity()?.let {activity ->
+        rootActivity()?.let { activity ->
             SendEmailUtil(recipient, subject, body).execute(activity)
         }
     }
@@ -282,16 +290,18 @@ internal class ManageCardFlow (
 
     override fun onSetPin() {
         val flow = SetPinFlow(
-                cardId = cardId,
-                onBack = { popFlow(animated = true) },
-                onFinish = {
-                    popFlow(animated = true)
-                    rootActivity()?.let {
-                        notify(title = "manage_card.confirm_pin.pin_updated.title".localized(),
-                                message = "manage_card.confirm_pin.pin_updated.message".localized(),
-                                messageType = MessageBanner.MessageType.HEADS_UP)
-                    }
+            cardId = cardId,
+            onBack = { popFlow(animated = true) },
+            onFinish = {
+                popFlow(animated = true)
+                rootActivity()?.let {
+                    notify(
+                        title = "manage_card.confirm_pin.pin_updated.title".localized(),
+                        message = "manage_card.confirm_pin.pin_updated.message".localized(),
+                        messageType = MessageBanner.MessageType.HEADS_UP
+                    )
                 }
+            }
         )
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }
@@ -300,7 +310,7 @@ internal class ManageCardFlow (
 
     override fun showVoip(action: Action) {
         val flow = VoipFlow(cardId = cardId, action = action, onBack = { popFlow(animated = true) },
-                onFinish = { popFlow(animated = true) })
+            onFinish = { popFlow(animated = true) })
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }
         }
@@ -314,7 +324,7 @@ internal class ManageCardFlow (
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 
-    private fun popAnimatedFlow(){
+    private fun popAnimatedFlow() {
         popFlow(true)
     }
 
@@ -323,12 +333,12 @@ internal class ManageCardFlow (
     //
     override fun onCardStatsTapped() {
         val flow = CardStatsFlow(
-                cardId = cardId,
-                onBack = { popFlow(animated = true) },
-                onFinish = { popFlow(animated = true) }
+            cardId = cardId,
+            onBack = { popFlow(animated = true) },
+            onFinish = { popFlow(animated = true) }
         )
         flow.init { initResult ->
-            initResult.either(::handleFailure) { push(flow = flow)}
+            initResult.either(::handleFailure) { push(flow = flow) }
         }
     }
 

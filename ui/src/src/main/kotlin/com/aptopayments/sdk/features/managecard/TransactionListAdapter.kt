@@ -9,11 +9,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.config.UIConfig
+import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.formatForTransactionList
 import com.aptopayments.core.extension.toCapitalized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.data.transaction.iconResource
+import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.invisibleIf
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.extension.observeNullable
@@ -76,7 +77,6 @@ internal open class TransactionListAdapter(
         holder.bind(transactionListItems[position], position)
     }
 
-
     private fun isLastPositionOfSection(position: Int): Boolean {
         transactionListItems.let {
             if (position >= it.size - 1) return true
@@ -84,11 +84,11 @@ internal open class TransactionListAdapter(
         }
     }
 
-    override fun cardViewTapped(cardView: CardView) {
+    override fun cardViewTapped() {
         delegate?.onCardTapped()
     }
 
-    override fun panNumberTappedInCardView(cardView: CardView) {
+    override fun panNumberTappedInCardView() {
         delegate?.onPanTapped()
     }
 
@@ -113,7 +113,7 @@ internal open class TransactionListAdapter(
                     observeNullable(viewModel.cardInfo) { handleCardDetails(cardView, it) }
                     observeNullable(viewModel.cardNetwork) { cardView.setCardNetwork(it) }
                     observeNullable(viewModel.cardStyle) { cardView.setCardStyle(it) }
-                    observeNullable(viewModel.fundingSource) { cardView.setBalance(it) }
+                    observeNullable(viewModel.fundingSource) { cardView.setValidFundingSource(it?.state == Balance.BalanceState.VALID) }
                     observeNullable(viewModel.state) { cardView.setCardState(it) }
                 }
                 cardView.delegate = cardDelegate

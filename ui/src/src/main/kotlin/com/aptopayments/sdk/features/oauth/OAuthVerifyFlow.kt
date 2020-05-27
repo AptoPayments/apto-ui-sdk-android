@@ -15,11 +15,11 @@ import org.koin.core.inject
 private const val OAUTH_VERIFY_TAG = "OAuthVerifyFragment"
 
 internal class OAuthVerifyFlow(
-        val allowedBalanceType: AllowedBalanceType,
-        val oauthAttempt: OAuthAttempt,
-        val onBack: (Unit) -> Unit,
-        val onFinish: (oauthAttempt: OAuthAttempt) -> Unit,
-        val onError: (Failure.ServerError) -> Unit
+    val allowedBalanceType: AllowedBalanceType,
+    val oauthAttempt: OAuthAttempt,
+    val onBack: (Unit) -> Unit,
+    val onFinish: (oauthAttempt: OAuthAttempt) -> Unit,
+    val onError: (Failure.ServerError) -> Unit
 ) : Flow(), OAuthVerifyContract.Delegate {
 
     val analyticsManager: AnalyticsServiceContract by inject()
@@ -29,10 +29,10 @@ internal class OAuthVerifyFlow(
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         oauthAttempt.userData?.let {
             val fragment = fragmentFactory.oauthVerifyFragment(
-                    datapoints = it,
-                    allowedBalanceType = allowedBalanceType,
-                    tokenId = oauthAttempt.tokenId,
-                    tag = OAUTH_VERIFY_TAG
+                datapoints = it,
+                allowedBalanceType = allowedBalanceType,
+                tokenId = oauthAttempt.tokenId,
+                tag = OAUTH_VERIFY_TAG
             )
             fragment.delegate = this
             setStartElement(element = fragment as FlowPresentable)
@@ -65,7 +65,6 @@ internal class OAuthVerifyFlow(
     fun showUpdatedUserData(dataPointList: DataPointList) {
         oAuthVerifyFragment?.updateDataPoints(dataPointList)
     }
-
 }
 
 internal class OAuthVerifyFlowInitFailure : Failure.FeatureFailure()

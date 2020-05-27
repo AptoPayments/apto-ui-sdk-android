@@ -22,12 +22,14 @@ class TransactionListViewModelTest : AndroidTest() {
     private lateinit var sut: TransactionListViewModel
 
     // Collaborators
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
     private val cardId = "cardId"
     private val startDate = LocalDate.of(2019, 1, 1)
     private val endDate = LocalDate.of(2019, 1, 31)
     private val mcc = MCC("plane", FOOD)
-    @Mock private lateinit var mockTransaction: Transaction
+    @Mock
+    private lateinit var mockTransaction: Transaction
 
     @Before
     override fun setUp() {

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class OAuthVerifyViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     val firstName: MutableLiveData<String> = MutableLiveData()
@@ -43,7 +43,11 @@ internal class OAuthVerifyViewModel constructor(
         }
     }
 
-    fun retrieveUpdatedUserData(allowedBalanceType: AllowedBalanceType, tokenId: String, callback: (oauthAttempt: OAuthUserDataUpdate) -> Unit) {
+    fun retrieveUpdatedUserData(
+        allowedBalanceType: AllowedBalanceType,
+        tokenId: String,
+        callback: (oauthAttempt: OAuthUserDataUpdate) -> Unit
+    ) {
         analyticsManager.track(Event.SelectBalanceStoreOauthConfirmRefreshDetailsTap)
         AptoPlatform.fetchOAuthData(allowedBalanceType, tokenId) { result ->
             result.either(::handleFailure) {

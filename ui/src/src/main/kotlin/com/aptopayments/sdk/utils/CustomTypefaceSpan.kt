@@ -1,9 +1,9 @@
 package com.aptopayments.sdk.utils
 
 import android.graphics.Paint
-import android.text.style.MetricAffectingSpan
 import android.graphics.Typeface
 import android.text.TextPaint
+import android.text.style.MetricAffectingSpan
 
 /**
  * Custom span style to be able to customise the typeface on Android version older that P (API level 26).

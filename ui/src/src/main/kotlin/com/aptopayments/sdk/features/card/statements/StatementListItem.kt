@@ -9,7 +9,7 @@ internal sealed class StatementListItem {
         }
     }
 
-    class MonthRow(val month : StatementMonth) : StatementListItem() {
+    class MonthRow(val month: StatementMonth) : StatementListItem() {
         override fun equals(other: Any?): Boolean {
             return other is MonthRow && other.month == month
         }

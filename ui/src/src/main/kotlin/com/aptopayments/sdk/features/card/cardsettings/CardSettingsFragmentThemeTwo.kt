@@ -42,6 +42,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private lateinit var projectConfiguration: ProjectConfiguration
     private val viewModel: CardSettingsViewModel by viewModel { parametersOf(card, cardProduct) }
     private val intentGenerator: IntentGenerator by inject()
+    private val iAPDeepLinkGenerator: InAppProvisioningDeepLinkGenerator by inject()
     override var delegate: CardSettingsContract.Delegate? = null
 
     override fun layoutId(): Int = R.layout.fragment_card_settings_theme_two
@@ -69,7 +70,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
             observeThree(cardholderAgreement, privacyPolicy, termsAndConditions, ::handleLegalSectionVisibility)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             failure(viewModel.failure) { handleFailure(it) }
-            observeNotNullable(cardDetailsFetchedCorrectly) {manageCardDetailsFetched(it) }
+            observeNotNullable(cardDetailsFetchedCorrectly) { manageCardDetailsFetched(it) }
             observeNotNullable(hasCardDetails) { value -> silentlySetCardDetailSwitchValue(value) }
             observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
         }
@@ -97,7 +98,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     }
 
     private fun handleShowIvrSupport(value: Boolean?) =
-            if (value == true) rl_ivr_support.show() else rl_ivr_support.remove()
+        if (value == true) rl_ivr_support.show() else rl_ivr_support.remove()
 
     private fun handleShowGetPin(value: Boolean?) = if (value == true) rl_get_pin.show() else rl_get_pin.remove()
 
@@ -113,8 +114,12 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         faq?.let { rl_faq.show() } ?: run { rl_faq.remove() }
     }
 
-    private fun handleLegalSectionVisibility(cardholderAgreement: Content?, privacyPolicy: Content?, termsAndConditions: Content?) {
-        if (cardholderAgreement==null && privacyPolicy==null && termsAndConditions==null) {
+    private fun handleLegalSectionVisibility(
+        cardholderAgreement: Content?,
+        privacyPolicy: Content?,
+        termsAndConditions: Content?
+    ) {
+        if (cardholderAgreement == null && privacyPolicy == null && termsAndConditions == null) {
             rl_legal.hide()
         } else {
             rl_legal.show()
@@ -174,64 +179,64 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private fun setupTexts() {
         tv_toolbar_title.localizedText = "card_settings.settings.title"
         (rl_settings as SectionHeaderViewTwo).set(
-                title = "card_settings.settings.settings.title".localized()
+            title = "card_settings.settings.settings.title".localized()
         )
         (rl_get_pin as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.settings.get_pin.title".localized(),
-                description = "card_settings.settings.get_pin.description".localized()
+            title = "card_settings.settings.get_pin.title".localized(),
+            description = "card_settings.settings.get_pin.description".localized()
         )
         (rl_set_pin as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.settings.set_pin.title".localized(),
-                description = "card_settings.settings.set_pin.description".localized()
+            title = "card_settings.settings.set_pin.title".localized(),
+            description = "card_settings.settings.set_pin.description".localized()
         )
         (rl_card_info as SectionSwitchViewTwo).set(
-                title = "card_settings.settings.card_details.title".localized(),
-                description = "card_settings.settings.card_details.description".localized()
+            title = "card_settings.settings.card_details.title".localized(),
+            description = "card_settings.settings.card_details.description".localized()
         )
         (rl_lock_card as SectionSwitchViewTwo).set(
-                title = "card_settings.settings.lock_card.title".localized(),
-                description = "card_settings.settings.lock_card.description".localized()
+            title = "card_settings.settings.lock_card.title".localized(),
+            description = "card_settings.settings.lock_card.description".localized()
         )
         (rl_transactions as SectionHeaderViewTwo).set(
-                title = "card_settings.transactions.title".localized()
+            title = "card_settings.transactions.title".localized()
         )
         (rl_detailed_card_activity as SectionSwitchViewTwo).set(
-                title = "card_settings.transactions.detailed_card_activity.title".localized(),
-                description = "card_settings.transactions.detailed_card_activity.description".localized()
+            title = "card_settings.transactions.detailed_card_activity.title".localized(),
+            description = "card_settings.transactions.detailed_card_activity.description".localized()
         )
         (rl_help as SectionHeaderViewTwo).set(
-                title = "card_settings.help.title".localized()
+            title = "card_settings.help.title".localized()
         )
         (rl_ivr_support as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.ivr_support.title".localized(),
-                description = "card_settings.help.ivr_support.description".localized()
+            title = "card_settings.help.ivr_support.title".localized(),
+            description = "card_settings.help.ivr_support.description".localized()
         )
         (rl_contact_support as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.contact_support.title".localized(),
-                description = "card_settings.help.contact_support.description".localized()
+            title = "card_settings.help.contact_support.title".localized(),
+            description = "card_settings.help.contact_support.description".localized()
         )
         (rl_report_stolen_card as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.help.report_lost_card.title".localized(),
-                description = "card_settings.help.report_lost_card.description".localized()
+            title = "card_settings.help.report_lost_card.title".localized(),
+            description = "card_settings.help.report_lost_card.description".localized()
         )
         (rl_faq as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.faq.title".localized(),
-                description = "card_settings.legal.faq.description".localized()
+            title = "card_settings.legal.faq.title".localized(),
+            description = "card_settings.legal.faq.description".localized()
         )
         (rl_legal as SectionHeaderViewTwo).set(
-                title = "card_settings.legal.title".localized()
+            title = "card_settings.legal.title".localized()
         )
         (rl_cardholder_agreement as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.cardholder_agreement.title".localized(),
-                description = "card_settings.legal.cardholder_agreement.description".localized()
+            title = "card_settings.legal.cardholder_agreement.title".localized(),
+            description = "card_settings.legal.cardholder_agreement.description".localized()
         )
         (rl_privacy_policy as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.privacy_policy.title".localized(),
-                description = "card_settings.legal.privacy_policy.description".localized()
+            title = "card_settings.legal.privacy_policy.title".localized(),
+            description = "card_settings.legal.privacy_policy.description".localized()
         )
         (rl_terms_of_service as SectionOptionWithSubtitleViewTwo).set(
-                title = "card_settings.legal.terms_of_service.title".localized(),
-                description = "card_settings.legal.terms_of_service.description".localized()
+            title = "card_settings.legal.terms_of_service.title".localized(),
+            description = "card_settings.legal.terms_of_service.description".localized()
         )
         (rl_statement as SectionOptionWithSubtitleViewTwo).set(
             title = "card_settings.help.monthly_statements.title".localized(),
@@ -254,7 +259,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     }
 
     private fun getPinPressed() {
-        when(val type = card.features?.getPin?.type) {
+        when (val type = card.features?.getPin?.type) {
             is Voip -> delegate?.showVoip(action = LISTEN_PIN)
             is Ivr -> {
                 context?.let { context ->
@@ -264,8 +269,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
                 }
             }
             // Unsupported get pin actions
-            is Api -> {}
-            is Unknown -> {}
+            is Api -> {
+            }
+            is Unknown -> {
+            }
         }
     }
 
@@ -352,36 +359,37 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private fun sendCustomerSupportEmail() {
         projectConfiguration.supportEmailAddress?.let { recipientAddress ->
             delegate?.showMailComposer(
-                    recipient = recipientAddress,
-                    subject = "help.mail.subject".localized(),
-                    body = "help.mail.body".localized()
+                recipient = recipientAddress,
+                subject = "help.mail.subject".localized(),
+                body = "help.mail.body".localized()
             )
         }
     }
 
     private fun reportLostOrStolenCard() {
         confirm(
-                title = "card_settings.settings.confirm_report_lost_card.title".localized(),
-                text = "card_settings.settings.confirm_report_lost_card.message".localized(),
-                confirm = "card_settings.settings.confirm_report_lost_card.ok_button".localized(),
-                cancel = "card_settings.settings.confirm_report_lost_card.cancel_button".localized(),
-                onConfirm = {
-                    viewModel.lockCard { }
-                    projectConfiguration.supportEmailAddress?.let { recipientAddress ->
-                        delegate?.showMailComposer(
-                                recipient = recipientAddress,
-                                subject = "email_lost_card_subject".localized(),
-                                body = null
-                        )
-                    }
-                },
-                onCancel = { }
+            title = "card_settings.settings.confirm_report_lost_card.title".localized(),
+            text = "card_settings.settings.confirm_report_lost_card.message".localized(),
+            confirm = "card_settings.settings.confirm_report_lost_card.ok_button".localized(),
+            cancel = "card_settings.settings.confirm_report_lost_card.cancel_button".localized(),
+            onConfirm = {
+                viewModel.lockCard { }
+                projectConfiguration.supportEmailAddress?.let { recipientAddress ->
+                    delegate?.showMailComposer(
+                        recipient = recipientAddress,
+                        subject = "email_lost_card_subject".localized(),
+                        body = null
+                    )
+                }
+            },
+            onCancel = { }
         )
     }
 
     private fun onGooglePayPressed() {
         activity?.let {
-            val intent = intentGenerator.invoke(InAppProvisioningDeepLinkGenerator(it, card.accountID))
+            iAPDeepLinkGenerator.setCardId(card.accountID)
+            val intent = intentGenerator.invoke(iAPDeepLinkGenerator)
             it.startActivity(intent)
         }
     }

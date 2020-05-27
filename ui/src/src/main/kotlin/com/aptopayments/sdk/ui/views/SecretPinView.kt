@@ -10,7 +10,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.hide
+import com.aptopayments.sdk.core.extension.invisibleIf
+import com.aptopayments.sdk.core.extension.show
+import com.aptopayments.sdk.core.extension.visibleIf
 import kotlinx.android.synthetic.main.view_secret_pin.view.*
 
 private const val DEFAULT_PIN_LENGTH = 4

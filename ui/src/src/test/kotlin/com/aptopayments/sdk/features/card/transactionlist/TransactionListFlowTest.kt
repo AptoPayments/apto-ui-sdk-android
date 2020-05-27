@@ -7,18 +7,19 @@ import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Mockito.mock
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TransactionListFlowTest : AndroidTest() {
     private lateinit var sut: TransactionListFlow
+
     // Collaborators
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
@@ -72,7 +73,7 @@ class TransactionListFlowTest : AndroidTest() {
     fun `on transaction tapped instantiate fragment from the factory`() {
         // Given
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
-        val transaction = mock(Transaction::class.java)
+        val transaction = mock<Transaction>()
         val fragmentTestDouble = transactionDetailsFragmentTestDouble()
         given {
             mockFragmentFactory.transactionDetailsFragment(transaction, detailsTag)

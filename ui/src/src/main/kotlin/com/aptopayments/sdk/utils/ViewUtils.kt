@@ -23,7 +23,6 @@ object ViewUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun showKeyboard(context: Context) {
@@ -32,9 +31,13 @@ object ViewUtils {
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
-    fun getAlertDialogBuilder(context: Context, okTitle: String, cancelTitle: String,
-                              positiveCallback: () -> Unit,
-                              negativeCallback: () -> Unit): AlertDialog.Builder {
+    fun getAlertDialogBuilder(
+        context: Context,
+        okTitle: String,
+        cancelTitle: String,
+        positiveCallback: () -> Unit,
+        negativeCallback: () -> Unit
+    ): AlertDialog.Builder {
         val builder = AlertDialog.Builder(context)
         builder.setPositiveButton(okTitle) { dialogInterface: DialogInterface, _: Int ->
             dialogInterface.dismiss()
@@ -56,4 +59,3 @@ object ViewUtils {
         return screenHeight < 1800
     }
 }
-

@@ -24,7 +24,6 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.threeten.bp.LocalDate
 
 private const val CARD_ID = "1"
@@ -113,7 +112,7 @@ class CardTransactionsChartViewModelTest : AndroidTest() {
 
     private fun checkMonthlyStatementsApiResult(apiResult: Boolean) {
         AptoUiSdk.cardOptions = CardOptions(showMonthlyStatementsOption = true)
-        val period = Mockito.mock(MonthlyStatementPeriod::class.java)
+        val period = mock<MonthlyStatementPeriod>()
         whenever(period.contains(MONTH, YEAR)).thenReturn(apiResult)
         configurePlatformFetchMonthlyStatementPeriod(period)
 

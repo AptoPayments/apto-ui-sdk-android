@@ -24,15 +24,17 @@ private const val CARD_KEY = "CARD"
 private const val CONFIG_KEY = "CONFIG"
 
 internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionListContract.View,
-        TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
+    TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
     override var delegate: TransactionListContract.Delegate? = null
 
     override fun layoutId(): Int = R.layout.transaction_list_fragment_theme_two
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
     private val viewModel: TransactionListViewModel by viewModel()
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var cardId: String
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var config: TransactionListConfig
+    @VisibleForTesting(otherwise = Modifier.PRIVATE)
+    lateinit var cardId: String
+    @VisibleForTesting(otherwise = Modifier.PRIVATE)
+    lateinit var config: TransactionListConfig
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
 
@@ -61,7 +63,7 @@ internal class TransactionListFragmentThemeTwo : BaseFragment(), TransactionList
 
     private fun setupToolbar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
                 .title(config.mcc.toLocalizedString())

@@ -51,5 +51,4 @@ internal class CardMonthlyStatsAdapter(date: LocalDate, private val cardID: Stri
     override fun onStatementTapped(month: Int, year: Int) {
         delegate?.onStatementTapped(month, year)
     }
-
 }

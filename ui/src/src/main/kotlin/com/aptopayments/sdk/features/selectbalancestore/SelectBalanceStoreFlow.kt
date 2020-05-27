@@ -20,11 +20,11 @@ import com.aptopayments.sdk.features.oauth.OAuthVerifyFlow
 import org.koin.core.inject
 import java.lang.reflect.Modifier
 
-internal class SelectBalanceStoreFlow (
-        var actionConfiguration: WorkflowActionConfigurationSelectBalanceStore,
-        var cardApplicationId: String,
-        var onBack: (Unit) -> Unit,
-        var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
+internal class SelectBalanceStoreFlow(
+    var actionConfiguration: WorkflowActionConfigurationSelectBalanceStore,
+    var cardApplicationId: String,
+    var onBack: (Unit) -> Unit,
+    var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow() {
 
     private val aptoPlatformProtocol: AptoPlatformProtocol by inject()
@@ -34,9 +34,10 @@ internal class SelectBalanceStoreFlow (
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         actionConfiguration.allowedBalanceTypes?.firstOrNull()?.let { allowedBalanceType ->
             initOAuthFlow(
-                    allowedBalanceType = allowedBalanceType,
-                    assetUrl = actionConfiguration.assetUrl) { initResult ->
-                initResult.either({onInitComplete}) { flow ->
+                allowedBalanceType = allowedBalanceType,
+                assetUrl = actionConfiguration.assetUrl
+            ) { initResult ->
+                initResult.either({ onInitComplete }) { flow ->
                     setStartElement(element = flow)
                     onInitComplete(Either.Right(Unit))
                 }
@@ -51,17 +52,16 @@ internal class SelectBalanceStoreFlow (
         if (failure is Failure.ServerError && failure.isOauthTokenRevokedError()) {
             popFlow(true)
             showRevokedTokenDialog(failure)
-        }
-        else handleFailure(failure)
+        } else handleFailure(failure)
     }
 
     private fun showRevokedTokenDialog(error: Failure.ServerError) {
         confirm(title = "select_balance_store.login.error.title".localized(),
-                text = error.errorMessage(),
-                confirm = "select_balance_store.login.error.ok_button".localized(),
-                cancel = "",
-                onConfirm = { },
-                onCancel = { }
+            text = error.errorMessage(),
+            confirm = "select_balance_store.login.error.ok_button".localized(),
+            cancel = "",
+            onConfirm = { },
+            onCancel = { }
         )
     }
 
@@ -69,46 +69,53 @@ internal class SelectBalanceStoreFlow (
     // OAuth flow
     //
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun initOAuthFlow(allowedBalanceType: AllowedBalanceType, assetUrl: String?,
-                      onComplete: (Either<Failure, Flow>) -> Unit) {
+    fun initOAuthFlow(
+        allowedBalanceType: AllowedBalanceType,
+        assetUrl: String?,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
         val config = OAuthConfig(
-                title = "select_balance_store.login.title",
-                explanation = "select_balance_store.login.explanation",
-                callToAction = "select_balance_store.login.call_to_action.title",
-                newUserAction = "select_balance_store.login.new_user.title",
-                assetUrl = assetUrl,
-                allowedBalanceType = allowedBalanceType
+            title = "select_balance_store.login.title",
+            explanation = "select_balance_store.login.explanation",
+            callToAction = "select_balance_store.login.call_to_action.title",
+            newUserAction = "select_balance_store.login.new_user.title",
+            assetUrl = assetUrl,
+            allowedBalanceType = allowedBalanceType
         )
         val flow = OAuthFlow(
-                config = config,
-                onBack = { onBack(Unit) },
-                onFinish = { oauthAttempt -> verifyOAuthData(allowedBalanceType, oauthAttempt, onComplete) }
+            config = config,
+            onBack = { onBack(Unit) },
+            onFinish = { oauthAttempt -> verifyOAuthData(allowedBalanceType, oauthAttempt, onComplete) }
         )
         flow.init { initResult ->
-            initResult.either({onComplete}) {
+            initResult.either({ onComplete }) {
                 onComplete(Either.Right(flow))
             }
         }
     }
 
-    private fun verifyOAuthData(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt,
-                                onComplete: (Either<Failure, Flow>) -> Unit) {
+    private fun verifyOAuthData(
+        allowedBalanceType: AllowedBalanceType,
+        oauthAttempt: OAuthAttempt,
+        onComplete: (Either<Failure, Flow>) -> Unit
+    ) {
         verifyFlow = OAuthVerifyFlow(
-                allowedBalanceType = allowedBalanceType,
-                oauthAttempt = oauthAttempt,
-                onBack = { onBack(Unit) },
-                onFinish = { result -> confirmAddressIfNeeded(allowedBalanceType, result) },
-                onError = { error -> handleError(error) }
+            allowedBalanceType = allowedBalanceType,
+            oauthAttempt = oauthAttempt,
+            onBack = { onBack(Unit) },
+            onFinish = { result -> confirmAddressIfNeeded(allowedBalanceType, result) },
+            onError = { error -> handleError(error) }
         )
         verifyFlow.init { initResult ->
-            initResult.either({onComplete}) {
+            initResult.either({ onComplete }) {
                 push(flow = verifyFlow)
             }
         }
     }
 
     private fun confirmAddressIfNeeded(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt) {
-        (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)?.firstOrNull() as? AddressDataPoint)?.let { address ->
+        (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)
+            ?.firstOrNull() as? AddressDataPoint)?.let { address ->
             val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized()
                 .replace("<<ADDRESS>>", address.toStringRepresentation())
             confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
@@ -159,5 +166,4 @@ internal class SelectBalanceStoreFlow (
             }
         }
     }
-
 }

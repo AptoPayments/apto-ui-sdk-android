@@ -92,5 +92,4 @@ internal class ShouldAuthenticateWithPINOnPCIUseCaseTest : AndroidTest() {
         result.isRight `should be` true
         result.either({}, { value -> value `should be` expectedResult })
     }
-
 }

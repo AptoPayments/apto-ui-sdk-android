@@ -49,14 +49,14 @@ abstract class BaseActivity : AppCompatActivity() {
         rl_loading_view.startAnimation(animation)
     }
 
-    internal fun hideKeyboard()  = ViewUtils.hideKeyboard(this)
+    internal fun hideKeyboard() = ViewUtils.hideKeyboard(this)
 
-    internal fun showKeyboard()  = ViewUtils.showKeyboard(this)
+    internal fun showKeyboard() = ViewUtils.showKeyboard(this)
 
     override fun onBackPressed() {
         if (isLoading) return
-        (supportFragmentManager.findFragmentById(
-                R.id.fragmentContainer) as? BaseFragment)?.onBackPressed() ?: super.onBackPressed()
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? BaseFragment)?.onBackPressed()
+            ?: super.onBackPressed()
     }
 
     internal fun checkPermission(permission: String): Int {
@@ -69,7 +69,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun confirm(
-        title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit,
+        title: String,
+        text: String,
+        confirm: String,
+        cancel: String,
+        onConfirm: (Unit) -> Unit,
         onCancel: (Unit) -> Unit
     ) {
         val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(this,
@@ -77,8 +81,7 @@ abstract class BaseActivity : AppCompatActivity() {
         themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             RECORD_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {

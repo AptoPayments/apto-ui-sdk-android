@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val KYC_STATUS_PARAMETER_KEY = "kyc_status"
 private const val CARD_ID_PARAMETER_KEY = "card_id"
 
-internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View {
+internal class KycStatusFragmentThemeTwo : BaseFragment(), KycStatusContract.View {
 
     override fun layoutId() = R.layout.fragment_kyc_status_theme_two
     private val viewModel: KycStatusViewModel by viewModel()
@@ -42,7 +42,6 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         delegate?.onKycClosed()
     }
 
@@ -59,7 +58,7 @@ internal class KycStatusFragmentThemeTwo: BaseFragment(), KycStatusContract.View
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeLargeTitleLabel(tv_kyc_title)
             customizeRegularTextLabel(tv_status_text)
             customizeSubmitButton(refresh_button)

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.PhoneDialer
 
 internal class ActivatePhysicalCardSuccessViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), PhoneDialer.Delegate {
 
     var getPINFinished: MutableLiveData<Boolean> = MutableLiveData()

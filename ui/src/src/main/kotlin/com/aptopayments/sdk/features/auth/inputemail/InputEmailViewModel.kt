@@ -9,7 +9,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class InputEmailViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     var enableNextButton: MutableLiveData<Boolean> = MutableLiveData(false)

@@ -14,6 +14,7 @@ internal class OnEnterBackgroundUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var authState: AuthStateProvider
+
     @Mock
     private lateinit var authenticationRepo: AuthenticationRepository
 

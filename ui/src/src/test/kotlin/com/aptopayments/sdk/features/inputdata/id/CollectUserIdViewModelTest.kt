@@ -123,7 +123,6 @@ class CollectUserIdViewModelTest : UnitTest() {
             IdDocumentDataPoint(IdDocumentDataPoint.Type.IDENTITY_CARD, DOCUMENT_NUMBER, COUNTRY_AR.isoCode)
         createSut(initialValue)
 
-
         assertEquals(DOCUMENT_NUMBER, sut.number.getOrAwaitValue())
         assertEquals(COUNTRY_AR, sut.selectedCountry.getOrAwaitValue())
     }

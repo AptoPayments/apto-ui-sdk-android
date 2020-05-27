@@ -87,7 +87,7 @@ internal class CollectUserNameSurnameFragment : BaseBindingFragment<FragmentColl
     }
 
     private fun setupToolBar(toolbar: Toolbar) {
-        toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupViewModel() {

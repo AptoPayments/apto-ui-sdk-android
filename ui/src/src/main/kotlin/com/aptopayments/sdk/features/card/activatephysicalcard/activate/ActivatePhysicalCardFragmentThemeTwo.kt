@@ -1,8 +1,6 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard.activate
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import com.aptopayments.core.data.card.ActivatePhysicalCardResult
 import com.aptopayments.core.data.card.ActivatePhysicalCardResultType
 import com.aptopayments.core.data.card.Card
@@ -57,19 +55,23 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_physical_activation_title)
             customizeRegularTextLabel(tv_physical_activation_explanation)
         }
     }
 
-    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()
         val validator = object : ValidInputListener {
-            override fun onValidInput(isValid: Boolean) { if (isValid) activateCard() }
+            override fun onValidInput(isValid: Boolean) {
+                if (isValid) {
+                    activateCard()
+                }
+            }
         }
         apto_pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view))
     }
@@ -86,7 +88,7 @@ internal class ActivatePhysicalCardFragmentThemeTwo : BaseFragment(), ActivatePh
             hideLoading()
             when (result?.result) {
                 ActivatePhysicalCardResultType.ACTIVATED -> delegate?.onPhysicalCardActivated()
-                ActivatePhysicalCardResultType.ERROR -> { showError(result) }
+                ActivatePhysicalCardResultType.ERROR -> showError(result)
             }
         }
     }

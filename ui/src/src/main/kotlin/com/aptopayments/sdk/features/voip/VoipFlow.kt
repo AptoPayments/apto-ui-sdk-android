@@ -8,11 +8,11 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 
 private const val VOIP_TAG = "VoipFragment"
 
-internal class VoipFlow (
-        val cardId: String,
-        val action: Action,
-        val onBack: (Unit) -> Unit,
-        val onFinish: (Unit) -> Unit
+internal class VoipFlow(
+    val cardId: String,
+    val action: Action,
+    val onBack: (Unit) -> Unit,
+    val onFinish: (Unit) -> Unit
 ) : Flow(), VoipContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val fragment = fragmentFactory.getVoipFragment(cardId, action, VOIP_TAG)

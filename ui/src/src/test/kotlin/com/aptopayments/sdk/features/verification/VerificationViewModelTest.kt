@@ -22,6 +22,7 @@ import kotlin.test.assertTrue
 
 class VerificationViewModelTest : UnitTest() {
     private lateinit var verificationViewModel: VerificationViewModel
+
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
@@ -29,7 +30,8 @@ class VerificationViewModelTest : UnitTest() {
     private lateinit var verificationLiveData: MutableLiveData<Verification>
 
     @Rule
-    @JvmField var rule: TestRule = InstantTaskExecutorRule()
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
     fun `set up for testing`() {

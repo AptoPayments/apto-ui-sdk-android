@@ -32,7 +32,7 @@ private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
 private const val ASSET_URL_KEY = "ASSET_URL"
 private const val ERROR_MESSAGE_KEYS_KEY = "ERROR_MESSAGE_KEYS"
 
-internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContract.View {
+internal class OAuthConnectFragmentThemeTwo : BaseFragment(), OAuthConnectContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_connect_theme_two
     private val viewModel: OAuthConnectViewModel by viewModel()
@@ -98,7 +98,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     private fun setupTexts() {
@@ -112,7 +112,7 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_oauth_header)
             customizeRegularTextLabel(tv_oauth_info)
@@ -153,7 +153,9 @@ internal class OAuthConnectFragmentThemeTwo: BaseFragment(), OAuthConnectContrac
     }
 
     private fun showOauthFailure(oauthAttempt: OAuthAttempt) {
-        if (oauthAttempt.status != FAILED) { return }
+        if (oauthAttempt.status != FAILED) {
+            return
+        }
         oauthAttempt.errorMessageKeys = errorMessageKeys
         notify(message = oauthAttempt.localizedErrorMessage(), type = ERROR)
     }

@@ -37,7 +37,6 @@ internal class PdfRendererFragment : BaseFragment(),
     }
 
     override fun setupViewModel() {
-
     }
 
     override fun viewLoaded() {
@@ -64,7 +63,7 @@ internal class PdfRendererFragment : BaseFragment(),
         }
     }
 
-     private fun onMenuItemSelected(item: MenuItem) : Boolean{
+    private fun onMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_pdf_share -> {
                 share(file)
@@ -86,7 +85,8 @@ internal class PdfRendererFragment : BaseFragment(),
             setOnMenuItemClickListener { onMenuItemSelected(it) }
             tintMenuItem()
         }
-        tb_llsdk_toolbar.configure(activity,
+        tb_llsdk_toolbar.configure(
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
                 .title(title)

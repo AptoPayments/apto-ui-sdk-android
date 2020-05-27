@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.core.extension
 
 import com.aptopayments.sdk.UnitTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class StringTest : UnitTest() {
@@ -30,5 +30,4 @@ class StringTest : UnitTest() {
     fun `stars_ when four digits then three star and one digit`() {
         assertEquals("1234".starsExceptLast(), "***4")
     }
-
 }

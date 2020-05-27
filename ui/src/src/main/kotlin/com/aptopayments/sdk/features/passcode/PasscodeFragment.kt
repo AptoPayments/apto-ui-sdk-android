@@ -93,7 +93,7 @@ internal abstract class PasscodeFragment : BaseFragment(), PasscodeContract.View
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     fun onPinEntered(currentPin: String) {

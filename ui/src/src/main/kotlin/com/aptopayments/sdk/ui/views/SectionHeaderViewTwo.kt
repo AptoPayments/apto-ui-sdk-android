@@ -9,9 +9,8 @@ import kotlinx.android.synthetic.main.view_section_option_two.view.*
 
 class SectionHeaderViewTwo
 @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0)
-    : LinearLayout(context, attrs, defStyleAttr, defStyleRes)
-{
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     override fun onFinishInflate() {
         super.onFinishInflate()

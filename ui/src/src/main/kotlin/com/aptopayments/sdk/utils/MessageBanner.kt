@@ -14,15 +14,25 @@ class MessageBanner {
         HEADS_UP
     }
 
-    fun showBanner(activity: FragmentActivity, textResId: Int, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG) {
+    fun showBanner(
+        activity: FragmentActivity,
+        textResId: Int,
+        messageType: MessageType,
+        duration: Int = Snackbar.LENGTH_LONG
+    ) {
         if (activity.isFinishing) {
             return
         }
         showBanner(activity, activity.getString(textResId), messageType, duration)
     }
 
-    fun showBanner(activity: FragmentActivity, message: String, messageType: MessageType, duration: Int = Snackbar.LENGTH_LONG,
-                   title: String? = null) {
+    fun showBanner(
+        activity: FragmentActivity,
+        message: String,
+        messageType: MessageType,
+        duration: Int = Snackbar.LENGTH_LONG,
+        title: String? = null
+    ) {
         if (activity.isFinishing) {
             return
         }
@@ -34,7 +44,7 @@ class MessageBanner {
         }
 
         val rootView = (activity.findViewById<View>(android.R.id.content) as ViewGroup)
-                .getChildAt(0) as ViewGroup
+            .getChildAt(0) as ViewGroup
         val customSnackbar = SnackbarThemeTwo.make(rootView, duration)
         val customTitle = if (UIConfig.showToastTitle) title else null
         customSnackbar.setTitle(customTitle)

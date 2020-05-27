@@ -1,15 +1,16 @@
 package com.aptopayments.sdk.core.platform
 
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.exception.Failure.NetworkConnection
+import com.aptopayments.sdk.AndroidTest
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.Test
 
 class BaseViewModelTest : AndroidTest() {
 
-    @Test fun `should handle failure by updating live data`() {
+    @Test
+    fun `should handle failure by updating live data`() {
         val viewModel = MyViewModel()
 
         viewModel.handleError(NetworkConnection)

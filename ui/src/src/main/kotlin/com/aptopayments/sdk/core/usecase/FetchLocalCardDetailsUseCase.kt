@@ -10,5 +10,4 @@ internal class FetchLocalCardDetailsUseCase(private val repository: LocalCardDet
     UseCaseWithoutParams<LiveData<CardDetails?>>() {
 
     override fun run(): Either<Failure, LiveData<CardDetails?>> = Either.Right(repository.getCardDetailsLiveData())
-
 }

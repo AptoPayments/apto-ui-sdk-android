@@ -10,8 +10,8 @@ import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager.*
 import java.lang.ref.WeakReference
 
-class PhoneDialer (
-        val context: Context
+class PhoneDialer(
+    val context: Context
 ) : PhoneStateListener() {
 
     private var lastKnownState: Int = CALL_STATE_IDLE
@@ -58,7 +58,7 @@ class PhoneDialer (
                 lastKnownState = state
                 delegate?.get()?.onCallStarted()
             }
-            else -> { lastKnownState = state }
+            else -> lastKnownState = state
         }
     }
 

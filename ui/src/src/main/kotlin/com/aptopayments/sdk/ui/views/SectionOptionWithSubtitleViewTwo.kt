@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.widget.RelativeLayout
 import com.aptopayments.sdk.core.extension.goneIf
 import com.aptopayments.sdk.core.extension.hide
-import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.view_section_option_subtitle_two.view.*
 

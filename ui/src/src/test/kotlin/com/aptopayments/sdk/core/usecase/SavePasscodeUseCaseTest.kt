@@ -3,7 +3,7 @@ package com.aptopayments.sdk.core.usecase
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

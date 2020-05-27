@@ -86,11 +86,12 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
     }
 
     companion object {
-        fun newInstance(cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) = IssueCardFragmentThemeTwo().apply {
-            arguments = Bundle().apply {
-                putString(CARD_APPLICATION_ID, cardApplicationId)
-                putSerializable(ACTION_CONFIGURATION, actionConfiguration)
+        fun newInstance(cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) =
+            IssueCardFragmentThemeTwo().apply {
+                arguments = Bundle().apply {
+                    putString(CARD_APPLICATION_ID, cardApplicationId)
+                    putSerializable(ACTION_CONFIGURATION, actionConfiguration)
+                }
             }
-        }
     }
 }

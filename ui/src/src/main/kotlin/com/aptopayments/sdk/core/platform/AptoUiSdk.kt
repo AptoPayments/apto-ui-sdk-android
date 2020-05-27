@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageInfo
 import androidx.fragment.app.FragmentActivity
+import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.platform.AptoPlatform
@@ -16,6 +17,7 @@ import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
+import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
 import com.aptopayments.sdk.utils.FontsUtil
 import org.koin.core.module.Module
 import java.lang.ref.WeakReference
@@ -41,8 +43,9 @@ interface AptoUiSdkProtocol {
         onError: ((Failure) -> Unit)?
     )
 
+    fun setCardIssueAdditional(fields: IssueCardAdditionalFields)
     fun userTokenPresent(): Boolean
-    fun getAppVersion(activity: FragmentActivity?) : String
+    fun getAppVersion(activity: FragmentActivity?): String
     fun registerFirebaseToken(firebaseToken: String)
     fun logout()
 }
@@ -104,6 +107,10 @@ object AptoUiSdk : AptoUiSdkProtocol {
                 onSuccess?.invoke()
             }
         }
+    }
+
+    override fun setCardIssueAdditional(fields: IssueCardAdditionalFields) {
+        IssueCardAdditionalFieldsRepositoryImpl.fields = fields
     }
 
     override fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()

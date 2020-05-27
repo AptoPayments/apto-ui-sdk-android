@@ -14,10 +14,12 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
 
-class OAuthFlowTest: AndroidTest() {
+class OAuthFlowTest : AndroidTest() {
 
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockDelegate: OAuthConnectContract.Delegate
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockDelegate: OAuthConnectContract.Delegate
 
     @Before
     override fun setUp() {
@@ -37,7 +39,8 @@ class OAuthFlowTest: AndroidTest() {
         val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = tag }
         val config = TestDataProvider.provideOauthConfig()
         val sut = OAuthFlow(config = config, onBack = {}, onFinish = {})
-        given { mockFragmentFactory.oauthConnectFragment(config = config, tag = tag)
+        given {
+            mockFragmentFactory.oauthConnectFragment(config = config, tag = tag)
         }.willReturn(fragmentDouble)
 
         // When

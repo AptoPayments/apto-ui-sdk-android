@@ -8,7 +8,6 @@ import com.aptopayments.core.exception.Failure
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T?) -> Unit) =
         liveData.observe(this, Observer(body))
 
-
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observeNotNullable(liveData: L, body: (T) -> Unit) =
     liveData.observe(this, Observer(body))
 

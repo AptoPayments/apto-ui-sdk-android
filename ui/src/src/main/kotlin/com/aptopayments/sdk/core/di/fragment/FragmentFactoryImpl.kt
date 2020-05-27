@@ -193,5 +193,4 @@ internal class FragmentFactoryImpl : FragmentFactory {
         config: AllowedCountriesConfiguration,
         tag: String
     ) = CollectUserPhoneFragment.newInstance(initialValue, config, tag)
-
 }

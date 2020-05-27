@@ -42,7 +42,7 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
 
     override fun viewLoaded() = viewModel.viewLoaded()
 
-    private fun applyFontsAndColors()   {
+    private fun applyFontsAndColors() {
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_email_header)
@@ -53,7 +53,7 @@ internal class InputEmailFragmentThemeTwo : BaseFragment(), InputEmailContract.V
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupListeners() {

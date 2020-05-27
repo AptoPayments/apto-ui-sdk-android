@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.ui.views.birthdate
 
 import org.threeten.bp.LocalDate
-import java.lang.Exception
 
 class BirthdateViewDateParser {
     fun parse(year: String, month: String, day: String): LocalDate? {

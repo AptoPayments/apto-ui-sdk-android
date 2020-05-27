@@ -8,7 +8,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -26,6 +27,7 @@ class InMemoryLocalCardDetailsRepositoryTest : UnitTest() {
 
     @Spy
     private lateinit var dateProvider: DateProvider
+
     @Mock
     private lateinit var aptoProtocol: AptoPlatformProtocol
     private lateinit var sut: InMemoryLocalCardDetailsRepository

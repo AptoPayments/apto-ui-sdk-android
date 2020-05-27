@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.core.ui
 
 import com.google.android.material.appbar.AppBarLayout
+import kotlin.math.abs
 
 abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
 
@@ -13,19 +14,19 @@ abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener 
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, offset: Int) {
-        val scrolledPercentage = Math.abs(offset)/appBarLayout.totalScrollRange.toFloat()
-        when (scrolledPercentage) {
+        val scrolledPercentage = abs(offset) / appBarLayout.totalScrollRange.toFloat()
+        mCurrentState = when (scrolledPercentage) {
             0.0f -> {
                 if (mCurrentState != State.EXPANDED) onStateChanged(scrolledPercentage)
-                mCurrentState = State.EXPANDED
+                State.EXPANDED
             }
             1.0f -> {
                 if (mCurrentState != State.COLLAPSED) onStateChanged(scrolledPercentage)
-                mCurrentState = State.COLLAPSED
+                State.COLLAPSED
             }
             else -> {
                 onStateChanged(scrolledPercentage)
-                mCurrentState = State.TRANSITION
+                State.TRANSITION
             }
         }
     }

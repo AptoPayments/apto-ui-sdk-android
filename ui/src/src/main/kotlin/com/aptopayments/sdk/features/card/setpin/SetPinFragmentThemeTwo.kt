@@ -50,14 +50,14 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_set_pin_title)
             customizeRegularTextLabel(tv_set_pin_explanation)
         }
     }
 
-    private fun setupToolBar() = tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
+    private fun setupToolBar() = tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
 
     override fun setupListeners() {
         super.setupListeners()
@@ -68,8 +68,6 @@ internal class SetPinFragmentThemeTwo : BaseFragment(), SetPinContract.View {
         }
         pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, pin_view))
     }
-
-
 
     override fun onBackPressed() {
         hideKeyboard()

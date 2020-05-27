@@ -72,5 +72,4 @@ internal class CollectUserPhoneViewModelTest : UnitTest() {
     fun `when nothing is set then continue button is disabled`() {
         kotlin.test.assertFalse { sut.continueEnabled.getOrAwaitValue() }
     }
-
 }

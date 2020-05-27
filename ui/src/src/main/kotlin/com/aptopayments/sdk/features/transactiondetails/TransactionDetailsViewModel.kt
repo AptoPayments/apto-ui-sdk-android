@@ -36,7 +36,9 @@ internal class TransactionDetailsViewModel constructor(
     }
 
     private fun calculateNativeBalanceRepresentation(): String {
-        return if (transaction.getNativeBalanceRepresentation().isNotBlank() && transaction.localAmount?.currency != transaction.nativeBalance?.currency) {
+        return if (transaction.getNativeBalanceRepresentation().isNotBlank() &&
+            transaction.localAmount?.currency != transaction.nativeBalance?.currency
+        ) {
             "≈ ${transaction.getNativeBalanceRepresentation()}"
         } else {
             ""

@@ -64,7 +64,7 @@ interface ThemeManager {
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
     fun customizeEditText(editText: EditText)
 
-    fun customizeRoundedBackground(view: View){
+    fun customizeRoundedBackground(view: View) {
         (view.background as? GradientDrawable)?.setColor(UIConfig.uiBackgroundSecondaryColor)
     }
 

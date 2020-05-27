@@ -26,5 +26,4 @@ internal class BiometricsAuthCorrectUseCaseTest : UnitTest() {
         assert(result.isRight)
         verify(authenticationRepository).saveAuthenticationTime()
     }
-
 }

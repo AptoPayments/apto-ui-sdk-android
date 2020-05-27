@@ -27,22 +27,31 @@ import org.mockito.Spy
 internal class AuthFlowTest : AndroidTest() {
 
     private lateinit var sut: AuthFlow
+
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
+
     @Mock
     private lateinit var mockPhoneDelegate: InputPhoneContract.Delegate
+
     @Mock
     private lateinit var mockEmailDelegate: InputEmailContract.Delegate
+
     @Mock
     private lateinit var mockBirthdayVerification: BirthdateVerificationContract.Delegate
+
     @Mock
     private lateinit var mockPhoneVerifyDelegate: PhoneVerificationContract.Delegate
+
     @Mock
     private lateinit var mockEmailVerifyDelegate: EmailVerificationContract.Delegate
+
     @Mock
     private lateinit var mockDataPoint: PhoneDataPoint
+
     @Mock
     private lateinit var countries: List<Country>
+
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
@@ -53,7 +62,7 @@ internal class AuthFlowTest : AndroidTest() {
         startKoin {
             modules(module {
                 single<AnalyticsServiceContract> { analyticsManager }
-                single{ mockFragmentFactory }
+                single { mockFragmentFactory }
             })
         }
     }
@@ -67,8 +76,9 @@ internal class AuthFlowTest : AndroidTest() {
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
         given {
             mockFragmentFactory.inputPhoneFragment(
-                    allowedCountries = countries,
-                    tag = tag)
+                allowedCountries = countries,
+                tag = tag
+            )
         }.willReturn(fragmentPhoneInputDouble)
 
         // When
@@ -76,8 +86,9 @@ internal class AuthFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).inputPhoneFragment(
-                allowedCountries = countries,
-                tag = tag)
+            allowedCountries = countries,
+            tag = tag
+        )
     }
 
     @Test
@@ -86,21 +97,18 @@ internal class AuthFlowTest : AndroidTest() {
         // Given
         val tag = "PhoneVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfiguration(), onBack = {}, onFinish = {})
-        val fragmentPhoneVerificationDouble = AuthPhoneVerificationFragmentDouble(mockPhoneVerifyDelegate).apply { this.TAG = tag }
+        val fragmentPhoneVerificationDouble =
+            AuthPhoneVerificationFragmentDouble(mockPhoneVerifyDelegate).apply { this.TAG = tag }
         val verification = Verification("", "phone")
         given {
-            mockFragmentFactory.phoneVerificationFragment(
-                    verification = verification,
-                    tag = tag)
+            mockFragmentFactory.phoneVerificationFragment(verification = verification, tag = tag)
         }.willReturn(fragmentPhoneVerificationDouble)
 
         // When
         sut.onPhoneVerificationStarted(verification)
 
         // Then
-        verify(mockFragmentFactory).phoneVerificationFragment(
-                verification = verification,
-                tag = tag)
+        verify(mockFragmentFactory).phoneVerificationFragment(verification = verification, tag = tag)
     }
 
     @Test
@@ -112,18 +120,14 @@ internal class AuthFlowTest : AndroidTest() {
         val fragmentEmailVerifyDouble = AuthVerifyEmailFragmentDouble(mockEmailVerifyDelegate).apply { this.TAG = tag }
         val verification = Verification("", "phone")
         given {
-            mockFragmentFactory.emailVerificationFragment(
-                    verification = verification,
-                    tag = tag)
+            mockFragmentFactory.emailVerificationFragment(verification = verification, tag = tag)
         }.willReturn(fragmentEmailVerifyDouble)
 
         // When
         sut.onEmailVerificationStarted(verification)
 
         // Then
-        verify(mockFragmentFactory).emailVerificationFragment(
-                verification = verification,
-                tag = tag)
+        verify(mockFragmentFactory).emailVerificationFragment(verification = verification, tag = tag)
     }
 
     @Test
@@ -137,8 +141,12 @@ internal class AuthFlowTest : AndroidTest() {
         given {
             mockFragmentFactory.inputPhoneFragment(countries, tag)
         }.willReturn(fragmentPhoneInputDouble)
-        mockDataPoint = PhoneDataPoint(verification = Verification("", "phone",
-                VerificationStatus.FAILED, "", Verification("", "phone")))
+        mockDataPoint = PhoneDataPoint(
+            verification = Verification(
+                "", "phone",
+                VerificationStatus.FAILED, "", Verification("", "phone")
+            )
+        )
 
         // When
         sut.onEmailVerificationPassed(mockDataPoint)
@@ -158,8 +166,12 @@ internal class AuthFlowTest : AndroidTest() {
         given {
             mockFragmentFactory.inputEmailFragment(tag)
         }.willReturn(fragmentEmailDouble)
-        mockDataPoint = PhoneDataPoint(verification = Verification("", "email",
-                VerificationStatus.FAILED, "", Verification("", "email")))
+        mockDataPoint = PhoneDataPoint(
+            verification = Verification(
+                "", "email",
+                VerificationStatus.FAILED, "", Verification("", "email")
+            )
+        )
 
         // When
         sut.onPhoneVerificationPassed(mockDataPoint)
@@ -175,8 +187,10 @@ internal class AuthFlowTest : AndroidTest() {
         val tag = "BirthdateVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        val verification = Verification("", "phone",
-                VerificationStatus.FAILED, "", Verification("", "birthdate"))
+        val verification = Verification(
+            "", "phone",
+            VerificationStatus.FAILED, "", Verification("", "birthdate")
+        )
         mockDataPoint = PhoneDataPoint(verification = verification)
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {
@@ -197,8 +211,10 @@ internal class AuthFlowTest : AndroidTest() {
         val tag = "BirthdateVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        val verification = Verification("", "email",
-            VerificationStatus.FAILED, "", Verification("", "birthdate"))
+        val verification = Verification(
+            "", "email",
+            VerificationStatus.FAILED, "", Verification("", "birthdate")
+        )
         mockDataPoint = PhoneDataPoint(verification = verification)
         val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
         given {

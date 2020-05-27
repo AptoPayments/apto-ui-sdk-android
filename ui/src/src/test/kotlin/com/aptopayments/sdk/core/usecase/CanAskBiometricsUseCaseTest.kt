@@ -15,6 +15,7 @@ internal class CanAskBiometricsUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var repo: AuthenticationRepository
+
     @Mock
     private lateinit var biometricsWrapper: BiometricWrapper
 
@@ -48,5 +49,4 @@ internal class CanAskBiometricsUseCaseTest : UnitTest() {
         whenever(repo.isBiometricsEnabledByUser()).thenReturn(biometricsEnabled)
         whenever(biometricsWrapper.canAskBiometric()).thenReturn(canAskBiometric)
     }
-
 }

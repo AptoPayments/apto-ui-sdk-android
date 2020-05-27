@@ -64,9 +64,10 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
 
     private fun showWaitlist() {
         val content = Content.Native(
-                backgroundColor = getBackgroundColor(),
-                backgroundImage = cardProduct.waitlistBackgroundImage,
-                asset = cardProduct.waitlistAsset)
+            backgroundColor = getBackgroundColor(),
+            backgroundImage = cardProduct.waitlistBackgroundImage,
+            asset = cardProduct.waitlistAsset
+        )
         vw_content_presenter.content = content
         content.backgroundImage?.let { iv_background.loadFromUrl(it.toString()) }
     }
@@ -84,12 +85,11 @@ internal class WaitlistFragmentThemeTwo : BaseFragment(), WaitlistContract.View 
 
     companion object {
         fun newInstance(cardProduct: CardProduct, cardId: String): WaitlistFragmentThemeTwo =
-                WaitlistFragmentThemeTwo().apply {
-                    arguments = Bundle().apply {
-                        putString(CARD_ID_PARAMETER_KEY, cardId)
-                        putSerializable(CARD_PRODUCT_PARAMETER_KEY, cardProduct)
-                    }
+            WaitlistFragmentThemeTwo().apply {
+                arguments = Bundle().apply {
+                    putString(CARD_ID_PARAMETER_KEY, cardId)
+                    putSerializable(CARD_PRODUCT_PARAMETER_KEY, cardProduct)
                 }
+            }
     }
 }
-

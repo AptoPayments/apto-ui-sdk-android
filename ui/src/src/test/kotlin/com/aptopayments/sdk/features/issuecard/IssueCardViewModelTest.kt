@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.issuecard
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
+import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -10,8 +11,10 @@ import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
+import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -41,6 +44,18 @@ class IssueCardViewModelTest : AndroidTest() {
     @Mock
     private lateinit var aptoPlatform: AptoPlatformProtocol
 
+    @Mock
+    private lateinit var issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository
+
+    @Mock
+    private lateinit var additionalFields: IssueCardAdditionalFields
+
+    @Before
+    override fun setUp() {
+        super.setUp()
+        whenever(issueCardAdditionalRepo.get()).thenReturn(additionalFields)
+    }
+
     @Test
     fun `when IssueCardViewModel then issueCard call is made correctly`() {
         val card = TestDataProvider.provideCard()
@@ -48,21 +63,39 @@ class IssueCardViewModelTest : AndroidTest() {
         whenever(
             aptoPlatform.issueCard(
                 captor.capture(),
+                TestDataProvider.anyObject(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[1] as (Either<Failure, Card>) -> Unit).invoke(
-                Either.Right(card)
-            )
+            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
-        verify(aptoPlatform).issueCard(any(), any())
+        verify(aptoPlatform).issueCard(any(), any(), any())
         verify(analyticsManager).track(Event.IssueCard)
         assertEquals(CARD_APPLICATION_ID, captor.firstValue)
         assertFalse(sut.errorVisible.getOrAwaitValue())
         assertEquals(card, sut.card.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when additional Field set them it is sent to the core sdk`() {
+        val card = TestDataProvider.provideCard()
+        val captor = argumentCaptor<IssueCardAdditionalFields>()
+        whenever(
+            aptoPlatform.issueCard(
+                any(),
+                captor.capture(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+        }
+
+        createSut()
+
+        assertEquals(additionalFields, captor.firstValue)
     }
 
     @Test
@@ -129,7 +162,7 @@ class IssueCardViewModelTest : AndroidTest() {
         sut.retryIssueCard()
 
         assertTrue { sut.errorVisible.getOrAwaitValue() }
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any())
     }
 
     @Test
@@ -144,11 +177,17 @@ class IssueCardViewModelTest : AndroidTest() {
 
         assertEquals(TestDataProvider.provideCard(), sut.card.getOrAwaitValue())
         assertFalse(sut.errorVisible.getOrAwaitValue())
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any())
     }
 
     private fun createSut() {
-        sut = IssueCardViewModel(CARD_APPLICATION_ID, WorkflowActionConfigurationIssueCard(ERROR_ASSET), analyticsManager, aptoPlatform)
+        sut = IssueCardViewModel(
+            CARD_APPLICATION_ID,
+            WorkflowActionConfigurationIssueCard(ERROR_ASSET),
+            analyticsManager,
+            aptoPlatform,
+            issueCardAdditionalRepo
+        )
     }
 
     private fun checkErrors(
@@ -166,9 +205,9 @@ class IssueCardViewModelTest : AndroidTest() {
 
     private fun configureIssueCardApi(answer: Either<Failure, Card>) {
         whenever(
-            aptoPlatform.issueCard(any(), TestDataProvider.anyObject())
+            aptoPlatform.issueCard(any(), any(), TestDataProvider.anyObject())
         ).thenAnswer { invocation ->
-            (invocation.arguments[1] as (Either<Failure, Card>) -> Unit).invoke(answer)
+            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(answer)
         }
     }
 }

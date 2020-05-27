@@ -29,6 +29,7 @@ internal class FetchRemoteCardDetailsUseCaseTest : UnitTest() {
 
     @Mock
     private lateinit var localRepo: LocalCardDetailsRepository
+
     @Mock
     private lateinit var remoteRepo: RemoteCardDetailsRepository
 
@@ -61,5 +62,4 @@ internal class FetchRemoteCardDetailsUseCaseTest : UnitTest() {
         verify(localRepo, times(0)).saveCardDetails(cardDetails)
         assertTrue(result.isLeft)
     }
-
 }

@@ -5,7 +5,7 @@ import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 interface OAuthConnectContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onBackFromOAuthConnect()
         fun show(url: String)
         fun onOAuthSuccess(oauthAttempt: OAuthAttempt)
@@ -16,5 +16,4 @@ interface OAuthConnectContract {
 
         fun reloadStatus()
     }
-
 }

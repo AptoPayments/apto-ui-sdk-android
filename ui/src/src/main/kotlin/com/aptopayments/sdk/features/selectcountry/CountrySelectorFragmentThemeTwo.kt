@@ -20,7 +20,8 @@ import kotlin.properties.Delegates
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
 
 internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelectorContract.View,
-        CountryListAdapter.Delegate {
+    CountryListAdapter.Delegate {
+
     // Wrapper class required to be able to use Delegates.observable because the Delegates do not support null as the
     // default value of the property (null cannot be observed).
     private class CountryWrapper(var country: Country?)
@@ -55,8 +56,10 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     override fun setupListeners() {
         super.setupListeners()
-        tv_select_country.setOnClickListener { selectedCountry.country?.let { country ->
-            delegate?.onCountrySelected(country) }
+        tv_select_country.setOnClickListener {
+            selectedCountry.country?.let { country ->
+                delegate?.onCountrySelected(country)
+            }
         }
     }
 
@@ -90,7 +93,7 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
     }
 
     private fun setupRecyclerView() {
@@ -98,8 +101,8 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         rv_country_list.layoutManager = linearLayoutManager
         countryList = allowedCountriesList
-                .sortedBy { it.name }
-                .map { CountryListItem(it, false) }
+            .sortedBy { it.name }
+            .map { CountryListItem(it, false) }
         countryListAdapter = CountryListAdapter(countryList)
         countryListAdapter.delegate = this
         rv_country_list.adapter = countryListAdapter
@@ -111,10 +114,10 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     companion object {
         fun newInstance(allowedCountriesList: List<Country>) =
-                CountrySelectorFragmentThemeTwo().apply {
-                    this.arguments = Bundle().apply {
-                        putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountriesList as Serializable)
-                    }
+            CountrySelectorFragmentThemeTwo().apply {
+                this.arguments = Bundle().apply {
+                    putSerializable(ALLOWED_COUNTRIES_KEY, allowedCountriesList as Serializable)
                 }
+            }
     }
 }

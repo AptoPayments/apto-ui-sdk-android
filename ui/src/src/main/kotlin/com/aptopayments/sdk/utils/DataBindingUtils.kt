@@ -66,7 +66,7 @@ object DataBindingUtils {
 
     @JvmStatic
     @BindingAdapter("localizeBinding")
-    fun localizeBinding(textView : AptoTextView, value : String?){
+    fun localizeBinding(textView: AptoTextView, value: String?) {
         textView.localizedText = value ?: ""
     }
 

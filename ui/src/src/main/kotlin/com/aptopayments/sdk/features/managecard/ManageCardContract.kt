@@ -1,13 +1,12 @@
 package com.aptopayments.sdk.features.managecard
 
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 interface ManageCardContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onAccountSettingsTapped()
         fun onActivatePhysicalCardTapped(card: Card)
         fun onCardStatsTapped()

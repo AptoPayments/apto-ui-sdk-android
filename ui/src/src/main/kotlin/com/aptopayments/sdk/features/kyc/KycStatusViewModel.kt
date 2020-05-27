@@ -9,14 +9,14 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class KycStatusViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     var kycStatus: MutableLiveData<KycStatus> = MutableLiveData()
 
     fun getKycStatus(cardID: String) {
         showLoading()
-        AptoPlatform.fetchFinancialAccount(accountId = cardID, showDetails = false, forceRefresh = true) { result ->
+        AptoPlatform.fetchFinancialAccount(accountId = cardID, forceRefresh = true) { result ->
             result.either(::handleFailure) {
                 hideLoading()
                 handleCard(it)

@@ -16,10 +16,13 @@ import org.mockito.Mock
 class VoipFlowTest : AndroidTest() {
 
     private lateinit var sut: VoipFlow
+
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
+
     @Mock
     private lateinit var mockDelegate: VoipContract.Delegate
+
     @Mock
     private lateinit var mockAction: Action
     private val cardId = "TEST_CARD_ID"

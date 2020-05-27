@@ -16,5 +16,4 @@ internal class OnEnterBackgroundUseCase(
         }
         return Either.Right(Unit)
     }
-
 }

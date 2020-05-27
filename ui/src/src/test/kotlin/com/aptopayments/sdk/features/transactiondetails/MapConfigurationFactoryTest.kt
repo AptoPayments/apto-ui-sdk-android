@@ -5,7 +5,7 @@ import com.aptopayments.core.data.transaction.Merchant
 import com.aptopayments.core.data.transaction.Store
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.UnitTest
-import com.aptopayments.sdk.core.data.transaction.iconResource
+import com.aptopayments.sdk.core.extension.iconResource
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Test
 import org.mockito.Mock
@@ -21,10 +21,13 @@ internal class MapConfigurationFactoryTest : UnitTest() {
 
     @Mock
     lateinit var transaction: Transaction
+
     @Mock
     lateinit var store: Store
+
     @Mock
     lateinit var merchant: Merchant
+
     @Mock
     lateinit var mcc: MCC
 

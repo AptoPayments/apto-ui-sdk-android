@@ -13,5 +13,4 @@ internal class CanAskBiometricsUseCase(
     override fun run(): Either<Failure, Boolean> {
         return Either.Right(authenticationRepository.isBiometricsEnabledByUser() && wrapper.canAskBiometric())
     }
-
 }

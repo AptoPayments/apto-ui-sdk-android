@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 
-class SendEmailUtil(private val targetEmail: String = "support@aptopayments.com",
-                    private val subject: String? = null,
-                    private val body: String? = null) {
+class SendEmailUtil(
+    private val targetEmail: String = "support@aptopayments.com",
+    private val subject: String? = null,
+    private val body: String? = null
+) {
 
     fun execute(activity: Activity) {
         val emailIntent = Intent(Intent.ACTION_SENDTO)

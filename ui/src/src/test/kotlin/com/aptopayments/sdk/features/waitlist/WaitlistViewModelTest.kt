@@ -16,9 +16,12 @@ import kotlin.test.assertTrue
 class WaitlistViewModelTest : AndroidTest() {
 
     private lateinit var sut: WaitlistViewModel
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
-    @Mock private lateinit var mockCard: Card
-    @Mock private lateinit var cardObserver: Observer<Card>
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Mock
+    private lateinit var mockCard: Card
+    @Mock
+    private lateinit var cardObserver: Observer<Card>
 
     @Before
     override fun setUp() {

@@ -8,6 +8,7 @@ import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 
 private const val ERROR_GENERIC = "GENERIC"
 private const val ERROR_INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS"
@@ -18,7 +19,8 @@ internal class IssueCardViewModel(
     private val cardApplicationId: String,
     private val actionConfiguration: WorkflowActionConfigurationIssueCard?,
     private val analyticsManager: AnalyticsServiceContract,
-    private val aptoPlatform: AptoPlatformProtocol
+    private val aptoPlatform: AptoPlatformProtocol,
+    private val issueCardAdditionalRepository: IssueCardAdditionalFieldsRepository
 ) : BaseViewModel() {
 
     var card: MutableLiveData<Card> = MutableLiveData()
@@ -41,7 +43,8 @@ internal class IssueCardViewModel(
         showLoading()
         errorVisible.value = false
         analyticsManager.track(Event.IssueCard)
-        aptoPlatform.issueCard(cardApplicationId) { result ->
+        val additionalFields = issueCardAdditionalRepository.get()
+        aptoPlatform.issueCard(cardApplicationId, additionalFields) { result ->
             hideLoading()
             result.either({ handleIssueCardFailure(it) }, { card.postValue(it) })
         }
@@ -117,7 +120,5 @@ internal class IssueCardViewModel(
             ERROR_INSUFFICIENT_APPLICATION_LIMITS to STRINGS_INSUFFICIENT_APPLICATION_LIMITS,
             ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS to STRINGS_BALANCE_VALIDATIONS_EMAIL_SENDS
         )
-
     }
-
 }

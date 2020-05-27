@@ -22,8 +22,7 @@ class CountDown {
             if (diffInSec <= 0) {
                 stop()
                 endBlock(Unit)
-            }
-            else {
+            } else {
                 fireBlock(diffInSec.toInt())
             }
         }

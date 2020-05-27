@@ -15,10 +15,13 @@ import org.mockito.Mock
 class SetPinFlowTest : AndroidTest() {
 
     private lateinit var sut: SetPinFlow
+
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
+
     @Mock
     private lateinit var mockSetPinDelegate: SetPinContract.Delegate
+
     @Mock
     private lateinit var mockConfirmPinDelegate: ConfirmPinContract.Delegate
 
@@ -57,7 +60,7 @@ class SetPinFlowTest : AndroidTest() {
         val pin = "1234"
         val fragmentDouble = ConfirmPinFragmentDouble(mockConfirmPinDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.confirmPinFragment(pin,tag)
+            mockFragmentFactory.confirmPinFragment(pin, tag)
         }.willReturn(fragmentDouble)
 
         // When

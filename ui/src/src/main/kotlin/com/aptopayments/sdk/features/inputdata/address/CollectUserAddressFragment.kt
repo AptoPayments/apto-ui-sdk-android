@@ -94,7 +94,7 @@ internal class CollectUserAddressFragment : BaseBindingFragment<FragmentCollectU
 
     private fun setupToolBar(toolbar: Toolbar) {
         toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .setPrimaryColors()
                 .build()

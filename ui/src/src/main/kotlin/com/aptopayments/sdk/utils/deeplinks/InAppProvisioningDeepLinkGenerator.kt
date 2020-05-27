@@ -1,14 +1,14 @@
 package com.aptopayments.sdk.utils.deeplinks
 
-import android.content.Context
+import com.aptopayments.sdk.utils.StringProvider
 
 private const val PARAMETER_CARD_ID = "cardId"
 
-class InAppProvisioningDeepLinkGenerator(context: Context, cardId: String) : DeepLinkIntentGenerator(context) {
+class InAppProvisioningDeepLinkGenerator(stringProvider: StringProvider) : DeepLinkIntentGenerator(stringProvider) {
 
     override val host = "provisioning"
 
-    init {
+    fun setCardId(cardId: String) {
         parameters[PARAMETER_CARD_ID] = cardId
     }
 }

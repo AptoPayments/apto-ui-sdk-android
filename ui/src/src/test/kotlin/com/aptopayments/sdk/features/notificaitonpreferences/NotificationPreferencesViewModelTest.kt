@@ -7,10 +7,10 @@ import com.aptopayments.core.data.user.notificationpreferences.NotificationPrefe
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 
 class NotificationPreferencesViewModelTest : AndroidTest() {
 
@@ -25,7 +25,7 @@ class NotificationPreferencesViewModelTest : AndroidTest() {
         sut = NotificationPreferencesViewModel()
         val mockPreferences = ArrayList<NotificationGroup>()
         mockPreferences.add(mock())
-        Mockito.`when`(mockNotificationPreferences.preferences).thenReturn(mockPreferences)
+        whenever(mockNotificationPreferences.preferences).thenReturn(mockPreferences)
     }
 
     @Test
@@ -50,15 +50,17 @@ class NotificationPreferencesViewModelTest : AndroidTest() {
         testActiveChannels[NotificationChannel.PUSH] = testIsPrimaryChannelActive
         testActiveChannels[NotificationChannel.EMAIL] = testIsSecondaryChannelActive
         val testNotificationGroup = NotificationGroup(
-                categoryId = NotificationGroup.Category.CARD_ACTIVITY,
-                groupId = testGroupId,
-                activeChannels = ActiveChannels(testActiveChannels),
-                state = NotificationGroup.State.ENABLED)
-        val testNotificationPreferencesList= ArrayList<NotificationGroup>()
+            categoryId = NotificationGroup.Category.CARD_ACTIVITY,
+            groupId = testGroupId,
+            activeChannels = ActiveChannels(testActiveChannels),
+            state = NotificationGroup.State.ENABLED
+        )
+        val testNotificationPreferencesList = ArrayList<NotificationGroup>()
         testNotificationPreferencesList.add(testNotificationGroup)
 
         // When
-        val result = sut.generateNotificationPreferenceListItems(testNotificationPreferencesList, NotificationChannel.EMAIL)
+        val result =
+            sut.generateNotificationPreferenceListItems(testNotificationPreferencesList, NotificationChannel.EMAIL)
 
         // Then
         assert(result.size == 1)

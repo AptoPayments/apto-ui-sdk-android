@@ -168,5 +168,4 @@ internal class CollectUserDataFlow(
     }
 
     internal class NoConfigurationStep : Failure.FeatureFailure()
-
 }

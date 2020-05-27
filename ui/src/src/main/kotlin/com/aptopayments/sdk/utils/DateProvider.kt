@@ -8,5 +8,4 @@ class DateProvider {
     fun localDate(): LocalDate = LocalDate.now()
 
     fun localDateTime(): LocalDateTime = LocalDateTime.now()
-
 }

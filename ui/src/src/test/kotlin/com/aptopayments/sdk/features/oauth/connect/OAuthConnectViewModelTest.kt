@@ -12,7 +12,8 @@ import kotlin.test.assertTrue
 class OAuthConnectViewModelTest : AndroidTest() {
 
     private lateinit var sut: OAuthConnectViewModel
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
     override fun setUp() {

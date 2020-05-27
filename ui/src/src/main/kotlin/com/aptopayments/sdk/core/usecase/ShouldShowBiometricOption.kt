@@ -16,5 +16,4 @@ internal class ShouldShowBiometricOption(
 
     private fun isSecurityAvailable() =
         uiSdkProtocol.cardOptions.authenticateOnStartup() || uiSdkProtocol.cardOptions.authenticateWithPINOnPCI()
-
 }

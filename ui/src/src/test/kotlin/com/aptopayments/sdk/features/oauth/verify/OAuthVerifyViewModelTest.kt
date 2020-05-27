@@ -13,7 +13,8 @@ class OAuthVerifyViewModelTest : UnitTest() {
 
     private lateinit var sut: OAuthVerifyViewModel
 
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
     fun setUp() {

@@ -57,12 +57,14 @@ internal class BirthdateViewDateParserTest : UnitTest() {
 
         assertNull(testedDate)
     }
+
     @Test
     fun `given empty Month then null returned`() {
         val testedDate = sut.parse(YEAR, "", DAY)
 
         assertNull(testedDate)
     }
+
     @Test
     fun `given empty Year then null returned`() {
         val testedDate = sut.parse("", MONTH, DAY)

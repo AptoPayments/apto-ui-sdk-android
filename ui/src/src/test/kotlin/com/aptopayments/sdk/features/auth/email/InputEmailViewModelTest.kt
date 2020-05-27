@@ -22,6 +22,7 @@ import kotlin.test.assertTrue
 class InputEmailViewModelTest : UnitTest() {
 
     private lateinit var inputEmailViewModel: InputEmailViewModel
+
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
@@ -29,7 +30,8 @@ class InputEmailViewModelTest : UnitTest() {
     private lateinit var verificationLiveData: MutableLiveData<Verification>
 
     @Rule
-    @JvmField var rule: TestRule = InstantTaskExecutorRule()
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {

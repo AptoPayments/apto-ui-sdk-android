@@ -25,7 +25,7 @@ private const val ACCOUNT_ID_KEY = "ACCOUNT_ID"
 private const val SELECTED_BALANCE_ID_KEY = "SELECTED_BALANCE_ID"
 
 internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), FundingSourceContract.View,
-        FundingSourceAdapter.Delegate {
+    FundingSourceAdapter.Delegate {
 
     override var delegate: FundingSourceContract.Delegate? = null
 
@@ -120,7 +120,7 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
     }
 
     private fun setupTheme() {
-        with (themeManager()) {
+        with(themeManager()) {
             customizeHighlightTitleLabel(tv_dialog_title)
             customizeEmptyCase(tv_no_funding_sources)
             customizeSubmitButton(add_funding_source_button)

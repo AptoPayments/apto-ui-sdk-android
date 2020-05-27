@@ -9,7 +9,6 @@ import com.aptopayments.sdk.core.usecase.ShouldShowBiometricOption
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 internal class AccountSettingsViewModel constructor(
     private val analyticsManager: AnalyticsServiceContract,
@@ -52,5 +51,4 @@ internal class AccountSettingsViewModel constructor(
     fun viewLoaded() {
         analyticsManager.track(Event.AccountSettings)
     }
-
 }

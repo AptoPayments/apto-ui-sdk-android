@@ -41,8 +41,7 @@ internal abstract class BaseDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activity!!).setView(dialogView).create()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return dialogView
     }
 
@@ -72,5 +71,5 @@ internal abstract class BaseDialogFragment : DialogFragment() {
     }
 
     internal fun notify(message: String, messageType: MessageBanner.MessageType = ERROR, title: String? = null) =
-            activity?.let { MessageBanner().showBanner(it, message = message, messageType = messageType, title = title) }
+        activity?.let { MessageBanner().showBanner(it, message = message, messageType = messageType, title = title) }
 }

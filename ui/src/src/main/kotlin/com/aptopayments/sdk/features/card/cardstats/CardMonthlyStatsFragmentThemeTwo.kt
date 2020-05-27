@@ -55,7 +55,7 @@ internal class CardMonthlyStatsFragmentThemeTwo : BaseFragment(), CardMonthlySta
 
     private fun setupToolBar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
                 .title(getToolbarTitle())

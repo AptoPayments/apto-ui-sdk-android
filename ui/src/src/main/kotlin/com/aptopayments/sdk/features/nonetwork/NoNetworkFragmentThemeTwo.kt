@@ -21,7 +21,7 @@ const val DELAY = 5000L
 const val PERIOD = 5000L
 const val PORT = 443
 
-internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View {
+internal class NoNetworkFragmentThemeTwo : BaseFragment(), NoNetworkContract.View {
 
     override fun layoutId() = R.layout.fragment_no_network_theme_two
 
@@ -41,7 +41,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
 
     override fun onStart() {
         super.onStart()
-        val uri = URI(ApiKeyProvider.environment.baseUrl)
+        val uri = URI(ApiKeyProvider.getEnvironmentUrl())
         timer = Timer()
         timer.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
             networkHandler.checkNetworkReachability(uri.host, PORT)
@@ -59,7 +59,7 @@ internal class NoNetworkFragmentThemeTwo: BaseFragment(), NoNetworkContract.View
         tv_loading_text.setTextColor(UIConfig.textTertiaryColor)
         pb_progress.indeterminateDrawable.setColorFilterCompat(UIConfig.textTertiaryColor, PorterDuff.Mode.SRC_IN)
 
-        FontsUtil.getFontOfType(FontsUtil.FontType.REGULAR)?.let{
+        FontsUtil.getFontOfType(FontsUtil.FontType.REGULAR)?.let {
             tv_description_text.typeface = it
             tv_loading_text.typeface = it
         }

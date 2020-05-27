@@ -21,9 +21,9 @@ private const val ACCOUNT_SETTINGS_TAG = "AccountSettingsFragment"
 private const val NOTIFICATION_PREFERENCES_TAG = "NotificationPreferencesFragment"
 
 internal class AccountSettingsFlow(
-        private val cardId: String,
-        private val contextConfiguration: ContextConfiguration,
-        private var onClose: () -> Unit
+    private val cardId: String,
+    private val contextConfiguration: ContextConfiguration,
+    private var onClose: () -> Unit
 ) : Flow(), AccountSettingsContract.Delegate, NotificationPreferencesContract.Delegate, KoinComponent {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()

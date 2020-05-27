@@ -4,6 +4,6 @@ import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.transaction.MCC
 
 data class PieChartElement(
-        val categorySpending: CategorySpending,
-        val mcc: MCC? = null
+    val categorySpending: CategorySpending,
+    val mcc: MCC? = null
 )

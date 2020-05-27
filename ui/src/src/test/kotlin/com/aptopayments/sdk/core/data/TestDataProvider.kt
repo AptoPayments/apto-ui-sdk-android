@@ -20,65 +20,70 @@ class TestDataProvider {
 
     companion object {
         fun provideOAuthAttempt() = OAuthAttempt(
-                id = "",
-                url = URL("http://www.google.es"),
-                status = OAuthAttemptStatus.PENDING,
-                userData = DataPointList(),
-                tokenId = "",
-                error = null,
-                errorMessage = null
+            id = "",
+            url = URL("http://www.google.es"),
+            status = OAuthAttemptStatus.PENDING,
+            userData = DataPointList(),
+            tokenId = "",
+            error = null,
+            errorMessage = null
         )
 
         fun provideContextConfiguration() = ContextConfiguration(
-                teamConfiguration = TeamConfiguration(
-                        name = "",
-                        logoUrl = ""),
-                projectConfiguration = ProjectConfiguration(
-                        name = "",
-                        summary = "",
-                        branding = Branding.createDefault(),
-                        labels = hashMapOf(),
-                        allowedCountries = arrayListOf(Country("US")),
-                        supportEmailAddress = "",
-                        trackerAccessToken = "",
-                        isTrackerActive = false,
-                        primaryAuthCredential = DataPoint.Type.PHONE)
+            teamConfiguration = TeamConfiguration(
+                name = "",
+                logoUrl = ""
+            ),
+            projectConfiguration = ProjectConfiguration(
+                name = "",
+                summary = "",
+                branding = Branding.createDefault(),
+                labels = hashMapOf(),
+                allowedCountries = arrayListOf(Country("US")),
+                supportEmailAddress = "",
+                trackerAccessToken = "",
+                isTrackerActive = false,
+                primaryAuthCredential = DataPoint.Type.PHONE
+            )
         )
 
         fun provideProjectBranding() = Branding.createDefault()
 
         fun provideContextConfigurationEmail() = ContextConfiguration(
-                teamConfiguration = TeamConfiguration(
-                        name = "",
-                        logoUrl = ""),
-                projectConfiguration = ProjectConfiguration(
-                        name = "",
-                        summary = "",
-                        branding = Branding.createDefault(),
-                        labels = hashMapOf(),
-                        allowedCountries = arrayListOf(Country("US")),
-                        supportEmailAddress = "",
-                        trackerAccessToken = "",
-                        isTrackerActive = false,
-                        primaryAuthCredential = DataPoint.Type.EMAIL)
+            teamConfiguration = TeamConfiguration(
+                name = "",
+                logoUrl = ""
+            ),
+            projectConfiguration = ProjectConfiguration(
+                name = "",
+                summary = "",
+                branding = Branding.createDefault(),
+                labels = hashMapOf(),
+                allowedCountries = arrayListOf(Country("US")),
+                supportEmailAddress = "",
+                trackerAccessToken = "",
+                isTrackerActive = false,
+                primaryAuthCredential = DataPoint.Type.EMAIL
+            )
         )
 
         fun provideOauthConfig() = OAuthConfig(
-                title = "title",
-                explanation = "explanation",
-                callToAction = "callToAction",
-                newUserAction = "newUserAction",
-                allowedBalanceType = provideAllowedBalanceType(),
-                assetUrl = null
+            title = "title",
+            explanation = "explanation",
+            callToAction = "callToAction",
+            newUserAction = "newUserAction",
+            allowedBalanceType = provideAllowedBalanceType(),
+            assetUrl = null
         )
 
         fun provideAllowedBalanceType() = AllowedBalanceType(
-                balanceType= "type",
-                baseUri = URL("http://www.aptopayments.com"))
+            balanceType = "type",
+            baseUri = URL("http://www.aptopayments.com")
+        )
 
         fun provideOAuthUserData() = OAuthUserDataUpdate(
-                result = OAuthUserDataUpdateResult.VALID,
-                userData = DataPointList()
+            result = OAuthUserDataUpdateResult.VALID,
+            userData = DataPointList()
         )
 
         fun provideCardApplicationId() = "bestCardApplicationIdEver"
@@ -88,39 +93,39 @@ class TestDataProvider {
         fun <T> anyObject(): T = Mockito.any<T>()
 
         fun provideCard(
-                accountID: String = "",
-                cardProductID: String = "",
-                cardNetwork: Card.CardNetwork = Card.CardNetwork.UNKNOWN,
-                lastFourDigits: String = "",
-                cardBrand: String = "",
-                cardIssuer: String = "",
-                state: Card.CardState = Card.CardState.UNKNOWN,
-                isWaitlisted: Boolean? = false,
-                cardStyle: CardStyle? = null,
-                kycStatus: KycStatus? = KycStatus.UNKNOWN,
-                kycReason: List<String>? = null,
-                orderedStatus: Card.OrderedStatus = Card.OrderedStatus.UNKNOWN,
-                spendableAmount: Money? = null,
-                nativeSpendableAmount: Money? = null,
-                cardHolder: String = "",
-                features: Features? = null
+            accountID: String = "",
+            cardProductID: String = "",
+            cardNetwork: Card.CardNetwork = Card.CardNetwork.UNKNOWN,
+            lastFourDigits: String = "",
+            cardBrand: String = "",
+            cardIssuer: String = "",
+            state: Card.CardState = Card.CardState.UNKNOWN,
+            isWaitlisted: Boolean? = false,
+            cardStyle: CardStyle? = null,
+            kycStatus: KycStatus? = KycStatus.UNKNOWN,
+            kycReason: List<String>? = null,
+            orderedStatus: Card.OrderedStatus = Card.OrderedStatus.UNKNOWN,
+            spendableAmount: Money? = null,
+            nativeSpendableAmount: Money? = null,
+            cardHolder: String = "",
+            features: Features? = null
         ) = Card(
-                accountID = accountID,
-                cardProductID = cardProductID,
-                cardNetwork = cardNetwork,
-                lastFourDigits = lastFourDigits,
-                cardBrand = cardBrand,
-                cardIssuer = cardIssuer,
-                state = state,
-                isWaitlisted = isWaitlisted,
-                cardStyle = cardStyle,
-                kycStatus = kycStatus,
-                kycReason = kycReason,
-                orderedStatus = orderedStatus,
-                spendableAmount = spendableAmount,
-                nativeSpendableAmount = nativeSpendableAmount,
-                cardHolder = cardHolder,
-                features = features
+            accountID = accountID,
+            cardProductID = cardProductID,
+            cardNetwork = cardNetwork,
+            lastFourDigits = lastFourDigits,
+            cardBrand = cardBrand,
+            cardIssuer = cardIssuer,
+            state = state,
+            isWaitlisted = isWaitlisted,
+            cardStyle = cardStyle,
+            kycStatus = kycStatus,
+            kycReason = kycReason,
+            orderedStatus = orderedStatus,
+            spendableAmount = spendableAmount,
+            nativeSpendableAmount = nativeSpendableAmount,
+            cardHolder = cardHolder,
+            features = features
         )
 
         fun provideCategorySpendingList(): List<CategorySpending> {
@@ -135,5 +140,4 @@ class TestDataProvider {
 
         fun provideCardId() = "CARD_ID"
     }
-        
 }

@@ -31,7 +31,8 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     override var delegate: PhoneVerificationContract.Delegate? = null
     private val viewModel: VerificationViewModel by viewModel()
-    @VisibleForTesting(otherwise = Modifier.PRIVATE) lateinit var verification: Verification
+    @VisibleForTesting(otherwise = Modifier.PRIVATE)
+    lateinit var verification: Verification
     private lateinit var phoneNumber: String
 
     override fun layoutId() = R.layout.fragment_verification_theme_two
@@ -53,7 +54,8 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
         viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
             observe(resendButtonState, ::handleResendButtonState)
-            failure(failure) { handleFailure(it) } }
+            failure(failure) { handleFailure(it) }
+        }
         viewModel.verification.postValue(verification)
     }
 
@@ -65,7 +67,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.PHONE)
 
     private fun applyFontsAndColors() {
-        with(themeManager()){
+        with(themeManager()) {
             apto_pin_view.setTextColor(UIConfig.textPrimaryColor)
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_verification_code_title)
@@ -79,7 +81,7 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
 
     private fun setupToolBar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
         )
     }
@@ -115,12 +117,11 @@ internal class PhoneVerificationFragmentThemeTwo : BaseFragment(), PhoneVerifica
                     VerificationStatus.PASSED -> {
                         try {
                             val dataPoint = PhoneDataPoint(
-                                    verification = verification,
-                                    phoneNumber = StringUtils.parsePhoneNumber(phoneNumber)
+                                verification = verification,
+                                phoneNumber = StringUtils.parsePhoneNumber(phoneNumber)
                             )
                             delegate?.onPhoneVerificationPassed(dataPoint)
-                        }
-                        catch(exception: NumberParseException) {
+                        } catch (exception: NumberParseException) {
                             exception.localizedMessage?.let { notify(it) }
                         }
                     }

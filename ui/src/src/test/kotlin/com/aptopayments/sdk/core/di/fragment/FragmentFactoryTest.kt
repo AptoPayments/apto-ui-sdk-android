@@ -33,7 +33,7 @@ class FragmentFactoryTest : AndroidTest() {
         // When
         val fragment = sut.transactionListFragment(cardId, config, tag)
 
-        //Then
+        // Then
         assert(fragment is TransactionListFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
@@ -46,7 +46,7 @@ class FragmentFactoryTest : AndroidTest() {
         // When
         val fragment = sut.setPinFragment(tag)
 
-        //Then
+        // Then
         assert(fragment is SetPinFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
@@ -60,7 +60,7 @@ class FragmentFactoryTest : AndroidTest() {
         // When
         val fragment = sut.confirmPinFragment(pin, tag)
 
-        //Then
+        // Then
         assert(fragment is ConfirmPinFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }

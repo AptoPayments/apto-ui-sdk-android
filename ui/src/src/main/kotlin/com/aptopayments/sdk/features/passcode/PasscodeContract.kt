@@ -12,5 +12,4 @@ interface PasscodeContract {
     interface View {
         var delegate: Delegate?
     }
-
 }

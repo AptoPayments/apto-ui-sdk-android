@@ -16,8 +16,8 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.StringUtils
 
 internal class FundingSourceAdapter(
-        lifecycleOwner: LifecycleOwner,
-        viewModel: FundingSourcesViewModel
+    lifecycleOwner: LifecycleOwner,
+    viewModel: FundingSourcesViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Delegate {
@@ -43,10 +43,12 @@ internal class FundingSourceAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = when(viewType) {
-            FundingSourceListItem.fundingSourceRowType -> inflater.inflate(R.layout.funding_sources_detail, parent, false)
-            FundingSourceListItem.addFundingSourceViewType -> inflater.inflate(R.layout.funding_sources_add_button, parent, false)
-            else -> { throw IllegalArgumentException("Unexpected transaction view type") }
+        val view = when (viewType) {
+            FundingSourceListItem.FUNDING_SOURCE_ROW_TYPE ->
+                inflater.inflate(R.layout.funding_sources_detail, parent, false)
+            FundingSourceListItem.ADD_FUNDING_SOURCE_VIEW_TYPE ->
+                inflater.inflate(R.layout.funding_sources_add_button, parent, false)
+            else -> throw IllegalArgumentException("Unexpected transaction view type")
         }
         return ViewHolder(view, viewType)
     }
@@ -54,14 +56,16 @@ internal class FundingSourceAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ViewHolder)?.let { viewHolder ->
             when (viewHolder.itemViewType) {
-                FundingSourceListItem.fundingSourceRowType -> customizeFundingSourceView(viewHolder, position)
-                FundingSourceListItem.addFundingSourceViewType -> customizeAddFundingSourceView(viewHolder, position)
-                else -> { throw IllegalArgumentException("Unexpected transaction view type") }
+                FundingSourceListItem.FUNDING_SOURCE_ROW_TYPE -> customizeFundingSourceView(viewHolder, position)
+                FundingSourceListItem.ADD_FUNDING_SOURCE_VIEW_TYPE -> customizeAddFundingSourceView(viewHolder, position)
+                else -> {
+                    throw IllegalArgumentException("Unexpected transaction view type")
+                }
             }
         }
     }
 
-    private fun customizeFundingSourceView(viewHolder:ViewHolder, position: Int) {
+    private fun customizeFundingSourceView(viewHolder: ViewHolder, position: Int) {
         (fundingSourceListItems?.get(position) as? FundingSourceListItem.FundingSourceRow)?.let { listIem ->
             val balance = listIem.balance
             viewHolder.source?.text = balance.custodianWallet?.custodian?.name?.let { StringUtils.capitalizeString(it) }
@@ -75,7 +79,7 @@ internal class FundingSourceAdapter(
         }
     }
 
-    private fun customizeAddFundingSourceView(viewHolder:ViewHolder, position: Int) {
+    private fun customizeAddFundingSourceView(viewHolder: ViewHolder, position: Int) {
         (fundingSourceListItems?.get(position) as? FundingSourceListItem.AddFundingSourceButton)?.let {
             viewHolder.addFundingSourceButton?.setOnClickListener {
                 delegate?.onAddFundingSourceTapped()
@@ -95,9 +99,9 @@ internal class FundingSourceAdapter(
         var addFundingSourceButton: TextView? = null
 
         init {
-            when(viewType) {
-                FundingSourceListItem.fundingSourceRowType -> setupAsFundingSourceRow()
-                FundingSourceListItem.addFundingSourceViewType -> setupAsAddFundingSourceButton()
+            when (viewType) {
+                FundingSourceListItem.FUNDING_SOURCE_ROW_TYPE -> setupAsFundingSourceRow()
+                FundingSourceListItem.ADD_FUNDING_SOURCE_VIEW_TYPE -> setupAsAddFundingSourceButton()
             }
         }
 
@@ -123,6 +127,5 @@ internal class FundingSourceAdapter(
                 customizeSubmitButton(addFundingSourceButton!!)
             }
         }
-
     }
 }

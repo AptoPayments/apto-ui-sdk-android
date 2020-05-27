@@ -16,5 +16,4 @@ internal class ShouldAuthenticateWithPINOnPCIUseCase(
             Either.Right(authenticationRepo.isBiometricsEnabledByUser())
         }
     }
-
 }

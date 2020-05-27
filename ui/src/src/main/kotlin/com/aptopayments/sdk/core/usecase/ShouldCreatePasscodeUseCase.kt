@@ -14,5 +14,4 @@ internal class ShouldCreatePasscodeUseCase(private val authenticationRepository:
                     (AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI())
         )
     }
-
 }

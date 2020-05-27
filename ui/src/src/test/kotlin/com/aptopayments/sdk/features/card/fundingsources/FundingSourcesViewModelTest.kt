@@ -12,7 +12,8 @@ import kotlin.test.assertTrue
 class FundingSourcesViewModelTest : AndroidTest() {
     private lateinit var sut: FundingSourcesViewModel
 
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
     override fun setUp() {

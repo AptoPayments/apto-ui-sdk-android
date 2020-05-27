@@ -3,9 +3,8 @@ package com.aptopayments.sdk.features.contentpresenter
 import com.aptopayments.sdk.core.platform.BaseFragment
 
 internal class ContentPresenterFragmentDouble(override var delegate: ContentPresenterContract.Delegate?) :
-        BaseFragment(),
-        ContentPresenterContract.View
-{
+    BaseFragment(),
+    ContentPresenterContract.View {
     override fun onContentLoaded() {}
     override fun onContentLoadingFailed() {}
     override fun didScrollToBottom() {}

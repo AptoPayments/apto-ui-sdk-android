@@ -10,7 +10,7 @@ import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class FundingSourcesViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     var selectedFundingSourceId: MutableLiveData<String> = MutableLiveData()
@@ -36,24 +36,38 @@ internal class FundingSourcesViewModel constructor(
         getFundingSources(cardId, refresh = true, page = 0, rows = Int.MAX_VALUE) {}
     }
 
-    private fun getFundingSources(cardId: String, refresh: Boolean, page: Int, rows: Int, onComplete: (() -> Unit)? = null) {
-        AptoPlatform.fetchCardFundingSources(cardId = cardId, forceRefresh = refresh, page = page, rows = rows) { result ->
+    private fun getFundingSources(
+        cardId: String,
+        refresh: Boolean,
+        page: Int,
+        rows: Int,
+        onComplete: (() -> Unit)? = null
+    ) {
+        AptoPlatform.fetchCardFundingSources(
+            cardId = cardId,
+            forceRefresh = refresh,
+            page = page,
+            rows = rows
+        ) { result ->
             result.either(::handleFailure) { fundingSources ->
                 if (fundingSources.isEmpty()) {
                     fundingSourceListItems.postValue(arrayListOf())
-                }
-                else {
-                    fundingSourceListItems.postValue(generateFundingSourceListItems(fundingSources, selectedFundingSourceId.value))
+                } else {
+                    fundingSourceListItems.postValue(
+                        generateFundingSourceListItems(
+                            fundingSources,
+                            selectedFundingSourceId.value
+                        )
+                    )
                 }
                 onComplete?.invoke()
-                Unit
             }
         }
     }
 
     fun setCardFundingSource(cardID: String, fundingSourceID: String, onComplete: (succeed: Boolean) -> Unit) {
         state.postValue(State.IN_PROGRESS)
-        AptoPlatform.setCardFundingSource(fundingSourceID, cardID) { result  ->
+        AptoPlatform.setCardFundingSource(fundingSourceID, cardID) { result ->
             result.either(::handleFailure) {
                 selectedFundingSourceId.postValue(fundingSourceID)
                 fundingSourceListItems.value?.mapNotNull {
@@ -70,7 +84,10 @@ internal class FundingSourcesViewModel constructor(
         }
     }
 
-    private fun generateFundingSourceListItems(fundingSources: List<Balance>, selected: String?): List<FundingSourceListItem> {
+    private fun generateFundingSourceListItems(
+        fundingSources: List<Balance>,
+        selected: String?
+    ): List<FundingSourceListItem> {
         val list: ArrayList<FundingSourceListItem> = arrayListOf()
         fundingSources.toTypedArray().sortWith(Comparator { b1, b2 ->
             when {

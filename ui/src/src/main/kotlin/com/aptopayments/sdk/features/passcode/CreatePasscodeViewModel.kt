@@ -31,5 +31,4 @@ internal class CreatePasscodeViewModel(analyticsManager: AnalyticsServiceContrac
     private inner class ConfirmStateImpl(firstPin: String) : ConfirmState(firstPin) {
         override fun getTitle() = "biometric_create_pin_confirmation_title"
     }
-
 }

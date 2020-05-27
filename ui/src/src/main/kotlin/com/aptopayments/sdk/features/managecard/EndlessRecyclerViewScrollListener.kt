@@ -11,14 +11,17 @@ private const val VISIBLE_THRESHOLD = 3
  * Source: https://gist.github.com/nesquena/d09dc68ff07e845cc622
  */
 internal abstract class EndlessRecyclerViewScrollListener(
-        private val layoutManager: RecyclerView.LayoutManager
+    private val layoutManager: RecyclerView.LayoutManager
 ) : RecyclerView.OnScrollListener() {
     // The current offset index of data you have loaded
     private var currentPage = 0
+
     // The total number of items in the dataset after the last load
     private var previousTotalItemCount = 1
+
     // True if we are still waiting for the last set of data to load.
     private var loading = true
+
     // Sets the starting page index
     private var startingPageIndex = 0
 

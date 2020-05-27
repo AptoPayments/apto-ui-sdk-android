@@ -5,11 +5,10 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class MaintenanceViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.Maintenance)
     }
-
 }

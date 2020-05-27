@@ -18,4 +18,3 @@ fun Switch.setColor(foreground: Int, colorParser: ColorParser = ColorParserImpl(
     DrawableCompat.setTintList(DrawableCompat.wrap(thumbDrawable), foregroundColors)
     DrawableCompat.setTintList(DrawableCompat.wrap(trackDrawable), backgroundColors)
 }
-

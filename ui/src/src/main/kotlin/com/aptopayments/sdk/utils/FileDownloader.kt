@@ -13,5 +13,4 @@ internal class FileDownloaderImpl : FileDownloader {
     override fun downloadFile(link: String, destinationFile: File) {
         URL(link).openStream().use { input -> FileOutputStream(destinationFile).use { output -> input.copyTo(output) } }
     }
-
 }

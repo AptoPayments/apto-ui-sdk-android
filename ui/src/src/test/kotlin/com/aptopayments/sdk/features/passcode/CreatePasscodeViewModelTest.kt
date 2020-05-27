@@ -19,6 +19,7 @@ class CreatePasscodeViewModelTest : UnitTest() {
     var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: CreatePasscodeViewModel
+
     @Mock
     private lateinit var analyticsManager: AnalyticsManager
 

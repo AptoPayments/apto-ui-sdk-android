@@ -13,9 +13,9 @@ private const val TRANSACTION_LIST_TAG = "TransactionListFragment"
 private const val TRANSACTION_DETAILS_TAG = "TransactionDetailsFragment"
 
 internal class TransactionListFlow(
-        private val cardId: String,
-        private val config: TransactionListConfig,
-        private val onBack: () -> Unit
+    private val cardId: String,
+    private val config: TransactionListConfig,
+    private val onBack: () -> Unit
 ) : Flow(), TransactionListContract.Delegate, TransactionDetailsContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val fragment = fragmentFactory.transactionListFragment(cardId, config, TRANSACTION_LIST_TAG)

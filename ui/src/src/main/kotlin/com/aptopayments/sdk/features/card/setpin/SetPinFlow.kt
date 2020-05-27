@@ -10,10 +10,10 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 private const val SET_PIN_TAG = "SetPinFragment"
 private const val CONFIRM_PIN_TAG = "ConfirmPinFragment"
 
-internal class SetPinFlow (
-        var cardId: String,
-        var onBack: (Unit) -> Unit,
-        var onFinish: (Unit) -> Unit
+internal class SetPinFlow(
+    var cardId: String,
+    var onBack: (Unit) -> Unit,
+    var onFinish: (Unit) -> Unit
 ) : Flow(), SetPinContract.Delegate, ConfirmPinContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -53,7 +53,8 @@ internal class SetPinFlow (
         AptoPlatform.changeCardPin(cardId, pin) { result ->
             result.either(::handleFailure) {
                 hideLoading()
-                onFinish(Unit) }
+                onFinish(Unit)
+            }
         }
     }
 }

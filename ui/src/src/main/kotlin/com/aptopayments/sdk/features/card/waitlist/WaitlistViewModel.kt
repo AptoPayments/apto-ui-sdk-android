@@ -8,13 +8,13 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class WaitlistViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     var card: MutableLiveData<Card> = MutableLiveData()
 
     fun getCard(cardId: String) {
-        AptoPlatform.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = true) { result ->
+        AptoPlatform.fetchFinancialAccount(accountId = cardId, forceRefresh = true) { result ->
             result.either(::handleFailure, card::postValue)
         }
     }

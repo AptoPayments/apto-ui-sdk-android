@@ -9,7 +9,7 @@ interface ContentPresenterContract {
         fun didScrollToBottom()
     }
 
-    interface View: ViewActions {
+    interface View : ViewActions {
         var delegate: Delegate?
     }
 

@@ -1,12 +1,13 @@
 package com.aptopayments.sdk.features.verification
 
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.core.data.user.Verification
+import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
@@ -15,7 +16,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Mockito
 import kotlin.test.assertEquals
 
 class EmailVerificationFragmentTest : AndroidTest() {
@@ -48,7 +48,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
     @Test
     fun `on back pressed notify delegate`() {
         // Given
-        val delegate = Mockito.mock(EmailVerificationContract.Delegate::class.java)
+        val delegate = mock<EmailVerificationContract.Delegate>()
         sut.delegate = delegate
 
         // When
@@ -58,6 +58,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
         verify(delegate).onBackFromEmailVerification()
     }
 
+    @Suppress("USELESS_IS_CHECK")
     @Test
     fun `email verification fragment return expected fragment and set TAG`() {
         // Given
@@ -67,7 +68,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
         // When
         val fragment = sut.emailVerificationFragment(verification, tag)
 
-        //Then
+        // Then
         assert(fragment is EmailVerificationFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }

@@ -15,94 +15,86 @@
             android:id="@+id/iv_background_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            tools:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/ll_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/et_card_name"
+            android:layout_above="@+id/t_card_name"
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/llsdk_card_left_margin"
             android:layout_marginRight="@dimen/llsdk_card_left_margin"
             android:layout_marginBottom="@dimen/llsdk_card_number_margin"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_card_number_1"
+            <TextView
+                android:id="@+id/card_number_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false"
                 android:maxLines="1"
+                android:text="@string/manage_card_number_placeholder"
                 android:textSize="@dimen/llsdk_card_number_text_size"
                 tools:text="1234" />
 
-            <EditText
-                android:id="@+id/et_card_number_space_1"
+            <TextView
+                android:id="@+id/card_number_space_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false" />
+                android:background="@android:color/transparent" />
 
-            <EditText
-                android:id="@+id/et_card_number_2"
+            <TextView
+                android:id="@+id/card_number_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false"
                 android:gravity="center"
                 android:maxLines="1"
+                android:text="@string/manage_card_number_placeholder"
                 android:textSize="@dimen/llsdk_card_number_text_size"
                 tools:text="1234" />
 
-            <EditText
-                android:id="@+id/et_card_number_space_2"
+            <TextView
+                android:id="@+id/card_number_space_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:cursorVisible="false"
                 android:focusable="false" />
 
-            <EditText
-                android:id="@+id/et_card_number_3"
+            <TextView
+                android:id="@+id/card_number_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false"
                 android:gravity="center"
                 android:maxLines="1"
+                android:text="@string/manage_card_number_placeholder"
                 android:textSize="@dimen/llsdk_card_number_text_size"
                 tools:text="1234" />
 
-            <EditText
-                android:id="@+id/et_card_number_space_3"
+            <TextView
+                android:id="@+id/card_number_space_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false" />
+                android:background="@android:color/transparent" />
 
-            <EditText
-                android:id="@+id/et_card_number_4"
+            <TextView
+                android:id="@+id/card_number_4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:background="@android:color/transparent"
-                android:cursorVisible="false"
-                android:focusable="false"
                 android:gravity="end"
                 android:maxLines="1"
+                android:text="@string/manage_card_number_placeholder"
                 android:textSize="@dimen/llsdk_card_number_text_size"
                 tools:text="1234" />
         </LinearLayout>
@@ -121,18 +113,17 @@
             tools:ignore="SmallSp"
             tools:textColor="@color/llsdk_dark_text_color" />
 
-        <EditText
-            android:id="@+id/et_card_name"
+        <TextView
+            android:id="@+id/t_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/tv_expiration_label"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="@dimen/llsdk_card_left_margin"
             android:layout_marginBottom="@dimen/llsdk_card_holder_name_margin"
             android:background="@android:color/transparent"
             android:focusable="false"
-            android:inputType="textCapCharacters|textNoSuggestions"
-            android:paddingRight="2dp"
+            android:paddingEnd="2dp"
             android:singleLine="true"
             android:textAllCaps="true"
             android:textSize="@dimen/llsdk_card_name_text_size"
@@ -147,10 +138,10 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/llsdk_card_left_margin"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
-            tools:src="@drawable/ic_visa_logo"/>
+            tools:src="@drawable/ic_visa_logo" />
 
-        <EditText
-            android:id="@+id/et_expiry_date"
+        <TextView
+            android:id="@+id/t_expirity_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -159,7 +150,6 @@
             android:layout_toEndOf="@+id/tv_expiration_label"
             android:background="@android:color/transparent"
             android:focusable="false"
-            android:inputType="date"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
             android:singleLine="true"
             android:textSize="@dimen/llsdk_expiry_date_text_size"
@@ -171,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="@dimen/llsdk_card_left_margin"
-            android:layout_toEndOf="@+id/et_expiry_date"
+            android:layout_toEndOf="@+id/t_expirity_date"
             android:alpha="0.7"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
             android:text="@string/card_cvv_label"
@@ -179,8 +169,8 @@
             tools:ignore="SmallSp"
             tools:textColor="@color/llsdk_dark_text_color" />
 
-        <EditText
-            android:id="@+id/et_cvv"
+        <TextView
+            android:id="@+id/t_cvv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -188,19 +178,11 @@
             android:layout_toEndOf="@+id/tv_cvv_label"
             android:background="@android:color/transparent"
             android:focusable="false"
-            android:inputType="number"
             android:maxLength="4"
             android:paddingBottom="@dimen/llsdk_card_bottom_margin"
             android:singleLine="true"
             android:textSize="@dimen/llsdk_cvv_text_size"
             tools:text="555" />
-
-        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
-        <View
-            android:layout_width="@dimen/llsdk_dummy_view_params"
-            android:layout_height="@dimen/llsdk_dummy_view_params"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
 
         <include
             layout="@layout/include_card_disabled_overlay"

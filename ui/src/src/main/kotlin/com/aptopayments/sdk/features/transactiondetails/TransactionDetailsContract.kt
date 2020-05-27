@@ -4,7 +4,7 @@ import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 interface TransactionDetailsContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onTransactionDetailsBackPressed()
     }
 

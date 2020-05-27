@@ -60,7 +60,8 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
                     NotificationGroup.Group.ATM_WITHDRAWAL -> handleAtmWithdrawalNotificationPreference(it)
                     NotificationGroup.Group.CARD_STATUS -> handleCardStatusNotificationPreference(it)
                     NotificationGroup.Group.LEGAL -> handleLegalNotificationPreference(it)
-                    NotificationGroup.Group.INCOMING_TRANSFER -> { }
+                    NotificationGroup.Group.INCOMING_TRANSFER -> {
+                    }
                 }
             }
         }
@@ -75,25 +76,25 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
     private fun handlePaymentDeclinedNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
         payment_declined_group.visibility = VISIBLE
         cb_payment_declined_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_payment_declined_secondary_notification.isChecked= notificationPreferenceLineItem.isSecondaryChannelActive
+        cb_payment_declined_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
     }
 
     private fun handleAtmWithdrawalNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
         atm_withdrawal_group.visibility = VISIBLE
         cb_atm_withdrawal_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_atm_withdrawal_secondary_notification.isChecked= notificationPreferenceLineItem.isSecondaryChannelActive
+        cb_atm_withdrawal_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
     }
 
     private fun handleCardStatusNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
         card_status_group.visibility = VISIBLE
         cb_card_status_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_card_status_secondary_notification.isChecked= notificationPreferenceLineItem.isSecondaryChannelActive
+        cb_card_status_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
     }
 
     private fun handleLegalNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
         legal_group.visibility = VISIBLE
         cb_legal_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_legal_secondary_notification.isChecked= notificationPreferenceLineItem.isSecondaryChannelActive
+        cb_legal_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
     }
 
     private fun setHeader(notificationChannel: NotificationChannel?) {
@@ -137,37 +138,61 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
         cb_payment_successful_primary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.PAYMENT_SUCCESSFUL, isPrimary = true, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.PAYMENT_SUCCESSFUL,
+                    isPrimary = true,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
         cb_payment_successful_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.PAYMENT_SUCCESSFUL, isPrimary = false, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.PAYMENT_SUCCESSFUL,
+                    isPrimary = false,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
         cb_payment_declined_primary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.PAYMENT_DECLINED, isPrimary = true, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.PAYMENT_DECLINED,
+                    isPrimary = true,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
         cb_payment_declined_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.PAYMENT_DECLINED, isPrimary = false, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.PAYMENT_DECLINED,
+                    isPrimary = false,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
         cb_atm_withdrawal_primary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.ATM_WITHDRAWAL, isPrimary = true, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.ATM_WITHDRAWAL,
+                    isPrimary = true,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
         cb_atm_withdrawal_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
             if (button.isPressed) {
                 showLoading()
-                viewModel.updateNotificationPreferences(NotificationGroup.Group.ATM_WITHDRAWAL, isPrimary = false, active = isChecked) { hideLoading() }
+                viewModel.updateNotificationPreferences(
+                    NotificationGroup.Group.ATM_WITHDRAWAL,
+                    isPrimary = false,
+                    active = isChecked
+                ) { hideLoading() }
             }
         }
     }
@@ -198,7 +223,7 @@ internal class NotificationPreferencesFragmentThemeTwo : BaseFragment(), Notific
 
     private fun setupToolBar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
                 .title("notification_preferences.title".localized())

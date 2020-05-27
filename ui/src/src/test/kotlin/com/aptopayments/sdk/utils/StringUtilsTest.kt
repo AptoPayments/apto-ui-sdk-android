@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.utils
 
-import com.google.i18n.phonenumbers.NumberParseException
 import com.aptopayments.sdk.UnitTest
+import com.google.i18n.phonenumbers.NumberParseException
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

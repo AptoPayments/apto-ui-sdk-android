@@ -75,21 +75,27 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     internal fun checkPermission(permission: String) = (activity as? BaseActivity)?.checkPermission(permission)
 
     internal fun requestPermission(permission: String, onResult: (Boolean) -> Unit) =
-            (activity as? BaseActivity)?.requestPermission(permission, onResult)
+        (activity as? BaseActivity)?.requestPermission(permission, onResult)
 
     internal fun firstTimeCreated(savedInstanceState: Bundle?) = savedInstanceState == null
 
     internal fun notify(message: String, type: MessageBanner.MessageType = ERROR) =
-            notify(title = null, message = message, type = type)
+        notify(title = null, message = message, type = type)
 
     internal fun notify(title: String?, message: String, type: MessageBanner.MessageType = ERROR) =
-            activity?.let { MessageBanner().showBanner(it, title = title, message = message, messageType = type) }
+        activity?.let { MessageBanner().showBanner(it, title = title, message = message, messageType = type) }
 
-    protected fun confirm(title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit,
-                          onCancel: (Unit) -> Unit) {
+    protected fun confirm(
+        title: String,
+        text: String,
+        confirm: String,
+        cancel: String,
+        onConfirm: (Unit) -> Unit,
+        onCancel: (Unit) -> Unit
+    ) {
         activity?.let {
             val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(it,
-                    confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+                confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
             themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
         }
     }

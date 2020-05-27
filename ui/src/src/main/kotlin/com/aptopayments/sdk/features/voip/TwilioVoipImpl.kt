@@ -48,21 +48,21 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
     private var onComplete: (() -> Unit)? = null
     private var onError: ((String?) -> Unit)? = null
 
-    override fun startCall(context: Context,
-                           destination: VoipCall,
-                           onRinging: () -> Unit,
-                           onEstablished: () -> Unit,
-                           onComplete: () -> Unit,
-                           onError: (String?) -> Unit) {
+    override fun startCall(
+        context: Context,
+        destination: VoipCall,
+        onRinging: () -> Unit,
+        onEstablished: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit
+    ) {
         this.onRinging = onRinging
         this.onEstablished = onEstablished
         this.onComplete = onComplete
         this.onError = onError
         val params: HashMap<String, String> = HashMap()
         params["request_token"] = destination.requestToken
-        val connectOptions = ConnectOptions.Builder(destination.accessToken)
-                .params(params)
-                .build()
+        val connectOptions = ConnectOptions.Builder(destination.accessToken).params(params).build()
         activeCall = Voice.connect(context, connectOptions, this)
     }
 

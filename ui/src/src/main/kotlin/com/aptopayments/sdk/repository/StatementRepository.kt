@@ -38,5 +38,4 @@ internal class StatementRepositoryImpl(
     override fun clearCache() {
         cacheFileManager.cleanCache(STATEMENT_DIR)
     }
-
 }

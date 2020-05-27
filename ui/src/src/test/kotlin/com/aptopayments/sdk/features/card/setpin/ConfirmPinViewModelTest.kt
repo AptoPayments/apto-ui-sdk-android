@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.card.setpin
 
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.core.analytics.Event
+import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import org.junit.Before
 import org.junit.Test
@@ -12,7 +12,8 @@ import kotlin.test.assertTrue
 class ConfirmPinViewModelTest : AndroidTest() {
 
     private lateinit var sut: ConfirmPinViewModel
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
     override fun setUp() {

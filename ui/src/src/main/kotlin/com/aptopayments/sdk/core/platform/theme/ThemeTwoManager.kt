@@ -38,7 +38,7 @@ import com.google.android.material.appbar.AppBarLayout
 private const val CARD_FONT_FILE = "fonts/ocraextended.ttf"
 private const val OPACITY_50_PERCENT = 128
 
-internal object ThemeTwoManager: ThemeManager {
+internal object ThemeTwoManager : ThemeManager {
     private var mCardTypeface: Typeface? = null
     private fun getCardTypeface(context: Context): Typeface {
         return mCardTypeface ?: {
@@ -60,7 +60,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeToolbarTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let{
+        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let {
             textView.typeface = it
         }
         textView.apply {
@@ -71,13 +71,13 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeHighlightTitleLabel(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let { textView.typeface = it }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
         textView.setTextColor(UIConfig.textSecondaryColor)
     }
 
     override fun customizeSubmitButton(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let { textView.typeface = it }
         textView.apply {
             setTextColor(UIConfig.textButtonColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
@@ -101,7 +101,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeLargeTitleLabel(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let { textView.typeface = it }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
             setTextColor(UIConfig.textPrimaryColor)
@@ -109,7 +109,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeRegularTextLabel(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -117,7 +117,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeSectionHeader(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -131,7 +131,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeFooterLabel(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let{
+        FontsUtil.getFontOfType(REGULAR)?.let {
             textView.typeface = it
         }
         textView.apply {
@@ -176,8 +176,7 @@ internal object ThemeTwoManager: ThemeManager {
             FontsUtil.getFontOfType(SEMI_BOLD)?.let { typeface ->
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                     applyStyle(TypefaceSpan(typeface), spannable, start, end)
-                }
-                else {
+                } else {
                     applyStyle(CustomTypefaceSpan(typeface), spannable, start, end)
                 }
             } ?: applyStyle(StyleSpan(Typeface.BOLD), spannable, start, end)
@@ -245,7 +244,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeSectionOptionTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let { textView.typeface = it }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -253,7 +252,7 @@ internal object ThemeTwoManager: ThemeManager {
     }
 
     override fun customizeSectionOptionDescription(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let{ textView.typeface = it }
+        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTextColor(UIConfig.textTertiaryColor)
@@ -273,7 +272,7 @@ internal object ThemeTwoManager: ThemeManager {
             textView.typeface = it
         }
         textView.apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP,14f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             alpha = 0.7f
             setTextColor(textColor)
             setAllCaps(true)
@@ -315,7 +314,7 @@ internal object ThemeTwoManager: ThemeManager {
             textView.typeface = it
         }
         textView.apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP,16f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             alpha = 0.7f
             setTextColor(UIConfig.textTopBarSecondaryColor)
         }
@@ -324,7 +323,7 @@ internal object ThemeTwoManager: ThemeManager {
     override fun customizeCardSmallValue(context: Context, textView: TextView) {
         textView.apply {
             typeface = getCardTypeface(context)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP,17f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
             setTextColor(UIConfig.textTopBarSecondaryColor)
         }
     }
@@ -332,7 +331,7 @@ internal object ThemeTwoManager: ThemeManager {
     override fun customizeCardLargeValue(context: Context, textView: TextView) {
         textView.apply {
             typeface = getCardTypeface(context)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP,24f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
             setTextColor(UIConfig.textTopBarSecondaryColor)
         }
     }
@@ -342,7 +341,7 @@ internal object ThemeTwoManager: ThemeManager {
             textView.typeface = it
         }
         textView.apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP,14f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTextColor(UIConfig.textTertiaryColor)
             gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
         }
@@ -369,8 +368,7 @@ internal object ThemeTwoManager: ThemeManager {
         }
     }
 
-    override fun getAlertDialog(builder: AlertDialog.Builder, alertTitle: String,
-                                alertMessage: String): AlertDialog {
+    override fun getAlertDialog(builder: AlertDialog.Builder, alertTitle: String, alertMessage: String): AlertDialog {
         val view = builder.create().layoutInflater.inflate(R.layout.alertview_theme_two, null)
         val dialogTitle = view.findViewById(R.id.alert_title) as TextView
         dialogTitle.apply {
@@ -410,8 +408,8 @@ internal object ThemeTwoManager: ThemeManager {
 
     override fun customizeRadioButton(button: AppCompatRadioButton) {
         val tintList = ColorStateList(
-                arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
-                intArrayOf(Color.LTGRAY, UIConfig.uiPrimaryColor)
+            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+            intArrayOf(Color.LTGRAY, UIConfig.uiPrimaryColor)
         )
         button.buttonTintList = tintList
     }
@@ -429,8 +427,8 @@ internal object ThemeTwoManager: ThemeManager {
 
     override fun customizeCheckBox(checkBox: AppCompatCheckBox) {
         val tintList = ColorStateList(
-                arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
-                intArrayOf(Color.LTGRAY, UIConfig.uiPrimaryColor)
+            arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
+            intArrayOf(Color.LTGRAY, UIConfig.uiPrimaryColor)
         )
         checkBox.buttonTintList = tintList
     }

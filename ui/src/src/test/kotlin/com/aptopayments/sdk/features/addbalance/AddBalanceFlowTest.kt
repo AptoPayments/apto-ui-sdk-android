@@ -17,8 +17,10 @@ import org.mockito.Mock
 import kotlin.test.assertEquals
 
 class AddBalanceFlowTest : AndroidTest() {
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockDelegate: OAuthConnectContract.Delegate
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockDelegate: OAuthConnectContract.Delegate
 
     private val allowedBalanceTypes = listOf(TestDataProvider.provideAllowedBalanceType())
 
@@ -38,20 +40,22 @@ class AddBalanceFlowTest : AndroidTest() {
         // Given
         val sut = AddBalanceFlow(allowedBalanceTypes = allowedBalanceTypes, cardID = "card", onBack = {}, onFinish = {})
         val errorMessageKeys = listOf(
-                "external_auth.login.error_oauth_invalid_request.message",
-                "external_auth.login.error_oauth_unauthorised_client.message",
-                "external_auth.login.error_oauth_access_denied.message",
-                "external_auth.login.error_oauth_unsupported_response_type.message",
-                "external_auth.login.error_oauth_invalid_scope.message",
-                "external_auth.login.error_oauth_server_error.message",
-                "external_auth.login.error_oauth_temporarily_unavailable.message",
-                "external_auth.login.error_oauth_unknown.message"
+            "external_auth.login.error_oauth_invalid_request.message",
+            "external_auth.login.error_oauth_unauthorised_client.message",
+            "external_auth.login.error_oauth_access_denied.message",
+            "external_auth.login.error_oauth_unsupported_response_type.message",
+            "external_auth.login.error_oauth_invalid_scope.message",
+            "external_auth.login.error_oauth_server_error.message",
+            "external_auth.login.error_oauth_temporarily_unavailable.message",
+            "external_auth.login.error_oauth_unknown.message"
         )
         val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = "OAuthConnectFragment" }
         val captor = argumentCaptor<OAuthConfig>()
-        given { mockFragmentFactory.oauthConnectFragment(
+        given {
+            mockFragmentFactory.oauthConnectFragment(
                 config = captor.capture(),
-                tag = TestDataProvider.anyObject())
+                tag = TestDataProvider.anyObject()
+            )
         }.willReturn(fragmentDouble)
 
         // When

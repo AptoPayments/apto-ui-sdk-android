@@ -78,7 +78,5 @@ internal class CollectUserIdViewModel(
     }
 
     private fun isAllRequiredDataSet() =
-        selectedCountry.value != null
-                && typePosition.value != UNSELECTED_VALUE
-                && number.value?.isNotEmpty() ?: false
+        selectedCountry.value != null && typePosition.value != UNSELECTED_VALUE && number.value?.isNotEmpty() ?: false
 }

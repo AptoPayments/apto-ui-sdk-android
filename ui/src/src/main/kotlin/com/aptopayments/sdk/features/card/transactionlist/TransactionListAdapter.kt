@@ -13,7 +13,7 @@ import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.formatForTransactionList
 import com.aptopayments.core.extension.toCapitalized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.data.transaction.iconResource
+import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -21,7 +21,7 @@ import com.aptopayments.sdk.features.managecard.TransactionListItem
 import kotlin.properties.Delegates
 
 internal class TransactionListAdapter(
-        transactionListItems: List<TransactionListItem>
+    transactionListItems: List<TransactionListItem>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Delegate {
@@ -38,9 +38,11 @@ internal class TransactionListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = when(viewType) {
-            TransactionListItem.SECTION_HEADER_VIEW_TYPE -> inflater.inflate(R.layout.view_transaction_section_title, parent, false)
-            TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> inflater.inflate(R.layout.view_transaction_row, parent, false)
+        val view = when (viewType) {
+            TransactionListItem.SECTION_HEADER_VIEW_TYPE ->
+                inflater.inflate(R.layout.view_transaction_section_title, parent, false)
+            TransactionListItem.TRANSACTION_ROW_VIEW_TYPE ->
+                inflater.inflate(R.layout.view_transaction_row, parent, false)
             else -> throw IllegalArgumentException("Unexpected transaction view type")
         }
         return ViewHolder(view, viewType)
@@ -48,10 +50,12 @@ internal class TransactionListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ViewHolder)?.let { viewHolder ->
-            when(viewHolder.itemViewType) {
+            when (viewHolder.itemViewType) {
                 TransactionListItem.SECTION_HEADER_VIEW_TYPE -> customizeSectionTitle(viewHolder, position)
                 TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> customizeTransactionRow(viewHolder, position)
-                else -> { throw IllegalArgumentException("Unexpected transaction view type") }
+                else -> {
+                    throw IllegalArgumentException("Unexpected transaction view type")
+                }
             }
         }
     }
@@ -75,7 +79,7 @@ internal class TransactionListAdapter(
             transaction.nativeBalance?.let { viewHolder.transactionNativeAmountView?.setText(transaction.getNativeBalanceRepresentation()) }
             if (isLastPositionOfSection(position)) viewHolder.transactionRowSeparator?.hide()
             else viewHolder.transactionRowSeparator?.show()
-            viewHolder.transactionRow?.setOnClickListener { delegate?.onTransactionTapped(transaction)}
+            viewHolder.transactionRow?.setOnClickListener { delegate?.onTransactionTapped(transaction) }
         }
     }
 
@@ -100,7 +104,7 @@ internal class TransactionListAdapter(
         var transactionRow: LinearLayout? = null
 
         init {
-            when(viewType) {
+            when (viewType) {
                 TransactionListItem.SECTION_HEADER_VIEW_TYPE -> setupSectionTitle()
                 TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> setupAsTransactionRow()
             }

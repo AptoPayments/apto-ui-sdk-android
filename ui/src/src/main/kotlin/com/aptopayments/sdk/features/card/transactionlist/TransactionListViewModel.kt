@@ -17,7 +17,7 @@ import java.util.Locale
 private const val ROWS_TO_RETRIEVE = 20
 
 internal class TransactionListViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract
+    private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
     private var lastTransactionId: String? = null
     var transactionListItems: MutableLiveData<List<TransactionListItem>> = MutableLiveData()
@@ -26,19 +26,35 @@ internal class TransactionListViewModel constructor(
         analyticsManager.track(Event.TransactionList)
     }
 
-    fun fetchTransaction(cardId: String, startDate: LocalDate?, endDate: LocalDate?, mcc: MCC?,
-                         onComplete: (transactionsLoaded: Int) -> Unit) =
-            fetchTransactions(cardId, startDate, endDate, mcc, true, onComplete)
+    fun fetchTransaction(
+        cardId: String,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        mcc: MCC?,
+        onComplete: (transactionsLoaded: Int) -> Unit
+    ) = fetchTransactions(cardId, startDate, endDate, mcc, true, onComplete)
 
-    fun fetchMoreTransaction(cardId: String, startDate: LocalDate?, endDate: LocalDate?, mcc: MCC?,
-                             onComplete: (transactionsLoaded: Int) -> Unit) =
-            fetchTransactions(cardId, startDate, endDate, mcc, false, onComplete)
+    fun fetchMoreTransaction(
+        cardId: String,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        mcc: MCC?,
+        onComplete: (transactionsLoaded: Int) -> Unit
+    ) = fetchTransactions(cardId, startDate, endDate, mcc, false, onComplete)
 
-    private fun fetchTransactions(cardId: String, startDate: LocalDate?, endDate: LocalDate?, mcc: MCC?,
-                                  clearCurrent: Boolean, onComplete: (transactionsLoaded: Int) -> Unit) {
+    private fun fetchTransactions(
+        cardId: String,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        mcc: MCC?,
+        clearCurrent: Boolean,
+        onComplete: (transactionsLoaded: Int) -> Unit
+    ) {
         val filters = transactionListFilters(startDate, endDate, mcc, clearCurrent)
-        AptoPlatform.fetchCardTransactions(cardId = cardId, filters = filters, forceRefresh = true,
-                clearCachedValues = false) { result ->
+        AptoPlatform.fetchCardTransactions(
+            cardId = cardId, filters = filters, forceRefresh = true,
+            clearCachedValues = false
+        ) { result ->
             result.either(::handleFailure) { transactionList ->
                 handleTransactions(transactionList, clearCurrent)
                 onComplete(transactionList.count())
@@ -46,11 +62,17 @@ internal class TransactionListViewModel constructor(
         }
     }
 
-    private fun transactionListFilters(startDate: LocalDate?, endDate: LocalDate?, mcc: MCC?,
-                                       clearCurrent: Boolean): TransactionListFilters {
+    private fun transactionListFilters(
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        mcc: MCC?,
+        clearCurrent: Boolean
+    ): TransactionListFilters {
         val lastTransactionId = if (clearCurrent) null else this.lastTransactionId
-        return TransactionListFilters(rows = ROWS_TO_RETRIEVE, lastTransactionId = lastTransactionId,
-                startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase(Locale.US))
+        return TransactionListFilters(
+            rows = ROWS_TO_RETRIEVE, lastTransactionId = lastTransactionId,
+            startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase(Locale.US)
+        )
     }
 
     private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
@@ -60,8 +82,11 @@ internal class TransactionListViewModel constructor(
         if (transactionList.isEmpty()) return
         lastTransactionId = transactionList.last().transactionId
         val items =
-                if (clearCurrent) { currentYear = 0; currentMonth = 0; ArrayList() }
-                else transactionListItems.value as ArrayList<TransactionListItem>
+            if (clearCurrent) {
+                currentYear = 0; currentMonth = 0; ArrayList()
+            } else {
+                transactionListItems.value as ArrayList<TransactionListItem>
+            }
         transactionList.forEach { transaction ->
             val month = transaction.createdAt.monthValue
             val year = transaction.createdAt.year

@@ -94,7 +94,7 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
 
     private fun setupToolbar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .setPrimaryColors()
                 .build()

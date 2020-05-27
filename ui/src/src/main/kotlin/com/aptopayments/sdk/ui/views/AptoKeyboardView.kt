@@ -10,6 +10,7 @@ import android.util.TypedValue.applyDimension
 import androidx.core.content.ContextCompat
 import com.aptopayments.sdk.R
 
+@Suppress("DEPRECATION")
 class AptoKeyboardView : KeyboardView {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
@@ -50,11 +51,17 @@ class AptoKeyboardView : KeyboardView {
             paint.textSize = pixelSize
             paint.typeface = Typeface.DEFAULT
             paint.getTextBounds(key.label.toString(), 0, key.label.toString().length, bounds)
-            canvas.drawText(key.label.toString(), (key.x + (key.width / 2)).toFloat(),
-                    ((key.y + key.height / 2) + bounds.height() / 2).toFloat(), paint)
+            canvas.drawText(
+                key.label.toString(), (key.x + (key.width / 2)).toFloat(),
+                ((key.y + key.height / 2) + bounds.height() / 2).toFloat(), paint
+            )
         } else if (key.icon != null) {
-            key.icon.setBounds(key.x + (key.width - key.icon.intrinsicWidth) / 2, key.y + (key.height - key.icon.intrinsicHeight) / 2,
-                    key.x + (key.width - key.icon.intrinsicWidth) / 2 + key.icon.intrinsicWidth, key.y + (key.height - key.icon.intrinsicHeight) / 2 + key.icon.intrinsicHeight)
+            key.icon.setBounds(
+                key.x + (key.width - key.icon.intrinsicWidth) / 2,
+                key.y + (key.height - key.icon.intrinsicHeight) / 2,
+                key.x + (key.width - key.icon.intrinsicWidth) / 2 + key.icon.intrinsicWidth,
+                key.y + (key.height - key.icon.intrinsicHeight) / 2 + key.icon.intrinsicHeight
+            )
             key.icon.draw(canvas)
         }
     }

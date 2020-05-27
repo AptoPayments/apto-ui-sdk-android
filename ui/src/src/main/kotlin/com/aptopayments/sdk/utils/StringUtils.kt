@@ -5,8 +5,8 @@ import android.text.Spanned
 import com.aptopayments.core.data.PhoneNumber
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import java.util.regex.Pattern
 import java.util.Locale
+import java.util.regex.Pattern
 
 class StringUtils {
 
@@ -26,7 +26,8 @@ class StringUtils {
         }
 
         fun capitalizeString(stringToCapitalize: String): String {
-            return stringToCapitalize.toUpperCase(Locale.getDefault())[0] + stringToCapitalize.substring(1, stringToCapitalize.length)
+            return stringToCapitalize.toUpperCase(Locale.getDefault())[0] +
+                    stringToCapitalize.substring(1, stringToCapitalize.length)
         }
 
         fun isValidEmail(stringToValidate: String): Boolean =

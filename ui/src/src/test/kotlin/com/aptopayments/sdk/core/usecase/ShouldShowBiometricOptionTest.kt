@@ -18,8 +18,10 @@ internal class ShouldShowBiometricOptionTest : UnitTest() {
 
     @Mock
     private lateinit var cardOptions: CardOptions
+
     @Mock
     private lateinit var biometricWrapper: BiometricWrapper
+
     @Mock
     private lateinit var uiSdkProtocol: AptoUiSdkProtocol
 

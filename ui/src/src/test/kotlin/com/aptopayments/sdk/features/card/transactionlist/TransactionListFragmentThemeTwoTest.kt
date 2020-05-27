@@ -4,8 +4,7 @@ import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -13,12 +12,11 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
 
 class TransactionListFragmentThemeTwoTest : AndroidTest() {
     // Collaborators
-    @Mock private lateinit var viewModel: TransactionListViewModel
+    @Mock
+    private lateinit var viewModel: TransactionListViewModel
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
     private lateinit var sut: TransactionListFragmentThemeTwo
@@ -36,24 +34,29 @@ class TransactionListFragmentThemeTwoTest : AndroidTest() {
         sut.config = config
     }
 
-    @Ignore @Test
+    @Ignore
+    @Test
     fun `on fragment presented call view model to fetch transactions`() {
         // Given
-        Mockito.doNothing().`when`(viewModel).fetchTransaction(eq(cardId), eq(config.startDate), eq(config.endDate),
-                eq(config.mcc), TestDataProvider.anyObject())
+        doNothing().whenever(viewModel).fetchTransaction(
+            eq(cardId), eq(config.startDate), eq(config.endDate),
+            eq(config.mcc), TestDataProvider.anyObject()
+        )
 
         // When
         sut.onPresented()
 
         // Then
-        verify(viewModel).fetchTransaction(eq(cardId), eq(config.startDate), eq(config.endDate), eq(config.mcc),
-                TestDataProvider.anyObject())
+        verify(viewModel).fetchTransaction(
+            eq(cardId), eq(config.startDate), eq(config.endDate), eq(config.mcc),
+            TestDataProvider.anyObject()
+        )
     }
 
     @Test
     fun `on back pressed notify delegate`() {
         // Given
-        val delegate = mock(TransactionListContract.Delegate::class.java)
+        val delegate = mock<TransactionListContract.Delegate>()
         sut.delegate = delegate
 
         // When
@@ -66,9 +69,9 @@ class TransactionListFragmentThemeTwoTest : AndroidTest() {
     @Test
     fun `on transaction tapped notify delegate`() {
         // Given
-        val delegate = mock(TransactionListContract.Delegate::class.java)
+        val delegate = mock<TransactionListContract.Delegate>()
         sut.delegate = delegate
-        val transaction = mock(Transaction::class.java)
+        val transaction = mock<Transaction>()
 
         // When
         sut.onTransactionTapped(transaction)

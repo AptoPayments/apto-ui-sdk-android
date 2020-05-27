@@ -50,5 +50,4 @@ internal class AddressDataPointGenerator() {
 
     private fun getShortNameFor(components: List<AddressComponent>, type: String) =
         components.firstOrNull { it.types.first() == type }?.shortName ?: ""
-
 }

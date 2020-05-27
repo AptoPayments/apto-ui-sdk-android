@@ -16,7 +16,7 @@ import com.aptopayments.core.data.transaction.MCC.Icon
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.data.transaction.iconResource
+import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -35,7 +35,7 @@ import org.threeten.bp.LocalDate
 import java.util.Locale
 
 internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsChartContract.View,
-        OnChartValueSelectedListener,
+    OnChartValueSelectedListener,
     CategoryListAdapter.Delegate {
 
     private lateinit var pieChart: AptoPieChart
@@ -188,7 +188,7 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     private fun groupSmallEntries(entries: ArrayList<PieEntry>): ArrayList<PieEntry> {
         // Values below 7% of the total will be grouped
-        val maxSpendingForSmallCategory= totalSpent * 0.07
+        val maxSpendingForSmallCategory = totalSpent * 0.07
         var totalSpendingOfSmallCategories = 0.0
         val iterator = entries.iterator()
         while (iterator.hasNext()) {
@@ -227,9 +227,9 @@ internal class CardTransactionsChartThemeTwo : BaseFragment(), CardTransactionsC
 
     @SuppressLint("SetTextI18n")
     override fun onValueSelected(entry: Entry?, highlight: Highlight?) {
-        if(entry == null || highlight == null || entry.data == null) return
+        if (entry == null || highlight == null || entry.data == null) return
         for (i in 0 until dataSet.colors.size) {
-            if(i == highlight.x.toInt()) dataSet.colors[i] = UIConfig.uiPrimaryColor
+            if (i == highlight.x.toInt()) dataSet.colors[i] = UIConfig.uiPrimaryColor
             else resetPieChartEntryColor(i)
         }
         val pieChartElement = entry.data as PieChartElement

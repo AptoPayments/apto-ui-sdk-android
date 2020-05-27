@@ -12,5 +12,4 @@ interface KycStatusContract {
     interface View {
         var delegate: Delegate?
     }
-
 }

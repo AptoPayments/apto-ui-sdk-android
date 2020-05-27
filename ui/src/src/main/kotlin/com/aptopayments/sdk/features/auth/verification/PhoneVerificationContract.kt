@@ -6,7 +6,7 @@ import java.io.Serializable
 
 interface PhoneVerificationContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onPhoneVerificationPassed(dataPoint: DataPoint)
         fun onBackFromPhoneVerification()
     }

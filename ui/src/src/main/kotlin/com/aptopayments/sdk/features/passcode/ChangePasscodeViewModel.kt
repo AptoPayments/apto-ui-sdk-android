@@ -48,7 +48,6 @@ internal class ChangePasscodeViewModel(
         override fun onBack() {
             backpressed.value = true
         }
-
     }
 
     private inner class SetStateImpl : SetState() {
@@ -65,5 +64,4 @@ internal class ChangePasscodeViewModel(
     }
 
     private fun isPasscodeCorrect(passcode: String) = verifyPasscodeUseCase.run(passcode).either({ false }, { it })
-
 }

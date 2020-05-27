@@ -5,11 +5,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.card.CardBackgroundStyle
 import com.aptopayments.core.data.card.CardStyle
 import com.aptopayments.core.data.config.UIConfig
-import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.loadFromUrl
@@ -23,56 +23,46 @@ import java.util.Locale
 
 private const val CARD_ASPECT_RATIO = 1.586
 
-class CardView
-@JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0)
-    : RelativeLayout(context, attrs, defStyleAttr, defStyleRes)
-{
+class CardView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) :
+    RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
+
     var delegate: Delegate? = null
     private val cardNumberPlaceholder = R.string.manage_card_number_placeholder
     private val expiryDatePlaceholder = R.string.manage_card_expiry_date_placeholder
     private val cvvPlaceholder = R.string.manage_card_cvv_placeholder
     private var cardStyle: CardStyle? = null
     private var lastFour: String? = null
-    private var hasValidBalance = true
+    private var hasValidFundingSource = true
     private var cardState = Card.CardState.ACTIVE
+    private var cardNumberElements: List<TextView>
 
     init {
         View.inflate(context, R.layout.view_card, this)
+        cardNumberElements = listOf(card_number_1, card_number_2, card_number_3, card_number_4)
         setupTheme(context)
         setupListeners()
     }
 
     private fun setupTheme(context: Context) {
         with(themeManager()) {
-            customizeCardLargeValue(context, et_card_number_1)
-            customizeCardLargeValue(context, et_card_number_2)
-            customizeCardLargeValue(context, et_card_number_3)
-            customizeCardLargeValue(context, et_card_number_4)
-            customizeCardSmallValue(context, et_card_name)
-            customizeCardSmallValue(context, et_expiry_date)
-            customizeCardSmallValue(context, et_cvv)
+            cardNumberElements.forEach { customizeCardLargeValue(context, it) }
+            customizeCardSmallValue(context, t_card_name)
+            customizeCardSmallValue(context, t_expirity_date)
+            customizeCardSmallValue(context, t_cvv)
         }
         background.setTint(UIConfig.uiPrimaryColor)
-        et_card_number_1.setText(cardNumberPlaceholder)
-        et_card_number_2.setText(cardNumberPlaceholder)
-        et_card_number_3.setText(cardNumberPlaceholder)
-        et_card_number_4.setText(cardNumberPlaceholder)
-        et_expiry_date.setText(expiryDatePlaceholder)
-        et_cvv.setText(cvvPlaceholder)
+        t_expirity_date.setText(expiryDatePlaceholder)
+        t_cvv.setText(cvvPlaceholder)
     }
 
     private fun setupListeners() {
-        setOnClickListener { delegate?.cardViewTapped(this) }
-        et_card_number_1.setOnClickListener { delegate?.panNumberTappedInCardView(this) }
-        et_card_number_2.setOnClickListener { delegate?.panNumberTappedInCardView(this) }
-        et_card_number_3.setOnClickListener { delegate?.panNumberTappedInCardView(this) }
-        et_card_number_4.setOnClickListener { delegate?.panNumberTappedInCardView(this) }
-        et_card_name.setOnClickListener { delegate?.cardViewTapped(this) }
-        et_expiry_date.setOnClickListener { delegate?.cardViewTapped(this) }
-        et_cvv.setOnClickListener { delegate?.cardViewTapped(this) }
-        card_disabled_overlay.setOnClickListener { delegate?.cardViewTapped(this) }
-        card_error_overlay.setOnClickListener { delegate?.cardViewTapped(this) }
+        setOnClickListener { delegate?.cardViewTapped() }
+        cardNumberElements.forEach { it.setOnClickListener { delegate?.panNumberTappedInCardView() } }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -83,44 +73,51 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setCardholderName(name: String?) {
-        name?.let { et_card_name.setText(it.toUpperCase(Locale.getDefault())) } ?: et_card_name.setText("")
+        t_card_name.text = name?.toUpperCase(Locale.getDefault()) ?: ""
     }
 
     fun setLastFour(lastFour: String?) {
         this.lastFour = lastFour
-        lastFour?.let { et_card_number_4.setText(it) } ?: et_card_number_4.setText(cardNumberPlaceholder)
+        lastFour?.let { card_number_4.text = it } ?: card_number_4.setText(cardNumberPlaceholder)
     }
 
     fun setPan(pan: String?) {
-        pan?.let {
-            if (it.length < 12) return
-            et_card_number_1.setText(it.substring(0, 4))
-            et_card_number_2.setText(it.substring(4, 8))
-            et_card_number_3.setText(it.substring(8, 12))
-            et_card_number_4.setText(it.substring(12))
-        } ?: run {
-            et_card_number_1.setText(cardNumberPlaceholder)
-            et_card_number_2.setText(cardNumberPlaceholder)
-            et_card_number_3.setText(cardNumberPlaceholder)
-            lastFour?.let { et_card_number_4.setText(it) } ?: et_card_number_4.setText(cardNumberPlaceholder)
+        if (isValidPan(pan)) {
+            setPanNumbers(pan!!)
+        } else {
+            setLastFourAndPlaceholders()
         }
+    }
+
+    private fun isValidPan(pan: String?) = pan != null && pan.length >= 12
+
+    private fun setPanNumbers(it: String) {
+        card_number_1.text = it.substring(0, 4)
+        card_number_2.text = it.substring(4, 8)
+        card_number_3.text = it.substring(8, 12)
+        card_number_4.text = it.substring(12)
+    }
+
+    private fun setLastFourAndPlaceholders() {
+        cardNumberElements.forEach { it.setText(cardNumberPlaceholder) }
+        lastFour?.let { card_number_4.text = lastFour }
     }
 
     @SuppressLint("SetTextI18n")
     fun setExpiryDate(month: String?, year: String?) {
         if (month.isNullOrEmpty() || year.isNullOrEmpty()) {
-            et_expiry_date.setText(expiryDatePlaceholder)
+            t_expirity_date.setText(expiryDatePlaceholder)
         } else {
-            et_expiry_date.setText("$month/$year")
+            t_expirity_date.text = "$month/$year"
         }
     }
 
     fun setCvv(cvv: String?) {
-        cvv?.let { et_cvv.setText(it) } ?: et_cvv.setText(cvvPlaceholder)
+        cvv?.let { t_cvv.text = it } ?: t_cvv.setText(cvvPlaceholder)
     }
 
     fun setCardNetwork(cardNetwork: Card.CardNetwork?) {
-        when(cardNetwork) {
+        when (cardNetwork) {
             Card.CardNetwork.VISA -> {
                 iv_card_logo.setImageResource(R.drawable.ic_visa_logo)
                 iv_card_logo.show()
@@ -131,15 +128,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 iv_card_logo.show()
                 updateLogoIconForCurrentCardStyle()
             }
-            else -> {
-                iv_card_logo.hide()
-            }
+            else -> iv_card_logo.hide()
         }
     }
 
     fun setCardStyle(style: CardStyle?) {
         this.cardStyle = style
-        when(val backgroundStyle = style?.background) {
+        when (val backgroundStyle = style?.background) {
             is CardBackgroundStyle.Color -> {
                 background.setTint(backgroundStyle.color)
                 iv_background_image.hide()
@@ -162,20 +157,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun updateLogoIconForCurrentCardStyle() {
         if (cardStyle?.background is CardBackgroundStyle.Image) {
             iv_card_logo.hide()
-        }
-        else {
+        } else {
             iv_card_logo.show()
         }
     }
 
     private fun setTextColor(textColor: Int) {
-        et_card_number_1.setTextColor(textColor)
-        et_card_number_2.setTextColor(textColor)
-        et_card_number_3.setTextColor(textColor)
-        et_card_number_4.setTextColor(textColor)
-        et_card_name.setTextColor(textColor)
-        et_expiry_date.setTextColor(textColor)
-        et_cvv.setTextColor(textColor)
+        cardNumberElements.forEach { it.setTextColor(textColor) }
+        t_card_name.setTextColor(textColor)
+        t_expirity_date.setTextColor(textColor)
+        t_cvv.setTextColor(textColor)
         tv_expiration_label.setTextColor(textColor)
         tv_cvv_label.setTextColor(textColor)
     }
@@ -185,19 +176,18 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         updateCardState()
     }
 
-    fun setBalance(balance: Balance?) {
-        hasValidBalance = balance?.state == Balance.BalanceState.VALID
+    fun setValidFundingSource(value: Boolean) {
+        hasValidFundingSource = value
         updateCardState()
     }
 
     private fun updateCardState() {
-        if (cardState == Card.CardState.ACTIVE && hasValidBalance) {
+        if (cardState == Card.CardState.ACTIVE && hasValidFundingSource) {
             enableCard()
         } else {
-            if (!hasValidBalance) {
+            if (!hasValidFundingSource) {
                 showInvalidBalance()
-            }
-            else {
+            } else {
                 showCardDisabled()
             }
         }
@@ -221,7 +211,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     interface Delegate {
-        fun cardViewTapped(cardView: CardView)
-        fun panNumberTappedInCardView(cardView: CardView)
+        fun cardViewTapped()
+        fun panNumberTappedInCardView()
     }
 }

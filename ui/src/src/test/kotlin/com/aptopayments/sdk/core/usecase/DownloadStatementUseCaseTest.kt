@@ -6,16 +6,12 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.repository.StatementRepositoryImpl
 import com.aptopayments.sdk.utils.*
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.threeten.bp.ZonedDateTime
 import java.io.File
 import kotlin.test.assertEquals
@@ -29,6 +25,7 @@ internal class DownloadStatementUseCaseTest : UnitTest() {
 
     @Mock
     lateinit var fileDownloader: FileDownloader
+
     @Mock
     lateinit var cacheFileManager: CacheFileManager
 
@@ -71,7 +68,7 @@ internal class DownloadStatementUseCaseTest : UnitTest() {
     @Test
     fun `when exception thrown downloading then left is returned`() = coroutineRule.runBlockingTest {
         whenever(statement.canDownload()).thenReturn(true)
-        val file = Mockito.mock(File::class.java)
+        val file = mock<File>()
         whenever(cacheFileManager.createTempFile(any(), any(), any())).thenReturn(file)
         whenever(fileDownloader.downloadFile(statement.downloadUrl!!, file)).thenThrow(RuntimeException())
 
@@ -83,7 +80,7 @@ internal class DownloadStatementUseCaseTest : UnitTest() {
 
     @Test
     fun `when preconditions are Ok then file is correctly downloaded`() = coroutineRule.runBlockingTest {
-        val file = Mockito.mock(File::class.java)
+        val file = mock<File>()
         whenever(cacheFileManager.createTempFile(any(), any(), any())).thenReturn(file)
         whenever(statement.canDownload()).thenReturn(true)
 

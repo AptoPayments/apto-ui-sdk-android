@@ -17,11 +17,11 @@ import com.aptopayments.sdk.utils.MessageBanner
 private const val ACTIVATE_PHYSICAL_CARD_TAG = "ActivatePhysicalCardFragment"
 private const val ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG = "ActivatePhysicalCardSuccessFragment"
 
-internal class ActivatePhysicalCardFlow (
-        var card: Card,
-        var onBack: (Unit) -> Unit,
-        var onFinish: (Unit) -> Unit,
-        var onPhysicalCardActivated: (Unit) -> Unit
+internal class ActivatePhysicalCardFlow(
+    var card: Card,
+    var onBack: (Unit) -> Unit,
+    var onFinish: (Unit) -> Unit,
+    var onPhysicalCardActivated: (Unit) -> Unit
 ) : Flow(), ActivatePhysicalCardContract.Delegate, ActivatePhysicalCardSuccessContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -61,17 +61,19 @@ internal class ActivatePhysicalCardFlow (
 
     override fun onSetPinClicked() {
         val flow = SetPinFlow(
-                cardId = card.accountID,
-                onBack = { popFlow(animated = true) },
-                onFinish = {
-                    popFlow(animated = true)
-                    rootActivity()?.let {
-                        notify(title = "manage_card.confirm_pin.pin_created.title".localized(),
-                                message = "manage_card.confirm_pin.pin_created.message".localized(),
-                                messageType = MessageBanner.MessageType.HEADS_UP)
-                    }
-                    onFinish(Unit)
+            cardId = card.accountID,
+            onBack = { popFlow(animated = true) },
+            onFinish = {
+                popFlow(animated = true)
+                rootActivity()?.let {
+                    notify(
+                        title = "manage_card.confirm_pin.pin_created.title".localized(),
+                        message = "manage_card.confirm_pin.pin_created.message".localized(),
+                        messageType = MessageBanner.MessageType.HEADS_UP
+                    )
                 }
+                onFinish(Unit)
+            }
         )
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }
@@ -80,13 +82,13 @@ internal class ActivatePhysicalCardFlow (
 
     override fun onGetPinViaVoipClicked() {
         val flow = VoipFlow(
-                cardId = card.accountID,
-                action = Action.LISTEN_PIN,
-                onBack = { popFlow(animated = true) },
-                onFinish = {
-                    popFlow(animated = true)
-                    onFinish(Unit)
-                }
+            cardId = card.accountID,
+            action = Action.LISTEN_PIN,
+            onBack = { popFlow(animated = true) },
+            onFinish = {
+                popFlow(animated = true)
+                onFinish(Unit)
+            }
         )
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }

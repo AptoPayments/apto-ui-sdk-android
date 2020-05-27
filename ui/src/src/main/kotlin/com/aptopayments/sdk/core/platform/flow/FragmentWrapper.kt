@@ -4,9 +4,9 @@ import androidx.fragment.app.FragmentManager
 import com.aptopayments.sdk.core.platform.BaseFragment
 
 internal class FragmentWrapper(
-        fragmentManager: FragmentManager?,
-        fragment: BaseFragment,
-        val tag: String
+    fragmentManager: FragmentManager?,
+    fragment: BaseFragment,
+    val tag: String
 ) : FlowPresentable {
     var fragmentManager: FragmentManager? = fragmentManager
         set(newValue) {

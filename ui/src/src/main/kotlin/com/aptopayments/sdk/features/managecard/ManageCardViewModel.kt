@@ -33,10 +33,10 @@ import java.util.ArrayList
 private const val ROWS_PER_PAGE = 20
 
 internal class ManageCardViewModel constructor(
-        private val cardId: String,
-        private val getTransactionsQueue: FetchTransactionsTaskQueue,
-        private var analyticsManager: AnalyticsServiceContract,
-        private val aptoUiSdkProtocol: AptoUiSdkProtocol
+    private val cardId: String,
+    private val getTransactionsQueue: FetchTransactionsTaskQueue,
+    private var analyticsManager: AnalyticsServiceContract,
+    private val aptoUiSdkProtocol: AptoUiSdkProtocol
 ) : BaseViewModel(), KoinComponent {
 
     private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
@@ -103,7 +103,11 @@ internal class ManageCardViewModel constructor(
             card.cardProductID?.let {
                 getCardProduct(cardProductId = it) {
                     getCardBalance(cardId = cardId, refresh = forceApiCall) {
-                        getTransactions(cardId = cardId, forceApiCall = forceApiCall, clearCachedValue = clearCachedValue) {
+                        getTransactions(
+                            cardId = cardId,
+                            forceApiCall = forceApiCall,
+                            clearCachedValue = clearCachedValue
+                        ) {
                             transactionsInfoRetrieved.postValue(true)
                             onComplete()
                         }
@@ -139,7 +143,7 @@ internal class ManageCardViewModel constructor(
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun getCard(cardId: String, refresh: Boolean, onComplete: ((Card) -> Unit)? = null) {
-        AptoPlatform.fetchFinancialAccount(accountId = cardId, showDetails = false, forceRefresh = refresh) { result ->
+        AptoPlatform.fetchFinancialAccount(accountId = cardId, forceRefresh = refresh) { result ->
             result.either(::handleFailure) { card ->
                 updateViewModelWithCard(card)
                 onComplete?.invoke(card)
@@ -227,10 +231,10 @@ internal class ManageCardViewModel constructor(
     }
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun updateTransactions(transactionList: List<Transaction>, append: Boolean) : List<Transaction> {
+    fun updateTransactions(transactionList: List<Transaction>, append: Boolean): List<Transaction> {
         if (transactionList.isEmpty()) return transactionList
         val currentTransactions: ArrayList<Transaction> = transactions.value as? ArrayList<Transaction>
-                ?: ArrayList()
+            ?: ArrayList()
 
         if (append) {
             currentTransactions.addAll(transactionList)
@@ -246,7 +250,9 @@ internal class ManageCardViewModel constructor(
         // Background refresh
         var newTransactionIndex = 0
         val topCachedTransactionDate = currentTransactions.first().createdAt
-        while (newTransactionIndex<transactionList.size && transactionList[newTransactionIndex].createdAt.isAfter(topCachedTransactionDate)) {
+        while (newTransactionIndex < transactionList.size &&
+            transactionList[newTransactionIndex].createdAt.isAfter(topCachedTransactionDate)
+        ) {
             currentTransactions.add(0, transactionList[newTransactionIndex])
             newTransactionIndex++
         }
@@ -257,7 +263,8 @@ internal class ManageCardViewModel constructor(
     private fun updateTransactionItems(newTransactions: List<Transaction>, append: Boolean, clearCachedValue: Boolean) {
         if (clearCachedValue) processNewTransactions(newTransactions)
         else {
-            val currentTransactionItems: ArrayList<TransactionListItem> = transactionListItems.value as ArrayList<TransactionListItem>
+            val currentTransactionItems: ArrayList<TransactionListItem> =
+                transactionListItems.value as ArrayList<TransactionListItem>
             mergeListItems(newTransactions, currentTransactionItems, append)
         }
     }
@@ -269,7 +276,10 @@ internal class ManageCardViewModel constructor(
     }
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun buildItems(newTransactions: List<Transaction>, skipFirstHeader: Boolean = false) : ArrayList<TransactionListItem> {
+    fun buildItems(
+        newTransactions: List<Transaction>,
+        skipFirstHeader: Boolean = false
+    ): ArrayList<TransactionListItem> {
         val result = ArrayList<TransactionListItem>()
         var transactionYear = -1
         var transactionMonth = -1
@@ -281,7 +291,7 @@ internal class ManageCardViewModel constructor(
 
         var currentTransactionYear: Int
         var currentTransactionMonth: Int
-        newTransactions.forEach{
+        newTransactions.forEach {
             val date = it.createdAt
             currentTransactionMonth = date.monthValue
             currentTransactionYear = date.year
@@ -296,7 +306,11 @@ internal class ManageCardViewModel constructor(
     }
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun mergeListItems(newTransactions: List<Transaction>, currentTransactionItems: MutableList<TransactionListItem>, append: Boolean) {
+    fun mergeListItems(
+        newTransactions: List<Transaction>,
+        currentTransactionItems: MutableList<TransactionListItem>,
+        append: Boolean
+    ) {
         if (append) {
             val lastCurrentTransaction = currentTransactionItems.findLast {
                 it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
@@ -332,7 +346,9 @@ internal class ManageCardViewModel constructor(
                 transactionItem.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE &&
                         (transactionItem as TransactionListItem.TransactionRow).transaction.createdAt <= oldestNewTransaction.createdAt
             }
-            if (index != -1) result.addAll(currentTransactionItems.subList(index, currentTransactionItems.size-1))
+            if (index != -1) {
+                result.addAll(currentTransactionItems.subList(index, currentTransactionItems.size - 1))
+            }
         }
         transactionListItems.postValue(result)
     }

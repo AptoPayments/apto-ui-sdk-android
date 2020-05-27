@@ -2,7 +2,7 @@ package com.aptopayments.sdk.ui.views.birthdate
 
 import android.content.Context
 import android.text.format.DateFormat
-import java.util.*
+import java.util.Locale
 
 internal class FormatOrderGenerator(private val context: Context) {
 

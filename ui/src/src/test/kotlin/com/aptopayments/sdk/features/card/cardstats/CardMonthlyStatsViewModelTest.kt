@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.card.cardstats
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.core.analytics.Event
-import com.aptopayments.core.data.card.SelectBalanceStoreResult
 import com.aptopayments.core.data.stats.MonthlySpending
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -22,13 +21,9 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Spy
-import org.mockito.internal.configuration.GlobalConfiguration.validate
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -48,8 +43,10 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
 
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+
     @Mock
     private lateinit var aptoPlatformProtocol: AptoPlatformProtocol
+
     @Mock
     private lateinit var dateProvider: DateProvider
 
@@ -194,5 +191,4 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
 
         verify(aptoPlatformProtocol).fetchMonthlyStatement(eq(MONTH), eq(YEAR), any())
     }
-
 }

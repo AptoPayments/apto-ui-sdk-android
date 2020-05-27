@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.utils
 
 import android.graphics.Typeface
-import java.util.*
+import java.util.HashMap
 
 internal object FontsUtil {
 

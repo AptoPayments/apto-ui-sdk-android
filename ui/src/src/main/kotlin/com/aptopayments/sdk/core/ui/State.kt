@@ -5,5 +5,4 @@ enum class State {
     NOT_STARTED,
     IN_PROGRESS,
     COMPLETED
-
 }

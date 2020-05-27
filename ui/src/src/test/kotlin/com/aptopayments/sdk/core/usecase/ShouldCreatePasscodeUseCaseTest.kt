@@ -53,5 +53,4 @@ internal class ShouldCreatePasscodeUseCaseTest : UnitTest() {
     private fun configureFlags(startup: Boolean, pci: Boolean) {
         AptoUiSdk.cardOptions = CardOptions(authenticateOnStartup = startup, authenticateWithPINOnPCI = pci)
     }
-
 }

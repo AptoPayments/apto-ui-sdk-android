@@ -18,10 +18,10 @@ import org.threeten.bp.LocalDate
 private const val CARD_MONTHLY_STATS_TAG = "CardMonthlyStatsFragment"
 private const val PDF_RENDERER_TAG = "PdfRendererFragment"
 
-internal class CardStatsFlow (
-        var cardId: String,
-        var onBack: () -> Unit,
-        var onFinish: () -> Unit
+internal class CardStatsFlow(
+    var cardId: String,
+    var onBack: () -> Unit,
+    var onFinish: () -> Unit
 ) : Flow(), CardMonthlyStatsContract.Delegate, PdfRendererContract.Delegate {
 
     val analyticsManager: AnalyticsServiceContract by inject()

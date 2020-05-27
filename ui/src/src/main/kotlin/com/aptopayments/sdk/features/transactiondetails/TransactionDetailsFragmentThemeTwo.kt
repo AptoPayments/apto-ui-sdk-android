@@ -40,7 +40,8 @@ private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
 private const val TRANSACTION_KEY = "TRANSACTION"
 private const val ZOOM = 16f
 
-internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionDetailsContract.View, OnMapReadyCallback {
+internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionDetailsContract.View,
+    OnMapReadyCallback {
 
     override var delegate: TransactionDetailsContract.Delegate? = null
     private lateinit var transaction: Transaction
@@ -191,7 +192,10 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
     }
 
     private fun setupToolBar() {
-        toolbar.configure(activity, ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor)).build())
+        toolbar.configure(this,
+            ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
+                .build()
+        )
         toolbar.bringToFront()
     }
 
@@ -199,11 +203,11 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
         transaction_details_toolbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout,
                                                                                                       verticalOffset ->
             if (abs(verticalOffset) == appBarLayout?.totalScrollRange) {
-                //Collapsed
+                // Collapsed
                 toolbar.setBackgroundColor(color)
                 collapsing_toolbar.setStatusBarScrimColor(color)
             } else {
-                //Expanded
+                // Expanded
                 toolbar.setBackgroundColor(Color.TRANSPARENT)
                 collapsing_toolbar.setStatusBarScrimColor(Color.TRANSPARENT)
             }

@@ -13,7 +13,7 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.stats.CategorySpending
 import com.aptopayments.core.data.transaction.MCC
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.data.transaction.iconResource
+import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
@@ -44,19 +44,19 @@ internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         val viewHolder = holder as ViewHolder
         categorySpendingList?.get(position)?.let { lineItem ->
             val mcc = MCC(lineItem.categorySpending.categoryId)
-            val icon = ContextCompat.getDrawable(holder.icon.context, mcc.iconResource)?.constantState?.newDrawable()?.mutate()
+            val icon =
+                ContextCompat.getDrawable(holder.icon.context, mcc.iconResource)?.constantState?.newDrawable()?.mutate()
             if (lineItem.isSelected) {
                 icon?.setColorFilterCompat(UIConfig.uiTertiaryColor, PorterDuff.Mode.SRC_ATOP)
                 viewHolder.icon.setBackgroundColorKeepShape(UIConfig.uiPrimaryColor)
-            }
-            else {
+            } else {
                 icon?.setColorFilterCompat(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
                 viewHolder.icon.setBackgroundColorKeepShape(UIConfig.uiTertiaryColor)
             }
             viewHolder.icon.setImageDrawable(icon)
             viewHolder.category.text = mcc.toLocalizedString()
             viewHolder.amount.text = lineItem.categorySpending.spending?.toAbsString()
-            viewHolder.row.setOnClickListener { delegate?.onCategoryTapped(lineItem.categorySpending)}
+            viewHolder.row.setOnClickListener { delegate?.onCategoryTapped(lineItem.categorySpending) }
         }
     }
 

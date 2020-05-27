@@ -24,7 +24,9 @@ import org.robolectric.annotation.Config
 abstract class AndroidTest : AutoCloseKoinTest() {
 
     @Suppress("LeakingThis")
-    @Rule @JvmField val injectMocks = InjectMocksRule.create(this@AndroidTest)
+    @Rule
+    @JvmField
+    val injectMocks = InjectMocksRule.create(this@AndroidTest)
 
     fun context(): Context = RuntimeEnvironment.application
 

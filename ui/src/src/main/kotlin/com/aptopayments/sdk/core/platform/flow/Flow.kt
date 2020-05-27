@@ -36,7 +36,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     private var fragmentContainer: Int = 0
     private var activity: WeakReference<AppCompatActivity?> = WeakReference(null)
     private val fragmentManager: FragmentManager?
-        get() { return rootActivity()?.supportFragmentManager }
+        get() = rootActivity()?.supportFragmentManager
     private var parentFlow: WeakReference<Flow?> = WeakReference(null)
     private var childItems = mutableListOf<FlowPresentable>()
 
@@ -82,7 +82,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
 
     open fun detachFromActivity() {
         childItems.forEach {
-            when(it) {
+            when (it) {
                 is Flow -> it.detachFromActivity()
                 is FragmentWrapper -> it.fragmentManager = null
             }
@@ -114,8 +114,11 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     protected fun push(fragment: BaseFragment, animated: Boolean = true, addToChildItems: Boolean = true) {
         if (addToChildItems) addChild(fragment)
         fragmentManager?.beginTransaction()?.apply {
-            if (animated) { setTransition(TRANSIT_FRAGMENT_OPEN) }
-            else { setCustomAnimations(R.anim.fade_in, R.anim.fade_out) }
+            if (animated) {
+                setTransition(TRANSIT_FRAGMENT_OPEN)
+            } else {
+                setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+            }
             add(fragmentContainer(), fragment, fragment.TAG).commit()
             runOnCommit { fragment.onPresented() }
         }
@@ -145,9 +148,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         childItems.lastOrNull()?.onPresented()
         fragmentManager?.fragments?.lastOrNull()?.let { lastFragment ->
             fragmentManager?.beginTransaction()?.apply {
-                setTransition(TRANSIT_FRAGMENT_CLOSE)
-                        .remove(lastFragment)
-                        .commit()
+                setTransition(TRANSIT_FRAGMENT_CLOSE).remove(lastFragment).commit()
             }
         }
     }
@@ -186,15 +187,26 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         }
     }
 
-    protected fun confirm(title: String, text: String, confirm: String, cancel: String, onConfirm: (Unit) -> Unit, onCancel: (Unit) -> Unit) {
+    protected fun confirm(
+        title: String,
+        text: String,
+        confirm: String,
+        cancel: String,
+        onConfirm: (Unit) -> Unit,
+        onCancel: (Unit) -> Unit
+    ) {
         rootActivity()?.let {
             val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(it,
-                    confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+                confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
             themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
         }
     }
 
-    protected fun notify(title: String, message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) {
+    protected fun notify(
+        title: String,
+        message: String,
+        messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR
+    ) {
         rootActivity()?.let { activity ->
             MessageBanner().showBanner(activity, title = title, message = message, messageType = messageType)
         }
@@ -218,7 +230,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
 
     private fun updateChildFragmentManager(manager: FragmentManager?) {
         childItems.forEach {
-            when(it) {
+            when (it) {
                 is Flow -> it.updateChildFragmentManager(manager)
                 is FragmentWrapper -> it.fragmentManager = manager
             }

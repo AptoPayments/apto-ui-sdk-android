@@ -21,8 +21,9 @@ internal class NotificationPreferencesViewModel : BaseViewModel() {
     fun getNotificationPreferences() {
         AptoPlatform.fetchNotificationPreferences { result ->
             result.either(::handleFailure) {
-                val channel = if (it.preferences?.firstOrNull()?.activeChannels?.get(NotificationChannel.EMAIL) != null) NotificationChannel.EMAIL
-                else NotificationChannel.SMS
+                val channel =
+                    if (it.preferences?.firstOrNull()?.activeChannels?.get(NotificationChannel.EMAIL) != null) NotificationChannel.EMAIL
+                    else NotificationChannel.SMS
                 secondaryChannel.postValue(channel)
                 notificationPreferencesList.postValue(generateNotificationPreferenceListItems(it.preferences, channel))
             }
@@ -30,30 +31,55 @@ internal class NotificationPreferencesViewModel : BaseViewModel() {
     }
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun generateNotificationPreferenceListItems(preferences: List<NotificationGroup>?, secondaryChannel: NotificationChannel): ArrayList<NotificationPreferenceLineItem> {
+    fun generateNotificationPreferenceListItems(
+        preferences: List<NotificationGroup>?,
+        secondaryChannel: NotificationChannel
+    ): ArrayList<NotificationPreferenceLineItem> {
         val notificationList = ArrayList<NotificationPreferenceLineItem>()
         preferences?.forEach { notificationGroup ->
             notificationGroup.groupId?.let { groupId ->
-                if( groupId != NotificationGroup.Group.LEGAL && groupId != NotificationGroup.Group.CARD_STATUS) {
+                if (groupId != NotificationGroup.Group.LEGAL && groupId != NotificationGroup.Group.CARD_STATUS) {
                     notificationGroupPreferencesMap[groupId] = notificationGroup.activeChannels
                 }
             }
-            val secondaryChannelActive = if (secondaryChannel == NotificationChannel.EMAIL) notificationGroup.activeChannels?.isChannelActive(NotificationChannel.EMAIL)
-            else notificationGroup.activeChannels?.isChannelActive(NotificationChannel.SMS)
-            if (listOfNotNull(notificationGroup.groupId, notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH), secondaryChannelActive).size == 3) {
-                notificationList.add(NotificationPreferenceLineItem(notificationGroup.groupId!!, notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH)!!, secondaryChannelActive!!))
+            val secondaryChannelActive =
+                if (secondaryChannel == NotificationChannel.EMAIL) notificationGroup.activeChannels?.isChannelActive(
+                    NotificationChannel.EMAIL
+                )
+                else notificationGroup.activeChannels?.isChannelActive(NotificationChannel.SMS)
+            if (listOfNotNull(
+                    notificationGroup.groupId,
+                    notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH),
+                    secondaryChannelActive
+                ).size == 3
+            ) {
+                notificationList.add(
+                    NotificationPreferenceLineItem(
+                        notificationGroup.groupId!!,
+                        notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH)!!,
+                        secondaryChannelActive!!
+                    )
+                )
             }
         }
         return notificationList
     }
 
-    fun updateNotificationPreferences(groupId: NotificationGroup.Group, isPrimary: Boolean, active: Boolean, onComplete: (Either<Failure, Unit>) -> Unit) {
+    fun updateNotificationPreferences(
+        groupId: NotificationGroup.Group,
+        isPrimary: Boolean,
+        active: Boolean,
+        onComplete: (Either<Failure, Unit>) -> Unit
+    ) {
         if (isPrimary) notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.PUSH, active)
         else {
             when (secondaryChannel.value) {
-                NotificationChannel.EMAIL -> notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.EMAIL, active)
-                NotificationChannel.SMS -> notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.SMS, active)
-                else -> {}
+                NotificationChannel.EMAIL ->
+                    notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.EMAIL, active)
+                NotificationChannel.SMS ->
+                    notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.SMS, active)
+                else -> {
+                }
             }
         }
         AptoPlatform.updateNotificationPreferences(getUpdateNotificationPreferencesRequest()) {

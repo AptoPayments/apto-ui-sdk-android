@@ -25,7 +25,7 @@ private const val DATA_POINTS_KEY = "DATA_POINTS"
 private const val ALLOWED_BALANCE_TYPE_KEY = "ALLOWED_BALANCE_TYPE"
 private const val TOKEN_ID_KEY = "OAUTH_TOKEN_ID"
 
-internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.View {
+internal class OAuthVerifyFragmentThemeTwo : BaseFragment(), OAuthVerifyContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_verify_theme_two
     private val viewModel: OAuthVerifyViewModel by viewModel()
@@ -90,7 +90,6 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         delegate?.onBackFromOAuthVerify()
     }
 
@@ -104,7 +103,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
             inflateMenu(R.menu.menu_update_personal_details)
             menu_container_update_personal.setOnClickListener { onUpdatePersonalDetails() }
             configure(
-                activity,
+                this@OAuthVerifyFragmentThemeTwo,
                 ToolbarConfiguration.Builder()
                     .backgroundColor(UIConfig.uiNavigationPrimaryColor)
                     .build()
@@ -114,7 +113,7 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
 
     private fun setupTheme() {
         styleMenuItem()
-        with (themeManager()) {
+        with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)
             customizeLargeTitleLabel(tv_personal_information_header)
             customizeFormLabel(tv_personal_information_description)
@@ -154,12 +153,12 @@ internal class OAuthVerifyFragmentThemeTwo: BaseFragment(), OAuthVerifyContract.
 
     companion object {
         fun newInstance(dataPointList: DataPointList, allowedBalanceType: AllowedBalanceType, tokenId: String) =
-                OAuthVerifyFragmentThemeTwo().apply {
-                    this.arguments = Bundle().apply {
-                        putSerializable(DATA_POINTS_KEY, dataPointList)
-                        putSerializable(ALLOWED_BALANCE_TYPE_KEY, allowedBalanceType)
-                        putString(TOKEN_ID_KEY, tokenId)
-                    }
+            OAuthVerifyFragmentThemeTwo().apply {
+                this.arguments = Bundle().apply {
+                    putSerializable(DATA_POINTS_KEY, dataPointList)
+                    putSerializable(ALLOWED_BALANCE_TYPE_KEY, allowedBalanceType)
+                    putString(TOKEN_ID_KEY, tokenId)
                 }
+            }
     }
 }

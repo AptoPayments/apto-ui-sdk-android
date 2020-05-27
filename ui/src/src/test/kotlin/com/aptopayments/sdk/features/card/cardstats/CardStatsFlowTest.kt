@@ -26,6 +26,7 @@ private const val PDF_RENDERER_TAG = "PdfRendererFragment"
 class CardStatsFlowTest : AndroidTest() {
 
     private lateinit var sut: CardStatsFlow
+
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
 
@@ -54,7 +55,7 @@ class CardStatsFlowTest : AndroidTest() {
 
     @Test
     fun `when statement downloaded then event is tracked`() {
-        sut = CardStatsFlow("card_id",onBack = {}, onFinish = {})
+        sut = CardStatsFlow("card_id", onBack = {}, onFinish = {})
         val pdfRendererFragment = PdfRendererFragmentDouble(pdfRendererFragmentDelegate).apply {
             this.TAG = PDF_RENDERER_TAG
         }

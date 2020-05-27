@@ -131,5 +131,4 @@ internal interface FragmentFactory {
         config: AllowedCountriesConfiguration,
         tag: String
     ): CollectUserPhoneContract.View
-
 }

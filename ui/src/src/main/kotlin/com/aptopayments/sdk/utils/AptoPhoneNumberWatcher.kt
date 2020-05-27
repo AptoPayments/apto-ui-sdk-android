@@ -58,8 +58,9 @@ class AptoPhoneNumberWatcher(countryCode: String, private val listener: ValidInp
         try {
             currentNumber = s
             val phoneNumber = phoneNumberUtil.parse(s, countryCode)
-            listener.onValidInput(phoneNumber.countryCode == countryCodeForRegion
-                    && phoneNumberUtil.isValidNumber(phoneNumber))
+            listener.onValidInput(
+                phoneNumber.countryCode == countryCodeForRegion && phoneNumberUtil.isValidNumber(phoneNumber)
+            )
         } catch (exception: Throwable) {
             listener.onValidInput(false)
         }
@@ -86,7 +87,9 @@ class AptoPhoneNumberWatcher(countryCode: String, private val listener: ValidInp
             // text is not the one we were expecting, just give up calling setSelection().
             if (formatted == s.toString()) {
                 rememberedPos -= removeRegionCode(s, regionCode)
-                if (rememberedPos > 0 ) Selection.setSelection(s, rememberedPos)
+                if (rememberedPos > 0) {
+                    Selection.setSelection(s, rememberedPos)
+                }
             } else {
                 removeRegionCode(s, regionCode)
             }

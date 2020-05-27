@@ -24,6 +24,7 @@ class IssueCardFlowTest : AndroidTest() {
 
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
+
     @Mock
     private lateinit var mockIssueCardDelegate: IssueCardContract.Delegate
 

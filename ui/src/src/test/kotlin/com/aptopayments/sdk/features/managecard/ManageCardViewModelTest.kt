@@ -11,12 +11,12 @@ import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.Spy
 import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
@@ -26,14 +26,26 @@ class ManageCardViewModelTest : AndroidTest() {
 
     private lateinit var sut: ManageCardViewModel
 
-    @Spy private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    @Spy
+    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
-    @Mock private lateinit var fetchTransactionsTaskQueue: FetchTransactionsTaskQueue
-    @Mock private lateinit var mockCard: Card
-    @Mock private lateinit var mockTransaction: Transaction
-    @Mock private lateinit var transactionsObserver: Observer<List<Transaction>?>
-    @Mock private lateinit var transactionListItemsObserver: Observer<List<TransactionListItem>?>
-    @Mock private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
+    @Mock
+    private lateinit var fetchTransactionsTaskQueue: FetchTransactionsTaskQueue
+
+    @Mock
+    private lateinit var mockCard: Card
+
+    @Mock
+    private lateinit var mockTransaction: Transaction
+
+    @Mock
+    private lateinit var transactionsObserver: Observer<List<Transaction>?>
+
+    @Mock
+    private lateinit var transactionListItemsObserver: Observer<List<TransactionListItem>?>
+
+    @Mock
+    private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
 
     private val EXPECTED_WAITLIST_VALUE = true
 
@@ -41,12 +53,17 @@ class ManageCardViewModelTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         startKoin {
-            modules( listOf(applicationModule,useCaseModule) )
+            modules(listOf(applicationModule, useCaseModule))
         }
-        sut = ManageCardViewModel(TestDataProvider.provideCardId(), fetchTransactionsTaskQueue, analyticsManager, aptoUiSdkProtocol)
-        `when`(mockCard.isWaitlisted).thenReturn(EXPECTED_WAITLIST_VALUE)
-        `when`(mockTransaction.createdAt).thenReturn(ZonedDateTime.now())
-        `when`(mockTransaction.transactionId).thenReturn("")
+        sut = ManageCardViewModel(
+            TestDataProvider.provideCardId(),
+            fetchTransactionsTaskQueue,
+            analyticsManager,
+            aptoUiSdkProtocol
+        )
+        whenever(mockCard.isWaitlisted).thenReturn(EXPECTED_WAITLIST_VALUE)
+        whenever(mockTransaction.createdAt).thenReturn(ZonedDateTime.now())
+        whenever(mockTransaction.transactionId).thenReturn("")
     }
 
     @Test
@@ -103,7 +120,11 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
 
         // When
-        sut.mergeListItems(newTransactions = newTransactions, currentTransactionItems = currentTransactions, append = true)
+        sut.mergeListItems(
+            newTransactions = newTransactions,
+            currentTransactionItems = currentTransactions,
+            append = true
+        )
 
         // Then
         assert(sut.transactionListItems.value?.size == 4)
@@ -119,8 +140,8 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction: Transaction = mock(Transaction::class.java)
-        `when`(newMockTransaction.createdAt).thenReturn(ZonedDateTime.now().plusMonths(1))
+        val newMockTransaction = mock<Transaction>()
+        whenever(newMockTransaction.createdAt).thenReturn(ZonedDateTime.now().plusMonths(1))
         newTransactions.add(newMockTransaction)
 
         val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
@@ -129,7 +150,11 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
 
         // When
-        sut.mergeListItems(newTransactions = newTransactions, currentTransactionItems = currentTransactions, append = true)
+        sut.mergeListItems(
+            newTransactions = newTransactions,
+            currentTransactionItems = currentTransactions,
+            append = true
+        )
 
         // Then
         assert(sut.transactionListItems.value?.size == 5)
@@ -146,9 +171,9 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction: Transaction = mock(Transaction::class.java)
+        val newMockTransaction = mock<Transaction>()
         val date = ZonedDateTime.now().plusYears(1)
-        `when`(newMockTransaction.createdAt).thenReturn(date)
+        whenever(newMockTransaction.createdAt).thenReturn(date)
         newTransactions.add(newMockTransaction)
 
         val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
@@ -157,7 +182,11 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
 
         // When
-        sut.mergeListItems(newTransactions = newTransactions, currentTransactionItems = currentTransactions, append = true)
+        sut.mergeListItems(
+            newTransactions = newTransactions,
+            currentTransactionItems = currentTransactions,
+            append = true
+        )
 
         // Then
         assert(sut.transactionListItems.value?.size == 5)
@@ -180,7 +209,11 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(TransactionListItem.HeaderView)
 
         // When
-        sut.mergeListItems(newTransactions = newTransactions, currentTransactionItems = currentTransactions, append = false)
+        sut.mergeListItems(
+            newTransactions = newTransactions,
+            currentTransactionItems = currentTransactions,
+            append = false
+        )
 
         // Then
         assert(sut.transactionListItems.value?.size == 3)
@@ -195,9 +228,9 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactionListItems.observeForever(transactionListItemsObserver)
         val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction: Transaction = mock(Transaction::class.java)
+        val newMockTransaction = mock<Transaction>()
         val date = ZonedDateTime.now().plusMonths(1)
-        `when`(newMockTransaction.createdAt).thenReturn(date)
+        whenever(newMockTransaction.createdAt).thenReturn(date)
         newTransactions.add(newMockTransaction)
         newTransactions.add(mockTransaction)
 
@@ -207,7 +240,11 @@ class ManageCardViewModelTest : AndroidTest() {
         currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
 
         // When
-        sut.mergeListItems(newTransactions = newTransactions, currentTransactionItems = currentTransactions, append = false)
+        sut.mergeListItems(
+            newTransactions = newTransactions,
+            currentTransactionItems = currentTransactions,
+            append = false
+        )
 
         // Then
         assert(sut.transactionListItems.value?.size == 5)
@@ -274,9 +311,9 @@ class ManageCardViewModelTest : AndroidTest() {
         // Given
         sut.transactions.observeForever(transactionsObserver)
         val currentTransactions: MutableList<Transaction> = mutableListOf()
-        val currentMockTransaction: Transaction = mock(Transaction::class.java)
+        val currentMockTransaction = mock<Transaction>()
         val date = ZonedDateTime.now().plusMonths(1)
-        `when`(currentMockTransaction.createdAt).thenReturn(date)
+        whenever(currentMockTransaction.createdAt).thenReturn(date)
         currentTransactions.add(currentMockTransaction)
         currentTransactions.add(mockTransaction)
         sut.transactions.value = currentTransactions
@@ -299,9 +336,9 @@ class ManageCardViewModelTest : AndroidTest() {
         sut.transactions.observeForever(transactionsObserver)
         val currentTransactions: MutableList<Transaction> = mutableListOf()
         currentTransactions.add(mockTransaction)
-        val newMockTransaction: Transaction = mock(Transaction::class.java)
+        val newMockTransaction = mock<Transaction>()
         val date = ZonedDateTime.now().plusMonths(1)
-        `when`(newMockTransaction.createdAt).thenReturn(date)
+        whenever(newMockTransaction.createdAt).thenReturn(date)
         sut.transactions.value = currentTransactions
         val newTransactions: MutableList<Transaction> = mutableListOf()
         newTransactions.add(newMockTransaction)

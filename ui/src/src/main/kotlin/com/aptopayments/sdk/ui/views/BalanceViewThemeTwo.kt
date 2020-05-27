@@ -18,9 +18,8 @@ import java.net.URL
 
 class BalanceViewThemeTwo
 @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0)
-    : RelativeLayout(context, attrs, defStyleAttr, defStyleRes)
-{
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
+    RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
     init {
         inflate(context, R.layout.view_balance_view_theme_two, this)
         setupUI()
@@ -62,18 +61,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun applyAlphaToTitle(fraction: Float) =
-            tv_title.setTextColor(
-                    ArgbEvaluator().evaluate(fraction, UIConfig.textTopBarSecondaryColor, Color.TRANSPARENT) as Int)
+        tv_title.setTextColor(
+            ArgbEvaluator().evaluate(fraction, UIConfig.textTopBarSecondaryColor, Color.TRANSPARENT) as Int
+        )
 
     private fun applyAlphaToButton(fraction: Float) {
         iv_refresh.imageAlpha = ArgbEvaluator().evaluate(fraction, 255, 0) as Int
     }
 
     private fun setBalanceTextSize(fraction: Float) =
-            tv_balance.interpolateTextSize(23f, 31f, fraction)
+        tv_balance.interpolateTextSize(23f, 31f, fraction)
 
     private fun setNativeBalanceTextSize(fraction: Float) =
-            tv_balance_native.interpolateTextSize(14f, 16f, fraction)
+        tv_balance_native.interpolateTextSize(14f, 16f, fraction)
 
     private fun showInvalidBalance() = set(balance = null, nativeBalance = null)
 

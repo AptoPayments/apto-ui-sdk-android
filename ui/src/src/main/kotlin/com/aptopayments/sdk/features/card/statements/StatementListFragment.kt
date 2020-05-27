@@ -84,7 +84,7 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
         val title = "monthly_statements.list.title".localized()
         val backButtonMode = BackButtonMode.Back(UIConfig.textTopBarSecondaryColor)
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(backButtonMode)
                 .title(title)

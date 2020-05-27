@@ -13,9 +13,8 @@ import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 
-class SnackbarThemeTwo private constructor(
-        parent: ViewGroup, content: View, contentViewCallback: ContentViewCallback
-) : BaseTransientBottomBar<SnackbarThemeTwo>(parent, content, contentViewCallback) {
+class SnackbarThemeTwo private constructor(parent: ViewGroup, content: View, contentViewCallback: ContentViewCallback) :
+    BaseTransientBottomBar<SnackbarThemeTwo>(parent, content, contentViewCallback) {
 
     private lateinit var titleTextView: TextView
     private lateinit var messageTextView: TextView
@@ -57,14 +56,14 @@ class SnackbarThemeTwo private constructor(
         override fun animateContentIn(delay: Int, duration: Int) {
             ViewCompat.setScaleY(view, 0f)
             ViewCompat.animate(view)
-                    .scaleY(1f).setDuration(duration.toLong()).startDelay = delay.toLong()
+                .scaleY(1f).setDuration(duration.toLong()).startDelay = delay.toLong()
         }
 
         override fun animateContentOut(delay: Int, duration: Int) {
             ViewCompat.setScaleY(view, 1f)
             ViewCompat.animate(view)
-                    .scaleY(0f)
-                    .setDuration(duration.toLong()).startDelay = delay.toLong()
+                .scaleY(0f)
+                .setDuration(duration.toLong()).startDelay = delay.toLong()
         }
     }
 

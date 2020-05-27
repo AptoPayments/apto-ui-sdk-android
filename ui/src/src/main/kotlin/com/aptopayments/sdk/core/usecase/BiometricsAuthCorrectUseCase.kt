@@ -12,5 +12,4 @@ internal class BiometricsAuthCorrectUseCase(
         authenticationRepository.saveAuthenticationTime()
         return Either.Right(Unit)
     }
-
 }

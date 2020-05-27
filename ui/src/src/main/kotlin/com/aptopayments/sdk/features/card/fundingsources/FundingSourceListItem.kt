@@ -7,14 +7,14 @@ sealed class FundingSourceListItem {
     object AddFundingSourceButton : FundingSourceListItem()
 
     fun itemType(): Int {
-        return when(this) {
-            is FundingSourceRow -> fundingSourceRowType
-            is AddFundingSourceButton -> addFundingSourceViewType
+        return when (this) {
+            is FundingSourceRow -> FUNDING_SOURCE_ROW_TYPE
+            is AddFundingSourceButton -> ADD_FUNDING_SOURCE_VIEW_TYPE
         }
     }
 
     companion object {
-        const val fundingSourceRowType = 0
-        const val addFundingSourceViewType = 1
+        const val FUNDING_SOURCE_ROW_TYPE = 0
+        const val ADD_FUNDING_SOURCE_VIEW_TYPE = 1
     }
 }

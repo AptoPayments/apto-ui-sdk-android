@@ -86,7 +86,7 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
     private fun setupToolBar(toolbar: Toolbar) {
         toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
         toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     override fun setupViewModel() {

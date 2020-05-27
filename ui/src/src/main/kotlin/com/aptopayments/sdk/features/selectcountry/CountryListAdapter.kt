@@ -12,7 +12,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.theme.themeManager
 
 internal class CountryListAdapter(
-        private val countryList: List<CountryListItem>
+    private val countryList: List<CountryListItem>
 ) : RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
 
     interface Delegate {

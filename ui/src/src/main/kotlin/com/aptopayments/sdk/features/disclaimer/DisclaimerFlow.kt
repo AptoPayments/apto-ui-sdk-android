@@ -14,13 +14,13 @@ import org.koin.core.inject
 
 private const val DISCLAIMER_TAG = "DisclaimerFragment"
 
-internal class DisclaimerFlow (
-        private var actionConfiguration: WorkflowActionConfigurationShowDisclaimer,
-        private var workflowAction: WorkflowAction,
-        private var workflowObjectId: String,
-        private var cardApplicationId: String,
-        var onBack: (Unit) -> Unit,
-        var onAccept: (Unit) -> Unit
+internal class DisclaimerFlow(
+    private var actionConfiguration: WorkflowActionConfigurationShowDisclaimer,
+    private var workflowAction: WorkflowAction,
+    private var workflowObjectId: String,
+    private var cardApplicationId: String,
+    var onBack: (Unit) -> Unit,
+    var onAccept: (Unit) -> Unit
 ) : Flow(), DisclaimerContract.Delegate {
 
     private val aptoPlatform: AptoPlatformProtocol by inject()
@@ -52,7 +52,7 @@ internal class DisclaimerFlow (
     }
 
     override fun onDisclaimerRejected() {
-        analyticsManager.track(Event.DisclaimerReject,  JSONObject().put("action_id", workflowAction.actionId))
+        analyticsManager.track(Event.DisclaimerReject, JSONObject().put("action_id", workflowAction.actionId))
         aptoPlatform.cancelCardApplication(cardApplicationId) { result ->
             result.either(::handleFailure) {
                 aptoPlatform.logout()

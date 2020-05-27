@@ -13,4 +13,3 @@ interface EmailVerificationContract {
         var delegate: Delegate?
     }
 }
-

@@ -14,9 +14,9 @@ private const val OAUTH_CONNECT_TAG = "OAuthConnectFragment"
 private const val WEB_BROWSER_TAG = "WebBrowserFragment"
 
 internal class OAuthFlow(
-        val config: OAuthConfig,
-        var onBack: (Unit) -> Unit,
-        var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
+    val config: OAuthConfig,
+    var onBack: (Unit) -> Unit,
+    var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow(), OAuthConnectContract.Delegate, WebBrowserContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {

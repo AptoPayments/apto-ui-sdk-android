@@ -5,7 +5,7 @@ import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 interface InputPhoneContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onPhoneVerificationStarted(verification: Verification)
         fun onBackFromInputPhone()
     }

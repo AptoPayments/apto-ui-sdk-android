@@ -25,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val CARD_ID_KEY = "CARD_ID"
 private const val ACTION_KEY = "ACTION"
 
+@Suppress("DEPRECATION")
 internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, KeyboardView.OnKeyboardActionListener {
 
     override var delegate: VoipContract.Delegate? = null
@@ -43,13 +44,11 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
             val permission = checkPermission(Manifest.permission.RECORD_AUDIO)
             if (permission == PackageManager.PERMISSION_GRANTED) {
                 viewModel.startCall(context, cardId, action)
-            }
-            else {
+            } else {
                 requestPermission(Manifest.permission.RECORD_AUDIO) { granted ->
                     if (granted) {
                         viewModel.startCall(context, cardId, action)
-                    }
-                    else {
+                    } else {
                         delegate?.onVoipCallError("manage_card.get_pin_voip.no_microphone_permission.description".localized())
                     }
                 }
@@ -95,7 +94,7 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
         when (newState) {
             is VoipViewModel.CallState.NotInitiated -> showNotInitiatedState()
             is VoipViewModel.CallState.Ringing -> showRingingState()
-            is VoipViewModel.CallState.Established -> { showEstablishedState(newState.elapsedTime) }
+            is VoipViewModel.CallState.Established -> showEstablishedState(newState.elapsedTime)
             is VoipViewModel.CallState.Finished -> delegate?.onVoipCallFinished()
             is VoipViewModel.CallState.Error -> showErrorState(newState.error)
         }
@@ -142,7 +141,7 @@ internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, Keyboar
     override fun swipeDown() {}
     override fun onText(p0: CharSequence?) {}
     override fun onKey(primaryCode: Int, keyCodes: IntArray?) =
-            viewModel.sendDigits(convertFromAsciiToString(primaryCode))
+        viewModel.sendDigits(convertFromAsciiToString(primaryCode))
 
     private fun convertFromAsciiToString(ascii: Int) = ascii.toChar().toString()
 

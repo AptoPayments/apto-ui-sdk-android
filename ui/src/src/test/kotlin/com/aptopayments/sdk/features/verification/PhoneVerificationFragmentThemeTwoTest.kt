@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.features.verification
 
-import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.core.data.config.UITheme
 import com.aptopayments.core.data.user.Verification
+import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationFragmentThemeTwo
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
@@ -16,7 +16,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Mockito
 import kotlin.test.assertEquals
 
 class PhoneVerificationFragmentThemeTwoTest : AndroidTest() {
@@ -50,7 +49,7 @@ class PhoneVerificationFragmentThemeTwoTest : AndroidTest() {
     @Test
     fun `on back pressed notify delegate`() {
         // Given
-        val delegate = Mockito.mock(PhoneVerificationContract.Delegate::class.java)
+        val delegate = mock<PhoneVerificationContract.Delegate>()
         sut.delegate = delegate
 
         // When
@@ -69,7 +68,7 @@ class PhoneVerificationFragmentThemeTwoTest : AndroidTest() {
         // When
         val fragment = sut.phoneVerificationFragment(verification, tag)
 
-        //Then
+        // Then
         assert(fragment is PhoneVerificationFragmentThemeTwo)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }

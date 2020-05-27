@@ -6,10 +6,10 @@ import android.text.TextWatcher
 import android.widget.EditText
 
 class TextInputWatcher(
-        private var callback: ValidInputListener,
-        private var minNumberCharacters: Int,
-        private var inputText: EditText,
-        private var regexValidator: String? = null
+    private var callback: ValidInputListener,
+    private var minNumberCharacters: Int,
+    private var inputText: EditText,
+    private var regexValidator: String? = null
 ) : TextWatcher {
 
     init {

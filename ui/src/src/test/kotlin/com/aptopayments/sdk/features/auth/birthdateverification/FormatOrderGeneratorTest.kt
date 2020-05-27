@@ -12,21 +12,24 @@ internal class FormatOrderGeneratorTest : AndroidTest() {
 
     val sut = FormatOrderGenerator(context())
 
-    @Test @Config(qualifiers = "en-rGB")
+    @Test
+    @Config(qualifiers = "en-rGB")
     fun whenUkThenDMY() {
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.DMY)
     }
 
-    @Test @Config(qualifiers = "es-rES")
+    @Test
+    @Config(qualifiers = "es-rES")
     fun whenSpainThenDMY() {
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.DMY)
     }
 
-    @Test @Config(qualifiers = "en-rUS")
+    @Test
+    @Config(qualifiers = "en-rUS")
     fun whenUsaThenMDY() {
 
         val order = sut.getFormatOrder()
@@ -34,14 +37,16 @@ internal class FormatOrderGeneratorTest : AndroidTest() {
         assertEquals(order, DateFormatOrder.MDY)
     }
 
-    @Test @Config(qualifiers = "ja-rJP")
+    @Test
+    @Config(qualifiers = "ja-rJP")
     fun whenJapanThenYMD() {
         val order = sut.getFormatOrder()
 
         assertEquals(order, DateFormatOrder.YMD)
     }
 
-    @Test @Config(qualifiers = "zh-rCN")
+    @Test
+    @Config(qualifiers = "zh-rCN")
     fun whenChinaThenYMD() {
         Locale.setDefault(Locale.CHINA)
 

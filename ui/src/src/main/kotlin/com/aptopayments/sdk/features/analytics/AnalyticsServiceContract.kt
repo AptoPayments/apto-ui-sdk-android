@@ -1,4 +1,5 @@
 package com.aptopayments.sdk.features.analytics
+
 import com.aptopayments.core.analytics.Event
 import org.json.JSONObject
 

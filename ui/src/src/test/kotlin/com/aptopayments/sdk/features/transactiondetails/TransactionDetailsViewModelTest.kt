@@ -22,26 +22,34 @@ private const val representation = "$ 10.11"
 private const val DOLLAR = "$"
 private const val EURO = "€"
 
-internal class TransactionDetailsViewModelTest : UnitTest(){
+internal class TransactionDetailsViewModelTest : UnitTest() {
 
     @Mock
     lateinit var analyticsManager: AnalyticsServiceContract
+
     @Mock
     lateinit var transaction: Transaction
+
     @Mock
-    lateinit var store : Store
+    lateinit var store: Store
+
     @Mock
-    lateinit var storeAdress : StoreAddress
+    lateinit var storeAdress: StoreAddress
+
     @Mock
-    lateinit var country : Country
+    lateinit var country: Country
+
     @Mock
     lateinit var merchant: Merchant
+
     @Mock
     lateinit var mcc: MCC
+
     @Mock
-    lateinit var localAmount : Money
+    lateinit var localAmount: Money
+
     @Mock
-    lateinit var nativeBalance : Money
+    lateinit var nativeBalance: Money
 
     private lateinit var sut: TransactionDetailsViewModel
 

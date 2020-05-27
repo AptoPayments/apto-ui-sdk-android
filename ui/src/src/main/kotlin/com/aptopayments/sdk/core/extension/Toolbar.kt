@@ -1,14 +1,14 @@
 package com.aptopayments.sdk.core.extension
 
-import android.app.Activity
 import android.graphics.PorterDuff
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 
-internal fun Toolbar.configure(activity: Activity?, config: ToolbarConfiguration) {
+internal fun Toolbar.configure(fragment: BaseFragment, config: ToolbarConfiguration) {
     title = config.title
     when (config.backButtonMode) {
         is BackButtonMode.Back -> {
@@ -26,7 +26,7 @@ internal fun Toolbar.configure(activity: Activity?, config: ToolbarConfiguration
     }
     config.backgroundColor?.let { setBackgroundColor(it) }
     config.titleTextColor?.let { setTitleTextColor(it) }
-    setNavigationOnClickListener { activity?.onBackPressed() }
+    setNavigationOnClickListener { fragment.onBackPressed() }
 }
 
 sealed class BackButtonMode {
@@ -70,5 +70,4 @@ class ToolbarConfiguration private constructor(
             titleTextColor = UIConfig.iconTertiaryColor
         }
     }
-
 }

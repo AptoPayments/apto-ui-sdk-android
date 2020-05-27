@@ -45,7 +45,6 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         delegate?.onCloseTapped()
     }
 
@@ -66,7 +65,7 @@ internal class ContentPresenterFragmentThemeTwo : BaseFragment(), ContentPresent
 
     private fun setupToolbar() {
         tb_llsdk_toolbar.configure(
-            activity,
+            this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Close(UIConfig.iconTertiaryColor))
                 .title(title)

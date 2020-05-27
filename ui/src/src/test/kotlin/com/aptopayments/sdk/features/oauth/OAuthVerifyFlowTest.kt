@@ -14,10 +14,12 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
 
-class OAuthVerifyFlowTest: AndroidTest() {
+class OAuthVerifyFlowTest : AndroidTest() {
 
-    @Mock private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock private lateinit var mockDelegate: OAuthVerifyContract.Delegate
+    @Mock
+    private lateinit var mockFragmentFactory: FragmentFactory
+    @Mock
+    private lateinit var mockDelegate: OAuthVerifyContract.Delegate
 
     @Before
     override fun setUp() {
@@ -38,12 +40,14 @@ class OAuthVerifyFlowTest: AndroidTest() {
         val allowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val oAuthAttempt = TestDataProvider.provideOAuthAttempt()
         val sut = OAuthVerifyFlow(allowedBalanceType = allowedBalanceType, oauthAttempt = oAuthAttempt,
-                onBack = {}, onFinish = {}, onError = {})
-        given { mockFragmentFactory.oauthVerifyFragment(
+            onBack = {}, onFinish = {}, onError = {})
+        given {
+            mockFragmentFactory.oauthVerifyFragment(
                 datapoints = oAuthAttempt.userData!!,
                 allowedBalanceType = allowedBalanceType,
                 tokenId = oAuthAttempt.tokenId,
-                tag = tag)
+                tag = tag
+            )
         }.willReturn(fragmentDouble)
 
         // When
@@ -51,9 +55,10 @@ class OAuthVerifyFlowTest: AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).oauthVerifyFragment(
-                datapoints = oAuthAttempt.userData!!,
-                allowedBalanceType = allowedBalanceType,
-                tokenId = oAuthAttempt.tokenId,
-                tag = tag)
+            datapoints = oAuthAttempt.userData!!,
+            allowedBalanceType = allowedBalanceType,
+            tokenId = oAuthAttempt.tokenId,
+            tag = tag
+        )
     }
 }

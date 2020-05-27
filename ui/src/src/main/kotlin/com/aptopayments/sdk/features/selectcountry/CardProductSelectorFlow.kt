@@ -16,9 +16,9 @@ import java.lang.reflect.Modifier
 
 private const val COUNTRY_SELECTOR_TAG = "CountrySelectorFragment"
 
-internal class CardProductSelectorFlow (
-        val onBack: (Unit) -> Unit,
-        val onFinish: (cardProductId: String) -> Unit
+internal class CardProductSelectorFlow(
+    val onBack: (Unit) -> Unit,
+    val onFinish: (cardProductId: String) -> Unit
 ) : Flow(), CountrySelectorContract.Delegate {
 
     val analyticsManager: AnalyticsServiceContract by inject()
@@ -90,8 +90,7 @@ internal class CardProductSelectorFlow (
             properties.put("countryCode", country.isoCode)
             analyticsManager.track(Event.CardProductSelectorProductSelected, properties)
             onFinish(cardProductId)
-        }
-        else {
+        } else {
             // TODO: show the card product selector
         }
     }

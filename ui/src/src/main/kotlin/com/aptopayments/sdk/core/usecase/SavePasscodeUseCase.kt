@@ -10,5 +10,4 @@ internal class SavePasscodeUseCase(private val authenticationRepository: Authent
         authenticationRepository.setPasscode(params)
         return Either.Right(Unit)
     }
-
 }

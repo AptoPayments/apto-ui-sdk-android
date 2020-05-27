@@ -13,10 +13,11 @@ import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
 
-class AptoPieChartRenderer(chart: PieChart,
-                           animator: ChartAnimator,
-                           viewPortHandler: ViewPortHandler,
-                           private val borderColor: Int
+class AptoPieChartRenderer(
+    chart: PieChart,
+    animator: ChartAnimator,
+    viewPortHandler: ViewPortHandler,
+    private val borderColor: Int
 ) : PieChartRenderer(chart, animator, viewPortHandler) {
 
     private var angle = 0f
@@ -79,32 +80,35 @@ class AptoPieChartRenderer(chart: PieChart,
 
                     mPathBuffer.reset()
 
-                    val arcStartPointX = center.x + radius * Math.cos((startAngleOuter * Utils.FDEG2RAD).toDouble()).toFloat()
-                    val arcStartPointY = center.y + radius * Math.sin((startAngleOuter * Utils.FDEG2RAD).toDouble()).toFloat()
+                    val arcStartPointX =
+                        center.x + radius * Math.cos((startAngleOuter * Utils.FDEG2RAD).toDouble()).toFloat()
+                    val arcStartPointY =
+                        center.y + radius * Math.sin((startAngleOuter * Utils.FDEG2RAD).toDouble()).toFloat()
 
                     if (sweepAngleOuter >= 360f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                         // Android is doing "mod 360"
                         mPathBuffer.addCircle(center.x, center.y, radius, Path.Direction.CW)
-                    }
-                    else {
+                    } else {
                         mPathBuffer.moveTo(arcStartPointX, arcStartPointY)
                         mPathBuffer.arcTo(circleBox, startAngleOuter, sweepAngleOuter)
                     }
 
                     mInnerRectBuffer.set(
-                            center.x - innerRadius,
-                            center.y - innerRadius,
-                            center.x + innerRadius,
-                            center.y + innerRadius)
+                        center.x - innerRadius,
+                        center.y - innerRadius,
+                        center.x + innerRadius,
+                        center.y + innerRadius
+                    )
 
                     if (drawInnerArc && (innerRadius > 0f || accountForSliceSpacing)) {
                         if (accountForSliceSpacing) {
                             var minSpacedRadius = calculateMinimumRadiusForSpacedSlice(
-                                    center, radius,
-                                    sliceAngle * phaseY,
-                                    arcStartPointX, arcStartPointY,
-                                    startAngleOuter,
-                                    sweepAngleOuter)
+                                center, radius,
+                                sliceAngle * phaseY,
+                                arcStartPointX, arcStartPointY,
+                                startAngleOuter,
+                                sweepAngleOuter
+                            )
 
                             minSpacedRadius = Math.abs(minSpacedRadius)
                             innerRadius = Math.max(innerRadius, minSpacedRadius)
@@ -120,33 +124,37 @@ class AptoPieChartRenderer(chart: PieChart,
                         if (sweepAngleOuter >= 360f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                             // Android is doing "mod 360"
                             mPathBuffer.addCircle(center.x, center.y, innerRadius, Path.Direction.CCW)
-                        }
-                        else {
+                        } else {
                             mPathBuffer.lineTo(
-                                    center.x + innerRadius * Math.cos((endAngleInner * Utils.FDEG2RAD).toDouble()).toFloat(),
-                                    center.y + innerRadius * Math.sin((endAngleInner * Utils.FDEG2RAD).toDouble()).toFloat())
+                                center.x + innerRadius * Math.cos((endAngleInner * Utils.FDEG2RAD).toDouble())
+                                    .toFloat(),
+                                center.y + innerRadius * Math.sin((endAngleInner * Utils.FDEG2RAD).toDouble()).toFloat()
+                            )
 
                             mPathBuffer.arcTo(mInnerRectBuffer, endAngleInner, -sweepAngleInner)
                         }
-                    }
-                    else {
+                    } else {
                         if (sweepAngleOuter % 360f > Utils.FLOAT_EPSILON) {
                             if (accountForSliceSpacing) {
                                 val angleMiddle = startAngleOuter + sweepAngleOuter / 2f
                                 val sliceSpaceOffset = calculateMinimumRadiusForSpacedSlice(
-                                        center,
-                                        radius,
-                                        sliceAngle * phaseY,
-                                        arcStartPointX,
-                                        arcStartPointY,
-                                        startAngleOuter,
-                                        sweepAngleOuter)
+                                    center,
+                                    radius,
+                                    sliceAngle * phaseY,
+                                    arcStartPointX,
+                                    arcStartPointY,
+                                    startAngleOuter,
+                                    sweepAngleOuter
+                                )
 
-                                val arcEndPointX = center.x + sliceSpaceOffset * Math.cos((angleMiddle * Utils.FDEG2RAD).toDouble()).toFloat()
-                                val arcEndPointY = center.y + sliceSpaceOffset * Math.sin((angleMiddle * Utils.FDEG2RAD).toDouble()).toFloat()
+                                val arcEndPointX =
+                                    center.x + sliceSpaceOffset * Math.cos((angleMiddle * Utils.FDEG2RAD).toDouble())
+                                        .toFloat()
+                                val arcEndPointY =
+                                    center.y + sliceSpaceOffset * Math.sin((angleMiddle * Utils.FDEG2RAD).toDouble())
+                                        .toFloat()
                                 mPathBuffer.lineTo(arcEndPointX, arcEndPointY)
-                            }
-                            else mPathBuffer.lineTo(center.x, center.y)
+                            } else mPathBuffer.lineTo(center.x, center.y)
                         }
                     }
                     mPathBuffer.close()

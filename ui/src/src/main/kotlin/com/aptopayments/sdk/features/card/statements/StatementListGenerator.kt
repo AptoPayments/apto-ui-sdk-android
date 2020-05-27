@@ -34,5 +34,4 @@ internal class StatementListGenerator {
 
     private fun addYearElement(output: MutableList<StatementListItem>, currentYear: Int) =
         output.add(StatementListItem.YearRow(currentYear))
-
 }

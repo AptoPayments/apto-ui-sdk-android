@@ -5,7 +5,6 @@ import com.aptopayments.core.data.user.NameDataPoint
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -109,10 +108,8 @@ internal class CollectNameViewModelTest : UnitTest() {
         val initialValue = NameDataPoint(NAME, SURNAME)
         val sut = CollectUserNameViewModel(initialValue, analyticsManager)
 
-
         assertTrue { sut.continueEnabled.getOrAwaitValue() }
         assertEquals(NAME, sut.name.getOrAwaitValue())
         assertEquals(SURNAME, sut.surname.getOrAwaitValue())
     }
-
 }

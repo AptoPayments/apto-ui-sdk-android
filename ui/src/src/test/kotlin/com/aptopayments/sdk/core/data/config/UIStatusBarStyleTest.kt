@@ -7,7 +7,8 @@ import org.junit.Test
 
 class UIStatusBarStyleTest : UnitTest() {
 
-    @Test fun `Light style correctly parses`() {
+    @Test
+    fun `Light style correctly parses`() {
         // Given
         val style = "light"
 
@@ -18,7 +19,8 @@ class UIStatusBarStyleTest : UnitTest() {
         uiStatusBarStyle shouldBe UIStatusBarStyle.LIGHT
     }
 
-    @Test fun `Dark style correctly parses`() {
+    @Test
+    fun `Dark style correctly parses`() {
         // Given
         val style = "dark"
 
@@ -29,7 +31,8 @@ class UIStatusBarStyleTest : UnitTest() {
         uiStatusBarStyle shouldBe UIStatusBarStyle.DARK
     }
 
-    @Test fun `Auto style correctly parses`() {
+    @Test
+    fun `Auto style correctly parses`() {
         // Given
         val style = "auto"
 
@@ -40,7 +43,8 @@ class UIStatusBarStyleTest : UnitTest() {
         uiStatusBarStyle shouldBe UIStatusBarStyle.AUTO
     }
 
-    @Test fun `Incorrect style defaults to auto`() {
+    @Test
+    fun `Incorrect style defaults to auto`() {
         // Given
         val style = "incorrect"
 
@@ -50,5 +54,4 @@ class UIStatusBarStyleTest : UnitTest() {
         // Then
         uiStatusBarStyle shouldBe UIStatusBarStyle.AUTO
     }
-
 }

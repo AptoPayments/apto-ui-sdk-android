@@ -15,8 +15,8 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import java.text.NumberFormat
 
 internal class AdjustmentsAdapter(
-        private var mTransaction: Transaction,
-        private var mAdjustments: List<TransactionAdjustment>
+    private var mTransaction: Transaction,
+    private var mAdjustments: List<TransactionAdjustment>
 ) : RecyclerView.Adapter<AdjustmentsAdapter.ViewHolder>() {
 
     // Provide a direct reference to each of the views within a data item
@@ -38,17 +38,20 @@ internal class AdjustmentsAdapter(
         val adjustment = mAdjustments[position]
         themeManager().customizeMainItem(viewHolder.description)
 
-        setDescription(adjustment,viewHolder)
+        setDescription(adjustment, viewHolder)
 
         adjustment.nativeAmount?.let { nativeAmount ->
             val amount: String = nativeAmount.toAbsString()
-            viewHolder.amount.text = String.format("%s %s", "transaction_details.adjustment.amount.title".localized(), amount)
+            viewHolder.amount.text =
+                String.format("%s %s", "transaction_details.adjustment.amount.title".localized(), amount)
             themeManager().customizeTimestamp(viewHolder.amount)
 
             adjustment.exchangeRate?.let { exchangeRate ->
                 val currency = adjustment.localAmount?.currencySymbol()
-                viewHolder.exchangeRate.text = String.format("1 %s @ %s %s", nativeAmount.currency,
-                        currency, formatDouble(exchangeRate))
+                viewHolder.exchangeRate.text = String.format(
+                    "1 %s @ %s %s", nativeAmount.currency,
+                    currency, formatDouble(exchangeRate)
+                )
                 themeManager().customizeTimestamp(viewHolder.exchangeRate)
                 viewHolder.exchangeRate.show()
             } ?: viewHolder.exchangeRate.remove()
@@ -58,7 +61,7 @@ internal class AdjustmentsAdapter(
         var feeText: String? = null
         adjustment.feeAmount?.let {
             if ((it.amount ?: 0.0) != 0.0) {
-                val feeAmount: String = if(mTransaction.transactionType.isCredit()) {
+                val feeAmount: String = if (mTransaction.transactionType.isCredit()) {
                     mTransaction.getAmountPrefix() + it.toAbsString()
                 } else {
                     it.toAbsString()
@@ -88,7 +91,7 @@ internal class AdjustmentsAdapter(
     }
 
     private fun formatDouble(value: Double): String {
-        val numberFormatter =  NumberFormat.getNumberInstance()
+        val numberFormatter = NumberFormat.getNumberInstance()
         numberFormatter.minimumFractionDigits = 2
         numberFormatter.maximumFractionDigits = 2
         return numberFormatter.format(value)

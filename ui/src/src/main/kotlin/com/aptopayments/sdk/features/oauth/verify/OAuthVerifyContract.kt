@@ -6,7 +6,7 @@ import com.aptopayments.sdk.core.platform.FragmentDelegate
 
 interface OAuthVerifyContract {
 
-    interface Delegate: FragmentDelegate {
+    interface Delegate : FragmentDelegate {
         fun onAcceptPii(updatedDataPoints: DataPointList)
         fun onBackFromOAuthVerify()
         fun onRevokedTokenError(failure: Failure.ServerError)
@@ -17,5 +17,4 @@ interface OAuthVerifyContract {
 
         var delegate: Delegate?
     }
-
 }

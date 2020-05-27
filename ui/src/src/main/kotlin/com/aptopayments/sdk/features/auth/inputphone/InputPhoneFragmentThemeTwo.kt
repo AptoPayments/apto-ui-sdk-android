@@ -73,7 +73,10 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build())
+        tb_llsdk_toolbar.configure(
+            this,
+            ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
+        )
     }
 
     override fun setupListeners() {

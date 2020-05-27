@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -119,8 +118,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     private fun handleBalance(balance: Balance?) {
-        if (viewModel.balanceLoaded
-                && (balance == null || balance.state == Balance.BalanceState.INVALID)) {
+        if (viewModel.balanceLoaded && (balance == null || balance.state == Balance.BalanceState.INVALID)) {
             if (previousMessageShownAt.until(LocalDateTime.now(), ChronoUnit.SECONDS) < FIVE_SECONDS) {
                 return
             } else {
@@ -209,7 +207,10 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
             }
             tintMenuItems()
         }
-        tb_llsdk_toolbar.configure(activity, ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.None).setSecondaryTertiaryColors().build())
+        tb_llsdk_toolbar.configure(
+            this,
+            ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.None).setSecondaryTertiaryColors().build()
+        )
         setOffsetChangedListener()
     }
 

@@ -19,12 +19,15 @@ interface VoipContract {
         var isMuted: Boolean
         var isOnHold: Boolean
         val timeElapsed: Long
-        fun startCall(context: Context,
-                      destination: VoipCall,
-                      onRinging: () -> Unit,
-                      onEstablished: () -> Unit,
-                      onComplete: () -> Unit,
-                      onError: (String?) -> Unit)
+        fun startCall(
+            context: Context,
+            destination: VoipCall,
+            onRinging: () -> Unit,
+            onEstablished: () -> Unit,
+            onComplete: () -> Unit,
+            onError: (String?) -> Unit
+        )
+
         fun sendDigits(digits: String)
         fun disconnect()
     }

@@ -15,6 +15,7 @@ import org.mockito.Spy
 class StatementListViewModelTest : AndroidTest(), KoinTest {
 
     private lateinit var sut: StatementListViewModel
+
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 

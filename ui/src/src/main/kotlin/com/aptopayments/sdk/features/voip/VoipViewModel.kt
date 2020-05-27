@@ -8,12 +8,12 @@ import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import org.json.JSONObject
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timer
 
 internal class VoipViewModel constructor(
-        private val analyticsManager: AnalyticsServiceContract,
-        private val voipHandler: VoipContract.Handler
+    private val analyticsManager: AnalyticsServiceContract,
+    private val voipHandler: VoipContract.Handler
 ) : BaseViewModel() {
 
     sealed class CallState {
@@ -33,12 +33,12 @@ internal class VoipViewModel constructor(
         AptoPlatform.fetchVoIPToken(cardID, action) { result ->
             result.either(::handleFailure) {
                 voipHandler.startCall(
-                        context,
-                        it,
-                        { callRinging() },
-                        { callEstablished() },
-                        { onCallComplete() },
-                        { error -> onCallError(error) }
+                    context,
+                    it,
+                    { callRinging() },
+                    { callEstablished() },
+                    { onCallComplete() },
+                    { error -> onCallError(error) }
                 )
             }
         }
