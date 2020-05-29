@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.core.platform
 
-import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -16,7 +15,7 @@ class AptoUiSdkTest {
 
     @Test
     fun `when setAdditionalFields then they are correctly stored`() {
-        val fields = IssueCardAdditionalFields(mapOf())
+        val fields = mapOf<String, String>()
 
         AptoUiSdk.setCardIssueAdditional(fields)
 

@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.issuecard
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
-import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.functional.Either
@@ -47,8 +46,7 @@ class IssueCardViewModelTest : AndroidTest() {
     @Mock
     private lateinit var issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository
 
-    @Mock
-    private lateinit var additionalFields: IssueCardAdditionalFields
+    private val additionalFields = mapOf("test" to "test1")
 
     @Before
     override fun setUp() {
@@ -82,7 +80,7 @@ class IssueCardViewModelTest : AndroidTest() {
     @Test
     fun `when additional Field set them it is sent to the core sdk`() {
         val card = TestDataProvider.provideCard()
-        val captor = argumentCaptor<IssueCardAdditionalFields>()
+        val captor = argumentCaptor<Map<String, String>>()
         whenever(
             aptoPlatform.issueCard(
                 any(),

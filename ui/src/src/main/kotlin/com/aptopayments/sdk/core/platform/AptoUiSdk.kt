@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageInfo
 import androidx.fragment.app.FragmentActivity
-import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.platform.AptoPlatform
@@ -43,7 +42,7 @@ interface AptoUiSdkProtocol {
         onError: ((Failure) -> Unit)?
     )
 
-    fun setCardIssueAdditional(fields: IssueCardAdditionalFields)
+    fun setCardIssueAdditional(fields: Map<String, Any>?)
     fun userTokenPresent(): Boolean
     fun getAppVersion(activity: FragmentActivity?): String
     fun registerFirebaseToken(firebaseToken: String)
@@ -109,7 +108,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
         }
     }
 
-    override fun setCardIssueAdditional(fields: IssueCardAdditionalFields) {
+    override fun setCardIssueAdditional(fields: Map<String, Any>?) {
         IssueCardAdditionalFieldsRepositoryImpl.fields = fields
     }
 

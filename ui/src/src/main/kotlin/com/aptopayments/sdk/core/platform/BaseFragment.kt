@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.ViewUtils
@@ -23,6 +25,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
     abstract fun layoutId(): Int
     abstract fun backgroundColor(): Int
 
+    private val analytics: AnalyticsServiceContract by inject()
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     lateinit var TAG: String
 
@@ -104,6 +107,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
         when (failure) {
             is Failure.ServerError -> {
                 notify("failure_server_error".localized())
+                analytics.track(Event.UnknownServerError, failure.toJSonObject())
             }
             is Failure.UserSessionExpired -> {
                 aptoPlatformProtocol.logout()

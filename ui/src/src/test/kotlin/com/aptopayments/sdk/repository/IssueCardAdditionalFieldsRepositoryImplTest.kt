@@ -1,17 +1,14 @@
 package com.aptopayments.sdk.repository
 
-import com.aptopayments.core.data.card.IssueCardAdditionalFields
 import com.aptopayments.sdk.UnitTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import org.mockito.Mock
 
 class IssueCardAdditionalFieldsRepositoryImplTest : UnitTest() {
 
-    @Mock
-    private lateinit var additionalFields: IssueCardAdditionalFields
+    private val additionalFields: Map<String, Any>? = mapOf("test" to "test1")
 
     private val sut = IssueCardAdditionalFieldsRepositoryImpl
 

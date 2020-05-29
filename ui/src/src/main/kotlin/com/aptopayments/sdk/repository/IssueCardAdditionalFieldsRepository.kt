@@ -1,17 +1,15 @@
 package com.aptopayments.sdk.repository
 
-import com.aptopayments.core.data.card.IssueCardAdditionalFields
-
 interface IssueCardAdditionalFieldsRepository {
-    fun set(fields: IssueCardAdditionalFields)
-    fun get(): IssueCardAdditionalFields?
+    fun set(fields: Map<String, Any>?)
+    fun get(): Map<String, Any>?
 }
 
 object IssueCardAdditionalFieldsRepositoryImpl : IssueCardAdditionalFieldsRepository {
 
-    var fields: IssueCardAdditionalFields? = null
+    var fields: Map<String, Any>? = null
 
-    override fun set(fields: IssueCardAdditionalFields) {
+    override fun set(fields: Map<String, Any>?) {
         this.fields = fields
     }
 
