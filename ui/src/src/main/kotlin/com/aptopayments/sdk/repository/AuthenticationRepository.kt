@@ -2,7 +2,7 @@ package com.aptopayments.sdk.repository
 
 import android.content.SharedPreferences
 import com.aptopayments.core.functional.Either
-import com.aptopayments.core.platform.AptoPlatform
+import com.aptopayments.core.platform.AptoPlatformProtocol
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 
@@ -26,10 +26,19 @@ internal interface AuthenticationRepository {
     fun getPasscode(): String
 }
 
-internal class AuthenticationRepositoryImpl(private val sharedPref: SharedPreferences) : AuthenticationRepository {
+internal class AuthenticationRepositoryImpl(
+    private val sharedPref: SharedPreferences,
+    private val aptoPlatform: AptoPlatformProtocol
+) : AuthenticationRepository {
 
     init {
-        AptoPlatform.subscribeSessionInvalidListener(this) { sharedPref.edit().clear().apply() }
+        aptoPlatform.subscribeSessionInvalidListener(this) {
+            sharedPref.edit().clear().apply()
+        }
+    }
+
+    protected fun finalize() {
+        aptoPlatform.unsubscribeSessionInvalidListener(this)
     }
 
     override fun saveAuthenticationTime() {

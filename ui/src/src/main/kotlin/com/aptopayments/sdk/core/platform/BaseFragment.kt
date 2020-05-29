@@ -9,6 +9,7 @@ import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.exception.Failure
 import com.aptopayments.core.extension.localized
 import com.aptopayments.core.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.BuildConfig
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -107,12 +108,18 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
         when (failure) {
             is Failure.ServerError -> {
                 notify("failure_server_error".localized())
-                analytics.track(Event.UnknownServerError, failure.toJSonObject())
+                trackServerError(failure)
             }
             is Failure.UserSessionExpired -> {
                 aptoPlatformProtocol.logout()
                 notify("session_expired_error".localized())
             }
+        }
+    }
+
+    private fun trackServerError(failure: Failure.ServerError) {
+        if (!BuildConfig.DEBUG) {
+            analytics.track(Event.UnknownServerError, failure.toJSonObject())
         }
     }
 

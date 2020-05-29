@@ -41,7 +41,7 @@ internal val applicationModule = module {
     factory<CacheFileManager> { CacheFileManagerImpl(get()) }
     factory<StatementRepository> { StatementRepositoryImpl(get(), get(), get()) }
     single { provideSharedPreferences(androidApplication()) }
-    factory<AuthenticationRepository> { AuthenticationRepositoryImpl(get()) }
+    single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
     factory { DateProvider() }
     single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get(), get()) }
     factory<RemoteCardDetailsRepository> { RemoteCardDetailsRepositoryImpl() }
