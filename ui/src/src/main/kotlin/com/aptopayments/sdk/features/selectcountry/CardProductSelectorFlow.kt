@@ -4,7 +4,6 @@ import androidx.annotation.VisibleForTesting
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.exception.Failure
-import com.aptopayments.core.extension.localized
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.Flow
@@ -21,8 +20,8 @@ internal class CardProductSelectorFlow(
     val onFinish: (cardProductId: String) -> Unit
 ) : Flow(), CountrySelectorContract.Delegate {
 
-    val analyticsManager: AnalyticsServiceContract by inject()
-    val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+    private val analyticsManager: AnalyticsServiceContract by inject()
+    private val aptoPlatformProtocol: AptoPlatformProtocol by inject()
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     var countryCardProductMap: HashMap<String, ArrayList<String>?> = HashMap()
@@ -30,11 +29,9 @@ internal class CardProductSelectorFlow(
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         aptoPlatformProtocol.fetchCardProducts { result ->
             result.either({ onInitComplete(Either.Left(it)) }, { cardProductList ->
-                when {
-                    cardProductList.isEmpty() -> {
-                        onInitComplete(Either.Left(CardProductSelectorInitFailure()))
-                    }
-                    cardProductList.size == 1 -> onFinish(cardProductList[0].id)
+                when (cardProductList.size) {
+                    0 -> onInitComplete(Either.Left(CardProductSelectorInitFailure()))
+                    1 -> onFinish(cardProductList[0].id)
                     else -> {
                         val allowedCountriesSet = mutableSetOf<Country>()
                         cardProductList.forEach { cardProduct ->
@@ -62,24 +59,6 @@ internal class CardProductSelectorFlow(
         (fragmentWithTag(COUNTRY_SELECTOR_TAG) as? CountrySelectorContract.View)?.let {
             it.delegate = this
         }
-    }
-
-    override fun getCountrySelectorTitle(): String {
-        rootActivity()?.let {
-            return "select_card_product.select_country.title".localized()
-        } ?: return ""
-    }
-
-    override fun getCountrySelectorDescription(): String {
-        rootActivity()?.let {
-            return "select_card_product.select_country.explanation".localized()
-        } ?: return ""
-    }
-
-    override fun getCountrySelectorCallToAction(): String {
-        rootActivity()?.let {
-            return "select_card_product.select_country.call_to_action".localized()
-        } ?: return ""
     }
 
     override fun onCountrySelected(country: Country) {

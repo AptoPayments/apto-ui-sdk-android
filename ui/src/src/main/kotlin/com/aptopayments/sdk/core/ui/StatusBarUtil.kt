@@ -1,12 +1,13 @@
 package com.aptopayments.sdk.core.ui
 
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.ColorInt
-import com.aptopayments.core.extension.isDarkColor
 import com.aptopayments.core.data.config.UIStatusBarStyle
+import kotlin.math.sqrt
 
 object StatusBarUtil {
 
@@ -48,5 +49,21 @@ object StatusBarUtil {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = color
+    }
+
+    private fun isDarkColor(@ColorInt color: Int): Boolean {
+        val red = Color.red(color)
+        val green = Color.green(color)
+        val blue = Color.blue(color)
+        return getBrightness(red, green, blue) <= 200
+    }
+
+    private fun getBrightness(red: Int, green: Int, blue: Int): Int {
+        // As per http://stackoverflow.com/a/2241471
+        return sqrt(
+            red.toDouble() * red.toDouble() * .299 +
+                    green.toDouble() * green.toDouble() * .587 +
+                    blue.toDouble() * blue.toDouble() * .114
+        ).toInt()
     }
 }

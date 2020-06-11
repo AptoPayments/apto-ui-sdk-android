@@ -5,7 +5,7 @@ import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.data.user.*
 import com.aptopayments.core.data.workflowaction.WorkflowActionConfigurationIssueCard
-import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
+import com.aptopayments.sdk.features.managecard.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneViewModel

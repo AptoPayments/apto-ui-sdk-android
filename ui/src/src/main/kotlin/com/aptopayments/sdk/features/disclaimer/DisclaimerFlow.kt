@@ -15,12 +15,12 @@ import org.koin.core.inject
 private const val DISCLAIMER_TAG = "DisclaimerFragment"
 
 internal class DisclaimerFlow(
-    private var actionConfiguration: WorkflowActionConfigurationShowDisclaimer,
-    private var workflowAction: WorkflowAction,
-    private var workflowObjectId: String,
-    private var cardApplicationId: String,
-    var onBack: (Unit) -> Unit,
-    var onAccept: (Unit) -> Unit
+    private val actionConfiguration: WorkflowActionConfigurationShowDisclaimer,
+    private val workflowAction: WorkflowAction,
+    private val workflowObjectId: String,
+    private val cardApplicationId: String,
+    private val onBack: (Unit) -> Unit,
+    private val onAccept: (Unit) -> Unit
 ) : Flow(), DisclaimerContract.Delegate {
 
     private val aptoPlatform: AptoPlatformProtocol by inject()

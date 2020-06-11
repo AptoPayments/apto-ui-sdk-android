@@ -8,7 +8,6 @@ import com.aptopayments.core.data.user.PhoneDataPoint
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -17,6 +16,7 @@ import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.StringUtils
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
+import com.aptopayments.sdk.utils.extensions.stringFromTimeInterval
 import com.google.android.material.appbar.AppBarLayout
 import com.google.i18n.phonenumbers.NumberParseException
 import kotlinx.android.synthetic.main.fragment_verification_theme_two.*

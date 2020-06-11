@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.LinearLayout
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -240,7 +239,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     private fun setupRecyclerView() = context?.let { context ->
-        transactionListAdapter = TransactionListAdapter(context as LifecycleOwner, viewModel)
+        transactionListAdapter = TransactionListAdapter(viewLifecycleOwner, viewModel)
         val linearLayoutManager = LinearLayoutManager(context)
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {

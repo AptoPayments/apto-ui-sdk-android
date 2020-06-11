@@ -27,7 +27,7 @@ internal class NoNetworkFragmentThemeTwo : BaseFragment(), NoNetworkContract.Vie
 
     private val networkHandler: NetworkHandler by inject()
     private val viewModel: NoNetworkViewModel by viewModel()
-    private var timer = Timer()
+    private var timer: Timer? = null
 
     override fun backgroundColor(): Int = UIConfig.uiNavigationSecondaryColor
 
@@ -43,13 +43,13 @@ internal class NoNetworkFragmentThemeTwo : BaseFragment(), NoNetworkContract.Vie
         super.onStart()
         val uri = URI(ApiKeyProvider.getEnvironmentUrl())
         timer = Timer()
-        timer.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
+        timer?.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
             networkHandler.checkNetworkReachability(uri.host, PORT)
         }
     }
 
     override fun onStop() {
-        timer.cancel()
+        timer?.cancel()
         super.onStop()
     }
 

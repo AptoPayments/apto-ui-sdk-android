@@ -10,14 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.formatForTransactionList
-import com.aptopayments.core.extension.toCapitalized
+import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.managecard.TransactionListItem
+import com.aptopayments.sdk.utils.extensions.toCapitalized
 import kotlin.properties.Delegates
 
 internal class TransactionListAdapter(

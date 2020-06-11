@@ -16,7 +16,6 @@ import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.platform.AptoPlatform
-import com.aptopayments.core.repository.transaction.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase

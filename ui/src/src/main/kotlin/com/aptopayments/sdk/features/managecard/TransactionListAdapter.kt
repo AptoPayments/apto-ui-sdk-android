@@ -11,8 +11,7 @@ import com.aptopayments.core.data.card.CardDetails
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.formatForTransactionList
-import com.aptopayments.core.extension.toCapitalized
+import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.invisibleIf
@@ -20,6 +19,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.CardView
+import com.aptopayments.sdk.utils.extensions.toCapitalized
 import kotlinx.android.synthetic.main.include_transaction_list_header.view.*
 import kotlinx.android.synthetic.main.view_transaction_row.view.*
 import kotlinx.android.synthetic.main.view_transaction_section_title.view.*

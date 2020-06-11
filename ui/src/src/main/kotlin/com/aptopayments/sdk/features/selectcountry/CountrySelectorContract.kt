@@ -8,9 +8,6 @@ interface CountrySelectorContract {
     interface Delegate : FragmentDelegate {
         fun onBackFromCountrySelector()
         fun onCountrySelected(country: Country)
-        fun getCountrySelectorTitle(): String
-        fun getCountrySelectorDescription(): String
-        fun getCountrySelectorCallToAction(): String
     }
 
     interface View {

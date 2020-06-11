@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.transactiondetails
 
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.transaction.Transaction
-import com.aptopayments.core.extension.formatForTransactionDetails
+import com.aptopayments.sdk.utils.extensions.formatForTransactionDetails
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 

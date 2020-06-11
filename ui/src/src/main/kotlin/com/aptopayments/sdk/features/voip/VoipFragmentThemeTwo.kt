@@ -11,7 +11,6 @@ import android.os.Bundle
 import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.voip.Action
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.extension.stringFromTimeInterval
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.hide
@@ -19,6 +18,7 @@ import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.extensions.stringFromTimeInterval
 import kotlinx.android.synthetic.main.fragment_voip_theme_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

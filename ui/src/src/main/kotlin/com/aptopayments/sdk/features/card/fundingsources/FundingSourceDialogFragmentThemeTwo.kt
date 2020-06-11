@@ -130,7 +130,7 @@ internal class FundingSourceDialogFragmentThemeTwo : BaseDialogFragment(), Fundi
     }
 
     private fun setupRecyclerView() {
-        val fundingSourceAdapter = FundingSourceAdapter(this, viewModel)
+        val fundingSourceAdapter = FundingSourceAdapter(viewLifecycleOwner, viewModel)
         fundingSourceAdapter.delegate = this
         val scroller = dialogView.findViewById<NestedScrollView>(R.id.nested_scrollbar)
         mRecyclerView = scroller.findViewById(R.id.funding_source_recycler)

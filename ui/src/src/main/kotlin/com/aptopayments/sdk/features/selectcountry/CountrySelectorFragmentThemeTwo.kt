@@ -49,7 +49,6 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     override fun setupUI() {
         setupTheme()
-        setupTexts()
         setupToolBar()
         setupRecyclerView()
     }
@@ -84,12 +83,6 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
             customizeFormLabel(tv_country_selector_description)
             customizeSubmitButton(tv_select_country)
         }
-    }
-
-    private fun setupTexts() {
-        tv_country_selector_header.text = delegate?.getCountrySelectorTitle()
-        tv_country_selector_description.text = delegate?.getCountrySelectorDescription()
-        tv_select_country.text = delegate?.getCountrySelectorCallToAction()
     }
 
     private fun setupToolBar() {

@@ -30,10 +30,6 @@ class TestDataProvider {
         )
 
         fun provideContextConfiguration() = ContextConfiguration(
-            teamConfiguration = TeamConfiguration(
-                name = "",
-                logoUrl = ""
-            ),
             projectConfiguration = ProjectConfiguration(
                 name = "",
                 summary = "",
@@ -50,10 +46,6 @@ class TestDataProvider {
         fun provideProjectBranding() = Branding.createDefault()
 
         fun provideContextConfigurationEmail() = ContextConfiguration(
-            teamConfiguration = TeamConfiguration(
-                name = "",
-                logoUrl = ""
-            ),
             projectConfiguration = ProjectConfiguration(
                 name = "",
                 summary = "",
@@ -132,11 +124,8 @@ class TestDataProvider {
             val spending1 = CategorySpending("glass", Money("USD", 130.0))
             val spending2 = CategorySpending("car", Money("USD", 80.0))
             val spending3 = CategorySpending("plane", Money("USD", 100.0))
-            val list = listOf(spending1, spending2, spending3)
-            return list
+            return listOf(spending1, spending2, spending3)
         }
-
-        fun provideDefaultTheme() = DEFAULT_THEME
 
         fun provideCardId() = "CARD_ID"
     }
