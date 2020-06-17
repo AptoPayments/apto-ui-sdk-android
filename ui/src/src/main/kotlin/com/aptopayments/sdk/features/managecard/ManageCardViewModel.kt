@@ -14,6 +14,7 @@ import com.aptopayments.core.data.card.Money
 import com.aptopayments.core.data.cardproduct.CardProduct
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
+import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.functional.getOrElse
 import com.aptopayments.core.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
@@ -61,6 +62,8 @@ internal class ManageCardViewModel constructor(
     val showAddToGooglePay = Transformations.map(iapHelper.showAddCardButton) { showAddCardButton ->
         aptoUiSdkProtocol.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites() && showAddCardButton
     }
+    val canBackPress: Boolean by lazy { isSdkEmbedded() }
+    val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
 
     private var lastTransactionId: String? = null
     private var cardInfoRetrieved = false
@@ -369,4 +372,6 @@ internal class ManageCardViewModel constructor(
     fun onReturnedFromAddToGooglePay() {
         startIapHelper()
     }
+
+    private fun isSdkEmbedded() = aptoUiSdkProtocol.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED
 }

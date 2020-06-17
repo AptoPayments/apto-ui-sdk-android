@@ -227,7 +227,7 @@ internal class TransactionDetailsFragmentThemeTwo : BaseFragment(), TransactionD
             val backgroundDrawable = ContextCompat.getDrawable(it, R.drawable.ic_map_marker_icon)
             backgroundDrawable?.let { background ->
                 background.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
-                background.setColorFilter(UIConfig.uiSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+                background.setColorFilterCompat(UIConfig.uiSecondaryColor, PorterDuff.Mode.SRC_ATOP)
                 val merchantIcon = ContextCompat.getDrawable(it, vectorDrawableResourceId)
                 merchantIcon?.let { icon ->
                     val backgroundWidth = background.intrinsicWidth

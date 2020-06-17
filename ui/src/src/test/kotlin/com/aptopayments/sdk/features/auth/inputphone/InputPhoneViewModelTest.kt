@@ -6,10 +6,12 @@ import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
 import com.aptopayments.core.exception.Failure
+import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.functional.Either
 import com.aptopayments.core.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -41,13 +43,16 @@ class InputPhoneViewModelTest : UnitTest() {
     private lateinit var aptoPlatform: AptoPlatformProtocol
 
     @Mock
+    private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
+
+    @Mock
     private lateinit var verification: Verification
 
     private lateinit var sut: InputPhoneViewModel
 
     @Before
     fun setUp() {
-        sut = InputPhoneViewModel(analyticsManager, aptoPlatform)
+        sut = InputPhoneViewModel(analyticsManager, aptoPlatform, aptoUiSdkProtocol)
     }
 
     @Test
@@ -118,5 +123,19 @@ class InputPhoneViewModelTest : UnitTest() {
     @Test
     fun `when no interaction then button is disabled`() {
         assertFalse(sut.enableNextButton.getOrAwaitValue())
+    }
+
+    @Test
+    fun `whenever embedded then X is shown`() {
+        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.EMBEDDED))
+
+        assertTrue { sut.showXOnToolbar }
+    }
+
+    @Test
+    fun `whenever embedded then X is not shown`() {
+        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.STANDALONE))
+
+        assertFalse(sut.showXOnToolbar)
     }
 }

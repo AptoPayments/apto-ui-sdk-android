@@ -10,7 +10,6 @@ import kotlin.test.assertEquals
 
 private const val DEAFAULT_SATISFY_HARDWARE_REQUISITES = false
 private const val DEFAULT_SHOW_ADD_CARD_BUTTON = false
-private const val DEFAULT_CARD_ID = "card_1234"
 
 internal class IAPHelperMockTest {
 
@@ -22,7 +21,7 @@ internal class IAPHelperMockTest {
 
     @Before
     fun setUp() {
-        sut = IAPHelperMock(DEFAULT_CARD_ID)
+        sut = IAPHelperMock()
     }
 
     @Test

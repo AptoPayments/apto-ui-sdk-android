@@ -9,7 +9,7 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 
-@SuppressWarnings("deprecation")
+@Suppress("DEPRECATION")
 internal fun Drawable.setColorFilterCompat(@ColorInt color: Int, mode: PorterDuff.Mode) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         colorFilter = BlendModeColorFilter(color, getBlendMode(mode))

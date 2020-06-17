@@ -49,7 +49,7 @@ internal val applicationModule = module {
     single { BiometricWrapper(androidContext()) }
     factory { FormatOrderGenerator(get()) }
     factory { CategorySpendingSorter() }
-    single<IAPHelper> { (cardId: String) -> IAPHelperMock(cardId) }
+    single<IAPHelper> { IAPHelperMock() }
     factory { IntentGenerator() }
     factory { Places.createClient(get()) }
     factory { PlaceFetcher(get(), get()) }

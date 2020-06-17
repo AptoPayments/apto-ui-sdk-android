@@ -6,14 +6,17 @@ import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.PhoneNumber
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.core.data.user.VerificationStatus
+import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.core.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 
 internal class InputPhoneViewModel constructor(
     private val analyticsManager: AnalyticsServiceContract,
-    private val aptoPlatform: AptoPlatformProtocol
+    private val aptoPlatform: AptoPlatformProtocol,
+    private val aptoUiSdkProtocol: AptoUiSdkProtocol
 ) : BaseViewModel() {
 
     private var phoneNumber = ""
@@ -21,6 +24,7 @@ internal class InputPhoneViewModel constructor(
     private val _enableNextButton = MutableLiveData(false)
     val enableNextButton = _enableNextButton as LiveData<Boolean>
     val verificationData = MutableLiveData<Verification?>(null)
+    val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
 
     fun onContinueClicked() {
         showLoading()
@@ -50,4 +54,6 @@ internal class InputPhoneViewModel constructor(
     fun onCountryChanged(countryCode: String) {
         this.countryCode = countryCode
     }
+
+    private fun isSdkEmbedded() = aptoUiSdkProtocol.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED
 }

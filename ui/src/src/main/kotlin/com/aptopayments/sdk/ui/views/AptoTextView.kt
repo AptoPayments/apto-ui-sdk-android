@@ -2,12 +2,12 @@ package com.aptopayments.sdk.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.aptopayments.core.extension.localized
 import com.aptopayments.sdk.R
 
 class AptoTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    TextView(context, attrs, defStyleAttr) {
+    AppCompatTextView(context, attrs, defStyleAttr) {
 
     var localizedText: String = ""
         set(value) = localizeAndSet(value)

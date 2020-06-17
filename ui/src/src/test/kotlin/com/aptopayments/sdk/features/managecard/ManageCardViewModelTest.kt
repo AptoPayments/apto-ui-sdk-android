@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer
 import com.aptopayments.core.analytics.Event
 import com.aptopayments.core.data.card.Card
 import com.aptopayments.core.data.transaction.Transaction
+import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
@@ -19,6 +20,7 @@ import org.mockito.Mock
 import org.mockito.Spy
 import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ManageCardViewModelTest : AndroidTest() {
@@ -348,5 +350,21 @@ class ManageCardViewModelTest : AndroidTest() {
         // Then
         assert(result.size == 1)
         assert(sut.transactions.value?.first() == newMockTransaction)
+    }
+
+    @Test
+    fun `whenever embedded then X is shown and Back is allowed`() {
+        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.EMBEDDED))
+
+        assertTrue { sut.canBackPress }
+        assertTrue { sut.showXOnToolbar }
+    }
+
+    @Test
+    fun `whenever embedded then X is not shown and Back is not allowed`() {
+        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.STANDALONE))
+
+        assertFalse(sut.canBackPress)
+        assertFalse(sut.showXOnToolbar)
     }
 }

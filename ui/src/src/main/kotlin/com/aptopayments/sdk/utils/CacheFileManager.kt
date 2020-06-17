@@ -39,7 +39,7 @@ internal class CacheFileManagerImpl(context: Context) : CacheFileManager {
 
     private fun removeAllFilesFromDir(dir: File) {
         if (dir.exists()) {
-            dir.listFiles().forEach { it.delete() }
+            dir.listFiles()?.forEach { it.delete() }
         }
     }
 }

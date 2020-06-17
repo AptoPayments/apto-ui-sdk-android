@@ -46,7 +46,7 @@ import org.koin.dsl.module
 import org.threeten.bp.LocalDate
 
 val viewModelModule = module {
-    viewModel { InputPhoneViewModel(get(), get()) }
+    viewModel { InputPhoneViewModel(get(), get(), get()) }
     viewModel { InputEmailViewModel(get()) }
     viewModel { OAuthConnectViewModel(get()) }
     viewModel { OAuthVerifyViewModel(get()) }

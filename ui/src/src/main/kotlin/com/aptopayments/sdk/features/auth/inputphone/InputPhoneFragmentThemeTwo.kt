@@ -5,10 +5,8 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.geo.Country
 import com.aptopayments.core.data.user.Verification
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.PhoneInputView
@@ -75,8 +73,16 @@ internal class InputPhoneFragmentThemeTwo : BaseFragment(), InputPhoneContract.V
     private fun setupToolBar() {
         tb_llsdk_toolbar.configure(
             this,
-            ToolbarConfiguration.Builder().backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
+            ToolbarConfiguration.Builder().backButtonMode(getBackButtonMode()).backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
         )
+    }
+
+    private fun getBackButtonMode(): BackButtonMode {
+        return if (viewModel.showXOnToolbar) {
+            BackButtonMode.Close()
+        } else {
+            BackButtonMode.Back()
+        }
     }
 
     override fun setupListeners() {

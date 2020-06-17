@@ -49,8 +49,9 @@ object DataBindingUtils {
             if ((event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) && listener != null) {
                 listener.invoke()
                 true
+            } else {
+                false
             }
-            false
         }
     }
 

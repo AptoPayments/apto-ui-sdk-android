@@ -19,7 +19,7 @@ interface IAPHelper {
     suspend fun onWalletCreated()
 }
 
-internal class IAPHelperMock(cardId: String) : IAPHelper {
+internal class IAPHelperMock() : IAPHelper {
     override val failure: LiveData<Failure> = MutableLiveData()
     override val showAddCardButton = MutableLiveData(false) as LiveData<Boolean>
     override fun satisfyHardwareRequisites() = false

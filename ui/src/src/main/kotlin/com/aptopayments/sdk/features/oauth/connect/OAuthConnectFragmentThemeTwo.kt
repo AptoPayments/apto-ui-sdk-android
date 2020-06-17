@@ -49,6 +49,7 @@ internal class OAuthConnectFragmentThemeTwo : BaseFragment(), OAuthConnectContra
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
+    @Suppress("UNCHECKED_CAST")
     override fun setUpArguments() {
         title = arguments!![TITLE_KEY] as String
         explanation = arguments!![EXPLANATION_KEY] as String

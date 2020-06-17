@@ -17,6 +17,7 @@ class AptoWebView @JvmOverloads constructor(
 
     var delegate: AptoWebViewDelegate? = null
 
+    @Suppress("DEPRECATION")
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, t, oldl, oldt)
         val height = Math.floor((contentHeight * scale).toDouble()).toInt()

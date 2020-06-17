@@ -39,6 +39,7 @@ internal class CountrySelectorFragmentThemeTwo : BaseFragment(), CountrySelector
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
+    @Suppress("UNCHECKED_CAST")
     override fun setUpArguments() {
         allowedCountriesList = arguments!![ALLOWED_COUNTRIES_KEY] as List<Country>
     }

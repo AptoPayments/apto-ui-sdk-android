@@ -17,6 +17,7 @@ class StringUtils {
                     "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+"
         )
 
+        @Suppress("DEPRECATION")
         fun parseHtmlLinks(text: String): Spanned {
             return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)

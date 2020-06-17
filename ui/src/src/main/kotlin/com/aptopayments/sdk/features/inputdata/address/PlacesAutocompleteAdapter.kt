@@ -52,6 +52,7 @@ internal class PlacesAutocompleteAdapter internal constructor(
                 return results
             }
 
+            @Suppress("UNCHECKED_CAST")
             override fun publishResults(charSequence: CharSequence?, results: FilterResults) {
                 if (results.count > 0) {
                     resultList = results.values as List<AutocompletePrediction>

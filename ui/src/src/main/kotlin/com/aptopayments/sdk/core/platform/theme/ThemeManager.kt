@@ -73,12 +73,8 @@ interface ThemeManager {
     }
 
     fun customizeMenuImage(item: MenuItem?, @ColorInt color: Int = UIConfig.textTopBarSecondaryColor) =
-        item?.let {
-            val icon = it.icon
-            icon?.let { icon ->
-                DrawableCompat.setTint(icon, color)
-                item.icon = icon
-            }
+        item?.icon?.let { icon ->
+            DrawableCompat.setTint(icon, color)
         }
 
     fun customizeMenuLayoutImage(layoutContainer: ViewGroup) {

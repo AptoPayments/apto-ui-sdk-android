@@ -129,6 +129,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
         AptoPlatform.logout()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun getModuleList(extraModules: List<(MutableList<Any>) -> Any>): MutableList<Module> {
         val list = mutableListOf(applicationModule, useCaseModule, viewModelModule)
         extraModules.forEach { it.invoke(list as MutableList<Any>) }

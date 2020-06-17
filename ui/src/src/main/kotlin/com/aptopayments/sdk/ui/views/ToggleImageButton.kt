@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.Checkable
-import android.widget.ImageButton
+import androidx.appcompat.widget.AppCompatImageButton
 import com.aptopayments.sdk.R
 
 /*
  * Taken from here:
  * https://stackoverflow.com/a/15247353/1411844
  */
-class ToggleImageButton : ImageButton, Checkable {
+class ToggleImageButton : AppCompatImageButton, Checkable {
     var onCheckedChangeListener: OnCheckedChangeListener? = null
 
     constructor(context: Context) : super(context)

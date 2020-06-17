@@ -51,16 +51,17 @@ class SnackbarThemeTwo private constructor(parent: ViewGroup, content: View, con
         }
     }
 
+    @Suppress("DEPRECATION")
     private class ContentViewCallback(private val view: View) : BaseTransientBottomBar.ContentViewCallback {
 
         override fun animateContentIn(delay: Int, duration: Int) {
-            ViewCompat.setScaleY(view, 0f)
+            view.scaleY = 0f
             ViewCompat.animate(view)
                 .scaleY(1f).setDuration(duration.toLong()).startDelay = delay.toLong()
         }
 
         override fun animateContentOut(delay: Int, duration: Int) {
-            ViewCompat.setScaleY(view, 1f)
+            view.scaleY = 1f
             ViewCompat.animate(view)
                 .scaleY(0f)
                 .setDuration(duration.toLong()).startDelay = delay.toLong()

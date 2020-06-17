@@ -15,7 +15,6 @@ import com.aptopayments.core.data.config.UIConfig
 import com.aptopayments.core.data.fundingsources.Balance
 import com.aptopayments.core.data.transaction.Transaction
 import com.aptopayments.core.extension.localized
-import com.aptopayments.core.features.managecard.CardOptions
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.AptoUiSdk
@@ -208,9 +207,17 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
         }
         tb_llsdk_toolbar.configure(
             this,
-            ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.None).setSecondaryTertiaryColors().build()
+            ToolbarConfiguration.Builder().backButtonMode(getBackButtonMode()).setSecondaryTertiaryColors().build()
         )
         setOffsetChangedListener()
+    }
+
+    private fun getBackButtonMode(): BackButtonMode {
+        return if (viewModel.showXOnToolbar) {
+            BackButtonMode.Close(UIConfig.iconTertiaryColor)
+        } else {
+            BackButtonMode.None
+        }
     }
 
     private fun setOffsetChangedListener() {
@@ -277,7 +284,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     }
 
     override fun onBackPressed() {
-        if (AptoUiSdk.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED) {
+        if (viewModel.canBackPress) {
             delegate?.onBackFromManageCard()
         }
     }

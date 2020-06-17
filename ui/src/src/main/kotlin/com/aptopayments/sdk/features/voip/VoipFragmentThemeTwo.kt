@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.aptopayments.sdk.features.voip
 
 import android.Manifest
@@ -25,7 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val CARD_ID_KEY = "CARD_ID"
 private const val ACTION_KEY = "ACTION"
 
-@Suppress("DEPRECATION")
 internal class VoipFragmentThemeTwo : BaseFragment(), VoipContract.View, KeyboardView.OnKeyboardActionListener {
 
     override var delegate: VoipContract.Delegate? = null
