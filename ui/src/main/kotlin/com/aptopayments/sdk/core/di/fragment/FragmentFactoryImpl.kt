@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.geo.Country
+import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.voip.Action
@@ -42,6 +43,11 @@ import com.aptopayments.sdk.features.inputdata.name.CollectUserNameSurnameFragme
 import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneFragment
 import com.aptopayments.sdk.features.issuecard.IssueCardFragmentThemeTwo
 import com.aptopayments.sdk.features.kyc.KycStatusFragmentThemeTwo
+import com.aptopayments.sdk.features.loadfunds.add.AddFundsFragment
+import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardDetailsFragment
+import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListFragment
+import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingFragment
+import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultFragment
 import com.aptopayments.sdk.features.maintenance.MaintenanceFragmentThemeTwo
 import com.aptopayments.sdk.features.managecard.ManageCardFragmentThemeTwo
 import com.aptopayments.sdk.features.nonetwork.NoNetworkFragmentThemeTwo
@@ -193,4 +199,15 @@ internal class FragmentFactoryImpl : FragmentFactory {
         config: AllowedCountriesConfiguration,
         tag: String
     ) = CollectUserPhoneFragment.newInstance(initialValue, config, tag)
+
+    override fun addCardDetailsFragment(cardId: String, tag: String) = AddCardDetailsFragment.newInstance(cardId, tag)
+    override fun addCardOnboardingFragment(cardId: String, tag: String) =
+        AddCardOnboardingFragment.newInstance(cardId = cardId, tag = tag)
+
+    override fun paymentSourcesList(tag: String) = PaymentSourcesListFragment.newInstance(tag)
+    override fun addFundsFragment(cardId: String, tag: String) =
+        AddFundsFragment.newInstance(cardId = cardId, tag = tag)
+
+    override fun addFundsResultFragment(cardId: String, payment: Payment, tag: String) =
+        AddFundsResultFragment.newInstance(cardId, payment, tag)
 }

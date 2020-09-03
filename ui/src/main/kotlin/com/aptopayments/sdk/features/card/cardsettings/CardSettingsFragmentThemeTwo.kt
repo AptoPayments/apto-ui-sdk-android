@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.card.cardsettings
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.mobile.data.card.Card
@@ -70,8 +71,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
             observeThree(cardholderAgreement, privacyPolicy, termsAndConditions, ::handleLegalSectionVisibility)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             failure(viewModel.failure) { handleFailure(it) }
-            observeNotNullable(cardDetailsFetchedCorrectly) { manageCardDetailsFetched(it) }
-            observeNotNullable(hasCardDetails) { value -> silentlySetCardDetailSwitchValue(value) }
+            observeNotNullable(cardDetailsClicked) { manageCardDetails() }
             observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
         }
         viewModel.viewResumed()
@@ -80,21 +80,13 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
     private fun handleAuthenticateCardDetails(authenticationNeeded: Boolean) {
         if (authenticationNeeded) {
             (activity as CardActivity).authenticate(AuthenticationView.AuthType.OPTIONAL,
-                onCancelled = { viewModel.cardDetailsAuthenticationCancelled() },
+                onCancelled = { viewModel.cardDetailsAuthenticationError() },
                 onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() })
         }
     }
 
-    private fun manageCardDetailsFetched(fetched: Boolean) {
-        if (fetched) {
-            onBackPressed()
-        } else {
-            silentlySetCardDetailSwitchValue(false)
-        }
-    }
-
-    private fun silentlySetCardDetailSwitchValue(value: Boolean) {
-        silentlySetSwitch(rl_card_info.sw_tv_section_switch_switch, value) { cardDetailsTapped(it) }
+    private fun manageCardDetails() {
+        onBackPressed()
     }
 
     private fun handleShowIvrSupport(value: Boolean?) =
@@ -133,17 +125,33 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         setupTheme()
         setupTexts()
         setupToolBar()
-        rl_google_pay.visibleIf(viewModel.showAddToGooglePay)
+        setUpVisibility()
     }
+
+    private fun setUpVisibility() {
+        rl_google_pay.visibleIf(viewModel.showAddToGooglePay)
+        configureAddFundsSectionVisibility()
+    }
+
+    private fun configureAddFundsSectionVisibility() {
+        if (shouldShowAddFunds()) {
+            rl_add_funds.show()
+            (rl_add_funds as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
+            val layoutParams = (settings_section.layoutParams as LinearLayout.LayoutParams)
+            layoutParams.topMargin = 0
+            settings_section.requestLayout()
+        }
+    }
+
+    private fun shouldShowAddFunds() = card.features?.funding?.isEnabled ?: false
 
     override fun setupListeners() {
         super.setupListeners()
         iv_close_button.setOnClickListener { onBackPressed() }
+        rl_add_funds.setOnClickListener { addFundsPressed() }
         rl_get_pin.setOnClickListener { getPinPressed() }
         rl_set_pin.setOnClickListener { setPinPressed() }
-        rl_card_info.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
-            cardDetailsTapped(value)
-        }
+        rl_card_info.setOnClickListener { cardDetailsTapped() }
         rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             lockUnlockCard(value)
         }
@@ -169,6 +177,7 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
         if (AptoUiSdk.cardOptions.showDetailedCardActivityOption()) {
             transactions_section.show()
             rl_detailed_card_activity.sw_tv_section_switch_switch.isChecked = getDetailedCardActivityPreference()
+            (rl_statement as SectionOptionWithSubtitleViewTwo).hideBottomSeparator()
         }
         if (!AptoUiSdk.cardOptions.showMonthlyStatementOption()) {
             rl_statement.remove()
@@ -178,6 +187,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     private fun setupTexts() {
         tv_toolbar_title.localizedText = "card_settings.settings.title"
+        (rl_add_funds as SectionOptionWithSubtitleViewTwo).set(
+            title = "card_settings_settings_load_funds_title".localized(),
+            description = "card_settings_settings_load_funds_subtitle".localized()
+        )
         (rl_settings as SectionHeaderViewTwo).set(
             title = "card_settings.settings.settings.title".localized()
         )
@@ -189,8 +202,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
             title = "card_settings.settings.set_pin.title".localized(),
             description = "card_settings.settings.set_pin.description".localized()
         )
-        (rl_card_info as SectionSwitchViewTwo).set(
-            title = "card_settings.settings.card_details.title".localized(),
+        (rl_card_info as SectionOptionWithSubtitleViewTwo).set(
+            title = "card_settings_settings_card_details_title".localized(),
             description = "card_settings.settings.card_details.description".localized()
         )
         (rl_lock_card as SectionSwitchViewTwo).set(
@@ -256,6 +269,10 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun onBackPressed() {
         delegate?.onBackFromCardSettings()
+    }
+
+    private fun addFundsPressed() {
+        delegate?.onAddFunds()
     }
 
     private fun getPinPressed() {
@@ -403,8 +420,8 @@ internal class CardSettingsFragmentThemeTwo : BaseFragment(), CardSettingsContra
 
     override fun viewLoaded() = viewModel.viewLoaded()
 
-    private fun cardDetailsTapped(value: Boolean) {
-        viewModel.cardDetailsTapped(value)
+    private fun cardDetailsTapped() {
+        viewModel.cardDetailsTapped()
     }
 
     companion object {

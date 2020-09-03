@@ -1,64 +1,48 @@
 package com.aptopayments.sdk.repository
 
-import android.os.Handler
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.data.card.CardDetails
-import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.utils.DateProvider
-import org.threeten.bp.LocalDateTime
+import com.aptopayments.sdk.utils.LiveEvent
+import com.aptopayments.sdk.utils.Timer
 
 private const val DETAILS_EXPIRATION_THRESHOLD_SECONDS = 60L
 private const val DETAILS_EXPIRATION_THRESHOLD_MILLI = DETAILS_EXPIRATION_THRESHOLD_SECONDS * 1000
 
-interface LocalCardDetailsRepository {
-    fun saveCardDetails(details: CardDetails)
-    fun getCardDetails(): CardDetails?
-    fun getCardDetailsLiveData(): LiveData<CardDetails?>
+internal interface LocalCardDetailsRepository {
+    fun showCardDetails()
+    fun hideCardDetails()
+    fun getCardDetailsEvent(): LiveEvent<Boolean>
     fun clear()
 }
 
-class InMemoryLocalCardDetailsRepository(
-    private val dateProvider: DateProvider,
-    private val aptoPlatformProtocol: AptoPlatformProtocol
-) : LocalCardDetailsRepository {
+internal class InMemoryLocalCardDetailsRepository(private val timer: Timer) :
+    LocalCardDetailsRepository {
 
-    private val handler = Handler()
-    private var savedTime: LocalDateTime? = null
-    private var _detailsLiveData = MutableLiveData<CardDetails?>()
-    private var details: CardDetails? = null
+    private var _detailsLiveEvent = LiveEvent<Boolean>()
+    private var showDetails: Boolean = false
         set(value) {
             field = value
-            _detailsLiveData.postValue(value)
-            clearHandler()
-            handler.postDelayed({ clear() }, DETAILS_EXPIRATION_THRESHOLD_MILLI)
+            _detailsLiveEvent.postValue(value)
+            if (showDetails) {
+                timer.start(DETAILS_EXPIRATION_THRESHOLD_MILLI)
+            }
         }
 
-    override fun saveCardDetails(details: CardDetails) {
-        savedTime = dateProvider.localDateTime()
-        aptoPlatformProtocol.subscribeSessionInvalidListener(this) { clear() }
-        this.details = details
+    init {
+        _detailsLiveEvent.postValue(false)
+        timer.setListener { hideCardDetails() }
     }
 
-    override fun getCardDetails(): CardDetails? {
-        if (!isTimeValid()) {
-            details = null
-            savedTime = null
-        }
-        return details
+    override fun showCardDetails() {
+        showDetails = true
     }
 
-    override fun getCardDetailsLiveData(): LiveData<CardDetails?> = _detailsLiveData
+    override fun hideCardDetails() {
+        showDetails = false
+    }
+
+    override fun getCardDetailsEvent() = _detailsLiveEvent
 
     override fun clear() {
-        savedTime = null
-        details = null
-        clearHandler()
-        aptoPlatformProtocol.unsubscribeSessionInvalidListener(this)
+        showDetails = false
+        timer.stop()
     }
-
-    private fun clearHandler() = handler.removeCallbacksAndMessages(null)
-
-    private fun isTimeValid(): Boolean =
-        savedTime?.plusSeconds(DETAILS_EXPIRATION_THRESHOLD_SECONDS)?.isAfter(dateProvider.localDateTime()) ?: false
 }

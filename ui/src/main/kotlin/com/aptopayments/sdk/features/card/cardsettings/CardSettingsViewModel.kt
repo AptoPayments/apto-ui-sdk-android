@@ -1,28 +1,23 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.Card
-import com.aptopayments.mobile.data.card.CardDetails
 import com.aptopayments.mobile.data.card.FeatureStatus
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.content.Content
-import com.aptopayments.mobile.functional.getOrElse
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.usecase.*
-import com.aptopayments.sdk.core.usecase.FetchRemoteCardDetailsUseCase.Params
+import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
+import com.aptopayments.sdk.core.usecase.ShouldAuthenticateWithPINOnPCIUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
+import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.PhoneDialer
-import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -35,12 +30,11 @@ internal class CardSettingsViewModel constructor(
     private val aptoUiSdk: AptoUiSdkProtocol
 ) : BaseViewModel(), KoinComponent {
 
-    private val clearCardDetails: ClearCardDetailsUseCase by inject()
-    private val fetchRemoteCardDetailsUseCase: FetchRemoteCardDetailsUseCase by inject()
-    private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
     private val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
     private val shouldAuthenticateWithPINOnPCIUseCase: ShouldAuthenticateWithPINOnPCIUseCase by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(card.cardProductID) }
+
+    private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
     val showGetPin: MutableLiveData<Boolean> = MutableLiveData()
     val showSetPin: MutableLiveData<Boolean> = MutableLiveData()
@@ -51,15 +45,10 @@ internal class CardSettingsViewModel constructor(
     val termsAndConditions: MutableLiveData<Content> = MutableLiveData()
     val showIvrSupport: MutableLiveData<Boolean> = MutableLiveData()
     val showAddToGooglePay = shouldShowAddToGooglePay()
-    val cardDetailsFetchedCorrectly = LiveEvent<Boolean>()
+    val cardDetailsClicked = LiveEvent<Boolean>()
     val authenticateCardDetails = LiveEvent<Boolean>()
 
-    val hasCardDetails: LiveData<Boolean> = Transformations.map(getCardDetailsLiveData()) { details -> details != null }
-
     private var phoneDialer: PhoneDialer? = null
-
-    private fun getCardDetailsLiveData() =
-        fetchLocalCardDetailsUseCase().getOrElse { MutableLiveData<CardDetails?>(null) }
 
     fun viewResumed() {
         updateViewModel()
@@ -110,18 +99,14 @@ internal class CardSettingsViewModel constructor(
         analyticsManager.track(Event.ManageCardCardSettings)
     }
 
-    fun cardDetailsTapped(switchValue: Boolean) {
-        if (switchValue) {
-            canAskBiometricsUseCase().either({}, { canAsk ->
-                if (canAsk) {
-                    checkIfAuthNeeded()
-                } else {
-                    cardDetailsAuthenticationSuccessful()
-                }
-            })
-        } else {
-            clearCardDetails()
-        }
+    fun cardDetailsTapped() {
+        canAskBiometricsUseCase().either({}, { canAsk ->
+            if (canAsk) {
+                checkIfAuthNeeded()
+            } else {
+                cardDetailsAuthenticationSuccessful()
+            }
+        })
     }
 
     private fun checkIfAuthNeeded() {
@@ -137,26 +122,15 @@ internal class CardSettingsViewModel constructor(
         )
     }
 
-    fun cardDetailsAuthenticationSuccessful() {
-        card.accountID.let { accountId ->
-            viewModelScope.launch {
-                showLoading()
-                fetchRemoteCardDetailsUseCase(Params(accountId)).either(
-                    {
-                        cardDetailsFetchedCorrectly.postValue(false)
-                        handleFailure(it)
-                    },
-                    {
-                        cardDetailsFetchedCorrectly.postValue(true)
-                    })
-            }.invokeOnCompletion { hideLoading() }
-        }
-    }
-
-    fun cardDetailsAuthenticationCancelled() {
-        cardDetailsFetchedCorrectly.postValue(false)
-    }
-
     private fun shouldShowAddToGooglePay() =
         aptoUiSdk.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites()
+
+    fun cardDetailsAuthenticationSuccessful() {
+        cardDetailsRepo.showCardDetails()
+        cardDetailsClicked.postValue(true)
+    }
+
+    fun cardDetailsAuthenticationError() {
+        cardDetailsRepo.hideCardDetails()
+    }
 }

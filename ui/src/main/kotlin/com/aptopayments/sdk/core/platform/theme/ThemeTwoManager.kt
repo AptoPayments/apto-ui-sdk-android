@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.*
@@ -30,8 +31,7 @@ import com.aptopayments.sdk.core.extension.setColor
 import com.aptopayments.sdk.core.ui.StatusBarUtil
 import com.aptopayments.sdk.utils.CustomTypefaceSpan
 import com.aptopayments.sdk.utils.FontsUtil
-import com.aptopayments.sdk.utils.FontsUtil.FontType.REGULAR
-import com.aptopayments.sdk.utils.FontsUtil.FontType.SEMI_BOLD
+import com.aptopayments.sdk.utils.FontsUtil.FontType.*
 import com.aptopayments.sdk.utils.extensions.toDp
 import com.google.android.material.appbar.AppBarLayout
 
@@ -60,24 +60,22 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeToolbarTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, BOLD)
         textView.apply {
-            setTextColor(UIConfig.iconTertiaryColor)
+            setTextColor(UIConfig.textTopBarSecondaryColor)
             setLineSpacing(0f, 1.17f)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
         }
     }
 
     override fun customizeHighlightTitleLabel(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let { textView.typeface = it }
+        setFontType(textView, BOLD)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
         textView.setTextColor(UIConfig.textSecondaryColor)
     }
 
     override fun customizeSubmitButton(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let { textView.typeface = it }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextColor(UIConfig.textButtonColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
@@ -101,7 +99,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeLargeTitleLabel(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let { textView.typeface = it }
+        setFontType(textView, BOLD)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
             setTextColor(UIConfig.textPrimaryColor)
@@ -109,7 +107,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeRegularTextLabel(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -117,7 +115,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSectionHeader(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -125,15 +123,13 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeFormLabel(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
+        setFontType(textView, REGULAR)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         textView.setTextColor(UIConfig.textSecondaryColor)
     }
 
     override fun customizeFooterLabel(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextColor(UIConfig.textSecondaryColor)
             setLinkTextColor(UIConfig.textLinkColor)
@@ -141,9 +137,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeErrorLabel(textView: TextView) {
-        FontsUtil.getFontOfType(SEMI_BOLD)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, SEMI_BOLD)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.apply {
             setTextColor(UIConfig.uiErrorColor)
@@ -151,9 +145,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeFormTextLink(textView: TextView) {
-        FontsUtil.getFontOfType(SEMI_BOLD)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, SEMI_BOLD)
         textView.apply {
             setTextColor(UIConfig.textLinkColor)
             setLinkTextColor(UIConfig.textLinkColor)
@@ -163,7 +155,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeHtml(textView: TextView, html: Spanned) {
-        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextColor(UIConfig.textPrimaryColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
@@ -186,23 +178,17 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeContentPlainText(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.setTextColor(UIConfig.textPrimaryColor)
     }
 
     override fun customizeContentPlainInvertedText(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.setTextColor(UIConfig.textTopBarSecondaryColor)
     }
 
     override fun customizeMainItem(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTextColor(UIConfig.textPrimaryColor)
@@ -211,9 +197,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeMainItemRight(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTextColor(UIConfig.textTertiaryColor)
@@ -223,9 +207,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeTimestamp(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTextColor(UIConfig.textTertiaryColor)
@@ -234,9 +216,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSectionTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -244,7 +224,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSectionOptionTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let { textView.typeface = it }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -252,7 +232,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSectionOptionDescription(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let { textView.typeface = it }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTextColor(UIConfig.textTertiaryColor)
@@ -268,9 +248,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeStarredSectionTitle(textView: TextView, @ColorInt textColor: Int) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             alpha = 0.7f
@@ -282,9 +260,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeAmountBig(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.BOLD)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, BOLD)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 31f)
             setTextColor(UIConfig.textTopBarSecondaryColor)
@@ -292,9 +268,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeAmountMedium(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -302,7 +276,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeAmountSmall(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let { textView.typeface = it }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTextColor(UIConfig.textPrimaryColor)
@@ -310,9 +284,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSubCurrency(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             alpha = 0.7f
@@ -320,26 +292,8 @@ internal object ThemeTwoManager : ThemeManager {
         }
     }
 
-    override fun customizeCardSmallValue(context: Context, textView: TextView) {
-        textView.apply {
-            typeface = getCardTypeface(context)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
-            setTextColor(UIConfig.textTopBarSecondaryColor)
-        }
-    }
-
-    override fun customizeCardLargeValue(context: Context, textView: TextView) {
-        textView.apply {
-            typeface = getCardTypeface(context)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-            setTextColor(UIConfig.textTopBarSecondaryColor)
-        }
-    }
-
     override fun customizeEmptyCase(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTextColor(UIConfig.textTertiaryColor)
@@ -348,9 +302,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeBannerTitle(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTextColor(UIConfig.textMessageColor)
@@ -358,9 +310,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeBannerMessage(textView: TextView) {
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, REGULAR)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTextColor(UIConfig.textMessageColor)
@@ -394,14 +344,10 @@ internal object ThemeTwoManager : ThemeManager {
         val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setTextColor(UIConfig.uiPrimaryColor)
 
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            dialogTitle.typeface = it
-            positiveButton.typeface = it
-            cancelButton.typeface = it
-        }
-        FontsUtil.getFontOfType(REGULAR)?.let {
-            dialogMessage.typeface = it
-        }
+        setFontType(dialogTitle, MEDIUM)
+        setFontType(positiveButton, MEDIUM)
+        setFontType(cancelButton, MEDIUM)
+        setFontType(dialogMessage, REGULAR)
 
         return dialog
     }
@@ -415,9 +361,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeMenuItem(textView: TextView) {
-        FontsUtil.getFontOfType(FontsUtil.FontType.MEDIUM)?.let {
-            textView.typeface = it
-        }
+        setFontType(textView, MEDIUM)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTextColor(UIConfig.textTopBarSecondaryColor)
@@ -436,5 +380,40 @@ internal object ThemeTwoManager : ThemeManager {
     override fun customizeEditText(editText: EditText) {
         editText.setTextColor(UIConfig.textPrimaryColor)
         editText.setHintTextColor(ColorUtils.setAlphaComponent(UIConfig.textPrimaryColor, OPACITY_50_PERCENT))
+    }
+
+    override fun customizeCardTitle(textView: TextView, enabled: Boolean) {
+        setFontType(textView, SEMI_BOLD)
+        val color = if (enabled) UIConfig.textPrimaryColor else UIConfig.textSecondaryColor
+        textView.setTextColor(color)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+    }
+
+    override fun customizeCardSubtitle(textView: TextView) {
+        setFontType(textView, REGULAR)
+        textView.setTextColor(UIConfig.textSecondaryColor)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+    }
+
+    override fun customizeCardCta(textView: TextView) {
+        setFontType(textView, SEMI_BOLD)
+        textView.setTextColor(UIConfig.uiPrimaryColor)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+    }
+
+    override fun customizeAddMoneyEditText(textView: TextView) {
+        setFontType(textView, BOLD)
+        textView.setTextColor(UIConfig.uiPrimaryColor)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
+    }
+
+    private fun setFontType(textView: TextView, fontType: FontsUtil.FontType) {
+        FontsUtil.getFontOfType(fontType)?.let {
+            textView.typeface = it
+        }
+    }
+
+    private fun applyStyle(style: CharacterStyle, spannable: Spannable, start: Int, end: Int) {
+        spannable.setSpan(style, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }

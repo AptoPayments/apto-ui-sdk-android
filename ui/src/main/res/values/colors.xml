@@ -21,6 +21,7 @@
     <color name="llsdk_application_approved_color">#58c246</color>
     <color name="llsdk_application_pending_borrower_action_color">#ffd52b</color>
     <color name="llsdk_application_pending_lender_action_color">#999</color>
+    <color name="divider_line_color">#f2f2f2</color>
 
     <!-- Dark -->
     <color name="llsdk_dark_text_color">#fff</color>
@@ -63,8 +64,4 @@
     <color name="button_inactive">#4D0667D0</color>
     <color name="button_active">#FF0667D0</color>
     <color name="button_settings_background">#FF1652F0</color>
-
-    <!--colors phone auth theme one-->
-    <color name="progressbar_background">#FFE9E9E9</color>
-    <color name="progressbar_top_progress_color">#FF313131</color>
 </resources>

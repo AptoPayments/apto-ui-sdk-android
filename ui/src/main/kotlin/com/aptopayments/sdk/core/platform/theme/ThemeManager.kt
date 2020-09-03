@@ -1,10 +1,7 @@
 package com.aptopayments.sdk.core.platform.theme
 
-import android.content.Context
 import android.graphics.drawable.GradientDrawable
-import android.text.Spannable
 import android.text.Spanned
-import android.text.style.CharacterStyle
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -53,8 +50,6 @@ interface ThemeManager {
     fun customizeAmountMedium(textView: TextView)
     fun customizeAmountSmall(textView: TextView)
     fun customizeSubCurrency(textView: TextView)
-    fun customizeCardSmallValue(context: Context, textView: TextView)
-    fun customizeCardLargeValue(context: Context, textView: TextView)
     fun customizeEmptyCase(textView: TextView)
     fun customizeBannerTitle(textView: TextView)
     fun customizeBannerMessage(textView: TextView)
@@ -63,6 +58,10 @@ interface ThemeManager {
     fun customizeMenuItem(textView: TextView)
     fun customizeCheckBox(checkBox: AppCompatCheckBox)
     fun customizeEditText(editText: EditText)
+    fun customizeCardTitle(textView: TextView, enabled: Boolean = true)
+    fun customizeCardSubtitle(textView: TextView)
+    fun customizeCardCta(textView: TextView)
+    fun customizeAddMoneyEditText(textView: TextView)
 
     fun customizeRoundedBackground(view: View) {
         (view.background as? GradientDrawable)?.setColor(UIConfig.uiBackgroundSecondaryColor)
@@ -86,8 +85,4 @@ interface ThemeManager {
 
 fun themeManager(): ThemeManager {
     return ThemeTwoManager
-}
-
-internal fun applyStyle(style: CharacterStyle, spannable: Spannable, start: Int, end: Int) {
-    spannable.setSpan(style, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 }

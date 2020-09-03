@@ -354,6 +354,8 @@
     <string name="card_settings_transactions_detailed_card_activity_description">Show all activity: declines, balance inquiries, etc.</string>
     <string name="card_settings_help_monthly_statements_title">Monthly Statements</string>
     <string name="card_settings_help_monthly_statements_description">Download transactions info into a PDF</string>
+    <string name="card_settings_settings_load_funds_title">Add Money</string>
+    <string name="card_settings_settings_load_funds_subtitle">Add funds to your balance</string>
 
     <!-- card management enable/disable dialog -->
     <string name="enable_card_message">You are activating your card. Are you sure?</string>
@@ -420,15 +422,15 @@
     <string name="transaction_details_currency">Currency</string>
     <string name="transaction_details_details_transaction_type_title">Transaction Type</string>
     <string name="transaction_details_basic_info_transaction_status_title">Transaction Status</string>
-    <string name="transaction_details_basic_info_funding_source_title">Crypto wallet</string>
+    <string name="transaction_details_basic_info_funding_source_title">Wallet</string>
     <string name="transaction_details_location">Location</string>
     <string name="transaction_details_details_category_title">Category</string>
     <string name="transaction_details_basic_info_transaction_date_title">Transaction date</string>
     <string name="transaction_details_id">ID</string>
     <string name="transaction_details_shift_id">Transaction ID</string>
     <string name="transaction_details_details_title">Details</string>
-    <string name="transaction_details_adjustment_transfer_from_text">From your crypto wallet</string>
-    <string name="transaction_details_adjustment_transfer_to_text">To your crypto wallet</string>
+    <string name="transaction_details_adjustment_transfer_from_text">From your wallet</string>
+    <string name="transaction_details_adjustment_transfer_to_text">To your wallet</string>
     <string name="transaction_details_adjustment_fee_title">Fee = </string>
     <string name="transaction_details_adjustment_amount_title">Amount = </string>
     <string name="transaction_details_exchange_rate">Exchange Rate</string>
@@ -721,4 +723,44 @@
     <string name="collect_user_data_address_apt_unit_placeholder">Apartment number (optional)</string>
     <string name="collect_user_data_phone_title">Your Phone Number 📲</string>
     <string name="collect_user_data_phone_subtitle">Please enter your phone number</string>
+    <string name="load_funds_add_card_title">Debit Card</string>
+    <string name="load_funds_add_card_card_number_placeholder">Enter debit card number</string>
+    <string name="load_funds_add_card_card_number_error_invalid">Please enter a valid card number</string>
+    <string name="load_funds_add_card_expiration_error_invalid">Date is invalid</string>
+    <string name="load_funds_add_card_date_placeholder">MM/YY</string>
+    <string name="load_funds_add_card_cvv_placeholder">CVV</string>
+    <string name="load_funds_add_card_zip_placeholder">ZIP code</string>
+    <string name="load_funds_add_card_primary_cta">Add Card</string>
+    <string name="load_funds_add_card_error_title">Error</string>
+    <string name="load_funds_add_card_error_message">We experienced an error while verifying your card. Please try again or contact support for further assistance</string>
+    <string name="load_funds_payment_methods_title">Payment Methods</string>
+    <string name="load_funds_payment_methods_existing_card_element_title">Debit Card</string>
+    <string name="load_funds_payment_methods_new_card_element_title">Debit Card</string>
+    <string name="load_funds_payment_methods_new_card_element_subtitle">Instant Deposit</string>
+    <string name="load_funds_payment_methods_existing_card_element_subtitle">&lt;&lt;NAME&gt;&gt; Debit</string>
+    <string name="load_funds_add_money_title">Add Money</string>
+    <string name="load_funds_add_money_daily_max_title">The maximum daily deposit is &lt;&lt;MAX&gt;&gt;</string>
+    <string name="load_funds_add_money_monthly_max_reached">You\'ve reached monthly limit &lt;&lt;MAX&gt;&gt;</string>
+    <string name="load_funds_add_money_primary_cta">Add</string>
+    <string name="load_funds_add_money_add_card">Add</string>
+    <string name="load_funds_add_money_change_card">Change</string>
+    <string name="load_funds_add_money_no_payment_method">No payment method</string>
+    <string name="load_funds_add_money_error_title">Error</string>
+    <string name="load_funds_add_money_error_message">We experienced an error while processing your transaction. Please try again or contact support for further assistance</string>
+    <string name="load_funds_transaction_successful_description">You deposited &lt;&lt;VALUE&gt;&gt;</string>
+    <string name="load_funds_transaction_time">Time</string>
+    <string name="load_funds_transaction_from">From</string>
+    <string name="load_funds_transaction_authorization">Authorization</string>
+    <string name="load_funds_transaction_bank_description">This transaction will appear in your bank account statement as: &lt;&lt;VALUE&gt;&gt;</string>
+    <string name="load_funds_transaction_learn_more">Learn more in the Cardholder Agreement</string>
+    <string name="load_funds_transaction_primary_cta">Done</string>
+    <string name="load_funds_transaction_status_title">Status</string>
+    <string name="load_funds_transaction_status_completed">Completed</string>
+    <string name="load_funds_transaction_status_pending">Pending</string>
+    <string name="load_funds_transaction_status_error">Error</string>
+    <string name="load_funds_transaction_transfer_initiated">Transfer initiated</string>
+    <string name="load_funds_add_card_onboarding_title">Debit Card</string>
+    <string name="load_funds_add_card_onboarding_explanation">You can instantly transfer funds from your existing bank debit card to your &lt;&lt;VALUE&gt;&gt; card account. Please note that transfers are reviewed and they can be delayed or declined if we suspect risks.</string>
+    <string name="load_funds_add_card_onboarding_explanation_2">This transaction will appear in your bank account statement as: &lt;&lt;VALUE&gt;&gt;</string>
+    <string name="load_funds_add_card_onboarding_primary_cta">Continue</string>
 </resources>

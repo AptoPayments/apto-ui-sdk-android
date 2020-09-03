@@ -37,6 +37,7 @@ internal class DisclaimerFragmentThemeTwo : BaseFragment(), DisclaimerContract.V
         setUpTheme()
         showLoading()
         setUpContent()
+        hideKeyboard()
     }
 
     private fun setUpContent() {

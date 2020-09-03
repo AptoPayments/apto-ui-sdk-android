@@ -2,13 +2,14 @@ package com.aptopayments.sdk.features.inputdata.address
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.user.AddressDataPoint
+import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.LiveEvent
+import com.aptopayments.sdk.utils.extensions.map
 import com.google.android.libraries.places.api.model.AddressComponents
 import kotlinx.coroutines.launch
 
@@ -19,12 +20,11 @@ internal class CollectUserAddressViewModel(
     private val placesFetcher: PlaceFetcher
 ) : BaseViewModel() {
 
-    private var addressComponents: AddressComponents? = null
+    private val addressDataPoint = MutableLiveData<AddressDataPoint?>()
     val searchText = MutableLiveData("")
     val optionalText = MutableLiveData("")
-    private val _continueEnabled = MutableLiveData(false)
-    val continueEnabled = _continueEnabled as LiveData<Boolean>
-    val optionalVisible = Transformations.map(_continueEnabled) { it }
+    val continueEnabled = addressDataPoint.map { it != null }
+    val optionalVisible = continueEnabled.map { it }
     val continueClicked = LiveEvent<AddressDataPoint>()
     private val _showPoweredByGoogle = MutableLiveData(true)
     val showPoweredByGoogle = _showPoweredByGoogle as LiveData<Boolean>
@@ -32,9 +32,9 @@ internal class CollectUserAddressViewModel(
     init {
         initialValue?.let {
             searchText.postValue("${it.streetOne}, ${it.locality}, ${it.country}")
-            optionalText.postValue(it.streetTwo)
-            _continueEnabled.postValue(true)
+            optionalText.postValue(it.streetTwo ?: "")
         }
+        addressDataPoint.value = initialValue
     }
 
     fun viewLoaded() {
@@ -43,13 +43,20 @@ internal class CollectUserAddressViewModel(
 
     fun continueClicked() {
         if (continueEnabled.value == true) {
-            val dataPoint = if (addressComponents != null) {
-                addressGenerator.generate(addressComponents!!, optionalText.value!!)
-            } else {
-                initialValue
-            }
-            continueClicked.postValue(dataPoint)
+            addressDataPoint.value = addStreetTwoToDataPoint(addressDataPoint.value!!, optionalText.value)
+            continueClicked.postValue(addressDataPoint.value)
         }
+    }
+
+    private fun addStreetTwoToDataPoint(address: AddressDataPoint, streetTwo: String?): AddressDataPoint {
+        return AddressDataPoint(
+            streetOne = address.streetOne,
+            streetTwo = streetTwo,
+            locality = address.locality,
+            region = address.region,
+            postalCode = address.postalCode,
+            country = address.country
+        )
     }
 
     fun onAddressClicked(placeId: String) {
@@ -62,16 +69,28 @@ internal class CollectUserAddressViewModel(
 
     fun onEditingAddress() {
         _showPoweredByGoogle.value = true
-        setAddressComponents(null)
+        invalidateAddressComponents()
     }
 
     fun onAddressDismissed() {
         _showPoweredByGoogle.value = false
-        setAddressComponents(null)
+        invalidateAddressComponents()
     }
 
     private fun setAddressComponents(addressComponents: AddressComponents?) {
-        this.addressComponents = addressComponents
-        _continueEnabled.postValue(addressComponents != null)
+        addressDataPoint.value = addressComponents?.let { addressGenerator.generate(it) }
+        checkIncorrectAddress()
     }
+
+    private fun checkIncorrectAddress() {
+        if (addressDataPoint.value == null) {
+            handleFailure(IncorrectAddressFailure())
+        }
+    }
+
+    private fun invalidateAddressComponents() {
+        addressDataPoint.value = null
+    }
+
+    class IncorrectAddressFailure : Failure.FeatureFailure()
 }

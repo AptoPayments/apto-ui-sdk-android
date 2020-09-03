@@ -30,4 +30,39 @@ class StringTest : UnitTest() {
     fun `stars_ when four digits then three star and one digit`() {
         assertEquals("1234".starsExceptLast(), "***4")
     }
+
+    @Test
+    fun `toOnlyDigits removes parenthesis`() {
+        val sut = "(123)123"
+
+        assertEquals("123123", sut.toOnlyDigits())
+    }
+
+    @Test
+    fun `toOnlyDigits removes spaces`() {
+        val sut = "12 31 23"
+
+        assertEquals("123123", sut.toOnlyDigits())
+    }
+
+    @Test
+    fun `toOnlyDigits removes letters`() {
+        val sut = "12asd31a23"
+
+        assertEquals("123123", sut.toOnlyDigits())
+    }
+
+    @Test
+    fun `toOnlyDigits removes commas`() {
+        val sut = "123,123"
+
+        assertEquals("123123", sut.toOnlyDigits())
+    }
+
+    @Test
+    fun `toOnlyDigits removes dots`() {
+        val sut = "123.123"
+
+        assertEquals("123123", sut.toOnlyDigits())
+    }
 }

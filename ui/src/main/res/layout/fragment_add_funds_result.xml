@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.loadfunds.result.AddFundsResultViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/load_funds_result_status_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="@dimen/llsdk_xlarge_margin"
+            android:src="@drawable/ic_tick_rounded_on"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/load_funds_result_main_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:gravity="center_horizontal"
+            android:text="@{viewModel.resultElement.title}"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/load_funds_result_status_icon"
+            tools:localize="load_funds_transaction_successfull_description" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load_funds_result_status_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_time_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/load_funds_result_status_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="@string/load_funds_transaction_status_title" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/load_funds_result_status_value"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:text="@{viewModel.resultElement.status}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Completed" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load_funds_result_time_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_from_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/load_funds_result_time_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="@string/load_funds_transaction_time" />
+
+            <TextView
+                android:id="@+id/load_funds_result_time_value"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:text="@{viewModel.resultElement.time}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="July 23, 2020 11:12 am" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load_funds_result_from_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_auth_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_goneMarginBottom="@dimen/llsdk_medium_margin">
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/load_funds_result_from_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="@string/load_funds_transaction_from" />
+
+            <com.aptopayments.sdk.ui.views.PaymentSourceSimpleView
+                android:id="@+id/load_funds_result_from_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                app:element="@{viewModel.resultElement.source}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load_funds_result_auth_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginBottom="@dimen/llsdk_medium_margin"
+            app:goneIf="@{viewModel.resultElement.authorizationId.empty}"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_legend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/load_funds_result_auth_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="@string/load_funds_transaction_authorization" />
+
+            <TextView
+                android:id="@+id/load_funds_result_auth_value"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:text="@{viewModel.resultElement.authorizationId}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="123456789" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/load_funds_result_legend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            android:gravity="start"
+            android:text="@{viewModel.resultElement.transactionLegend}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_learn_more"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:localize="load_funds_transaction_bank_description" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/load_funds_result_learn_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            android:layout_marginBottom="@dimen/llsdk_big_medium_margin"
+            android:gravity="start"
+            android:onClick="@{()-> viewModel.onAgreementClicked()}"
+            android:textSize="12sp"
+            android:background="?android:selectableItemBackground"
+            app:layout_constraintBottom_toTopOf="@+id/load_funds_result_done"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/load_funds_result_done"
+            app:localize="load_funds_transaction_learn_more" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/load_funds_result_done"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_marginBottom="@dimen/llsdk_big_medium_margin"
+            android:onClick="@{() -> viewModel.onDoneClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="load_funds_transaction_primary_cta" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

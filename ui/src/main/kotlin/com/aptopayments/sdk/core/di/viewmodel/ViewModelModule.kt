@@ -2,10 +2,10 @@ package com.aptopayments.sdk.core.di.viewmodel
 
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.cardproduct.CardProduct
+import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
-import com.aptopayments.sdk.features.managecard.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneViewModel
@@ -32,7 +32,13 @@ import com.aptopayments.sdk.features.inputdata.name.CollectUserNameViewModel
 import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneViewModel
 import com.aptopayments.sdk.features.issuecard.IssueCardViewModel
 import com.aptopayments.sdk.features.kyc.KycStatusViewModel
+import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel
+import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardPaymentSourceViewModel
+import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel
+import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel
+import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultViewModel
 import com.aptopayments.sdk.features.maintenance.MaintenanceViewModel
+import com.aptopayments.sdk.features.managecard.FetchTransactionsTaskQueue
 import com.aptopayments.sdk.features.managecard.ManageCardViewModel
 import com.aptopayments.sdk.features.nonetwork.NoNetworkViewModel
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
@@ -88,4 +94,9 @@ val viewModelModule = module {
     viewModel { (initialValue: AddressDataPoint?) -> CollectUserAddressViewModel(initialValue, get(), get(), get()) }
     viewModel { CollectUserBirthdateViewModel(get()) }
     viewModel { CollectUserPhoneViewModel(get()) }
+    viewModel { (cardId: String) -> AddCardPaymentSourceViewModel(cardId, get(), get()) }
+    viewModel { PaymentSourcesListViewModel(get(), get()) }
+    viewModel { (cardId: String) -> AddFundsViewModel(cardId, get(), get(), get()) }
+    viewModel { (cardId: String, payment: Payment) -> AddFundsResultViewModel(cardId, payment, get(), get()) }
+    viewModel { (cardId: String) -> AddCardOnboardingViewModel(cardId, get(), get()) }
 }

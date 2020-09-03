@@ -13,6 +13,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserNameBinding
+import com.aptopayments.sdk.utils.NameInputFilter
 import com.aptopayments.sdk.utils.shake
 import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,6 +52,12 @@ internal class CollectUserNameSurnameFragment : BaseBindingFragment<FragmentColl
         setupToolBar(binding.tbLlsdkToolbarLayout.findViewById(R.id.tb_llsdk_toolbar))
         setScrollOnFocus()
         setHints()
+        setEditTextFilters()
+    }
+
+    private fun setEditTextFilters() {
+        binding.etFirstName.filters = arrayOf(NameInputFilter { binding.firstNameIn.shake() })
+        binding.etLastName.filters = arrayOf(NameInputFilter { binding.lastNameIn.shake() })
     }
 
     private fun setScrollOnFocus() {

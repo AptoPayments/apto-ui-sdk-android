@@ -15,24 +15,38 @@ private const val POSTAL_CODE = "postal_code"
 
 internal class AddressDataPointGenerator() {
 
-    fun generate(components: AddressComponents, optional: String): AddressDataPoint? {
-        val list = components.asList()
-        val streetOne = getStreetOne(getStreetNumber(list), getStreet(list))
-        val city = getCity(list)
-        val state = getState(list)
-        val country = getCountry(list)
-        val postalCode = getPostalCode(list)
-        return if (!isAnyRequiredFieldIncomplete(streetOne, city, state, country)) {
-            AddressDataPoint(streetOne, optional, city, state, postalCode, country)
+    fun generate(components: AddressComponents): AddressDataPoint? {
+        val address = Address(components.asList())
+        return if (address.hasAllFieldsSet()) {
+            AddressDataPoint(
+                streetOne = "${address.streetNumber} ${address.street}",
+                locality = address.city,
+                region = address.state,
+                postalCode = address.postalCode,
+                country = address.country
+            )
         } else {
             null
         }
     }
+}
 
-    private fun isAnyRequiredFieldIncomplete(streetOne: String, city: String, state: String, country: String) =
-        streetOne.isEmpty() || city.isEmpty() || state.isEmpty() || country.isEmpty()
+private class Address(components: List<AddressComponent>) {
+    var streetNumber: String = ""
+    var street: String = ""
+    var city: String = ""
+    var state: String = ""
+    var country: String = ""
+    var postalCode: String = ""
 
-    private fun getStreetOne(number: String, street: String) = "$number${if (number.isEmpty()) "" else " "}$street"
+    init {
+        streetNumber = getStreetNumber(components)
+        street = getStreet(components)
+        city = getCity(components)
+        state = getState(components)
+        country = getCountry(components)
+        postalCode = getPostalCode(components)
+    }
 
     private fun getStreetNumber(components: List<AddressComponent>) = getShortNameFor(components, NUMBER)
 
@@ -50,4 +64,12 @@ internal class AddressDataPointGenerator() {
 
     private fun getShortNameFor(components: List<AddressComponent>, type: String) =
         components.firstOrNull { it.types.first() == type }?.shortName ?: ""
+
+    fun hasAllFieldsSet() =
+        streetNumber.isNotEmpty() &&
+                street.isNotEmpty() &&
+                city.isNotEmpty() &&
+                state.isNotEmpty() &&
+                country.isNotEmpty() &&
+                postalCode.isNotEmpty()
 }

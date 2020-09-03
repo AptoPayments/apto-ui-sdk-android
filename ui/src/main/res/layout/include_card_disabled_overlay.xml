@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_disabled_overlay"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -16,4 +16,4 @@
         android:paddingTop="40dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_lock" />
-</LinearLayout>
+</FrameLayout>

@@ -1,8 +1,5 @@
 package com.aptopayments.sdk.features.managecard
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -10,7 +7,6 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
@@ -68,7 +64,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     private fun configureMenuVisibility() {
         tb_llsdk_toolbar?.apply {
             (menu.findItem(R.id.menu_activate_physical_card))?.isVisible =
-                (viewModel.orderedStatus.value == Card.OrderedStatus.ORDERED)
+                (viewModel.showPhysicalCardActivationMessage.value ?: false)
             (menu.findItem(R.id.menu_card_stats))?.isVisible = AptoUiSdk.cardOptions.showStatsButton()
             (menu.findItem(R.id.menu_account_settings))?.isVisible = AptoUiSdk.cardOptions.showAccountSettingsButton()
         }
@@ -83,7 +79,7 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
 
     override fun setupViewModel() {
         viewModel.apply {
-            observe(orderedStatus) { configureMenuVisibility() }
+            observe(showPhysicalCardActivationMessage) { configureMenuVisibility() }
             observeThree(
                 transactions,
                 transactionsInfoRetrieved,
@@ -92,8 +88,8 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
                 handleEmptyCase(transactions, transactionInfoRetrieved, showAddToGooglePay!!)
             }
             observeNullable(fundingSource, ::handleBalance)
-            observeNullable(cardStyle) {
-                it?.balanceSelectorAsset?.let { url ->
+            observeNullable(cardInfo) {
+                it?.cardStyle?.balanceSelectorAsset?.let { url ->
                     bv_balance_view.setSelectBalanceIcon(url)
                 }
             }
@@ -141,34 +137,13 @@ internal class ManageCardFragmentThemeTwo : BaseFragment(), ManageCardContract.V
     override fun onCardTapped() {
         if (viewModel.fundingSource.value?.state != Balance.BalanceState.VALID) {
             delegate?.onFundingSourceTapped(viewModel.fundingSource.value?.id)
-            return
+        } else {
+            showCardSettings()
         }
-        showCardSettings()
     }
 
     override fun onCardSettingsTapped() {
         showCardSettings()
-    }
-
-    override fun onPanTapped() {
-        if (viewModel.cardInfo.value == null) {
-            showCardSettings()
-        } else {
-            copyPanToClipboard(viewModel.cardInfo.value!!.pan)
-        }
-    }
-
-    private fun copyPanToClipboard(pan: String) {
-        context?.let { context ->
-            val clipData = ClipData.newPlainText("Card Number", pan)
-            (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.let {
-                it.setPrimaryClip(clipData)
-                notify(
-                    message = "manage_card_card_view_copy_pan_text".localized(),
-                    type = MessageBanner.MessageType.SUCCESS
-                )
-            }
-        }
     }
 
     private fun showCardSettings() = viewModel.card.value?.let {

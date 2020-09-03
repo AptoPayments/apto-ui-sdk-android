@@ -106,6 +106,13 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     protected open fun handleFailure(failure: Failure?) {
         when (failure) {
+            is Failure.FeatureFailure -> {
+                if (failure.errorMessage().isEmpty()) {
+                    notify("failure_server_error".localized())
+                } else {
+                    notify(failure.getErrorTitleKey().localized(), failure.errorMessage().localized())
+                }
+            }
             is Failure.ServerError -> {
                 notify("failure_server_error".localized())
                 trackServerError(failure)

@@ -41,6 +41,7 @@ internal class IssueCardFragmentThemeTwo : BaseFragment(), IssueCardContract.Vie
         binding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        hideKeyboard()
         return binding.root
     }
 

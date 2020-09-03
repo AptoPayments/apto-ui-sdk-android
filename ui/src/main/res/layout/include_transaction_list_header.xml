@@ -27,8 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
-        <com.aptopayments.sdk.ui.views.CardView
-            android:id="@+id/cv_card_view"
+
+        <com.aptopayments.sdk.ui.views.PCICardView
+            android:id="@+id/pci_card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_10sdp"

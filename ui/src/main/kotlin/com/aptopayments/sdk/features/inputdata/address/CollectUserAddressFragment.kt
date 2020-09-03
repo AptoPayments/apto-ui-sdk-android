@@ -16,6 +16,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserAddressBinding
+import com.aptopayments.sdk.utils.shake
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.appbar.AppBarLayout
@@ -103,6 +104,7 @@ internal class CollectUserAddressFragment : BaseBindingFragment<FragmentCollectU
 
     override fun setupViewModel() {
         observeNotNullable(viewModel.continueClicked) { delegate?.onAddressSelected(it) }
+        observeNotNullable(viewModel.failure) { handleFailure(it) }
     }
 
     override fun onBackPressed() {
@@ -124,6 +126,13 @@ internal class CollectUserAddressFragment : BaseBindingFragment<FragmentCollectU
                 val item = autocompleteAdapter.getItem(i)
                 viewModel.onAddressClicked(item.placeId)
             }
+        }
+    }
+
+    override fun handleFailure(failure: Failure?) {
+        when (failure) {
+            is CollectUserAddressViewModel.IncorrectAddressFailure -> binding.collectAddressSearchContainer.shake()
+            else -> super.handleFailure(failure)
         }
     }
 

@@ -7,6 +7,7 @@ import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.geo.Country
+import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.voip.Action
@@ -41,6 +42,11 @@ import com.aptopayments.sdk.features.inputdata.name.CollectUserNameSurnameContra
 import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneContract
 import com.aptopayments.sdk.features.issuecard.IssueCardContract
 import com.aptopayments.sdk.features.kyc.KycStatusContract
+import com.aptopayments.sdk.features.loadfunds.add.AddFundsContract
+import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardPaymentSourceContract
+import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingContract
+import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListContract
+import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultFragment
 import com.aptopayments.sdk.features.maintenance.MaintenanceContract
 import com.aptopayments.sdk.features.managecard.ManageCardContract
 import com.aptopayments.sdk.features.nonetwork.NoNetworkContract
@@ -131,4 +137,10 @@ internal interface FragmentFactory {
         config: AllowedCountriesConfiguration,
         tag: String
     ): CollectUserPhoneContract.View
+
+    fun addCardDetailsFragment(cardId: String, tag: String): AddCardPaymentSourceContract.View
+    fun addCardOnboardingFragment(cardId: String, tag: String): AddCardOnboardingContract.View
+    fun paymentSourcesList(tag: String): PaymentSourcesListContract.View
+    fun addFundsFragment(cardId: String, tag: String): AddFundsContract.View
+    fun addFundsResultFragment(cardId: String, payment: Payment, tag: String): AddFundsResultFragment
 }

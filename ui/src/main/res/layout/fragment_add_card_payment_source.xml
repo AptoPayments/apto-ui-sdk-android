@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardPaymentSourceViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addcard_number_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
+            tools:hint="@string/load_funds_add_card_card_number_placeholder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addcard_number_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789 "
+                android:drawableStart="@{androidx.core.content.ContextCompat.getDrawable(context, viewModel.creditCardNetwork.icon)}"
+                android:drawableEnd="@drawable/ic_lock"
+                android:drawablePadding="16dp"
+                android:inputType="numberDecimal"
+                android:maxLength="@{viewModel.creditCardNetwork.maxLength}"
+                android:text="@={viewModel.creditCardNumber}"
+                tools:drawableStart="@drawable/ic_card_visa" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addcard_expiration_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@id/addcard_cvv_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addcard_number_container"
+            tools:hint="@string/load_funds_add_card_date_placeholder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addcard_expiration_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789/"
+                android:drawablePadding="16dp"
+                android:inputType="numberDecimal"
+                android:maxLength="5"
+                android:text="@={viewModel.expiration}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addcard_cvv_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/addcard_expiration_container"
+            app:layout_constraintTop_toBottomOf="@+id/addcard_number_container"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addcard_cvv_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:drawablePadding="16dp"
+                android:inputType="numberDecimal"
+                android:maxLength="@{viewModel.creditCardNetwork.cvvDigits}"
+                android:text="@={viewModel.cvv}"
+                tools:hint="@string/load_funds_add_card_cvv_placeholder"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addcard_zip_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addcard_expiration_container"
+            tools:hint="@string/load_funds_add_card_zip_placeholder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addcard_zip_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:inputType="numberDecimal"
+                android:maxLength="5"
+                android:text="@={viewModel.zipCode}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/addcard_continue_button"
+            style="@style/ThemeTwo.ContinueButton"
+            android:enabled="@{viewModel.continueButtonEnabled}"
+            android:onClick="@{() -> viewModel.onContinueClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="load_funds_add_card_primary_cta" />
+
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="addcard_expiration_container,addcard_cvv_container,addcard_zip_container,addcard_continue_button"
+            app:goneIf="@{!viewModel.showAllFields}"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

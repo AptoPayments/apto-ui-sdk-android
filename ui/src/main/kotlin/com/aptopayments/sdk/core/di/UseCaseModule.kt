@@ -6,9 +6,6 @@ import org.koin.dsl.module
 internal val useCaseModule = module {
     factory { ShouldAuthenticateOnStartUpUseCase(get(), get()) }
     factory { ShouldAuthenticateWithPINOnPCIUseCase(get()) }
-    factory { ClearCardDetailsUseCase(get()) }
-    factory { FetchRemoteCardDetailsUseCase(get(), get()) }
-    factory { FetchLocalCardDetailsUseCase(get()) }
     factory { SavePasscodeUseCase(get()) }
     factory { ShouldCreatePasscodeUseCase(get()) }
     factory { OnEnterBackgroundUseCase(get(), get()) }

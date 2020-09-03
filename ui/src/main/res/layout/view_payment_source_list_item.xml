@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="element"
+            type="com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListItem" />
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_64sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
+        android:onClick="@{() -> viewModel.selectPaymentSource(element.elem.id)}">
+
+        <com.aptopayments.sdk.ui.views.PaymentSourceFullView
+            android:id="@+id/payment_source_element"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            app:element="@{element.elem}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/payment_method_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            android:src="@drawable/ic_tick_rounded_on"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{element.preferred}"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/payment_method_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            android:src="@drawable/ic_tick_rounded_off"
+            app:goneIf="@{element.preferred}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            layout="@layout/include_divider_line"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/divider_line_height"
+            android:layout_marginStart="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

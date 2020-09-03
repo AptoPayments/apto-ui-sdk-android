@@ -1,7 +1,9 @@
 package com.aptopayments.sdk.core.data
 
 import com.aptopayments.mobile.data.card.*
-import com.aptopayments.mobile.data.config.*
+import com.aptopayments.mobile.data.config.Branding
+import com.aptopayments.mobile.data.config.ContextConfiguration
+import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
 import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus
@@ -128,5 +130,24 @@ class TestDataProvider {
         }
 
         fun provideCardId() = "CARD_ID"
+
+        fun provideVisaValidNumbers() = listOf("4242424242424242", "4000056655665556")
+
+        fun provideVisaInValidNumbers() = listOf("4242424242424241")
+
+        fun provideVisaInValidPatternNumbers() = listOf("5555555555554444")
+
+        fun provideMasterValidNumbers() =
+            listOf("5555555555554444", "2223003122003222", "5200828282828210", "5105105105105100")
+
+        fun provideMasterInValidPatternNumbers() = listOf("5655555555554444", "4242424242424242", "6011111111111117")
+
+        fun provideAmexValidNumbers() = listOf("378282246310005", "371449635398431", "340000000000009")
+
+        fun provideAmexInValidPatternNumbers() = listOf("318282246310005", "2223003122003222")
+
+        fun provideDiscoverValidNumbers() = listOf("6011111111111117", "6011000990139424", "6445644564456445")
+
+        fun provideDiscoverInValidPatternNumbers() = listOf("6021111111111111", "378282246310005")
     }
 }

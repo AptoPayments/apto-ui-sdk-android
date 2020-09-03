@@ -28,18 +28,21 @@
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
     </style>
+
     <style name="ThemeTwo.FormField" parent="ThemeTwo">
         <item name="android:textColor">@color/llsdk_primary_text_color</item>
         <item name="android:textSize">@dimen/llsdk_form_field_theme_2</item>
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
     </style>
+
     <style name="ThemeTwo.Instructions" parent="ThemeTwo">
         <item name="android:textColor">@color/llsdk_secondary_text_color</item>
         <item name="android:textSize">@dimen/llsdk_instructions</item>
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
     </style>
+
     <style name="ThemeTwo.TextLink" parent="ThemeTwo">
         <item name="android:textColor">@color/llsdk_primary_text_color</item>
         <item name="android:textSize">@dimen/llsdk_form_text_link_theme_2</item>
@@ -65,7 +68,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ThemeTwo" >
+    <style name="ThemeTwo">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/title_color</item>
@@ -105,7 +108,7 @@
     </style>
 
     <style name="TextInputEditText.Name" parent="TextInputEditText">
-        <item name="android:inputType">textCapWords|textNoSuggestions</item>
+        <item name="android:inputType">textPersonName|textCapWords|textNoSuggestions</item>
     </style>
 
     <style name="ThemeTwo.ContinueButton" parent="ThemeTwo">
@@ -138,7 +141,7 @@
     <style name="TransparentText" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/transparent</item>
     </style>
-    
+
     <style name="PinKeyboardButton">
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:gravity">center</item>
@@ -149,5 +152,9 @@
 
     <style name="PinKeyboardButton.Small">
         <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="AddFundsResultRow">
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

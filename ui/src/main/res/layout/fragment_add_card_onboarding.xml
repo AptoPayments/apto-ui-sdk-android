@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/add_card_onboarding_title"
+            style="@style/ThemeTwo.TextHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_llsdk_toolbar_layout"
+            app:localize="load_funds_add_card_onboarding_title" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/add_card_onboarding_description_first"
+            style="@style/ThemeTwo.TextHeader"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:lineSpacingExtra="3sp"
+            android:text="@{viewModel.firstDescription}"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_card_onboarding_title"
+            tools:localize="load_funds_add_card_onboarding_explanation" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/add_card_onboarding_description_second"
+            style="@style/ThemeTwo.TextHeader"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:lineSpacingExtra="3sp"
+            android:text="@{viewModel.secondDescription}"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_card_onboarding_description_first"
+            tools:localize="load_funds_add_card_onboarding_explanation_2" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/add_card_ftu_continue"
+            style="@style/ThemeTwo.ContinueButton"
+            android:onClick="@{() -> viewModel.onContinueClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="load_funds_add_card_onboarding_primary_cta" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,18 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.aptopayments.mobile.data.card.CardDetails
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
-import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.iconResource
-import com.aptopayments.sdk.core.extension.invisibleIf
-import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.extension.observeNullable
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.ui.views.CardView
+import com.aptopayments.sdk.ui.views.PCICardView
+import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.utils.extensions.toCapitalized
 import kotlinx.android.synthetic.main.include_transaction_list_header.view.*
 import kotlinx.android.synthetic.main.view_transaction_row.view.*
@@ -27,12 +23,11 @@ import kotlinx.android.synthetic.main.view_transaction_section_title.view.*
 internal open class TransactionListAdapter(
     private val lifecycleOwner: LifecycleOwner,
     private val viewModel: ManageCardViewModel
-) : RecyclerView.Adapter<TransactionListAdapter.BaseViewHolder>(), CardView.Delegate {
+) : RecyclerView.Adapter<TransactionListAdapter.BaseViewHolder>() {
 
     interface Delegate {
         fun onCardTapped()
         fun onCardSettingsTapped()
-        fun onPanTapped()
         fun onTransactionTapped(transaction: Transaction)
     }
 
@@ -57,7 +52,7 @@ internal open class TransactionListAdapter(
         return when (viewType) {
             TransactionListItem.HEADER_VIEW_TYPE -> {
                 val view = inflater.inflate(R.layout.include_transaction_list_header, parent, false)
-                ViewHolderHeader(view, this, delegate, lifecycleOwner)
+                ViewHolderHeader(view, delegate, lifecycleOwner)
             }
             TransactionListItem.SECTION_HEADER_VIEW_TYPE -> {
                 val view = inflater.inflate(R.layout.view_transaction_section_title, parent, false)
@@ -84,21 +79,12 @@ internal open class TransactionListAdapter(
         }
     }
 
-    override fun cardViewTapped() {
-        delegate?.onCardTapped()
-    }
-
-    override fun panNumberTappedInCardView() {
-        delegate?.onPanTapped()
-    }
-
     abstract inner class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         abstract fun bind(item: TransactionListItem, position: Int)
     }
 
     inner class ViewHolderHeader(
         view: View,
-        cardDelegate: CardView.Delegate,
         transactionDelegate: Delegate?,
         lifecycleOwner: LifecycleOwner
     ) : BaseViewHolder(view) {
@@ -106,33 +92,22 @@ internal open class TransactionListAdapter(
         init {
             view.view_card_top_background?.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
             view.view_card_bottom_background?.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
-            view.cv_card_view?.let { cardView ->
+            view.pci_card_view?.let { cardView ->
+                cardView.setConfiguration(viewModel.cardConfiguration)
                 with(lifecycleOwner) {
-                    observeNullable(viewModel.cardHolder) { cardView.setCardholderName(it) }
-                    observeNullable(viewModel.lastFour) { cardView.setLastFour(it) }
-                    observeNullable(viewModel.cardInfo) { handleCardDetails(cardView, it) }
-                    observeNullable(viewModel.cardNetwork) { cardView.setCardNetwork(it) }
-                    observeNullable(viewModel.cardStyle) { cardView.setCardStyle(it) }
                     observeNullable(viewModel.fundingSource) { cardView.setValidFundingSource(it?.state == Balance.BalanceState.VALID) }
-                    observeNullable(viewModel.state) { cardView.setCardState(it) }
+                    observeNullable(viewModel.cardInfo) { cardView.setCardInfo(it) }
+                    observeNotNullable(viewModel.showCardDetails) { cardView.showCardDetails(it) }
                 }
-                cardView.delegate = cardDelegate
+                cardView.delegate = object : PCICardView.Delegate {
+                    override fun cardViewTapped() {
+                        delegate?.onCardTapped()
+                    }
+                }
             }
             view.card_settings_button?.let { cardSettingsButton ->
                 cardSettingsButton.backgroundTintList = ColorStateList.valueOf(UIConfig.uiPrimaryColor)
                 cardSettingsButton.setOnClickListener { transactionDelegate?.onCardSettingsTapped() }
-            }
-        }
-
-        private fun handleCardDetails(cardView: CardView, details: CardDetails?) {
-            if (details != null) {
-                cardView.setPan(details.pan)
-                cardView.setCvv(details.cvv)
-                cardView.setExpiryDate(details.expirationMonth, details.expirationYear)
-            } else {
-                cardView.setPan(null)
-                cardView.setCvv(null)
-                cardView.setExpiryDate(null, null)
             }
         }
 
@@ -179,6 +154,7 @@ internal open class TransactionListAdapter(
             transaction.nativeBalance?.let {
                 view.tv_transaction_native_amount.text = transaction.getNativeBalanceRepresentation()
             }
+            view.tv_transaction_native_amount.goneIf(transaction.localAmount == transaction.nativeBalance)
             view.ll_separator.invisibleIf(isLastPositionOfSection(position))
             view.ll_transaction_row.setOnClickListener { listener.invoke(transaction) }
         }

@@ -9,7 +9,6 @@ import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -25,7 +24,6 @@ import kotlin.test.assertTrue
 
 private const val PLACE_ID = "PLACE1234"
 private const val PLACE_ID_2 = "PLACE5678"
-private const val OPTIONAL = "OPTIONAL VALUE"
 private const val STREET_ONE = "ONE"
 private const val STREET_TWO = "TWO"
 private const val LOCALITY = "Bcn"
@@ -57,8 +55,8 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
     @Mock
     lateinit var addressComponents: AddressComponents
 
-    @Mock
-    lateinit var datapoint: AddressDataPoint
+    private val fullDatapoint = AddressDataPoint(STREET_ONE, STREET_TWO, LOCALITY, REGION, POSTAL_CODE, COUNTRY)
+    private val singleDatapoint = AddressDataPoint(STREET_ONE, "", LOCALITY, REGION, POSTAL_CODE, COUNTRY)
 
     lateinit var sut: CollectUserAddressViewModel
 
@@ -147,7 +145,7 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
         sut.continueEnabled.getOrAwaitValue()
         sut.continueClicked()
 
-        assertEquals(sut.continueClicked.getOrAwaitValue(), datapoint)
+        assertEquals(singleDatapoint, sut.continueClicked.getOrAwaitValue())
     }
 
     @Test
@@ -175,26 +173,28 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
         }
 
     @Test
-    fun `when address set and continue clicked then generator called correctly`() = runBlockingTest {
+    fun `when address set and continue clicked then returned address is correct`() = runBlockingTest {
         val sut = CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
         configureCorrectCase()
 
         sut.onAddressClicked(PLACE_ID)
-        sut.continueClicked()
 
-        verify(addressGenerator).generate(place.addressComponents!!, "")
+        verify(addressGenerator).generate(place.addressComponents!!)
     }
 
     @Test
-    fun `when address and optional set and continue clicked then generator called correctly`() = runBlockingTest {
+    fun `when address and optional set and continue clicked then returned address is correct`() = runBlockingTest {
         val sut = CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
         configureCorrectCase()
 
         sut.onAddressClicked(PLACE_ID)
-        sut.optionalText.value = OPTIONAL
+        sut.optionalText.value = STREET_TWO
+        sut.continueEnabled.getOrAwaitValue()
         sut.continueClicked()
 
-        verify(addressGenerator).generate(place.addressComponents!!, OPTIONAL)
+        val returnedValue = sut.continueClicked.getOrAwaitValue()
+
+        assertEquals(fullDatapoint, returnedValue)
     }
 
     @Test
@@ -213,6 +213,7 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
             val initialValue = AddressDataPoint(STREET_ONE, STREET_TWO, LOCALITY, REGION, POSTAL_CODE, COUNTRY)
             val sut = CollectUserAddressViewModel(initialValue, analyticsManager, addressGenerator, placeFetcher)
 
+            sut.continueEnabled.getOrAwaitValue()
             sut.continueClicked()
 
             assertEquals(initialValue, sut.continueClicked.getOrAwaitValue())
@@ -221,6 +222,6 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
     private suspend fun configureCorrectCase() {
         whenever(placeFetcher.fetchPlace(PLACE_ID)).thenReturn(place)
         whenever(place.addressComponents).thenReturn(addressComponents)
-        whenever(addressGenerator.generate(eq(addressComponents), any())).thenReturn(datapoint)
+        whenever(addressGenerator.generate(eq(addressComponents))).thenReturn(singleDatapoint)
     }
 }

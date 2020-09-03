@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -19,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
-            android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginStart="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_14sdp"
             android:paddingBottom="@dimen/_14sdp"
@@ -29,7 +29,14 @@
                 android:id="@+id/settings_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:orientation="vertical">
+
+                <include
+                    android:id="@+id/rl_add_funds"
+                    layout="@layout/view_section_option_subtitle_two"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
                 <include layout="@layout/view_section_header_two"
                     android:id="@+id/rl_settings" />
@@ -43,7 +50,7 @@
                 <include layout="@layout/view_section_option_subtitle_two"
                     android:id="@+id/rl_set_pin" />
 
-                <include layout="@layout/view_section_switch_two"
+                <include layout="@layout/view_section_option_subtitle_two"
                     android:id="@+id/rl_card_info" />
 
                 <include layout="@layout/view_section_switch_two"

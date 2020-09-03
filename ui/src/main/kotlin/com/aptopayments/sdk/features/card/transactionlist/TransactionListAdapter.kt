@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.R
+import com.aptopayments.sdk.core.extension.goneIf
 import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.show
@@ -77,6 +77,7 @@ internal class TransactionListAdapter(
             viewHolder.transactionDateView?.text = transaction.createdAt.formatForTransactionList()
             transaction.localAmount?.let { viewHolder.transactionAmountView?.setText(transaction.getLocalAmountRepresentation()) }
             transaction.nativeBalance?.let { viewHolder.transactionNativeAmountView?.setText(transaction.getNativeBalanceRepresentation()) }
+            viewHolder.transactionNativeAmountView?.goneIf(transaction.localAmount == transaction.nativeBalance)
             if (isLastPositionOfSection(position)) viewHolder.transactionRowSeparator?.hide()
             else viewHolder.transactionRowSeparator?.show()
             viewHolder.transactionRow?.setOnClickListener { delegate?.onTransactionTapped(transaction) }
@@ -101,7 +102,7 @@ internal class TransactionListAdapter(
         var transactionAmountView: TextView? = null
         var transactionNativeAmountView: TextView? = null
         var transactionRowSeparator: View? = null
-        var transactionRow: LinearLayout? = null
+        var transactionRow: ViewGroup? = null
 
         init {
             when (viewType) {

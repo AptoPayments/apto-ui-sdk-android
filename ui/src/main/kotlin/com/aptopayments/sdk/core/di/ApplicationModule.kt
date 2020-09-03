@@ -14,6 +14,9 @@ import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
 import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
 import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
+import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
+import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
+import com.aptopayments.sdk.features.loadfunds.result.PaymentResultElementMapper
 import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
@@ -43,7 +46,8 @@ internal val applicationModule = module {
     single { provideSharedPreferences(androidApplication()) }
     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
     factory { DateProvider() }
-    single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get(), get()) }
+    factory<Timer> { RealTimer() }
+    single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get()) }
     factory<RemoteCardDetailsRepository> { RemoteCardDetailsRepositoryImpl() }
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }
@@ -55,6 +59,9 @@ internal val applicationModule = module {
     factory { PlaceFetcher(get(), get()) }
     factory { AddressDataPointGenerator() }
     factory<IssueCardAdditionalFieldsRepository> { IssueCardAdditionalFieldsRepositoryImpl }
+    single { PaymentSourcesRepository(get(), get()) }
+    factory { PaymentSourceElementMapper() }
+    factory { PaymentResultElementMapper(get()) }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

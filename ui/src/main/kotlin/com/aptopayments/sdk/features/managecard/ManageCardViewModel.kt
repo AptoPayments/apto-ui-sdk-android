@@ -2,26 +2,23 @@ package com.aptopayments.sdk.features.managecard
 
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
-import com.aptopayments.mobile.data.card.CardDetails
-import com.aptopayments.mobile.data.card.CardStyle
-import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.features.managecard.CardOptions
-import com.aptopayments.mobile.functional.getOrElse
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.usecase.FetchLocalCardDetailsUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
+import com.aptopayments.sdk.repository.LocalCardDetailsRepository
+import com.aptopayments.sdk.ui.views.PCIConfiguration
+import com.aptopayments.sdk.utils.LiveEvent
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -39,26 +36,19 @@ internal class ManageCardViewModel constructor(
     private val aptoUiSdkProtocol: AptoUiSdkProtocol
 ) : BaseViewModel(), KoinComponent {
 
-    private val fetchLocalCardDetailsUseCase: FetchLocalCardDetailsUseCase by inject()
+    private val repo: LocalCardDetailsRepository by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(cardId) }
 
-    var card: MutableLiveData<Card> = MutableLiveData()
-    var cardLoaded: MutableLiveData<Boolean> = MutableLiveData()
-    var state: MutableLiveData<Card.CardState?> = MutableLiveData()
-    var orderedStatus: MutableLiveData<Card.OrderedStatus> = MutableLiveData()
-    var cardStyle: MutableLiveData<CardStyle?> = MutableLiveData()
-    var cardHolder: MutableLiveData<String?> = MutableLiveData()
-    var lastFour: MutableLiveData<String?> = MutableLiveData()
-    var cardNetwork: MutableLiveData<Card.CardNetwork?> = MutableLiveData()
-    var spendableToday: MutableLiveData<Money?> = MutableLiveData()
-    var nativeSpendableToday: MutableLiveData<Money?> = MutableLiveData()
-    var showPhysicalCardActivationMessage: MutableLiveData<Boolean> = MutableLiveData()
-    val cardInfo: LiveData<CardDetails?> = getCardDetailsLiveData()
-    var transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
-    var fundingSource: MutableLiveData<Balance?> = MutableLiveData()
-    var transactionListItems: MutableLiveData<List<TransactionListItem>> = MutableLiveData(listOf())
-    var cardProduct: MutableLiveData<CardProduct> = MutableLiveData()
-    var transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData()
+    val card: MutableLiveData<Card> = MutableLiveData()
+    val cardInfo = MutableLiveData<CardInfo>()
+    val cardConfiguration: PCIConfiguration by lazy { PCIConfigurationBuilder().build(cardId) }
+    val showPhysicalCardActivationMessage = MutableLiveData(false)
+    val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
+    val transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
+    val fundingSource = MutableLiveData<Balance?>()
+    val transactionListItems = MutableLiveData<List<TransactionListItem>>(emptyList())
+    val cardProduct: MutableLiveData<CardProduct> = MutableLiveData()
+    val transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData()
     val showAddToGooglePay = Transformations.map(iapHelper.showAddCardButton) { showAddCardButton ->
         aptoUiSdkProtocol.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites() && showAddCardButton
     }
@@ -66,7 +56,6 @@ internal class ManageCardViewModel constructor(
     val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
 
     private var lastTransactionId: String? = null
-    private var cardInfoRetrieved = false
     var balanceLoaded = false
     private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
 
@@ -97,9 +86,6 @@ internal class ManageCardViewModel constructor(
         }
     }
 
-    private fun getCardDetailsLiveData() =
-        fetchLocalCardDetailsUseCase().getOrElse { MutableLiveData<CardDetails?>(null) }
-
     private fun fetchData(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
         getCard(cardId = cardId, refresh = forceApiCall) { card ->
             card.cardProductID?.let {
@@ -120,7 +106,7 @@ internal class ManageCardViewModel constructor(
     }
 
     private fun backgroundRefresh(cardId: String) {
-        getCard(cardId = cardId, refresh = true) { cardInfoRetrieved = true }
+        getCard(cardId = cardId, refresh = true) { }
         getCardBalance(cardId, refresh = true) {}
         getBackgroundTransactions(cardId = cardId) { transactionsInfoRetrieved.postValue(true) }
     }
@@ -156,19 +142,18 @@ internal class ManageCardViewModel constructor(
 
     private fun updateViewModelWithCard(card: Card) {
         this.card.postValue(card)
-        cardHolder.postValue(card.cardHolder)
-        lastFour.postValue(card.lastFourDigits)
-        cardNetwork.postValue(card.cardNetwork)
-        state.postValue(card.state)
-        orderedStatus.postValue(card.orderedStatus)
+        cardInfo.value = CardInfo(
+            cardId = card.accountID,
+            cardHolder = card.cardHolder,
+            lastFourDigits = card.lastFourDigits,
+            cardNetwork = card.cardNetwork,
+            state = card.state,
+            orderedStatus = card.orderedStatus,
+            cardStyle = card.cardStyle
+        )
 
-        showPhysicalCardActivationMessage
-            .postValue(card.orderedStatus == Card.OrderedStatus.ORDERED && card.orderedStatus != orderedStatus.value)
+        showPhysicalCardActivationMessage.postValue(card.orderedStatus == Card.OrderedStatus.ORDERED)
 
-        spendableToday.postValue(card.spendableAmount)
-        nativeSpendableToday.postValue(card.nativeSpendableAmount)
-        cardStyle.postValue(card.cardStyle)
-        if (cardLoaded.value == false) cardLoaded.postValue(true)
         if (transactionListItems.value.isNullOrEmpty()) {
             val list = ArrayList<TransactionListItem>()
             list.add(TransactionListItem.HeaderView)
