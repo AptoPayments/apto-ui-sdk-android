@@ -6,6 +6,7 @@ import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.oauth.OAuthConfig
@@ -24,7 +25,7 @@ internal class AddBalanceFlow(
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         allowedBalanceTypes.firstOrNull()?.let { allowedBalanceType ->
             initOAuthFlow(allowedBalanceType = allowedBalanceType) { initResult ->
-                initResult.either({ onInitComplete }) { flow ->
+                initResult.either({ onInitComplete(it.left()) }) { flow ->
                     setStartElement(element = flow)
                     onInitComplete(Either.Right(Unit))
                 }
@@ -67,7 +68,7 @@ internal class AddBalanceFlow(
             }
         )
         flow.init { initResult ->
-            initResult.either({ onComplete }) {
+            initResult.either({ onComplete(it.left()) }) {
                 onComplete(Either.Right(flow))
             }
         }

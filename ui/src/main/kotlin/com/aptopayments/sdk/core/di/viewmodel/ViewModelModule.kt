@@ -18,8 +18,8 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsViewModel
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartViewModel
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
-import com.aptopayments.sdk.features.card.setpin.ConfirmPinViewModel
-import com.aptopayments.sdk.features.card.setpin.SetPinViewModel
+import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinViewModel
+import com.aptopayments.sdk.features.card.setpin.SetCardPinViewModel
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
@@ -80,8 +80,8 @@ val viewModelModule = module {
     }
     viewModel { TransactionListViewModel(get()) }
     viewModel { WaitlistViewModel(get()) }
-    viewModel { SetPinViewModel(get()) }
-    viewModel { ConfirmPinViewModel(get()) }
+    viewModel { SetCardPinViewModel(get()) }
+    viewModel { ConfirmCardPinViewModel(get()) }
     viewModel { VoipViewModel(get(), get()) }
     viewModel { StatementListViewModel(get()) }
     viewModel { CreatePasscodeViewModel(get()) }

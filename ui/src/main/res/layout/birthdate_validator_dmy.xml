@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:weightSum="5"
-    tools:showIn="@layout/fragment_birthdate_verification_theme_two">
+    tools:showIn="@layout/fragment_birthdate_verification">
 
     <EditText
         android:id="@+id/et_birthday_day"

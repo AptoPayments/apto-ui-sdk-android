@@ -319,7 +319,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun getAlertDialog(builder: AlertDialog.Builder, alertTitle: String, alertMessage: String): AlertDialog {
-        val view = builder.create().layoutInflater.inflate(R.layout.alertview_theme_two, null)
+        val view = builder.create().layoutInflater.inflate(R.layout.custom_alertview, null)
         val dialogTitle = view.findViewById(R.id.alert_title) as TextView
         dialogTitle.apply {
             text = alertTitle

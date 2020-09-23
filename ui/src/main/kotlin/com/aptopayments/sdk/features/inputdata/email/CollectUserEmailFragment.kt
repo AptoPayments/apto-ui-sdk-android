@@ -31,7 +31,7 @@ internal class CollectUserEmailFragment : BaseBindingFragment<FragmentCollectUse
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
-        initialValue = arguments!![DATAPOINT_EMAIL] as EmailDataPoint?
+        initialValue = requireArguments()[DATAPOINT_EMAIL] as EmailDataPoint?
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

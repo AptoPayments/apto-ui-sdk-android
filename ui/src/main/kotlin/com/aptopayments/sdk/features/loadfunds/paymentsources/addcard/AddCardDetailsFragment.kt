@@ -49,7 +49,7 @@ internal class AddCardDetailsFragment : BaseBindingFragment<FragmentAddCardPayme
 
     override fun setUpArguments() {
         super.setUpArguments()
-        cardId = arguments!![CARD_ID_KEY] as String
+        cardId = requireArguments()[CARD_ID_KEY] as String
     }
 
     override fun setupViewModel() {

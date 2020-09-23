@@ -13,25 +13,23 @@ class AptoTextView @JvmOverloads constructor(context: Context, attrs: AttributeS
         set(value) = localizeAndSet(value)
 
     init {
-        attrs?.let {
+        attrs?.let { attributeSet ->
             val typedArray =
-                context.obtainStyledAttributes(it, R.styleable.AptoTextView, 0, 0)
+                context.obtainStyledAttributes(attributeSet, R.styleable.AptoTextView, 0, 0)
 
-            val localize = typedArray.getString(R.styleable.AptoTextView_localize)
-
-            if (!localize.isNullOrEmpty()) {
-                text = if (isInEditMode) {
-                    getEditModeStringResource(localize)
-                } else {
-                    localize.localized()
-                }
+            typedArray.getString(R.styleable.AptoTextView_localize)?.let {
+                localizeAndSet(it)
             }
             typedArray.recycle()
         }
     }
 
     private fun localizeAndSet(value: String) {
-        text = value.localized()
+        text = if (!isInEditMode) {
+            value.localized()
+        } else {
+            getEditModeStringResource(value)
+        }
     }
 
     private fun getEditModeStringResource(localize: String): String {

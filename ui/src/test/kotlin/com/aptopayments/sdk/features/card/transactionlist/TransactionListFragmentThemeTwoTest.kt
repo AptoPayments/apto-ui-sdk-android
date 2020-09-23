@@ -19,7 +19,7 @@ class TransactionListFragmentThemeTwoTest : AndroidTest() {
     private lateinit var viewModel: TransactionListViewModel
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
-    private lateinit var sut: TransactionListFragmentThemeTwo
+    private lateinit var sut: TransactionListFragment
 
     @Before
     override fun setUp() {
@@ -29,7 +29,7 @@ class TransactionListFragmentThemeTwoTest : AndroidTest() {
                 viewModel { viewModel }
             })
         }
-        sut = TransactionListFragmentThemeTwo.newInstance(cardId, config)
+        sut = TransactionListFragment.newInstance(cardId, config)
         sut.cardId = cardId
         sut.config = config
     }

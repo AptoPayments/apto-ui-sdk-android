@@ -33,7 +33,7 @@ internal class CollectUserNameSurnameFragment : BaseBindingFragment<FragmentColl
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
-        initialValue = arguments!![DATAPOINT_NAME] as NameDataPoint?
+        initialValue = requireArguments()[DATAPOINT_NAME] as NameDataPoint?
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

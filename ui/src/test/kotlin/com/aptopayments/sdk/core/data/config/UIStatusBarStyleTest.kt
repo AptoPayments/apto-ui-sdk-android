@@ -2,8 +2,8 @@ package com.aptopayments.sdk.core.data.config
 
 import com.aptopayments.mobile.data.config.UIStatusBarStyle
 import com.aptopayments.sdk.UnitTest
-import org.amshove.kluent.shouldBe
 import org.junit.Test
+import kotlin.test.assertSame
 
 class UIStatusBarStyleTest : UnitTest() {
 
@@ -16,7 +16,7 @@ class UIStatusBarStyleTest : UnitTest() {
         val uiStatusBarStyle = UIStatusBarStyle.parseStatusBarStyle(style)
 
         // Then
-        uiStatusBarStyle shouldBe UIStatusBarStyle.LIGHT
+        assertSame(UIStatusBarStyle.LIGHT, uiStatusBarStyle)
     }
 
     @Test
@@ -28,7 +28,7 @@ class UIStatusBarStyleTest : UnitTest() {
         val uiStatusBarStyle = UIStatusBarStyle.parseStatusBarStyle(style)
 
         // Then
-        uiStatusBarStyle shouldBe UIStatusBarStyle.DARK
+        assertSame(UIStatusBarStyle.DARK, uiStatusBarStyle)
     }
 
     @Test
@@ -40,7 +40,7 @@ class UIStatusBarStyleTest : UnitTest() {
         val uiStatusBarStyle = UIStatusBarStyle.parseStatusBarStyle(style)
 
         // Then
-        uiStatusBarStyle shouldBe UIStatusBarStyle.AUTO
+        assertSame(UIStatusBarStyle.AUTO, uiStatusBarStyle)
     }
 
     @Test
@@ -52,6 +52,6 @@ class UIStatusBarStyleTest : UnitTest() {
         val uiStatusBarStyle = UIStatusBarStyle.parseStatusBarStyle(style)
 
         // Then
-        uiStatusBarStyle shouldBe UIStatusBarStyle.AUTO
+        assertSame(UIStatusBarStyle.AUTO, uiStatusBarStyle)
     }
 }

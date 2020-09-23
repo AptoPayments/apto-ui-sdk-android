@@ -3,10 +3,10 @@ package com.aptopayments.sdk.core.di.fragment
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.platform.BaseFragment
-import com.aptopayments.sdk.features.card.setpin.ConfirmPinFragmentThemeTwo
-import com.aptopayments.sdk.features.card.setpin.SetPinFragmentThemeTwo
+import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinFragment
+import com.aptopayments.sdk.features.card.setpin.SetCardPinFragment
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
-import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragmentThemeTwo
+import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragment
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -34,7 +34,7 @@ class FragmentFactoryTest : AndroidTest() {
         val fragment = sut.transactionListFragment(cardId, config, tag)
 
         // Then
-        assert(fragment is TransactionListFragmentThemeTwo)
+        assert(fragment is TransactionListFragment)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
 
@@ -47,7 +47,7 @@ class FragmentFactoryTest : AndroidTest() {
         val fragment = sut.setPinFragment(tag)
 
         // Then
-        assert(fragment is SetPinFragmentThemeTwo)
+        assert(fragment is SetCardPinFragment)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
 
@@ -61,7 +61,7 @@ class FragmentFactoryTest : AndroidTest() {
         val fragment = sut.confirmPinFragment(pin, tag)
 
         // Then
-        assert(fragment is ConfirmPinFragmentThemeTwo)
+        assert(fragment is ConfirmCardPinFragment)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
 }

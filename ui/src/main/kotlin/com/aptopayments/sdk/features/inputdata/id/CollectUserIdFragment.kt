@@ -56,7 +56,7 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
 
         setTypeSpinnerChangeListener()
 
-        idTypeAdapter = ArrayAdapter(context!!, R.layout.dropdown_menu_popup_item, mutableListOf())
+        idTypeAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, mutableListOf())
         binding.collectIdTypeSpinner.adapter = idTypeAdapter
     }
 
@@ -106,8 +106,8 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
     override fun viewLoaded() = viewModel.viewLoaded()
 
     override fun setUpArguments() {
-        config = arguments!![CONFIGURATION_BUNDLE] as IdDataPointConfiguration
-        initialValue = arguments!![DATAPOINT_ID] as IdDocumentDataPoint?
+        config = requireArguments()[CONFIGURATION_BUNDLE] as IdDataPointConfiguration
+        initialValue = requireArguments()[DATAPOINT_ID] as IdDocumentDataPoint?
     }
 
     companion object {

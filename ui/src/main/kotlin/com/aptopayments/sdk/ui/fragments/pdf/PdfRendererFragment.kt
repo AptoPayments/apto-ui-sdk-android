@@ -32,8 +32,8 @@ internal class PdfRendererFragment : BaseFragment(),
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
     override fun setUpArguments() {
-        file = arguments!![FILE_KEY] as File
-        title = arguments!![TITLE_KEY] as String
+        file = requireArguments()[FILE_KEY] as File
+        title = requireArguments()[TITLE_KEY] as String
     }
 
     override fun setupViewModel() {

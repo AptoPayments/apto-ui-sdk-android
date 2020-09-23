@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.ViewPaymentSourceListItemBinding
 import com.aptopayments.sdk.databinding.ViewPaymentSourceListNewBinding
-import kotlinx.android.synthetic.main.view_section_option_subtitle_two.view.*
 
 internal class PaymentSourcesListAdapter(val viewModel: PaymentSourcesListViewModel) :
     RecyclerView.Adapter<PaymentSourcesListAdapter.BaseViewHolder>() {

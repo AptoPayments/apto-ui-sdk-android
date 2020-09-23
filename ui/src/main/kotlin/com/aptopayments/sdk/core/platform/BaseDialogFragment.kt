@@ -34,11 +34,11 @@ internal abstract class BaseDialogFragment : DialogFragment() {
     protected lateinit var dialogView: View
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = LayoutInflater.from(activity!!).inflate(layoutId(), null)
+        dialogView = LayoutInflater.from(requireActivity()).inflate(layoutId(), null)
         if (savedInstanceState != null) {
             TAG = savedInstanceState.getString(TAG_KEY)!!
         }
-        return AlertDialog.Builder(activity!!).setView(dialogView).create()
+        return AlertDialog.Builder(requireActivity()).setView(dialogView).create()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

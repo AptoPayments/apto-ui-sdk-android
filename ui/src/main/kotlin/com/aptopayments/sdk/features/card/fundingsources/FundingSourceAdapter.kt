@@ -13,7 +13,7 @@ import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.utils.StringUtils
+import java.util.Locale
 
 internal class FundingSourceAdapter(
     lifecycleOwner: LifecycleOwner,
@@ -68,7 +68,7 @@ internal class FundingSourceAdapter(
     private fun customizeFundingSourceView(viewHolder: ViewHolder, position: Int) {
         (fundingSourceListItems?.get(position) as? FundingSourceListItem.FundingSourceRow)?.let { listIem ->
             val balance = listIem.balance
-            viewHolder.source?.text = balance.custodianWallet?.custodian?.name?.let { StringUtils.capitalizeString(it) }
+            viewHolder.source?.text = balance.custodianWallet?.custodian?.name?.let { capitalizeString(it) }
             viewHolder.rate?.text = balance.custodianWallet?.balance?.toAbsString()
             viewHolder.amount?.text = balance.balance.toString()
             viewHolder.selector?.isChecked = listIem.selected
@@ -77,6 +77,11 @@ internal class FundingSourceAdapter(
                 notifyDataSetChanged()
             }
         }
+    }
+
+    fun capitalizeString(stringToCapitalize: String): String {
+        return stringToCapitalize.toUpperCase(Locale.getDefault())[0] +
+                stringToCapitalize.substring(1, stringToCapitalize.length)
     }
 
     private fun customizeAddFundingSourceView(viewHolder: ViewHolder, position: Int) {

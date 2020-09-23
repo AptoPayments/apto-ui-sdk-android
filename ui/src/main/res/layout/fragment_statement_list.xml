@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_llsdk_toolbar_layout"
-        tools:listitem="@layout/view_section_header_two" />
+        tools:listitem="@layout/view_section_header_element" />
 
     <com.aptopayments.sdk.ui.views.AptoTextView
         android:id="@+id/statements_list_empty_message"

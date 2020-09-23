@@ -1,18 +1,14 @@
 package com.aptopayments.sdk.core.usecase
 
-import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
-import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.AuthStateProvider
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeInstanceOf
-import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -38,7 +34,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
     }
 
     @Test
@@ -48,7 +44,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
 
         verify(authStateProvider).userTokenPresent()
     }
@@ -61,7 +57,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
         verify(authenticationRepo).isAuthenticationNeedSaved()
         verify(authenticationRepo).isAuthTimeInvalid()
         verifyNoMoreInteractions(authenticationRepo)
@@ -76,7 +72,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
         verify(authenticationRepo).isAuthTimeInvalid()
     }
 
@@ -89,7 +85,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, true)
+        result.shouldBeRightAndEqualTo(true)
     }
 
     private fun configureAuthTimeInvalid(authTimeInvalid: Boolean) {
@@ -106,7 +102,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
     }
 
     @Test
@@ -119,7 +115,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
     }
 
     @Test
@@ -132,13 +128,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, true)
-    }
-
-    private fun assertRightEitherIsEqualTo(result: Either<Failure, Any>, rightValue: Boolean) {
-        result shouldBeInstanceOf Either::class.java
-        result.isRight shouldEqual true
-        result.either({}, { it shouldBe rightValue })
+        result.shouldBeRightAndEqualTo(true)
     }
 
     private fun configurePasscodeSet(passcodeSet: Boolean) {

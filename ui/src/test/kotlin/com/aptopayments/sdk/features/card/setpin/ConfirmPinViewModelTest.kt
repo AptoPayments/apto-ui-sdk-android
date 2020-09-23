@@ -11,14 +11,14 @@ import kotlin.test.assertTrue
 
 class ConfirmPinViewModelTest : AndroidTest() {
 
-    private lateinit var sut: ConfirmPinViewModel
+    private lateinit var sut: ConfirmCardPinViewModel
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
     override fun setUp() {
         super.setUp()
-        sut = ConfirmPinViewModel(analyticsManager)
+        sut = ConfirmCardPinViewModel(analyticsManager)
     }
 
     @Test

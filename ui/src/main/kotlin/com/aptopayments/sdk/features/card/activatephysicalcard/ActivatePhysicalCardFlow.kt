@@ -10,7 +10,7 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.card.activatephysicalcard.activate.ActivatePhysicalCardContract
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessContract
-import com.aptopayments.sdk.features.card.setpin.SetPinFlow
+import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.MessageBanner
 
@@ -60,7 +60,7 @@ internal class ActivatePhysicalCardFlow(
     override fun onCloseFromActivatePhysicalCardSuccess() = onFinish(Unit)
 
     override fun onSetPinClicked() {
-        val flow = SetPinFlow(
+        val flow = SetCardPinFlow(
             cardId = card.accountID,
             onBack = { popFlow(animated = true) },
             onFinish = {

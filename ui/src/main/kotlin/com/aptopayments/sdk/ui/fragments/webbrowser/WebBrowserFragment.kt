@@ -43,7 +43,7 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     override fun setupViewModel() = Unit
 
     override fun setUpArguments() {
-        url = arguments!![URL_KEY] as String
+        url = requireArguments()[URL_KEY] as String
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {

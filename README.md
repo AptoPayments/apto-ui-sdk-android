@@ -20,15 +20,15 @@ private fun startSdk() {
 ## Requirements
 
     * Android Version - API Level 23 (Android 6.0)
-    * Kotlin - 1.3.72
-    * Gradle - 3.6.3
+    * Kotlin - 1.4.0
+    * Gradle - 4.0.1
 
 ### Installation (Using [Gradle](https://gradle.org))
 
 1. In your `build.gradle` file, add the following dependency:
 
     ```
-    implementation 'com.aptopayments.sdk:ui:2.7.0'
+    implementation 'com.aptopayments.sdk:ui:3.2.0'
     ```
 
 2. Run `./gradlew build`.
@@ -118,7 +118,7 @@ STANDALONE: if this case the SDK can only be closed via logout. Use this mode wh
 You should replace the `.otf` file names for the ones that you include in your `assets` folder
 
 ```kotlin
-val fontoptions = FontOptions(
+val fontOptions = FontOptions(
         regularFont = Typeface.createFromAsset(assets, "regular-font.otf"),
         mediumFont = Typeface.createFromAsset(assets, "medium-font.otf"),
         semiBoldFont = Typeface.createFromAsset(assets, "semibold-font.otf"),

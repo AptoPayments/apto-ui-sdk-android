@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/tb_llsdk_custom_toolbar"
+            layout="@layout/include_custom_toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tb_llsdk_custom_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/settings_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@{viewModel.showAddFunds ? @dimen/_0sdp : @dimen/_14sdp}">
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_add_funds"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:visibility="gone"
+                        app:optionDescription="card_settings_settings_load_funds_subtitle"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_settings_load_funds_title"
+                        app:visibleIf="@{viewModel.showAddFunds}"
+                        tools:visibility="visible" />
+
+                    <com.aptopayments.sdk.ui.views.SectionHeaderView
+                        android:id="@+id/rl_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:headerTitle="card_settings_settings_settings_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_google_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings_google_pay_provisioning_title"
+                        app:optionTitle="card_settings_google_pay_provisioning_subtitle"
+                        app:visibleIf="@{viewModel.showAddToGooglePay}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_get_pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings.settings.get_pin.description"
+                        app:optionTitle="card_settings.settings.get_pin.title"
+                        app:visibleIf="@{viewModel.showGetPin}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_set_pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings.settings.set_pin.description"
+                        app:optionTitle="card_settings.settings.set_pin.title"
+                        app:visibleIf="@{viewModel.showSetPin}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_card_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:onClick="@{() -> viewModel.cardDetailsPressed()}"
+                        app:optionDescription="card_settings.settings.card_details.description"
+                        app:optionTitle="card_settings_settings_card_details_title" />
+
+                    <include
+                        android:id="@+id/rl_lock_card"
+                        layout="@layout/view_section_switch_two" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/transactions_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.aptopayments.sdk.ui.views.SectionHeaderView
+                        android:id="@+id/rl_transactions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:headerTitle="card_settings.transactions.title" />
+
+                    <include
+                        android:id="@+id/rl_detailed_card_activity"
+                        layout="@layout/view_section_switch_two" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/help_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.aptopayments.sdk.ui.views.SectionHeaderView
+                        android:id="@+id/rl_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:headerTitle="card_settings_help_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_ivr_support"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings_help_ivr_support_description"
+                        app:optionTitle="card_settings_help_ivr_support_title"
+                        app:visibleIf="@{viewModel.showIvrSupport}" />
+
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_contact_support"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings_help_contact_support_description"
+                        app:optionTitle="card_settings_help_contact_support_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_report_stolen_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings_help_report_lost_card_description"
+                        app:optionTitle="card_settings_help_report_lost_card_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_faq"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:onClick="@{()-> viewModel.onFaqPressed()}"
+                        app:optionDescription="card_settings_legal_faq_description"
+                        app:optionTitle="card_settings_legal_faq_title"
+                        app:visibleIf="@{viewModel.showFaq}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_statement"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings_help_monthly_statements_description"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_help_monthly_statements_title" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/legal_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:visibleIf="@{viewModel.showLegalSection}">
+
+                    <com.aptopayments.sdk.ui.views.SectionHeaderView
+                        android:id="@+id/rl_legal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:headerTitle="card_settings_legal_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_cardholder_agreement"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:onClick="@{()-> viewModel.onCardholderAgreementPressed()}"
+                        app:optionDescription="card_settings_legal_cardholder_agreement_description"
+                        app:optionTitle="card_settings_legal_cardholder_agreement_title"
+                        app:visibleIf="@{viewModel.showCardholderAgreement}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_privacy_policy"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:onClick="@{()-> viewModel.onPrivacyPolicyPressed()}"
+                        app:optionDescription="card_settings.legal.privacy_policy.description"
+                        app:optionTitle="card_settings.legal.privacy_policy.title"
+                        app:visibleIf="@{viewModel.showPrivacyPolicy}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_terms_of_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:onClick="@{()-> viewModel.onTermsPressed()}"
+                        app:optionDescription="card_settings_legal_terms_of_service_description"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_legal_terms_of_service_title"
+                        app:visibleIf="@{viewModel.showTermsAndConditions}" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>

@@ -80,9 +80,19 @@ internal class AddCardPaymentSourceViewModel(
 
         repo.addPaymentSource(card) { result ->
             hideLoading()
-            result.either({ handleFailure(AddCardPaymentSourceFailure()) }, {
+            result.either({ handleFailure(getAddCardFailure(it)) }, {
                 cardTransactionCompleted.postValue(result.isRight)
             })
+        }
+    }
+
+    private fun getAddCardFailure(failure: Failure) = AddCardPaymentSourceFailure(getFailureMessage(failure))
+
+    private fun getFailureMessage(failure: Failure): String {
+        return if (failure is Failure.ServerError && !failure.hasUndefinedKey()) {
+            failure.getErrorKey()
+        } else {
+            "load_funds_add_card_error_message"
         }
     }
 
@@ -104,5 +114,6 @@ internal class AddCardPaymentSourceViewModel(
         return fieldStateList.all { it.value != null && it.value == FieldState.CORRECT }
     }
 
-    class AddCardPaymentSourceFailure : Failure.FeatureFailure("load_funds_add_card_error_message", "load_funds_add_card_error_title")
+    class AddCardPaymentSourceFailure(message: String) :
+        Failure.FeatureFailure(message, "load_funds_add_card_error_title")
 }

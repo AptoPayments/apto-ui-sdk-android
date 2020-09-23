@@ -14,16 +14,16 @@ import org.mockito.Mock
 
 class SetPinFlowTest : AndroidTest() {
 
-    private lateinit var sut: SetPinFlow
+    private lateinit var sut: SetCardPinFlow
 
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
 
     @Mock
-    private lateinit var mockSetPinDelegate: SetPinContract.Delegate
+    private lateinit var mockSetPinDelegate: SetCardPinContract.Delegate
 
     @Mock
-    private lateinit var mockConfirmPinDelegate: ConfirmPinContract.Delegate
+    private lateinit var mockConfirmPinDelegate: ConfirmCardPinContract.Delegate
 
     @Before
     override fun setUp() {
@@ -34,13 +34,13 @@ class SetPinFlowTest : AndroidTest() {
                 single { mockFragmentFactory }
             })
         }
-        sut = SetPinFlow(cardId = "TEST_CARD_ID", onBack = {}, onFinish = {})
+        sut = SetCardPinFlow(cardId = "TEST_CARD_ID", onBack = {}, onFinish = {})
     }
 
     @Test
     fun `should use the factory to instantiate SetPinFragmentInterface as first fragment`() {
         // Given
-        val tag = "SetPinFragment"
+        val tag = "SetCardPinFragment"
         val fragmentDouble = SetPinFragmentDouble(mockSetPinDelegate).apply { this.TAG = tag }
         given {
             mockFragmentFactory.setPinFragment(tag)
@@ -56,7 +56,7 @@ class SetPinFlowTest : AndroidTest() {
     @Test
     fun `should use the factory to instantiate ConfirmPinFragmentInterface when set pin has finished`() {
         // Given
-        val tag = "ConfirmPinFragment"
+        val tag = "ConfirmCardPinFragment"
         val pin = "1234"
         val fragmentDouble = ConfirmPinFragmentDouble(mockConfirmPinDelegate).apply { this.TAG = tag }
         given {

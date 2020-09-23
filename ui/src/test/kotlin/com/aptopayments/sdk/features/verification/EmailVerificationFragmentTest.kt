@@ -5,7 +5,7 @@ import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
-import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragmentThemeTwo
+import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragment
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -23,7 +23,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
     @Mock
     private lateinit var viewModel: VerificationViewModel
     private val verification = Verification("", "email")
-    private lateinit var sut: EmailVerificationFragmentThemeTwo
+    private lateinit var sut: EmailVerificationFragment
 
     @Before
     override fun setUp() {
@@ -33,7 +33,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
                 viewModel { viewModel }
             })
         }
-        sut = EmailVerificationFragmentThemeTwo.newInstance(verification)
+        sut = EmailVerificationFragment.newInstance(verification)
     }
 
     @Test
@@ -69,7 +69,7 @@ class EmailVerificationFragmentTest : AndroidTest() {
         val fragment = sut.emailVerificationFragment(verification, tag)
 
         // Then
-        assert(fragment is EmailVerificationFragmentThemeTwo)
+        assert(fragment is EmailVerificationFragment)
         assertEquals(tag, (fragment as BaseFragment).TAG)
     }
 }

@@ -7,7 +7,7 @@ import com.aptopayments.mobile.data.user.EmailDataPoint
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.LiveEvent
-import com.aptopayments.sdk.utils.StringUtils
+import com.aptopayments.sdk.utils.extensions.isValidEmail
 
 internal class CollectUserEmailViewModel(
     private val initialValue: EmailDataPoint?,
@@ -16,7 +16,7 @@ internal class CollectUserEmailViewModel(
 
     val email = MutableLiveData("")
 
-    val continueEnabled = Transformations.map(email) { StringUtils.isValidEmail(it) }
+    val continueEnabled = Transformations.map(email) { it.isValidEmail() }
 
     val continueNext = LiveEvent<EmailDataPoint>()
 

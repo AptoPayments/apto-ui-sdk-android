@@ -26,8 +26,8 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsContract
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
-import com.aptopayments.sdk.features.card.setpin.ConfirmPinContract
-import com.aptopayments.sdk.features.card.setpin.SetPinContract
+import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinContract
+import com.aptopayments.sdk.features.card.setpin.SetCardPinContract
 import com.aptopayments.sdk.features.card.statements.StatementListContract
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListContract
@@ -112,8 +112,8 @@ internal interface FragmentFactory {
     ): TransactionListContract.View
 
     fun waitlistFragment(cardId: String, cardProduct: CardProduct, tag: String): WaitlistContract.View
-    fun setPinFragment(tag: String): SetPinContract.View
-    fun confirmPinFragment(pin: String, tag: String): ConfirmPinContract.View
+    fun setPinFragment(tag: String): SetCardPinContract.View
+    fun confirmPinFragment(pin: String, tag: String): ConfirmCardPinContract.View
     fun getVoipFragment(cardId: String, action: Action, tag: String): VoipContract.View
     fun statementListFragment(tag: String): StatementListContract.View
     fun pdfRendererFragment(title: String, file: File, tag: String): PdfRendererContract.View

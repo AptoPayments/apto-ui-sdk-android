@@ -44,6 +44,7 @@ internal class ManageCardViewModel constructor(
     val cardConfiguration: PCIConfiguration by lazy { PCIConfigurationBuilder().build(cardId) }
     val showPhysicalCardActivationMessage = MutableLiveData(false)
     val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
+    val showFundingSourceDialog = LiveEvent<String>()
     val transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
     val fundingSource = MutableLiveData<Balance?>()
     val transactionListItems = MutableLiveData<List<TransactionListItem>>(emptyList())
@@ -161,10 +162,6 @@ internal class ManageCardViewModel constructor(
         }
     }
 
-    private fun handleCardBalance(balance: Balance) {
-        fundingSource.postValue(balance)
-    }
-
     fun refreshBalance(cardId: String) {
         getCardBalance(cardId, refresh = true) {}
     }
@@ -173,7 +170,7 @@ internal class ManageCardViewModel constructor(
         // TODO: use refresh = false to read from cache
         AptoPlatform.fetchCardFundingSource(cardId, refresh) {
             balanceLoaded = true
-            it.either(::handleFailure, ::handleCardBalance)
+            it.either(::handleFailure) { balance -> fundingSource.postValue(balance) }
             onComplete?.invoke()
         }
     }
@@ -359,4 +356,10 @@ internal class ManageCardViewModel constructor(
     }
 
     private fun isSdkEmbedded() = aptoUiSdkProtocol.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED
+
+    fun onFundingSourceTapped() {
+        if (card.value?.features?.selectBalanceStore?.allowedBalanceTypes?.isNotEmpty() == true) {
+            showFundingSourceDialog.postValue(fundingSource.value?.id)
+        }
+    }
 }

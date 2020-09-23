@@ -1,15 +1,11 @@
 package com.aptopayments.sdk.core.usecase
 
-import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
-import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
+import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.whenever
-import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeInstanceOf
-import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -38,7 +34,7 @@ internal class ShouldShowBiometricOptionTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, false)
+        result.shouldBeRightAndEqualTo(false)
     }
 
     @Test
@@ -48,7 +44,7 @@ internal class ShouldShowBiometricOptionTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, true)
+        result.shouldBeRightAndEqualTo(true)
     }
 
     @Test
@@ -58,7 +54,7 @@ internal class ShouldShowBiometricOptionTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, true)
+        result.shouldBeRightAndEqualTo(true)
     }
 
     @Test
@@ -68,22 +64,16 @@ internal class ShouldShowBiometricOptionTest : UnitTest() {
 
         val result = sut()
 
-        assertRightEitherIsEqualTo(result, true)
+        result.shouldBeRightAndEqualTo(true)
     }
 
-    fun configureWrapper(canAskBiometric: Boolean) {
+    private fun configureWrapper(canAskBiometric: Boolean) {
         whenever(biometricWrapper.canAskBiometric()).thenReturn(canAskBiometric)
     }
 
-    fun configureCardOptions(authenticateOnStartup: Boolean, authenticateOnPCI: Boolean) {
+    private fun configureCardOptions(authenticateOnStartup: Boolean, authenticateOnPCI: Boolean) {
         whenever(uiSdkProtocol.cardOptions).thenReturn(cardOptions)
         whenever(cardOptions.authenticateOnStartup()).thenReturn(authenticateOnStartup)
         whenever(cardOptions.authenticateWithPINOnPCI()).thenReturn(authenticateOnPCI)
-    }
-
-    private fun assertRightEitherIsEqualTo(result: Either<Failure, Any>, rightValue: Boolean) {
-        result shouldBeInstanceOf Either::class.java
-        result.isRight shouldEqual true
-        result.either({}, { it shouldBe rightValue })
     }
 }

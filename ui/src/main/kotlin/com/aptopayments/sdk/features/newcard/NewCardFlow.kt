@@ -5,6 +5,7 @@ import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.workflowaction.*
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFlow
@@ -56,7 +57,7 @@ internal class NewCardFlow(
     private fun updateCardApplication(onComplete: (Either<Failure, CardApplication>) -> Unit) {
         cardApplication?.let { cardApplication ->
             AptoPlatform.fetchCardApplicationStatus(cardApplication.id) { result ->
-                result.either({ onComplete }) { cardApplication ->
+                result.either({ onComplete(it.left()) }) { cardApplication ->
                     this.cardApplication = cardApplication
                     onComplete(Either.Right(cardApplication))
                 }

@@ -13,7 +13,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.PhoneInputView
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.fragment_phone_input_theme_two.*
+import kotlinx.android.synthetic.main.fragment_phone_input.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,13 +28,13 @@ internal class CollectUserPhoneFragment : BaseFragment(),
     override var delegate: CollectUserPhoneContract.Delegate? = null
     private lateinit var config: AllowedCountriesConfiguration
 
-    override fun layoutId() = R.layout.fragment_phone_input_theme_two
+    override fun layoutId() = R.layout.fragment_phone_input
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
-        config = arguments!![COUNTRY_CONFIG] as AllowedCountriesConfiguration
-        initialValue = arguments!![DATAPOINT_PHONE] as PhoneDataPoint?
+        config = requireArguments()[COUNTRY_CONFIG] as AllowedCountriesConfiguration
+        initialValue = requireArguments()[DATAPOINT_PHONE] as PhoneDataPoint?
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

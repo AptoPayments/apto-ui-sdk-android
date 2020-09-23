@@ -12,7 +12,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.birthdate.BirthdateView
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.fragment_birthdate_verification_theme_two.*
+import kotlinx.android.synthetic.main.fragment_birthdate_verification.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDate
@@ -25,12 +25,12 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
     override var delegate: CollectUserBirthdateContract.Delegate? = null
     private val viewModel: CollectUserBirthdateViewModel by viewModel()
 
-    override fun layoutId() = R.layout.fragment_birthdate_verification_theme_two
+    override fun layoutId() = R.layout.fragment_birthdate_verification
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
-        initialValue = arguments!![DATAPOINT_BIRTHDATE] as BirthdateDataPoint?
+        initialValue = requireArguments()[DATAPOINT_BIRTHDATE] as BirthdateDataPoint?
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -2,6 +2,7 @@
 <resources>
     <!-- Generic -->
     <attr name="llsdk_toolbarPopupTheme" format="reference" />
+
     <declare-styleable name="toggle_image_button">
         <attr name="android:checked" />
     </declare-styleable>
@@ -9,6 +10,15 @@
     <declare-styleable name="AptoTextView">
         <attr name="localize" format="string" />
     </declare-styleable>
+    <declare-styleable name="SectionHeaderView">
+        <attr name="headerTitle" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SectionOptionWithSubtitleView">
+        <attr name="optionTitle" format="string" />
+        <attr name="optionDescription" format="string" />
+        <attr name="optionShowDivider" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="SecretPinView">
         <attr name="length" format="integer" />
         <attr name="showForgot" format="boolean" />

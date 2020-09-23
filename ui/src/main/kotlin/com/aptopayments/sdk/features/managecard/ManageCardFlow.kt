@@ -20,7 +20,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.ActivatePhysicalC
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardstats.CardStatsFlow
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
-import com.aptopayments.sdk.features.card.setpin.SetPinFlow
+import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
@@ -290,7 +290,7 @@ internal class ManageCardFlow(
     }
 
     override fun onSetPin() {
-        val flow = SetPinFlow(
+        val flow = SetCardPinFlow(
             cardId = cardId,
             onBack = { popFlow(animated = true) },
             onFinish = {

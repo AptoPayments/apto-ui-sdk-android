@@ -4,8 +4,8 @@ import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.whenever
-import org.amshove.kluent.`should be`
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -46,8 +46,7 @@ internal class ShouldCreatePasscodeUseCaseTest : UnitTest() {
         configureFlags(startup = pinOnStartup, pci = pinOnPCI)
         val result = sut()
 
-        result.isRight `should be` true
-        result.either({}, { value -> value `should be` resultExpected })
+        result.shouldBeRightAndEqualTo(resultExpected)
     }
 
     private fun configureFlags(startup: Boolean, pci: Boolean) {

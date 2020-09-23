@@ -43,21 +43,21 @@ internal class CollectUserAddressFragment : BaseBindingFragment<FragmentCollectU
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
     override fun setUpArguments() {
-        config = arguments!![ADDRESS_CONFIG] as AllowedCountriesConfiguration
-        initialValue = arguments!![DATAPOINT_ADDRESS] as AddressDataPoint?
+        config = requireArguments()[ADDRESS_CONFIG] as AllowedCountriesConfiguration
+        initialValue = requireArguments()[DATAPOINT_ADDRESS] as AddressDataPoint?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initializePlaces()
         super.onCreate(savedInstanceState)
-        autocompleteAdapter = PlacesAutocompleteAdapter(context!!, placesClient, config.allowedCountries)
+        autocompleteAdapter = PlacesAutocompleteAdapter(requireContext(), placesClient, config.allowedCountries)
     }
 
     private fun initializePlaces() {
         if (!Places.isInitialized()) {
             val key = getString(R.string.google_maps_key)
             if (key != MAPS_DEFAULT) {
-                Places.initialize(activity!!.application, key)
+                Places.initialize(requireActivity().application, key)
             } else {
                 handleFailure(NoApiKeyFailure())
             }

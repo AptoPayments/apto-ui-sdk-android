@@ -2,14 +2,13 @@ package com.aptopayments.sdk.features.card.statements
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.monthLocalized
-import kotlinx.android.synthetic.main.view_section_header_two.view.*
-import kotlinx.android.synthetic.main.view_section_option_subtitle_two.view.*
+import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+import kotlinx.android.synthetic.main.view_section_header_element.view.*
 
 internal class StatementListAdapter(val delegate: Delegate) :
     RecyclerView.Adapter<StatementListAdapter.BaseViewHolder>() {
@@ -33,11 +32,15 @@ internal class StatementListAdapter(val delegate: Delegate) :
 
         return when (viewType) {
             StatementListItem.YEAR_VIEW_TYPE -> {
-                view = inflater.inflate(R.layout.view_section_header_two, parent, false)
+                view = inflater.inflate(R.layout.view_section_header_element, parent, false)
                 ViewHolderYear(view)
             }
             StatementListItem.MONTH_VIEW_TYPE -> {
-                view = inflater.inflate(R.layout.view_section_option_subtitle_two, parent, false)
+                view = inflater.inflate(
+                    R.layout.view_section_option_subtitle_element,
+                    parent,
+                    false
+                ) as (SectionOptionWithSubtitleView)
                 ViewHolderMonth(view)
             }
             else -> throw IllegalArgumentException("Unexpected view type")
@@ -54,24 +57,20 @@ internal class StatementListAdapter(val delegate: Delegate) :
         abstract fun bind(item: StatementListItem)
     }
 
-    inner class ViewHolderMonth(val view: View) : BaseViewHolder(view) {
-
-        init {
-            view.tv_option_subtitle_description.visibility = GONE
-        }
+    inner class ViewHolderMonth(val view: SectionOptionWithSubtitleView) : BaseViewHolder(view) {
 
         override fun bind(item: StatementListItem) {
             val monthStatement = (item as StatementListItem.MonthRow).month
 
             view.setOnClickListener { delegate.onMonthTapped(monthStatement) }
-            view.tv_option_subtitle_title.text = monthStatement.toLocalDate().monthLocalized()
+            view.optionTitle = monthStatement.toLocalDate().monthLocalized()
         }
     }
 
     inner class ViewHolderYear(val view: View) : BaseViewHolder(view) {
 
         override fun bind(item: StatementListItem) {
-            view.tv_title.text = (item as StatementListItem.YearRow).year.toString()
+            view.header_item.title = (item as StatementListItem.YearRow).year.toString()
         }
     }
 }

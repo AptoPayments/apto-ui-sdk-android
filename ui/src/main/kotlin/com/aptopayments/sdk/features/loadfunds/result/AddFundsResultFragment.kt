@@ -47,8 +47,8 @@ internal class AddFundsResultFragment : BaseBindingFragment<FragmentAddFundsResu
 
     override fun setUpArguments() {
         super.setUpArguments()
-        cardId = arguments!![CARD_ID] as String
-        payment = arguments!![PAYMENT_KEY] as Payment
+        cardId = requireArguments()[CARD_ID] as String
+        payment = requireArguments()[PAYMENT_KEY] as Payment
     }
 
     override fun setupUI() {

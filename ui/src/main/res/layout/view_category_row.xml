@@ -54,7 +54,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="65dp"
         android:layout_marginEnd="@dimen/_11sdp"
-        android:background="@color/colorAccent"
+        android:background="@color/divider_line_color"
         android:layout_below="@id/ll_category_row"
         android:orientation="horizontal"/>
 </RelativeLayout>

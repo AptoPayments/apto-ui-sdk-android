@@ -1,11 +1,10 @@
 package com.aptopayments.sdk.core.platform
 
-import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.exception.Failure.NetworkConnection
 import com.aptopayments.sdk.AndroidTest
-import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.Test
+import kotlin.test.assertTrue
 
 class BaseViewModelTest : AndroidTest() {
 
@@ -15,11 +14,9 @@ class BaseViewModelTest : AndroidTest() {
 
         viewModel.handleError(NetworkConnection)
 
-        val failure = viewModel.failure
         val error = viewModel.failure.value
 
-        failure shouldBeInstanceOf MutableLiveData::class.java
-        error shouldBeInstanceOf NetworkConnection::class.java
+        assertTrue(error is NetworkConnection)
     }
 
     private class MyViewModel : BaseViewModel() {

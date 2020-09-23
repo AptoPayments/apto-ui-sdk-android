@@ -11,6 +11,7 @@ import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationSe
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -37,7 +38,7 @@ internal class SelectBalanceStoreFlow(
                 allowedBalanceType = allowedBalanceType,
                 assetUrl = actionConfiguration.assetUrl
             ) { initResult ->
-                initResult.either({ onInitComplete }) { flow ->
+                initResult.either({ onInitComplete(it.left()) }) { flow ->
                     setStartElement(element = flow)
                     onInitComplete(Either.Right(Unit))
                 }
@@ -88,7 +89,7 @@ internal class SelectBalanceStoreFlow(
             onFinish = { oauthAttempt -> verifyOAuthData(allowedBalanceType, oauthAttempt, onComplete) }
         )
         flow.init { initResult ->
-            initResult.either({ onComplete }) {
+            initResult.either({ onComplete(it.left()) }) {
                 onComplete(Either.Right(flow))
             }
         }
@@ -107,7 +108,7 @@ internal class SelectBalanceStoreFlow(
             onError = { error -> handleError(error) }
         )
         verifyFlow.init { initResult ->
-            initResult.either({ onComplete }) {
+            initResult.either({ onComplete(it.left()) }) {
                 push(flow = verifyFlow)
             }
         }

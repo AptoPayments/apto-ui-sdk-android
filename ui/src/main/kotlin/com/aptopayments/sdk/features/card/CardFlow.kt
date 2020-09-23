@@ -212,7 +212,7 @@ internal class CardFlow : Flow(), KoinComponent {
     //
     private fun showSetLoginPinFlow(cardId: String) {
         initSetLoginPinFlow(cardId) { initResult ->
-            initResult.either({ ::handleFailure }) { flow ->
+            initResult.either(::handleFailure) { flow ->
                 clearChildElements()
                 push(flow = flow)
             }
@@ -233,7 +233,7 @@ internal class CardFlow : Flow(), KoinComponent {
 
     private fun showManageCardFlow(cardId: String) {
         initManageCardFlow(cardId = cardId) { initResult ->
-            initResult.either({ ::handleFailure }) { flow ->
+            initResult.either(::handleFailure) { flow ->
                 clearChildElements()
                 push(flow = flow)
             }

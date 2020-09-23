@@ -24,7 +24,7 @@ private const val CURRENCY = "USD"
 
 internal class AddFundsViewModel(
     private val cardId: String,
-    private val paymentSourcesRepo: PaymentSourcesRepository,
+    paymentSourcesRepo: PaymentSourcesRepository,
     private val aptoPlatform: AptoPlatformProtocol,
     private val elementMapper: PaymentSourceElementMapper
 ) : BaseViewModel() {
@@ -68,7 +68,7 @@ internal class AddFundsViewModel(
     }
 
     private fun processLoadFundsResult(result: Either<Failure, Payment>) {
-        result.either({ unableToLoadFunds() }, { payment ->
+        result.either({ unableToLoadFunds(it) }, { payment ->
             if (payment.status == PaymentStatus.FAILED) {
                 unableToLoadFunds()
             } else {
@@ -77,8 +77,16 @@ internal class AddFundsViewModel(
         })
     }
 
-    private fun unableToLoadFunds() {
-        handleFailure(UnableToLoadFundsError())
+    private fun unableToLoadFunds(failure: Failure? = null) {
+        handleFailure(UnableToLoadFundsError(getFailureErrorKey(failure)))
+    }
+
+    private fun getFailureErrorKey(failure: Failure?): String {
+        return if (failure is Failure.ServerError && !failure.hasUndefinedKey()) {
+            failure.getErrorKey()
+        } else {
+            "load_funds_add_money_error_message"
+        }
     }
 
     private fun getAmount() = amount.value?.toOnlyDigits()
@@ -117,13 +125,9 @@ internal class AddFundsViewModel(
 
     private fun checkAmountInsideLimits(): Boolean {
         return if (isAmountCorrect()) {
-            val requested = getAmount()!!.toInt()
+            val requested = getAmount()!!.toFloat()
             when {
                 requested > getDailyLimit() -> {
-                    postError("load_funds_add_money_daily_max_title".localized(), getDailyLimit())
-                    false
-                }
-                requested > getMontlyLimit() -> {
                     postError("load_funds_add_money_daily_max_title".localized(), getDailyLimit())
                     false
                 }
@@ -142,9 +146,7 @@ internal class AddFundsViewModel(
         error.value = legend.replace("<<MAX>>", limit.toInt().toString())
     }
 
-    private fun getMontlyLimit() = fundingLimits?.monthly?.remaining?.amount ?: 0.0
-
-    private fun getDailyLimit() = fundingLimits?.daily?.remaining?.amount ?: 0.0
+    private fun getDailyLimit() = fundingLimits?.daily?.max?.amount ?: 0.0
 
     private fun isPaymentSourceCorrect() = paymentSource.value?.isDefined() ?: false
 
@@ -158,8 +160,8 @@ internal class AddFundsViewModel(
         }.localized()
     }
 
-    class UnableToLoadFundsError() : Failure.FeatureFailure(
-        message = "load_funds_add_money_error_message",
+    class UnableToLoadFundsError(key: String) : Failure.FeatureFailure(
+        message = key,
         title = "load_funds_add_money_error_title"
     )
 }

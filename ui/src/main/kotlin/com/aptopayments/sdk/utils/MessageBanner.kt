@@ -45,7 +45,7 @@ class MessageBanner {
 
         val rootView = (activity.findViewById<View>(android.R.id.content) as ViewGroup)
             .getChildAt(0) as ViewGroup
-        val customSnackbar = SnackbarThemeTwo.make(rootView, duration)
+        val customSnackbar = CustomSnackbar.make(rootView, duration)
         val customTitle = if (UIConfig.showToastTitle) title else null
         customSnackbar.setTitle(customTitle)
         customSnackbar.setMessage(message)

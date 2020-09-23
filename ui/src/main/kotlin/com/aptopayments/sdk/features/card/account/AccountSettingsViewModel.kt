@@ -35,7 +35,7 @@ internal class AccountSettingsViewModel constructor(
     }
 
     @Synchronized
-    fun onFingerprintSwichTapped() {
+    fun onFingerprintSwitchTapped() {
         val currentValue = authRepository.isBiometricsEnabledByUser()
         authRepository.enableBiometrics(!currentValue)
         _fingerprintEnabled.value = !currentValue
