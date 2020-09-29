@@ -72,6 +72,11 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         cardFlow?.detachFromActivity()
     }
 
+    override fun onStop() {
+        hideKeyboard()
+        super.onStop()
+    }
+
     override fun onDestroy() {
         cardFlow?.detachFromActivity()
         ProcessLifecycleOwner.get().lifecycle.removeObserver(observer)

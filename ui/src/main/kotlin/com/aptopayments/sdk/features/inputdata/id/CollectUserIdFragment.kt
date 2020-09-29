@@ -64,6 +64,7 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
         binding.collectIdTypeSpinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
                 viewModel.onIdTypeSelected(position)
+                binding.collectIdNumberEdittext.requestFocus()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
