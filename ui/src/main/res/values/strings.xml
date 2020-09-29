@@ -772,4 +772,6 @@
     <string name="load_funds_add_card_onboarding_explanation_2">This transaction will appear in your bank account statement as: &lt;&lt;VALUE&gt;&gt;</string>
     <string name="load_funds_add_card_onboarding_primary_cta">Continue</string>
 
+    <!-- PCI SDK -->
+    <string name="pcisdk_input_code_message">Enter the verification code we just sent you via SMS</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.extension.localized
+import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.removeAnimated
 import com.aptopayments.sdk.core.extension.show
@@ -20,6 +21,7 @@ import com.aptopayments.sdk.ui.views.AuthenticationView.AuthType.FORCED
 import com.aptopayments.sdk.utils.MessageBanner
 import kotlinx.android.synthetic.main.activity_layout.*
 import org.koin.android.ext.android.inject
+import java.lang.ref.WeakReference
 
 class CardActivity : BaseActivity(), AuthenticationView.Delegate {
 
@@ -48,6 +50,7 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         }
         configureBiometricView()
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
+        removeAuthenticateScreenWhenLoggedOut()
     }
 
     override fun onResume() {
@@ -140,6 +143,14 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         } else {
             AuthenticationView.AuthMethod.ONLY_BIOMETRICS
         }
+
+    private fun removeAuthenticateScreenWhenLoggedOut() {
+        val weak = WeakReference(this)
+        AptoPlatform.subscribeSessionInvalidListener(weak) {
+            weak.get()?.cleanAuth()
+            AptoPlatform.unsubscribeSessionInvalidListener(weak)
+        }
+    }
 
     companion object {
         fun callingIntent(from: Context): Intent = Intent(from, CardActivity::class.java)
