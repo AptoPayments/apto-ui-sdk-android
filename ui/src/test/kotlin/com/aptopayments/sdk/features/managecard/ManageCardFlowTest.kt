@@ -29,6 +29,7 @@ import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@Suppress("UNCHECKED_CAST")
 class ManageCardFlowTest : AndroidTest() {
 
     private lateinit var sut: ManageCardFlow
@@ -72,7 +73,7 @@ class ManageCardFlowTest : AndroidTest() {
         // Given
         val card = TestDataProvider.provideCard(kycStatus = KycStatus.REJECTED)
         whenever(
-            sut.aptoPlatformProtocol.fetchFinancialAccount(
+            sut.aptoPlatformProtocol.fetchCard(
                 anyString(),
                 anyBoolean(),
                 TestDataProvider.anyObject()
@@ -95,7 +96,7 @@ class ManageCardFlowTest : AndroidTest() {
         // Given
         val card = TestDataProvider.provideCard(accountID = cardId, kycStatus = KycStatus.PASSED, isWaitlisted = true)
         whenever(
-            sut.aptoPlatformProtocol.fetchFinancialAccount(
+            sut.aptoPlatformProtocol.fetchCard(
                 anyString(),
                 anyBoolean(),
                 TestDataProvider.anyObject()
@@ -132,7 +133,7 @@ class ManageCardFlowTest : AndroidTest() {
         // Given
         val card = TestDataProvider.provideCard(accountID = cardId, kycStatus = KycStatus.PASSED, isWaitlisted = false)
         whenever(
-            sut.aptoPlatformProtocol.fetchFinancialAccount(
+            sut.aptoPlatformProtocol.fetchCard(
                 anyString(),
                 anyBoolean(),
                 TestDataProvider.anyObject()
@@ -158,7 +159,7 @@ class ManageCardFlowTest : AndroidTest() {
         // Given
         val card = TestDataProvider.provideCard(accountID = cardId)
         whenever(
-            sut.aptoPlatformProtocol.fetchFinancialAccount(
+            sut.aptoPlatformProtocol.fetchCard(
                 anyString(),
                 anyBoolean(),
                 TestDataProvider.anyObject()
@@ -185,7 +186,7 @@ class ManageCardFlowTest : AndroidTest() {
         val balanceId = "TEST_BALANCE_ID"
         val card = TestDataProvider.provideCard()
         whenever(
-            sut.aptoPlatformProtocol.fetchFinancialAccount(
+            sut.aptoPlatformProtocol.fetchCard(
                 anyString(),
                 anyBoolean(),
                 TestDataProvider.anyObject()

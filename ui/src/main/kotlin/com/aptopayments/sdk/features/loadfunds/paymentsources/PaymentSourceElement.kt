@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources
 
 import androidx.annotation.IntegerRes
-import com.aptopayments.mobile.data.paymentsources.BankAccount
 import com.aptopayments.mobile.data.paymentsources.Card
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
 import com.aptopayments.mobile.extension.localized
@@ -18,10 +17,10 @@ internal data class PaymentSourceElement(
 }
 
 internal class PaymentSourceElementMapper() {
+
     fun map(elem: PaymentSource): PaymentSourceElement {
         return when (elem) {
             is Card -> mapCard(elem)
-            is BankAccount -> throw RuntimeException() // TODO when UI defined
             else -> throw RuntimeException()
         }
     }

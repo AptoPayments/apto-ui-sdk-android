@@ -10,8 +10,6 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
-import com.aptopayments.sdk.core.extension.monthToString
-import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
@@ -61,8 +59,8 @@ class CardTransactionsChartViewModelTest : AndroidTest() {
 
         verify(aptoPlatform).cardMonthlySpending(
             eq(CARD_ID),
-            eq(CURRENT_DATE.monthToString()),
-            eq(CURRENT_DATE.yearToString()),
+            eq(CURRENT_DATE.monthValue),
+            eq(CURRENT_DATE.year),
             any()
         )
     }
@@ -136,8 +134,8 @@ class CardTransactionsChartViewModelTest : AndroidTest() {
         whenever(
             aptoPlatform.cardMonthlySpending(
                 ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.anyInt(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->

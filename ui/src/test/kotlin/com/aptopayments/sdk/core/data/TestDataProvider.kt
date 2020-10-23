@@ -1,14 +1,19 @@
 package com.aptopayments.sdk.core.data
 
 import com.aptopayments.mobile.data.card.*
+import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.config.Branding
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.config.ProjectConfiguration
+import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
 import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus
 import com.aptopayments.mobile.data.oauth.OAuthUserDataUpdate
 import com.aptopayments.mobile.data.oauth.OAuthUserDataUpdateResult
+import com.aptopayments.mobile.data.payment.Payment
+import com.aptopayments.mobile.data.payment.PaymentStatus
+import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.data.stats.CategorySpending
 import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.DataPointList
@@ -16,6 +21,8 @@ import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
 import com.aptopayments.sdk.features.oauth.OAuthConfig
 import org.mockito.Mockito
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
 import java.net.URL
 
 class TestDataProvider {
@@ -122,6 +129,30 @@ class TestDataProvider {
             features = features
         )
 
+        fun provideCardProduct(
+            id: String = "",
+            cardholderAgreement: Content? = null,
+            privacyPolicy: Content? = null,
+            termsAndConditions: Content? = null,
+            faq: Content? = null,
+            name: String = "",
+            waitlistBackgroundImage: URL? = null,
+            waitlistBackgroundColor: Int? = null,
+            waitlistDarkBackgroundColor: Int? = null,
+            waitlistAsset: URL? = null
+        ) = CardProduct(
+            id = id,
+            cardholderAgreement = cardholderAgreement,
+            privacyPolicy = privacyPolicy,
+            termsAndConditions = termsAndConditions,
+            faq = faq,
+            name = name,
+            waitlistBackgroundImage = waitlistBackgroundImage,
+            waitlistBackgroundColor = waitlistBackgroundColor,
+            waitlistDarkBackgroundColor = waitlistDarkBackgroundColor,
+            waitlistAsset = waitlistAsset
+        )
+
         fun provideCategorySpendingList(): List<CategorySpending> {
             val spending1 = CategorySpending("glass", Money("USD", 130.0))
             val spending2 = CategorySpending("car", Money("USD", 80.0))
@@ -149,5 +180,30 @@ class TestDataProvider {
         fun provideDiscoverValidNumbers() = listOf("6011111111111117", "6011000990139424", "6445644564456445")
 
         fun provideDiscoverInValidPatternNumbers() = listOf("6021111111111111", "378282246310005")
+
+        fun provideNewCard() = NewCard(
+            description = "desc",
+            pan = "4242424242424242",
+            cvv = "123",
+            expirationMonth = "01",
+            expirationYear = "25",
+            zipCode = "12345"
+        )
+
+        fun providePaymentSourcesCard() = com.aptopayments.mobile.data.paymentsources.Card(
+            id = "entity_12345",
+            description = "desc",
+            isPreferred = true,
+            network = Card.CardNetwork.VISA,
+            lastFour = "4242"
+        )
+
+        fun providePaymentSourcesPayment() = Payment(
+            id = "12345",
+            status = PaymentStatus.PROCESSED,
+            createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC),
+            amount = Money("USD", 100.0),
+            source = providePaymentSourcesCard()
+        )
     }
 }

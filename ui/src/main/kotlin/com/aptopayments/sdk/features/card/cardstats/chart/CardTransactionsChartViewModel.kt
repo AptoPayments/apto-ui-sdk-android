@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.aptopayments.mobile.data.stats.MonthlySpending
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.core.extension.monthToString
-import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import org.koin.core.KoinComponent
@@ -32,7 +30,7 @@ internal class CardTransactionsChartViewModel constructor(
     }
 
     private fun getMonthlySpending() {
-        aptoPlatform.cardMonthlySpending(cardId, date.monthToString(), date.yearToString()) { result ->
+        aptoPlatform.cardMonthlySpending(cardId, date.monthValue, date.year) { result ->
             result.either(::handleFailure) {
                 _spending.postValue(it)
             }

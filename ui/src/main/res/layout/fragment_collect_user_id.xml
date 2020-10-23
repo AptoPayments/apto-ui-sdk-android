@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -65,8 +64,8 @@
                     style="@style/ThemeTwo.FormField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:visibleIf="@{viewModel.countryList.size > 1}"
-                    app:localize="@string/birthday_collector_id_document_country_label" />
+                    app:localize="@string/birthday_collector_id_document_country_label"
+                    app:visibleIf="@{viewModel.countryList.size > 1}" />
 
                 <FrameLayout
                     android:id="@+id/country_container"
@@ -75,9 +74,9 @@
                     android:layout_marginBottom="@dimen/_24sdp"
                     android:background="@drawable/rounded_corners"
                     android:elevation="2dp"
-                    app:visibleIf="@{viewModel.countryList.size > 1}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:visibleIf="@{viewModel.countryList.size > 1}">
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/country_spinner"
@@ -87,8 +86,8 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:nextFocusForward="@+id/collect_id_type_spinner"
-                        app:items="@{viewModel.countryList}"
-                        app:itemSelected="@={viewModel.selectedCountry}" />
+                        app:itemSelected="@={viewModel.selectedCountry}"
+                        app:items="@{viewModel.countryList}" />
                 </FrameLayout>
 
                 <com.aptopayments.sdk.ui.views.AptoTextView
@@ -150,8 +149,8 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:inputType="textPostalAddress"
-                            app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
-                            android:text="@={viewModel.number}" />
+                            android:text="@={viewModel.number}"
+                            app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </FrameLayout>
             </LinearLayout>

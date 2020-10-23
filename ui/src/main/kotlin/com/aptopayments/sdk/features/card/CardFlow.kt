@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.card
 
 import androidx.appcompat.app.AppCompatActivity
+import com.aptopayments.mobile.data.ListPagination
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.exception.Failure
@@ -87,9 +88,9 @@ internal class CardFlow : Flow(), KoinComponent {
     }
 
     private fun initNewOrExistingCardFlow(onComplete: (Either<Failure, Flow>) -> Unit) {
-        AptoPlatform.fetchCards { result ->
+        AptoPlatform.fetchCards(ListPagination()) { result ->
             result.either({ onComplete(Either.Left(it)) }) { cards ->
-                cards.firstOrNull { it.state != Card.CardState.CANCELLED }?.let { card ->
+                cards.data.firstOrNull { it.state != Card.CardState.CANCELLED }?.let { card ->
                     initSetLoginPinFlow(cardId = card.accountID, onInitComplete = onComplete)
                 } ?: initCardProductSelectorFlow(onComplete)
             }

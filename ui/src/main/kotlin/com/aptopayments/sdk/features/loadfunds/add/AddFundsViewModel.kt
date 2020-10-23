@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.loadfunds.add
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.data.card.FundingLimits
 import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.payment.Payment
@@ -19,12 +20,13 @@ import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceEleme
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.extensions.map
+import kotlinx.coroutines.launch
 
 private const val CURRENCY = "USD"
 
 internal class AddFundsViewModel(
     private val cardId: String,
-    paymentSourcesRepo: PaymentSourcesRepository,
+    private val repo: PaymentSourcesRepository,
     private val aptoPlatform: AptoPlatformProtocol,
     private val elementMapper: PaymentSourceElementMapper
 ) : BaseViewModel() {
@@ -32,7 +34,7 @@ internal class AddFundsViewModel(
     private var balanceId = ""
     private var fundingLimits: FundingLimits? = null
 
-    private val selectedPaymentSource = paymentSourcesRepo.getSelectedPaymentSourceLiveData()
+    private val selectedPaymentSource = repo.selectedPaymentSource
     val amount = MutableLiveData("$")
     val paymentSource = selectedPaymentSource.map { getPaymentSourceElement(it) }
     val error = MutableLiveData("")
@@ -41,17 +43,33 @@ internal class AddFundsViewModel(
 
     private val _continueEnabled = MediatorLiveData<Boolean>()
     val continueButtonEnabled = _continueEnabled as LiveData<Boolean>
-    val paymentMade = LiveEvent<Payment>()
 
-    val paymentSourceClicked = LiveEvent<Boolean>()
+    val action = LiveEvent<Actions>()
 
     init {
         fetchPreRequisites()
         observeContinueSources()
     }
 
+    private fun fetchSelected() {
+        viewModelScope.launch {
+            showLoading()
+            val selected = repo.refreshSelectedPaymentSource()
+            selected.either({ handleFailure(it) }) {
+                if (it == null) {
+                    action.postValue(Actions.AddPaymentSource)
+                }
+            }
+            hideLoading()
+        }
+    }
+
     fun onPaymentSourceClicked() {
-        paymentSourceClicked.postValue(true)
+        if (selectedPaymentSource.value != null) {
+            action.value = Actions.PaymentSourcesList
+        } else {
+            action.value = Actions.AddPaymentSource
+        }
     }
 
     fun onContinueClicked() {
@@ -72,9 +90,16 @@ internal class AddFundsViewModel(
             if (payment.status == PaymentStatus.FAILED) {
                 unableToLoadFunds()
             } else {
-                paymentMade.value = payment
+                action.value = Actions.PaymentResult(payment)
+                updateSelectedPaymentSource()
             }
         })
+    }
+
+    private fun updateSelectedPaymentSource() {
+        viewModelScope.launch {
+            repo.refreshSelectedPaymentSource()
+        }
     }
 
     private fun unableToLoadFunds(failure: Failure? = null) {
@@ -96,16 +121,23 @@ internal class AddFundsViewModel(
     }
 
     private fun fetchPreRequisites() {
-        showLoading()
-        aptoPlatform.fetchFinancialAccount(cardId, false) { result ->
-            hideLoading()
-            result.either({ handleFailure(it) }, {
-                fundingLimits = it.features?.funding?.limits
-            })
-        }
+        fetchSelected()
+        getFundingLimits()
+        getBalanceId()
+    }
+
+    private fun getBalanceId() {
         aptoPlatform.fetchCardFundingSource(cardId, false) { result ->
             result.either({ handleFailure(it) }, {
                 balanceId = it.id
+            })
+        }
+    }
+
+    private fun getFundingLimits() {
+        aptoPlatform.fetchCard(cardId, false) { result ->
+            result.either({ handleFailure(it) }, {
+                fundingLimits = it.features?.funding?.limits
             })
         }
     }
@@ -164,4 +196,10 @@ internal class AddFundsViewModel(
         message = key,
         title = "load_funds_add_money_error_title"
     )
+
+    sealed class Actions {
+        class PaymentResult(val payment: Payment) : Actions()
+        object PaymentSourcesList : Actions()
+        object AddPaymentSource : Actions()
+    }
 }

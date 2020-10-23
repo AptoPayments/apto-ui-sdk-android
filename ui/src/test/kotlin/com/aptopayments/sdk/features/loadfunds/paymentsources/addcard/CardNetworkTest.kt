@@ -16,7 +16,7 @@ internal class CardNetworkTest {
 
     @Test
     fun `unknown has the higher maxLenghValue `() {
-        val maxLength = CardNetwork.values().maxBy { it.maxLength }?.maxLength ?: 0
+        val maxLength = CardNetwork.values().maxByOrNull { it.maxLength }?.maxLength ?: 0
 
         assertEquals(UNKNOWN.maxLength, maxLength)
     }

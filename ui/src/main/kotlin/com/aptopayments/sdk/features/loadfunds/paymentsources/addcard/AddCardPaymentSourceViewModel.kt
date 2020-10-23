@@ -1,9 +1,6 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.exception.Failure
@@ -18,6 +15,7 @@ import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.states.Exp
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.states.ZipFieldStateResolver
 import com.aptopayments.sdk.utils.DateProvider
 import com.aptopayments.sdk.utils.LiveEvent
+import kotlinx.coroutines.launch
 
 internal class AddCardPaymentSourceViewModel(
     cardId: String,
@@ -57,7 +55,7 @@ internal class AddCardPaymentSourceViewModel(
 
     init {
         observeAllFieldStateChanges()
-        aptoPlatform.fetchFinancialAccount(cardId, false) { result ->
+        aptoPlatform.fetchCard(cardId, false) { result ->
             result.either({ handleFailure(it) }, { setCardNetworks(it) })
         }
     }
@@ -67,9 +65,21 @@ internal class AddCardPaymentSourceViewModel(
     }
 
     fun onContinueClicked() {
-        showLoading()
-        val expirationString = expiration.value!!
-        val card = NewCard(
+        viewModelScope.launch() {
+            showLoading()
+
+            val card = getCard(expiration.value!!)
+            val result = repo.addPaymentSource(card)
+
+            hideLoading()
+            result.either({ handleFailure(getAddCardFailure(it)) }, {
+                cardTransactionCompleted.postValue(result.isRight)
+            })
+        }
+    }
+
+    private fun getCard(expirationString: String): NewCard {
+        return NewCard(
             description = null,
             pan = creditCardNumber.value!!.toOnlyDigits(),
             cvv = cvv.value!!,
@@ -77,13 +87,6 @@ internal class AddCardPaymentSourceViewModel(
             expirationYear = expirationString.drop(3),
             zipCode = zipCode.value!!
         )
-
-        repo.addPaymentSource(card) { result ->
-            hideLoading()
-            result.either({ handleFailure(getAddCardFailure(it)) }, {
-                cardTransactionCompleted.postValue(result.isRight)
-            })
-        }
     }
 
     private fun getAddCardFailure(failure: Failure) = AddCardPaymentSourceFailure(getFailureMessage(failure))

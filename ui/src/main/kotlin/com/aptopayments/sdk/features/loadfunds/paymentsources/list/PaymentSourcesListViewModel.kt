@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.core.platform.BaseViewModel
@@ -9,18 +10,20 @@ import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceEleme
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
+import com.aptopayments.sdk.utils.CoroutineDispatcherProvider
 import com.aptopayments.sdk.utils.LiveEvent
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class PaymentSourcesListViewModel(
     private val repo: PaymentSourcesRepository,
-    private val elementMapper: PaymentSourceElementMapper
+    private val elementMapper: PaymentSourceElementMapper,
+    private val dispatchers: CoroutineDispatcherProvider
 ) : BaseViewModel() {
-
-    val sourceSelected = LiveEvent<Boolean>()
-    val newPaymentSource = LiveEvent<Boolean>()
 
     private val _sourceList = MutableLiveData<List<PaymentSourcesListItem>>(emptyList())
     val sourceList = _sourceList as LiveData<List<PaymentSourcesListItem>>
+    val actions = LiveEvent<Actions>()
 
     fun onPresented() {
         loadPaymentSourcesList()
@@ -28,21 +31,23 @@ internal class PaymentSourcesListViewModel(
 
     private fun loadPaymentSourcesList() {
         showLoading()
-        repo.getPaymentSourcesList(forceApiCall = false) { result ->
-            hideLoading()
-            result.either({ handleFailure(it) }, { list ->
-                _sourceList.postValue(mapPaymentSources(list, repo.selectedPaymentSource.value))
-            })
+        viewModelScope.launch(dispatchers.io) {
+            repo.getPaymentSourceList().either(::handleFailure) {
+                _sourceList.postValue(mapPaymentSources(it, repo.selectedPaymentSource.value))
+            }
+            withContext(dispatchers.main) {
+                hideLoading()
+            }
         }
     }
 
-    fun selectPaymentSource(id: String) {
-        repo.selectPaymentSource(id)
-        sourceSelected.postValue(true)
+    fun selectPaymentSource(source: PaymentSource) {
+        repo.selectPaymentSourceLocally(source)
+        actions.postValue(Actions.SourceSelected)
     }
 
     fun newPaymentSource() {
-        newPaymentSource.postValue(true)
+        actions.postValue(Actions.NewPaymentSource)
     }
 
     private fun mapPaymentSources(
@@ -50,12 +55,28 @@ internal class PaymentSourcesListViewModel(
         preferred: PaymentSource?
     ): MutableList<PaymentSourcesListItem> {
         return list.map {
-            PaymentSourcesListItem(
-                elementMapper.map(it),
-                it.id == preferred?.id,
-                PaymentSourcesListItem.Type.EXISTING
-            )
+            createPaymentSourceListItem(it, preferred)
         }.toMutableList().apply { add(getNewPaymentMethodItem()) }
+    }
+
+    private fun createPaymentSourceListItem(
+        it: PaymentSource,
+        preferred: PaymentSource?
+    ): PaymentSourcesListItem {
+        return PaymentSourcesListItem(
+            elementMapper.map(it),
+            isPreferred(it, preferred),
+            PaymentSourcesListItem.Type.EXISTING,
+            it
+        )
+    }
+
+    private fun isPreferred(current: PaymentSource, preferred: PaymentSource?): Boolean {
+        return if (preferred != null) {
+            current.id == preferred.id
+        } else {
+            current.isPreferred
+        }
     }
 
     private fun getNewPaymentMethodItem() =
@@ -68,4 +89,9 @@ internal class PaymentSourcesListViewModel(
                 logo = CardNetwork.UNKNOWN.icon
             ), false, PaymentSourcesListItem.Type.NEW
         )
+
+    sealed class Actions {
+        object SourceSelected : Actions()
+        object NewPaymentSource : Actions()
+    }
 }

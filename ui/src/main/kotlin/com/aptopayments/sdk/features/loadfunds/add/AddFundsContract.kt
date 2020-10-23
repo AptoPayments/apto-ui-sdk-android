@@ -6,8 +6,9 @@ import com.aptopayments.sdk.core.platform.FragmentDelegate
 internal interface AddFundsContract {
 
     interface Delegate : FragmentDelegate {
-        fun onFundsAdded(payment: Payment)
-        fun onPaymentSourceChange()
+        fun onPaymentResult(payment: Payment)
+        fun onPaymentSourcesList()
+        fun onAddPaymenSource()
         fun onBackFromAddFunds()
     }
 

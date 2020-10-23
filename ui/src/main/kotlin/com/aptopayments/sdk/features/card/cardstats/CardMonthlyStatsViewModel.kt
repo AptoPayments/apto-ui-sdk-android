@@ -10,8 +10,6 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.extension.monthLocalized
-import com.aptopayments.sdk.core.extension.monthToString
-import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.data.StatementFile
@@ -62,7 +60,7 @@ internal class CardMonthlyStatsViewModel(
     }
 
     private fun getMonthlySpending(date: LocalDate, callback: (Either<Failure, MonthlySpending>) -> Unit) =
-        aptoPlatformProtocol.cardMonthlySpending(cardId, date.monthToString(), date.yearToString(), callback)
+        aptoPlatformProtocol.cardMonthlySpending(cardId, date.monthValue, date.year, callback)
 
     private fun configurePreviousMonth(spending: MonthlySpending, date: LocalDate) {
         if (spending.prevSpendingExists) {

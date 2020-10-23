@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.loadfunds.result
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.data.cardproduct.CardProduct
+import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
@@ -16,36 +16,52 @@ internal class AddFundsResultViewModel(
     private val aptoPlatform: AptoPlatformProtocol
 ) : BaseViewModel() {
 
-    private var cardProduct: CardProduct? = null
+    private var cardHolderAgreement: Content? = null
     private val _resultElement = MutableLiveData<PaymentResultElement>()
     val resultElement = _resultElement as LiveData<PaymentResultElement>
-    val onAgreement = LiveEvent<Content>()
-    val onDone = LiveEvent<Boolean>()
+    val action = LiveEvent<Action>()
 
     init {
+        fetchSoftDescriptorAndCHA(cardId, mapper, payment)
+    }
+
+    private fun fetchSoftDescriptorAndCHA(
+        cardId: String,
+        mapper: PaymentResultElementMapper,
+        payment: Payment
+    ) {
         showLoading()
-        aptoPlatform.fetchFinancialAccount(cardId, false) { cardResult ->
+        aptoPlatform.fetchCard(cardId, false) { cardResult ->
             cardResult.either({ handleFailure(it) }, { card ->
                 _resultElement.value = mapper.map(payment, card.features?.funding?.softDescriptor)
-                card.cardProductID?.let { id ->
-                    aptoPlatform.fetchCardProduct(id, false) { cardProductResult ->
-                        cardProductResult.either({ handleFailure(it) }, { cardProduct ->
-                            hideLoading()
-                            this.cardProduct = cardProduct
-                        })
-                    }
-                }
+                hideLoading()
+                fetchAgreement(card)
             })
         }
     }
 
     fun onAgreementClicked() {
-        cardProduct?.let {
-            onAgreement.value = it.cardholderAgreement
+        cardHolderAgreement?.let {
+            action.value = Action.Agreement(it)
         }
     }
 
     fun onDoneClicked() {
-        onDone.value = true
+        action.value = Action.Done
+    }
+
+    private fun fetchAgreement(card: Card) {
+        card.cardProductID?.let { id ->
+            aptoPlatform.fetchCardProduct(id, false) { cardProductResult ->
+                cardProductResult.either({ handleFailure(it) }, { cardProduct ->
+                    this.cardHolderAgreement = cardProduct.cardholderAgreement
+                })
+            }
+        }
+    }
+
+    sealed class Action {
+        object Done : Action()
+        class Agreement(val content: Content) : Action()
     }
 }

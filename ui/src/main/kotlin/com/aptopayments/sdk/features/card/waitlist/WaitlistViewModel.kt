@@ -14,7 +14,7 @@ internal class WaitlistViewModel constructor(
     var card: MutableLiveData<Card> = MutableLiveData()
 
     fun getCard(cardId: String) {
-        AptoPlatform.fetchFinancialAccount(accountId = cardId, forceRefresh = true) { result ->
+        AptoPlatform.fetchCard(cardId = cardId, forceRefresh = true) { result ->
             result.either(::handleFailure, card::postValue)
         }
     }

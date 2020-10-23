@@ -95,7 +95,7 @@ val viewModelModule = module {
     viewModel { CollectUserBirthdateViewModel(get()) }
     viewModel { CollectUserPhoneViewModel(get()) }
     viewModel { (cardId: String) -> AddCardPaymentSourceViewModel(cardId, get(), get()) }
-    viewModel { PaymentSourcesListViewModel(get(), get()) }
+    viewModel { PaymentSourcesListViewModel(get(), get(), get()) }
     viewModel { (cardId: String) -> AddFundsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, payment: Payment) -> AddFundsResultViewModel(cardId, payment, get(), get()) }
     viewModel { (cardId: String) -> AddCardOnboardingViewModel(cardId, get(), get()) }

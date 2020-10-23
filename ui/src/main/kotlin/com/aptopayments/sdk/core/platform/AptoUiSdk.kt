@@ -121,7 +121,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
     override fun getAppVersion(activity: FragmentActivity?): String {
         return activity?.let {
             val packageInfo: PackageInfo = activity.packageManager.getPackageInfo(activity.packageName, 0)
-            "${packageInfo.versionName} - (${BuildConfig.VERSION_NAME})"
+            "${packageInfo.versionName} - (${BuildConfig.LIBRARY_VERSION_NAME})"
         } ?: ""
     }
 

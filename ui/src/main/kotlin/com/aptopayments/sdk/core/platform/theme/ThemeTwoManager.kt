@@ -15,10 +15,7 @@ import android.text.style.*
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Window
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox

@@ -54,7 +54,7 @@ internal class ManageCardFlow(
         get() = fragmentWithTag(MANAGE_CARD_TAG) as? ManageCardContract.View
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchCard(cardId = cardId, forceRefresh = false) { result ->
             result.either({ onInitComplete(Either.Left(it)) }, { card ->
                 when (card.kycStatus) {
                     KycStatus.PASSED -> {
@@ -114,7 +114,7 @@ internal class ManageCardFlow(
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun showManageCardFragment() {
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchCard(cardId = cardId, forceRefresh = false) { result ->
             result.either(::handleFailure) { card ->
                 val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
                 fragment.delegate = this
@@ -146,7 +146,7 @@ internal class ManageCardFlow(
 
     override fun onAddFundingSource(selectedBalanceID: String?) {
         popDialogFragmentWithTag(FUNDING_SOURCE_DIALOG_TAG)
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = false) { result ->
+        aptoPlatformProtocol.fetchCard(cardId = cardId, forceRefresh = false) { result ->
             result.either(::handleFailure) { card ->
                 initAddBalanceFlow(card, selectedBalanceID)
             }
@@ -186,7 +186,7 @@ internal class ManageCardFlow(
 
     private fun refreshCard() {
         showLoading()
-        aptoPlatformProtocol.fetchFinancialAccount(accountId = cardId, forceRefresh = true) { result ->
+        aptoPlatformProtocol.fetchCard(cardId = cardId, forceRefresh = true) { result ->
             result.either(::handleFailure) {
                 manageCardFragment?.refreshBalance()
                 hideLoading()

@@ -4,8 +4,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.core.extension.BackButtonMode
+import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.configure
+import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
+import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel.Actions
 import kotlinx.android.synthetic.main.fragment_payment_sources_list.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,9 +31,13 @@ internal class PaymentSourcesListFragment : BaseFragment(), PaymentSourcesListCo
 
     override fun setupViewModel() {
         observeNotNullable(viewModel.failure) { handleFailure(it) }
-        observeNullable(viewModel.sourceSelected) { delegate?.onClosePaymentSourcesList() }
-        observeNullable(viewModel.newPaymentSource) { delegate?.newCardPressed() }
         observeNotNullable(viewModel.sourceList) { adapter.setData(it) }
+        observeNotNullable(viewModel.actions) { action ->
+            when (action) {
+                Actions.NewPaymentSource -> delegate?.newCardPressed()
+                Actions.SourceSelected -> delegate?.onClosePaymentSourcesList()
+            }
+        }
     }
 
     override fun setupUI() {

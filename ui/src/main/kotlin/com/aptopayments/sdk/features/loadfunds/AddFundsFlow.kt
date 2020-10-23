@@ -11,10 +11,8 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsContract
 import com.aptopayments.sdk.features.loadfunds.paymentsources.AddPaymentSourceFlow
-import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListContract
 import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultContract
-import org.koin.core.inject
 
 private const val PAYMENT_SOURCES_LIST_TAG = "PaymentSourcesListFragment"
 private const val ADD_FUNDS_TAG = "AddFundsFragment"
@@ -25,10 +23,7 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
     PaymentSourcesListContract.Delegate, AddFundsContract.Delegate, AddFundsResultContract.Delegate,
     ContentPresenterContract.Delegate {
 
-    private val paymentSourcesRepository: PaymentSourcesRepository by inject()
-
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        paymentSourcesRepository.getPaymentSourcesList(true) { result ->
             val fragment = fragmentFactory.addFundsFragment(
                 cardId = cardId,
                 tag = ADD_FUNDS_TAG
@@ -36,13 +31,6 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
             fragment.delegate = this
             setStartElement(element = fragment as FlowPresentable)
             onInitComplete(Either.Right(Unit))
-
-            result.either({ handleFailure(it) }, {
-                if (it.isEmpty()) {
-                    openNewCard()
-                }
-            })
-        }
     }
 
     override fun restoreState() {
@@ -77,7 +65,7 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 
-    override fun onFundsAdded(payment: Payment) {
+    override fun onPaymentResult(payment: Payment) {
         val fragment = fragmentFactory.addFundsResultFragment(
             cardId = cardId,
             payment = payment,
@@ -87,22 +75,14 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
         push(fragment as BaseFragment)
     }
 
-    override fun onPaymentSourceChange() {
-        paymentSourcesRepository.getPaymentSourcesList(forceApiCall = false) { result ->
-            result.runIfRight {
-                if (it.isEmpty()) {
-                    openNewCard()
-                } else {
-                    openPaymentSourcesList()
-                }
-            }
-        }
-    }
-
-    private fun openPaymentSourcesList() {
+    override fun onPaymentSourcesList() {
         val fragment = fragmentFactory.paymentSourcesList(tag = PAYMENT_SOURCES_LIST_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
+    }
+
+    override fun onAddPaymenSource() {
+        openNewCard()
     }
 
     override fun onBackFromAddFunds() {

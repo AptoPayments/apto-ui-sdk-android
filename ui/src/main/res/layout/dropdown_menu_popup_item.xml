@@ -7,4 +7,5 @@
     android:maxLines="1"
     android:padding="16dp"
     android:textSize="@dimen/_13sdp"
+    android:textColor="#666666"
     tools:text="test" />

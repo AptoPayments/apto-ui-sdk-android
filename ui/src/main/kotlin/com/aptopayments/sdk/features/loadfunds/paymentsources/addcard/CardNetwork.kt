@@ -32,7 +32,7 @@ internal enum class CardNetwork(
     MASTERCARD(MASTER_NETWORK_PATTERN, MASTER_PATTERN, NORMAL_CARD_MASK, 19, 3, R.drawable.ic_card_mastercard),
     AMEX(AMEX_NETWORK_PATTERN, AMEX_PATTERN, AMEX_CARD_MASK, 17, 4, R.drawable.ic_card_amex),
     DISCOVER(DISCOVER_NETWORK_PATTERN, DISCOVER_PATTERN, NORMAL_CARD_MASK, 19, 3, R.drawable.ic_card_discover),
-    TEST(TEST_NETWORK_PATTERN, TEST_PATTERN, NORMAL_CARD_MASK, 19, 3, R.drawable.ic_card_discover),
+    TEST(TEST_NETWORK_PATTERN, TEST_PATTERN, NORMAL_CARD_MASK, 19, 3, R.drawable.ic_card_unknown),
     UNKNOWN("", "", NORMAL_CARD_MASK, 19, 0, R.drawable.ic_card_unknown);
 
     companion object {

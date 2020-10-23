@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.user.IdDataPointConfiguration
@@ -16,6 +15,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserIdBinding
+import com.aptopayments.sdk.utils.CustomArrayAdapter
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,7 +27,7 @@ private const val DATAPOINT_ID = "DATAPOINT_ID"
 internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserIdBinding>(),
     CollectUserIdContract.View {
 
-    private lateinit var idTypeAdapter: ArrayAdapter<String>
+    private lateinit var idTypeAdapter: CustomArrayAdapter<String>
     private lateinit var config: IdDataPointConfiguration
     private var initialValue: IdDocumentDataPoint? = null
     private val viewModel: CollectUserIdViewModel by viewModel { parametersOf(initialValue, config) }
@@ -56,7 +56,7 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
 
         setTypeSpinnerChangeListener()
 
-        idTypeAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, mutableListOf())
+        idTypeAdapter = CustomArrayAdapter(requireContext(), mutableListOf())
         binding.collectIdTypeSpinner.adapter = idTypeAdapter
     }
 
@@ -80,6 +80,7 @@ internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserId
             customizeFormLabel(binding.collectIdCountryTitle)
             customizeFormLabel(binding.collectIdTypeTitle)
             customizeFormLabel(binding.collectIdNumberTitle)
+            customizeEditText(binding.collectIdNumberEdittext)
             customizeSubmitButton(binding.continueButton)
         }
     }

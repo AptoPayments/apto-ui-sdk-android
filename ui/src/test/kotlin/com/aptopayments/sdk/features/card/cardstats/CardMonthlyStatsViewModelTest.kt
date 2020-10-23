@@ -10,8 +10,6 @@ import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.extension.monthLocalized
-import com.aptopayments.sdk.core.extension.monthToString
-import com.aptopayments.sdk.core.extension.yearToString
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.utils.DateProvider
 import com.nhaarman.mockitokotlin2.*
@@ -21,6 +19,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Spy
@@ -139,7 +138,7 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
     @Test
     fun `given MonthlySpending with previousMonth when monthSelected then prefetch and emit previous month`() {
         val newDate = LocalDate.of(YEAR, MONTH - 1, 1)
-        val result = MonthlySpending(true, true, listOf())
+        val result = MonthlySpending(prevSpendingExists = true, nextSpendingExists = true, spending = listOf())
         configurePlatformCardMonthlySpending(result)
 
         sut.onMonthSelected(newDate)
@@ -147,8 +146,8 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
         val prevNewDate = newDate.minusMonths(1)
         verify(aptoPlatformProtocol).cardMonthlySpending(
             eq(CARD_ID),
-            eq(prevNewDate.monthToString()),
-            eq(prevNewDate.yearToString()),
+            eq(MONTH - 1),
+            eq(YEAR),
             any()
         )
         assertEquals(sut.addSpending.value, prevNewDate)
@@ -156,8 +155,8 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
 
     @Test
     fun `given MonthlySpending without previousMonth when monthSelected then no prefetch is done`() {
-        val newDate = LocalDate.of(YEAR, MONTH - 1, 1)
-        val result = MonthlySpending(false, true, listOf())
+        val newDate = LocalDate.of(YEAR, MONTH, 1)
+        val result = MonthlySpending(prevSpendingExists = false, nextSpendingExists = true, spending = listOf())
         configurePlatformCardMonthlySpending(result)
 
         sut.onMonthSelected(newDate)
@@ -165,19 +164,20 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
         val prevNewDate = newDate.minusMonths(1)
         verify(aptoPlatformProtocol, times(0)).cardMonthlySpending(
             eq(CARD_ID),
-            eq(prevNewDate.monthToString()),
-            eq(prevNewDate.yearToString()),
+            eq(prevNewDate.monthValue),
+            eq(prevNewDate.year),
             any()
         )
         assertEquals(sut.addSpending.value, null)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun configurePlatformCardMonthlySpending(result: MonthlySpending) {
         whenever(
             aptoPlatformProtocol.cardMonthlySpending(
                 anyString(),
-                anyString(),
-                anyString(),
+                anyInt(),
+                anyInt(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->

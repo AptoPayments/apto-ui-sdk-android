@@ -48,7 +48,6 @@ internal val applicationModule = module {
     factory { DateProvider() }
     factory<Timer> { RealTimer() }
     single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get()) }
-    factory<RemoteCardDetailsRepository> { RemoteCardDetailsRepositoryImpl() }
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }
     factory { FormatOrderGenerator(get()) }

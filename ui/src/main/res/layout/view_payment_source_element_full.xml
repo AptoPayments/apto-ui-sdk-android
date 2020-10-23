@@ -69,11 +69,10 @@
 
         <TextView
             android:id="@+id/payment_method_title"
-            text="@{element.title}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text=""
+            android:text="@{element.title}"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@id/payment_method_description"
             app:layout_constraintStart_toEndOf="@+id/four_dots"

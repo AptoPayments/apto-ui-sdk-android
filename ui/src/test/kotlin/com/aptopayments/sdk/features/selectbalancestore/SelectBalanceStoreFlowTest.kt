@@ -75,6 +75,7 @@ class SelectBalanceStoreFlowTest : UnitTest() {
         )
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun `should track event selectBalanceStoreIdentityNotVerified when select balance store fails`() {
         // Given

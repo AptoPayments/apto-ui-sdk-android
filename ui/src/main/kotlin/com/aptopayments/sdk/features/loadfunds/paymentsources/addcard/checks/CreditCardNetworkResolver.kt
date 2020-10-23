@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.checks
 
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.sdk.BuildConfig
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
 
 internal class CreditCardNetworkResolver {
@@ -12,5 +13,8 @@ internal class CreditCardNetworkResolver {
 
     fun setAllowedNetworks(list: List<Card.CardNetwork>) {
         networks = list.map { CardNetwork.valueOf(it.name) }
+        if (BuildConfig.DEBUG) {
+            networks = networks.plusElement(CardNetwork.TEST)
+        }
     }
 }

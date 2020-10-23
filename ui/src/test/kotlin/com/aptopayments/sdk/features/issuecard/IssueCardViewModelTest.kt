@@ -29,6 +29,7 @@ private const val ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS_DISABLED = 200040
 private const val ERROR_BALANCE_VALIDATIONS_INSUFFICIENT_APPLICATION_LIMIT = 200041
 private const val ERROR_OTHER = 1234
 
+@Suppress("UNCHECKED_CAST")
 class IssueCardViewModelTest : AndroidTest() {
 
     @Rule

@@ -18,7 +18,7 @@ internal class AddCardOnboardingViewModel(
     private val _secondDescription = MutableLiveData("")
     val firstDescription = _firstDescription as LiveData<String>
     val secondDescription = _secondDescription as LiveData<String>
-    val continueEvent = LiveEvent<Boolean>()
+    val actions = LiveEvent<Actions>()
 
     init {
         fetchNamesAndPublishDescriptions(cardId)
@@ -26,12 +26,12 @@ internal class AddCardOnboardingViewModel(
 
     fun onContinueClicked() {
         repository.acceptedOnboarding()
-        continueEvent.postValue(true)
+        actions.postValue(Actions.Continue)
     }
 
     private fun fetchNamesAndPublishDescriptions(cardId: String) {
         showLoading()
-        aptoPlatform.fetchFinancialAccount(cardId, false) { result ->
+        aptoPlatform.fetchCard(cardId, false) { result ->
             hideLoading()
             result.either({ handleFailure(it) }, { card ->
                 _secondDescription.value = createSecondDescription(card.features?.funding?.softDescriptor ?: "")
@@ -55,4 +55,8 @@ internal class AddCardOnboardingViewModel(
 
     private fun createSecondDescription(softDescriptor: String) =
         "load_funds_add_card_onboarding_explanation_2".localized().replace("<<VALUE>>", softDescriptor)
+
+    sealed class Actions {
+        object Continue : Actions()
+    }
 }

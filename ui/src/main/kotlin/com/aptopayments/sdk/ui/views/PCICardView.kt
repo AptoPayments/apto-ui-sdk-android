@@ -11,6 +11,7 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.features.managecard.CardInfo
+import com.aptopayments.sdk.pci.config.*
 import kotlinx.android.synthetic.main.include_card_disabled_overlay.view.*
 import kotlinx.android.synthetic.main.include_card_error_overlay.view.*
 import kotlinx.android.synthetic.main.view_pci_card.view.*
@@ -32,7 +33,7 @@ class PCICardView @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.view_pci_card, this)
-        pci_view.lastFour()
+        pci_view.hidePCIData()
         pci_click_listener.setOnClickListener {
             delegate?.cardViewTapped()
         }
@@ -47,14 +48,15 @@ class PCICardView @JvmOverloads constructor(
         lastFour: String,
         name: String
     ) {
-        pci_view.initialise(
+        val configAuth = PCIConfigAuth(
             apiKey = config.apiKey,
             userToken = config.token,
             cardId = config.cardId,
-            lastFour = lastFour,
-            environment = config.environment,
-            name = name
+            environment = PCIEnvironment.valueOf(config.environment.toUpperCase())
         )
+        val configCard = PCIConfigCard(lastFour = lastFour, nameOnCard = name)
+
+        pci_view.init(PCIConfig(configAuth = configAuth, configCard = configCard))
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -71,7 +73,7 @@ class PCICardView @JvmOverloads constructor(
         initialize(config, cardInfo?.lastFourDigits ?: "0000", cardInfo?.cardHolder ?: "")
     }
 
-    fun setCardNetwork(cardNetwork: Card.CardNetwork?) {
+    private fun setCardNetwork(cardNetwork: Card.CardNetwork?) {
         setNetworkImage(cardNetwork)
         updateNetworkLogoIconForCurrentCardStyle()
     }
@@ -98,17 +100,7 @@ class PCICardView @JvmOverloads constructor(
     }
 
     private fun setTextStyles(style: CardStyle?) {
-        val textColor = style?.textColor?.let { Integer.toHexString(it) } ?: "000000"
-        pci_view.alertButtonColor = UIConfig.uiPrimaryColor
-        pci_view.styles = mapOf(
-            "container" to "width: -webkit-fill-available; height: -webkit-fill-available",
-            "content" to mapOf(
-                "pan" to "color: #$textColor; font-family: monospace; position: relative; top: 90px; font-size: 26px; text-align: center; font-weight: 600; text-shadow: 0 1px 1px rgba(43, 45, 53, 0.3);",
-                "name" to "color: #$textColor; font-family: monospace; position: absolute; bottom: 55px; left: 15px; font-size: 16px; font-weight: 600; text-shadow: 0 1px 1px rgba(43, 45, 53, 0.3);",
-                "cvv" to "color: #$textColor; font-family: monospace; position: absolute; bottom: 15px; left: 120px; font-size: 16px; text-shadow: 0 1px 1px rgba(43, 45, 53, 0.3);",
-                "exp" to "color: #$textColor; font-family: monospace; position: absolute; bottom: 15px; left: 15px; font-size: 16px; text-shadow: 0 1px 1px rgba(43, 45, 53, 0.3);"
-            )
-        )
+        pci_view.setStyle(PCIConfigStyle(textColor = style?.textColor, alertButtonColor = UIConfig.uiPrimaryColor))
     }
 
     private fun setCardBackground(style: CardStyle?) {
@@ -169,9 +161,9 @@ class PCICardView @JvmOverloads constructor(
 
     fun showCardDetails(value: Boolean) {
         if (value) {
-            pci_view.reveal()
+            pci_view.showPCIData()
         } else {
-            pci_view.lastFour()
+            pci_view.hidePCIData()
         }
     }
 

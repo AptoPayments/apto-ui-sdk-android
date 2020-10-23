@@ -11,6 +11,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddCardOnboardingBinding
+import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel.Actions
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,9 +41,15 @@ internal class AddCardOnboardingFragment : BaseBindingFragment<FragmentAddCardOn
     }
 
     override fun setupViewModel() {
-        observeNotNullable(viewModel.continueEvent) { delegate?.onContinueAddCardOnboarding() }
+        observeNotNullable(viewModel.actions) { onActionPerformed(it) }
         observeNotNullable(viewModel.loading) { handleLoading(it) }
         observeNotNullable(viewModel.failure) { handleFailure(it) }
+    }
+
+    private fun onActionPerformed(actions: Actions) {
+        when (actions) {
+            is Actions.Continue -> delegate?.onContinueAddCardOnboarding()
+        }
     }
 
     override fun onBackPressed() {

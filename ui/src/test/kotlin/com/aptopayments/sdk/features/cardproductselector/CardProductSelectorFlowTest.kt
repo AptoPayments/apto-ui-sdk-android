@@ -42,6 +42,7 @@ class CardProductSelectorFlowTest : AndroidTest() {
     @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
+    @Suppress("UNCHECKED_CAST")
     @Before
     override fun setUp() {
         super.setUp()

@@ -10,6 +10,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddFundsBinding
+import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel.Actions
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,13 +51,13 @@ internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>()
     override fun setupViewModel() {
         observeNotNullable(viewModel.failure) { handleFailure(it) }
         observeNotNullable(viewModel.loading) { handleLoading(it) }
-        observeNullable(viewModel.paymentSourceClicked) {
+        observeNotNullable(viewModel.action) { action ->
             hideKeyboard()
-            delegate?.onPaymentSourceChange()
-        }
-        observeNotNullable(viewModel.paymentMade) {
-            hideKeyboard()
-            delegate?.onFundsAdded(it)
+            when (action) {
+                is Actions.PaymentResult -> delegate?.onPaymentResult(action.payment)
+                is Actions.PaymentSourcesList -> delegate?.onPaymentSourcesList()
+                is Actions.AddPaymentSource -> delegate?.onAddPaymenSource()
+            }
         }
     }
 
@@ -84,7 +85,7 @@ internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>()
             customizeCardCta(binding.addFundsChangeSource)
             customizeSubmitButton(binding.addFundsButton)
         }
-
+        binding.selectedPaymentSource.setCardBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         binding.inputPaymentAmountError.setTextColor(UIConfig.textPrimaryColor)
         binding.moneyInput.setTextColor(UIConfig.textPrimaryColor)
     }

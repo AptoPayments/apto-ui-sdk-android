@@ -4,14 +4,12 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.goneIf
 import com.aptopayments.sdk.core.extension.invisibleIf
 import com.aptopayments.sdk.core.extension.loadFromUrl
@@ -80,7 +78,7 @@ object DataBindingUtils {
         listener: InverseBindingListener?
     ) {
         if (items != null) {
-            spinner.adapter = ArrayAdapter(spinner.context, R.layout.dropdown_menu_popup_item, items)
+            spinner.adapter = CustomArrayAdapter(spinner.context, items)
             setCurrentSelection(spinner, itemSelected)
             setSpinnerListener(spinner, listener)
         }

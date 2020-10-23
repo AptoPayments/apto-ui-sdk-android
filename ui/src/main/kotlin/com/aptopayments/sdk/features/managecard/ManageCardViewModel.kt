@@ -132,7 +132,7 @@ internal class ManageCardViewModel constructor(
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun getCard(cardId: String, refresh: Boolean, onComplete: ((Card) -> Unit)? = null) {
-        AptoPlatform.fetchFinancialAccount(accountId = cardId, forceRefresh = refresh) { result ->
+        AptoPlatform.fetchCard(cardId = cardId, forceRefresh = refresh) { result ->
             result.either(::handleFailure) { card ->
                 updateViewModelWithCard(card)
                 onComplete?.invoke(card)

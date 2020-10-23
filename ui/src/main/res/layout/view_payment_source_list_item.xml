@@ -21,7 +21,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?selectableItemBackground"
-        android:onClick="@{() -> viewModel.selectPaymentSource(element.elem.id)}">
+        android:onClick="@{() -> viewModel.selectPaymentSource(element.source)}">
 
         <com.aptopayments.sdk.ui.views.PaymentSourceFullView
             android:id="@+id/payment_source_element"

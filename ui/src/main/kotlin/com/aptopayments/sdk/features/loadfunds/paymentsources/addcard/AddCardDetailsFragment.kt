@@ -70,7 +70,13 @@ internal class AddCardDetailsFragment : BaseBindingFragment<FragmentAddCardPayme
         setDateMask()
         setCardMask()
         setLocalizedHints()
-        themeManager().customizeSubmitButton(addcard_continue_button)
+        with(themeManager()) {
+            customizeSubmitButton(addcard_continue_button)
+            customizeEditText(addcard_number_input)
+            customizeEditText(addcard_expiration_input)
+            customizeEditText(addcard_cvv_input)
+            customizeEditText(addcard_zip_input)
+        }
         setupToolBar()
     }
 

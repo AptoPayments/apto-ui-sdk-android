@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.geo.Country
 import com.google.android.gms.tasks.Tasks
 import com.google.android.libraries.places.api.model.AutocompletePrediction
@@ -35,6 +36,8 @@ internal class PlacesAutocompleteAdapter internal constructor(
         val textView2 = row.findViewById<TextView>(android.R.id.text2)
         textView1.text = item.getPrimaryText(null)
         textView2.text = item.getSecondaryText(null)
+        textView1.setTextColor(UIConfig.textPrimaryColor)
+        textView2.setTextColor(UIConfig.textPrimaryColor)
         return row
     }
 
