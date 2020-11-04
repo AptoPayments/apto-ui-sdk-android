@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.monthLocalized
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.view_section_header_element.view.*
 
 internal class StatementListAdapter(val delegate: Delegate) :
@@ -62,7 +63,7 @@ internal class StatementListAdapter(val delegate: Delegate) :
         override fun bind(item: StatementListItem) {
             val monthStatement = (item as StatementListItem.MonthRow).month
 
-            view.setOnClickListener { delegate.onMonthTapped(monthStatement) }
+            view.setOnClickListenerSafe { delegate.onMonthTapped(monthStatement) }
             view.optionTitle = monthStatement.toLocalDate().monthLocalized()
         }
     }

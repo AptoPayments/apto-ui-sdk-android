@@ -14,6 +14,7 @@ import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.invisibleIf
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.extension.visibleIf
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.view_secret_pin.view.*
 
 private const val DEFAULT_PIN_LENGTH = 4
@@ -93,7 +94,7 @@ class SecretPinView @JvmOverloads constructor(context: Context, attrs: Attribute
         configureClickAndColor(pin_btn_8, 8)
         configureClickAndColor(pin_btn_9, 9)
         pin_btn_back.setOnClickListener { removeDigit() }
-        pin_btn_forgot.setOnClickListener { delegate?.onForgotPressed() }
+        pin_btn_forgot.setOnClickListenerSafe { delegate?.onForgotPressed() }
     }
 
     private fun configureLength(typedArray: TypedArray) {

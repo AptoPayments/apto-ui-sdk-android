@@ -86,8 +86,7 @@
             android:layout_marginEnd="@dimen/llsdk_medium_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/addcard_expiration_container"
-            app:layout_constraintTop_toBottomOf="@+id/addcard_number_container"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/addcard_number_container">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addcard_cvv_input"
@@ -98,7 +97,7 @@
                 android:inputType="numberDecimal"
                 android:maxLength="@{viewModel.creditCardNetwork.cvvDigits}"
                 android:text="@={viewModel.cvv}"
-                tools:hint="@string/load_funds_add_card_cvv_placeholder"/>
+                tools:hint="@string/load_funds_add_card_cvv_placeholder" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,11 +130,11 @@
             android:id="@+id/addcard_continue_button"
             style="@style/ThemeTwo.ContinueButton"
             android:enabled="@{viewModel.continueButtonEnabled}"
-            android:onClick="@{() -> viewModel.onContinueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:localize="load_funds_add_card_primary_cta" />
+            app:localize="load_funds_add_card_primary_cta"
+            app:onClickSafe="@{() -> viewModel.onContinueClicked()}" />
 
         <androidx.constraintlayout.widget.Group
             android:layout_width="wrap_content"

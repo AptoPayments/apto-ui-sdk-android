@@ -15,7 +15,7 @@ This document provides an overview of how to:
 * [Start the Cardholder Onboarding Flow](#user-content-start-the-cardholder-onboarding-flow)
 * [Override Configurations and Keys](#user-content-override-configurations-and-keys)
 
-**Note:** The UI SDK imports the PCI SDK. Therefore, the main screen will display a view provided by the PCI-SDK.
+**Note:** The UI SDK automatically imports the [PCI SDK](https://github.com/AptoPayments/apto-pci-sdk-android). Therefore, the main screen will display a view provided by the [PCI SDK](https://github.com/AptoPayments/apto-pci-sdk-android).
 
 For more information, see the [Apto Developer Guides](http://docs.aptopayments.com) or the [Apto API Docs](https://docs.aptopayments.com/api/MobileAPI.html).
 
@@ -107,12 +107,13 @@ android {
     dependencies {
 		...
 
-		implementation 'com.aptopayments.sdk:mobile:3.2.2'
-		implementation 'com.aptopayments.sdk:ui:3.2.2'
+		implementation 'com.aptopayments.sdk:ui:3.4.0'
 
 		...
 	}
 ```
+
+This dependency already includes the [Android Mobile SDK](https://github.com/AptoPayments/apto-sdk-android) and the [Android PCI SDK](https://github.com/AptoPayments/apto-pci-sdk-android).
 
 **Note:** The other files in the repo are not required for installation or initialization. Those files are available so you can:
 
@@ -160,7 +161,7 @@ AptoUiSdk.setApiKey("MOBILE_API_KEY", AptoSdkEnvironment.SBX)
 
 ## Start the Cardholder Onboarding Flow
 
-Once the SDK is initialized, you can implement our pre-built cardholder onboarding flow for collecting cardholder information. For an example of the cardholder onboarding UI/UX screens, please view the [Apto Developer Guides](http://docs.aptopayments.com).
+Once the SDK is initialized, you can implement our pre-built cardholder onboarding flow. The onboarding flow enables users to verify their credentials login and to manage their cardholder information. For an example of the cardholder onboarding UI/UX screens, please view the [Apto Developer Guides](http://docs.aptopayments.com).
 
 To start the cardholder onboarding flow:
 
@@ -170,7 +171,7 @@ To start the cardholder onboarding flow:
     val cardOptions = CardOptions()
 ```
 
-2. Invoke the `startCardFlow` method, passing in the `activity` and `cardOptions` values.
+2. Invoke the `startCardFlow` method, passing in the `activity` and `cardOptions` values. Ensure you replace the `activity` parameter with the Android Activity where the UI SDK will start from.
 
 ```kotlin
     AptoUiSdk.startCardFlow(activity, cardOptions,
@@ -184,17 +185,23 @@ To start the cardholder onboarding flow:
 ```
 
 
-The `startCardFlow` method has two required parameters and two optional parameters:
+The `startCardFlow` method has one required parameter and four optional parameters:
 
 Parameter|Required?|Description
 ---|---|---
-`Activity`|Yes|This is the Android `Activity` object where the SDK will be started. This `Activity` is used to present the UI to the user.
-`CardOptions`|Yes|The UI SDK has multiple features that can be enabled / disabled. This parameter is used to enable / disable card management features and can be used to define the card theme and fonts. See [CardOptions Parameters](#user-content-cardoptions-parameters) for more information.
+`activity`|Yes|This is the Android `Activity` object where the SDK will be started. This `Activity` is used to present the UI to the user.
+`cardOptions`|No|The UI SDK has multiple features that can be enabled / disabled. This parameter is used to enable / disable card management features and can be used to define the card theme and fonts. See [CardOptions Parameters](#user-content-cardoptions-parameters) for more information.
+`metadata`|No|Metadata that will be stored in our servers.
 `onSuccess` (optional)|No|This is the callback closure called once the Apto UI SDK has been initialized.
 `onError` (optional)|No|This is the callback closure called if there was a failure during the SDK initialization process.
 
 
 ### CardOptions Parameters
+
+The UI SDK retrieves all card design configurations from our servers and applies the configurations to the included [PCI SDK](https://github.com/AptoPayments/apto-pci-sdk-android). This ensures the correct card styles and design are shown to the user, including:
+
+* Card Background
+* Card Text Colors
 
 Use the `CardOptions` object to customize the the card management features and card themes and fonts.
 
@@ -213,7 +220,7 @@ Some of the features that can be customized are:
 * Font Options
 * Card logo and design
 	
-	**Note:** If you need to customize the logo and/or card design, it will need to be configured on our servers. You will need to send us a 969px × 612px png file of the entire card, including the background, company logo, and network logo (IE Visa, Mastercard, etc). Please [contact us](mailto:developers@aptopayments.com) for more information.
+	**Note:** If you need to customize the logo and/or card design, it will need to be configured on our servers. You will need to send us a 969px × 612px png file of the entire card, including the background, company logo, and network logo (IE Visa, Mastercard, etc). Once your PNG file is set up, the UI SDK will communicate with our servers to retrieve the PNG file and display it to the user. Please [contact us](mailto:developers@aptopayments.com) for more information.
 
 The `CardOptions` object can accept multiple unordered parameters. No parameters are required to create a `CardOptions` object.
 
@@ -231,7 +238,7 @@ Parameter|Default Value|Description
 `showNotificationPreferences`|`false`|Controls if the user can customize their notification preferences.
 `showDetailedCardActivityOption`|`false`|Controls if the user can view detailed transaction activity. For example, declined transactions.
 `showMonthlyStatementsOption`|`true`|Controls if the user can view their monthly statements.
-`authenticateOnStartup`|`false`|Controls if the user must authenticate their account (using a Passcode or Biometrics), when the app opens or after returning from background mode.
+`authenticateOnStartup`|`false`|Controls if the user must authenticate their account (using a Passcode or Biometrics), when the app opens or after returning from background mode. Enabling this option will require the user to create a Passcode when signing up.
 `authenticateWithPINOnPCI`|`false`|Controls if the user must authenticate using their Passcode, prior to viewing their full card data. <br/><br/>**Note:** If biometric authentication is enabled, it will appear first. The user may choose to cancel biometric authentication and use their Passcode instead.
 `darkThemeEnabled`|`false`|Controls if the UI's dark theme is enabled. *(Only available on devices with Android 10+)*.<br/><br/>**Note:** If this value is set to `true`, you should also change your app theme to support the *DayNight Theme*. See [darkThemeEnabled Parameter](#user-content-darkthemeenabled-parameter)
 `inAppProvisioningEnabled`|`false`|This feature will be available in the future, and will require an additional Google authorization.

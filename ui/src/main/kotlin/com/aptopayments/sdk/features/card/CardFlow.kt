@@ -1,17 +1,18 @@
 package com.aptopayments.sdk.features.card
 
 import androidx.appcompat.app.AppCompatActivity
-import com.aptopayments.mobile.data.ListPagination
-import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.getOrElse
+import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.network.NetworkHandler
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
+import com.aptopayments.sdk.core.usecase.InitNewOrExistingFlowUseCase
+import com.aptopayments.sdk.core.usecase.InitNewOrExistingFlowUseCase.Action
 import com.aptopayments.sdk.core.usecase.ShouldCreatePasscodeUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.AuthFlow
@@ -34,6 +35,7 @@ internal class CardFlow : Flow(), KoinComponent {
     val analyticsManager: AnalyticsServiceContract by inject()
     private val statementRepository: StatementRepository by inject()
     private val shouldCreatePasscodeUseCase: ShouldCreatePasscodeUseCase by inject()
+    private val newOrExistingFlowUseCase: InitNewOrExistingFlowUseCase by inject()
 
     private lateinit var contextConfiguration: ContextConfiguration
     private var noNetworkFragmentShown = false
@@ -88,12 +90,16 @@ internal class CardFlow : Flow(), KoinComponent {
     }
 
     private fun initNewOrExistingCardFlow(onComplete: (Either<Failure, Flow>) -> Unit) {
-        AptoPlatform.fetchCards(ListPagination()) { result ->
-            result.either({ onComplete(Either.Left(it)) }) { cards ->
-                cards.data.firstOrNull { it.state != Card.CardState.CANCELLED }?.let { card ->
-                    initSetLoginPinFlow(cardId = card.accountID, onInitComplete = onComplete)
-                } ?: initCardProductSelectorFlow(onComplete)
-            }
+        newOrExistingFlowUseCase { result ->
+            result.either({ onComplete(it.left()) }, { action ->
+                when (action) {
+                    is Action.ContinueFlowWithCard -> initSetLoginPinFlow(
+                        cardId = action.cardId,
+                        onInitComplete = onComplete
+                    )
+                    Action.ContinueWithCardProductSelectorFlow -> initCardProductSelectorFlow(onComplete)
+                }
+            })
         }
     }
 

@@ -160,11 +160,11 @@
             android:id="@+id/continue_button"
             style="@style/ThemeTwo.ContinueButton"
             android:enabled="@{viewModel.continueEnabled}"
-            android:onClick="@{() -> viewModel.continueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:localize="collect_user_data_personal_info_call_to_action" />
+            app:localize="collect_user_data_personal_info_call_to_action"
+            app:onClickSafe="@{() -> viewModel.continueClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

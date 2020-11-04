@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.managecard
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +17,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.AppBarStateChangeListener
 import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_manage_card.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import kotlinx.android.synthetic.main.include_transaction_list_header.*
@@ -42,7 +42,6 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
     private val viewModel: ManageCardViewModel by viewModel { parametersOf(cardId) }
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
-    private var mLastClickTime: Long = 0
     private var clicksAllowed = true
     private var previousMessageShownAt = LocalDateTime.of(2010, 1, 1, 0, 0, 0)
 
@@ -72,7 +71,7 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
 
     override fun setupListeners() {
         super.setupListeners()
-        add_to_gpay.setOnClickListener {
+        add_to_gpay.setOnClickListenerSafe {
             onGooglePayPressed()
         }
     }
@@ -122,15 +121,7 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
             }
         } else {
             bv_balance_view.set(balance)
-            bv_balance_view.setOnClickListener { onBalanceClicked() }
-        }
-    }
-
-    private fun onBalanceClicked() {
-        // Prevent multiple clicks using threshold of 1000ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime >= 1000) {
-            mLastClickTime = SystemClock.elapsedRealtime()
-            viewModel.onFundingSourceTapped()
+            bv_balance_view.setOnClickListenerSafe { viewModel.onFundingSourceTapped() }
         }
     }
 
@@ -173,9 +164,9 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
     private fun setupToolbar() {
         tb_llsdk_toolbar?.apply {
             inflateMenu(R.menu.menu_manage_card)
-            menu_container_stats?.setOnClickListener { delegate?.onCardStatsTapped() }
-            menu_container_account_settings?.setOnClickListener { delegate?.onAccountSettingsTapped() }
-            menu_container_activate_card?.setOnClickListener {
+            menu_container_stats?.setOnClickListenerSafe { delegate?.onCardStatsTapped() }
+            menu_container_account_settings?.setOnClickListenerSafe { delegate?.onAccountSettingsTapped() }
+            menu_container_activate_card?.setOnClickListenerSafe {
                 viewModel.card.value?.let { delegate?.onActivatePhysicalCardTapped(it) }
             }
             tintMenuItems()

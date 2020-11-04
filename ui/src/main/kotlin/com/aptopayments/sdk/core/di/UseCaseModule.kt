@@ -15,4 +15,5 @@ internal val useCaseModule = module {
     factory { ForgotPinUseCase(get()) }
     factory { DownloadStatementUseCase(get()) }
     factory { ShouldShowBiometricOption(get(), get()) }
+    factory { InitNewOrExistingFlowUseCase(get(), get(), get()) }
 }

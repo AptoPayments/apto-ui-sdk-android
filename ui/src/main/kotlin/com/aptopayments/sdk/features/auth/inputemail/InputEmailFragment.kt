@@ -13,6 +13,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.isValidEmail
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_input.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -58,7 +59,7 @@ internal class InputEmailFragment : BaseFragment(), InputEmailContract.View {
 
     override fun setupListeners() {
         super.setupListeners()
-        continue_button.setOnClickListener { handleContinueButtonClick() }
+        continue_button.setOnClickListenerSafe { handleContinueButtonClick() }
         et_email.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 

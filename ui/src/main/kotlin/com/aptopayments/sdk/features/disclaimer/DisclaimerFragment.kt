@@ -10,6 +10,7 @@ import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_disclaimer.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -61,8 +62,8 @@ internal class DisclaimerFragment : BaseFragment(), DisclaimerContract.View,
 
     override fun setupListeners() {
         super.setupListeners()
-        tv_accept_disclaimer.setOnClickListener { delegate?.onDisclaimerAccepted() }
-        tv_reject_disclaimer.setOnClickListener {
+        tv_accept_disclaimer.setOnClickListenerSafe { delegate?.onDisclaimerAccepted() }
+        tv_reject_disclaimer.setOnClickListenerSafe {
             confirm(
                 title = "disclaimer.disclaimer.cancel_action.title".localized(),
                 text = "disclaimer.disclaimer.cancel_action.message".localized(),

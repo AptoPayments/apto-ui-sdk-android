@@ -16,7 +16,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserAddressBinding
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.appbar.AppBarLayout

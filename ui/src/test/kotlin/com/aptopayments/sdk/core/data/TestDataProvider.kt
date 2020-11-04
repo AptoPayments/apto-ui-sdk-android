@@ -109,7 +109,8 @@ class TestDataProvider {
             spendableAmount: Money? = null,
             nativeSpendableAmount: Money? = null,
             cardHolder: String = "",
-            features: Features? = null
+            features: Features? = null,
+            metadata: String? = null
         ) = Card(
             accountID = accountID,
             cardProductID = cardProductID,
@@ -126,7 +127,8 @@ class TestDataProvider {
             spendableAmount = spendableAmount,
             nativeSpendableAmount = nativeSpendableAmount,
             cardHolder = cardHolder,
-            features = features
+            features = features,
+            metadata = metadata
         )
 
         fun provideCardProduct(
@@ -201,9 +203,10 @@ class TestDataProvider {
         fun providePaymentSourcesPayment() = Payment(
             id = "12345",
             status = PaymentStatus.PROCESSED,
-            createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC),
             amount = Money("USD", 100.0),
-            source = providePaymentSourcesCard()
+            source = providePaymentSourcesCard(),
+            approvalCode = "123456",
+            createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC)
         )
     }
 }

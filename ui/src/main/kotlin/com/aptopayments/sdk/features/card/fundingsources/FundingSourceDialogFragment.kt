@@ -18,6 +18,7 @@ import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_funding_sources_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -114,7 +115,7 @@ internal class FundingSourceDialogFragment : BaseDialogFragment(), FundingSource
         refresh_button.setOnClickListener {
             viewModel.fetchData(mAccountId, refresh = true) {}
         }
-        add_funding_source_button.setOnClickListener {
+        add_funding_source_button.setOnClickListenerSafe {
             delegate?.onAddFundingSource(mSelectedBalanceID)
         }
     }

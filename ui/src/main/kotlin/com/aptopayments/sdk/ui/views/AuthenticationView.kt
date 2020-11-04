@@ -19,7 +19,7 @@ import com.aptopayments.sdk.core.usecase.VerifyPasscodeUseCase
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_BIOMETRICS
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthMethod.ONLY_PIN
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.shake
 import kotlinx.android.synthetic.main.view_authentication.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject

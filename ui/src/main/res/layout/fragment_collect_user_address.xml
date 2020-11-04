@@ -115,8 +115,8 @@
                             android:nextFocusForward="@+id/et_last_name"
                             android:text="@={viewModel.optionalText}"
                             app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
-                            tools:hint="@string/collect_user_data_address_apt_unit_placeholder"
-                            app:requestFocus="@{viewModel.optionalVisible}"/>
+                            app:requestFocus="@{viewModel.optionalVisible}"
+                            tools:hint="@string/collect_user_data_address_apt_unit_placeholder" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </FrameLayout>
@@ -138,12 +138,12 @@
             android:id="@+id/continue_button"
             style="@style/ThemeTwo.ContinueButton"
             android:enabled="@{viewModel.continueEnabled}"
-            android:onClick="@{() -> viewModel.continueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scroll"
-            app:localize="collect_user_data_personal_info_call_to_action" />
+            app:localize="collect_user_data_personal_info_call_to_action"
+            app:onClickSafe="@{() -> viewModel.continueClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

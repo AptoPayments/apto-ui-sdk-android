@@ -71,12 +71,12 @@
             android:layout_marginEnd="@dimen/llsdk_medium_margin"
             android:layout_marginBottom="12dp"
             android:foreground="?selectableItemBackground"
-            android:onClick="@{() -> viewModel.onPaymentSourceClicked()}"
             app:cardCornerRadius="16dp"
             app:cardElevation="16dp"
             app:layout_constraintBottom_toTopOf="@+id/add_funds_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:onClickSafe="@{() -> viewModel.onPaymentSourceClicked()}">
 
             <com.aptopayments.sdk.ui.views.PaymentSourceFullView
                 android:layout_width="wrap_content"
@@ -100,11 +100,11 @@
             android:id="@+id/add_funds_button"
             style="@style/ThemeTwo.ContinueButton"
             visibleIf="@{viewModel.continueButtonEnabled}"
-            android:onClick="@{() -> viewModel.onContinueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:localize="load_funds_add_money_primary_cta" />
+            app:localize="load_funds_add_money_primary_cta"
+            app:onClickSafe="@{() -> viewModel.onContinueClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

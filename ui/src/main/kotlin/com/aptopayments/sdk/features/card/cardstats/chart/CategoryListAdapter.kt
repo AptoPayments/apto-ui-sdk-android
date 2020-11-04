@@ -17,6 +17,7 @@ import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.setBackgroundColorKeepShape
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 
 internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -56,7 +57,7 @@ internal class CategoryListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.icon.setImageDrawable(icon)
             viewHolder.category.text = mcc.toLocalizedString()
             viewHolder.amount.text = lineItem.categorySpending.spending?.toAbsString()
-            viewHolder.row.setOnClickListener { delegate?.onCategoryTapped(lineItem.categorySpending) }
+            viewHolder.row.setOnClickListenerSafe { delegate?.onCategoryTapped(lineItem.categorySpending) }
         }
     }
 

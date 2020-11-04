@@ -16,6 +16,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.SendEmailUtil
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_account_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
@@ -74,12 +75,12 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
 
     override fun setupListeners() {
         super.setupListeners()
-        iv_close_button.setOnClickListener { onBackPressed() }
-        rl_contact_support.setOnClickListener { sendCustomerSupportEmail() }
-        rl_sign_out.setOnClickListener { showConfirmLogOutDialog() }
-        rl_notifications.setOnClickListener { delegate?.showNotificationPreferences() }
-        rl_statements.setOnClickListener { delegate?.onMonthlyStatementTapped() }
-        rl_passcode.setOnClickListener { onChangePasscodeTapped() }
+        iv_close_button.setOnClickListenerSafe { onBackPressed() }
+        rl_contact_support.setOnClickListenerSafe { sendCustomerSupportEmail() }
+        rl_sign_out.setOnClickListenerSafe { showConfirmLogOutDialog() }
+        rl_notifications.setOnClickListenerSafe { delegate?.showNotificationPreferences() }
+        rl_statements.setOnClickListenerSafe { delegate?.onMonthlyStatementTapped() }
+        rl_passcode.setOnClickListenerSafe { onChangePasscodeTapped() }
     }
 
     private fun onChangePasscodeTapped() {

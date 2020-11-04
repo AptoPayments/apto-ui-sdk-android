@@ -217,7 +217,7 @@
     <string name="select_balance_store_oauth_confirm_address_cancel_button">Cancel</string>
     <string name="select_balance_store_login_new_user_title">&lt;a href=\'https://www.aptopayments.com\'&gt;Don\'t have an account? Tap here.&lt;/a&gt;</string>
     <string name="select_balance_store_oauth_confirm_updated_pii_message_message">Looks like you’ve updated your personal details in your account.</string>
-    <string name="elect_balance_store_login_error_identity_not_verified_message">Account not verified</string>
+    <string name="select_balance_store_login_error_identity_not_verified_message">Account not verified</string>
 
     <!-- Disclaimers -->
     <string name="disclaimer_accept">Accept</string>

@@ -76,7 +76,7 @@ val viewModelModule = module {
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(get()) }
     viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->
-        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get())
+        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get(), get())
     }
     viewModel { TransactionListViewModel(get()) }
     viewModel { WaitlistViewModel(get()) }

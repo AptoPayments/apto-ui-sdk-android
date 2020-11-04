@@ -14,7 +14,8 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
+import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_email_verification.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -90,7 +91,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
             }
         }
         apto_pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view))
-        tv_resend_btn.setOnClickListener { resendVerification() }
+        tv_resend_btn.setOnClickListenerSafe { resendVerification() }
     }
 
     private fun resendVerification() {

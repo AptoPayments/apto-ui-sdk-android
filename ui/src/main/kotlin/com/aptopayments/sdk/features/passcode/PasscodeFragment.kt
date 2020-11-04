@@ -12,7 +12,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_passcode.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*

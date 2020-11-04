@@ -13,6 +13,7 @@ import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import java.util.Locale
 
 internal class FundingSourceAdapter(
@@ -72,7 +73,7 @@ internal class FundingSourceAdapter(
             viewHolder.rate?.text = balance.custodianWallet?.balance?.toAbsString()
             viewHolder.amount?.text = balance.balance.toString()
             viewHolder.selector?.isChecked = listIem.selected
-            viewHolder.fundingSourceRow?.setOnClickListener {
+            viewHolder.fundingSourceRow?.setOnClickListenerSafe {
                 delegate?.onFundingSourceTapped(balance)
                 notifyDataSetChanged()
             }
@@ -86,7 +87,7 @@ internal class FundingSourceAdapter(
 
     private fun customizeAddFundingSourceView(viewHolder: ViewHolder, position: Int) {
         (fundingSourceListItems?.get(position) as? FundingSourceListItem.AddFundingSourceButton)?.let {
-            viewHolder.addFundingSourceButton?.setOnClickListener {
+            viewHolder.addFundingSourceButton?.setOnClickListenerSafe {
                 delegate?.onAddFundingSourceTapped()
             }
         }

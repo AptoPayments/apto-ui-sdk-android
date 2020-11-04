@@ -97,12 +97,12 @@
             style="@style/ThemeTwo.ContinueButton"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:onClick="@{() -> viewModel.retryIssueCard()}"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:localizeBinding="@{viewModel.primaryCta}"
+            app:onClickSafe="@{() -> viewModel.retryIssueCard()}"
             tools:text="Try again" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import com.aptopayments.sdk.core.extension.invisibleIf
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.ui.views.AptoTextView
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 
 object DataBindingUtils {
 
@@ -118,5 +119,11 @@ object DataBindingUtils {
             }
             return false
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:onClickSafe")
+    fun setDebouncedListener(view: View, onClickListener: View.OnClickListener) {
+        view.setOnClickListenerSafe { onClickListener.onClick(view) }
     }
 }

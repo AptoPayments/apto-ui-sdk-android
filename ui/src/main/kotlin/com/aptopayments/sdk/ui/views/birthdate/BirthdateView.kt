@@ -11,7 +11,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
 import com.aptopayments.sdk.utils.ViewUtils.showKeyboard
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.shake
 import kotlinx.android.synthetic.main.view_birthdate_picker.view.*
 import org.threeten.bp.LocalDate
 

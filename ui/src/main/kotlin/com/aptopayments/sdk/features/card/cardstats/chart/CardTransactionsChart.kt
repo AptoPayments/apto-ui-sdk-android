@@ -22,6 +22,7 @@ import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -75,7 +76,7 @@ internal class CardTransactionsChart : BaseFragment(), CardTransactionsChartCont
     }
 
     private fun setClickListeners() {
-        monthly_statement_link.setOnClickListener { delegate?.onStatementTapped(date.monthValue, date.year) }
+        monthly_statement_link.setOnClickListenerSafe { delegate?.onStatementTapped(date.monthValue, date.year) }
     }
 
     override fun handleFailure(failure: Failure?) {

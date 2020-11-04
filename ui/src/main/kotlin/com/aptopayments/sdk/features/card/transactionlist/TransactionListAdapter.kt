@@ -17,6 +17,7 @@ import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.show
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.managecard.TransactionListItem
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.toCapitalized
 import kotlin.properties.Delegates
 
@@ -80,7 +81,7 @@ internal class TransactionListAdapter(
             viewHolder.transactionNativeAmountView?.goneIf(transaction.localAmount == transaction.nativeBalance)
             if (isLastPositionOfSection(position)) viewHolder.transactionRowSeparator?.hide()
             else viewHolder.transactionRowSeparator?.show()
-            viewHolder.transactionRow?.setOnClickListener { delegate?.onTransactionTapped(transaction) }
+            viewHolder.transactionRow?.setOnClickListenerSafe { delegate?.onTransactionTapped(transaction) }
         }
     }
 

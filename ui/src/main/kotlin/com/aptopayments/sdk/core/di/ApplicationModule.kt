@@ -61,6 +61,10 @@ internal val applicationModule = module {
     single { PaymentSourcesRepository(get(), get()) }
     factory { PaymentSourceElementMapper() }
     factory { PaymentResultElementMapper(get()) }
+    factory<CardMetadataRepository> { CardMetadataRepositoryImpl }
+    factory<UserMetadataRepository> { UserMetadataRepositoryImpl }
+    factory<ManageCardIdRepository> { ManageCardIdRepositoryImpl }
+    factory<ForceIssueCardRepository> { ForceIssueCardRepositoryImpl }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

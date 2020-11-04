@@ -11,6 +11,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.birthdate.BirthdateView
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_birthdate_verification.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -60,7 +61,7 @@ internal class BirthdateVerificationFragment : BaseFragment(), BirthdateVerifica
     override fun viewLoaded() = viewModel.viewLoaded()
 
     override fun setupListeners() {
-        continue_button.setOnClickListener {
+        continue_button.setOnClickListenerSafe {
             hideKeyboard()
             viewModel.onContinueClicked()
         }

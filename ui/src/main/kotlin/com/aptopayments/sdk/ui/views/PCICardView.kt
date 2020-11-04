@@ -12,6 +12,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.features.managecard.CardInfo
 import com.aptopayments.sdk.pci.config.*
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.include_card_disabled_overlay.view.*
 import kotlinx.android.synthetic.main.include_card_error_overlay.view.*
 import kotlinx.android.synthetic.main.view_pci_card.view.*
@@ -34,7 +35,7 @@ class PCICardView @JvmOverloads constructor(
     init {
         View.inflate(context, R.layout.view_pci_card, this)
         pci_view.hidePCIData()
-        pci_click_listener.setOnClickListener {
+        pci_click_listener.setOnClickListenerSafe {
             delegate?.cardViewTapped()
         }
     }

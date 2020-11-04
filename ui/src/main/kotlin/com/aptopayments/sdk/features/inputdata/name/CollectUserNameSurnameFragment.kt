@@ -14,7 +14,7 @@ import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserNameBinding
 import com.aptopayments.sdk.utils.NameInputFilter
-import com.aptopayments.sdk.utils.shake
+import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

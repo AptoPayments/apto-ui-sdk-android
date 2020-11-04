@@ -18,7 +18,7 @@ internal class PaymentResultElementMapper(private val paymentSourceMapper: Payme
             status = payment.status.legend.localized(),
             time = payment.createdAt.formatForTransactionDetails(),
             source = getPaymentSource(payment.source),
-            authorizationId = payment.id,
+            authorizationId = payment.approvalCode,
             transactionLegend = getTransactionLegend(softDescriptor ?: "")
         )
     }

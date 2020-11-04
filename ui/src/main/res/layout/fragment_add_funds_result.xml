@@ -232,24 +232,24 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/llsdk_medium_margin"
             android:layout_marginBottom="@dimen/llsdk_big_medium_margin"
-            android:gravity="start"
-            android:onClick="@{()-> viewModel.onAgreementClicked()}"
-            android:textSize="12sp"
             android:background="?android:selectableItemBackground"
+            android:gravity="start"
+            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/load_funds_result_done"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/load_funds_result_done"
-            app:localize="load_funds_transaction_learn_more" />
+            app:localize="load_funds_transaction_learn_more"
+            app:onClickSafe="@{()-> viewModel.onAgreementClicked()}" />
 
         <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/load_funds_result_done"
             style="@style/ThemeTwo.ContinueButton"
             android:layout_marginBottom="@dimen/llsdk_big_medium_margin"
-            android:onClick="@{() -> viewModel.onDoneClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:localize="load_funds_transaction_primary_cta" />
+            app:localize="load_funds_transaction_primary_cta"
+            app:onClickSafe="@{() -> viewModel.onDoneClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

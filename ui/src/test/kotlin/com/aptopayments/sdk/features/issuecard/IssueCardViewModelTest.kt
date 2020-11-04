@@ -10,6 +10,7 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
+import com.aptopayments.sdk.repository.CardMetadataRepository
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
@@ -47,12 +48,17 @@ class IssueCardViewModelTest : AndroidTest() {
     @Mock
     private lateinit var issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository
 
+    @Mock
+    private lateinit var metadataRepo: CardMetadataRepository
+
     private val additionalFields = mapOf("test" to "test1")
+    private val metadata = "metadata"
 
     @Before
     override fun setUp() {
         super.setUp()
         whenever(issueCardAdditionalRepo.get()).thenReturn(additionalFields)
+        whenever(metadataRepo.data).thenReturn(metadata)
     }
 
     @Test
@@ -63,16 +69,18 @@ class IssueCardViewModelTest : AndroidTest() {
             aptoPlatform.issueCard(
                 captor.capture(),
                 TestDataProvider.anyObject(),
+                TestDataProvider.anyObject(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
-        verify(aptoPlatform).issueCard(any(), any(), any())
+        verify(aptoPlatform).issueCard(any(), any(), any(), any())
         verify(analyticsManager).track(Event.IssueCard)
+        verify(metadataRepo).clear()
         assertEquals(CARD_APPLICATION_ID, captor.firstValue)
         assertFalse(sut.errorVisible.getOrAwaitValue())
         assertEquals(card, sut.card.getOrAwaitValue())
@@ -86,15 +94,36 @@ class IssueCardViewModelTest : AndroidTest() {
             aptoPlatform.issueCard(
                 any(),
                 captor.capture(),
+                any(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
         assertEquals(additionalFields, captor.firstValue)
+    }
+
+    @Test
+    fun `when metadata set them it is sent to the core sdk`() {
+        val card = TestDataProvider.provideCard()
+        val captor = argumentCaptor<String>()
+        whenever(
+            aptoPlatform.issueCard(
+                any(),
+                any(),
+                captor.capture(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+        }
+
+        createSut()
+
+        assertEquals(metadata, captor.firstValue)
     }
 
     @Test
@@ -161,7 +190,7 @@ class IssueCardViewModelTest : AndroidTest() {
         sut.retryIssueCard()
 
         assertTrue { sut.errorVisible.getOrAwaitValue() }
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any())
     }
 
     @Test
@@ -176,7 +205,7 @@ class IssueCardViewModelTest : AndroidTest() {
 
         assertEquals(TestDataProvider.provideCard(), sut.card.getOrAwaitValue())
         assertFalse(sut.errorVisible.getOrAwaitValue())
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any())
     }
 
     private fun createSut() {
@@ -185,7 +214,8 @@ class IssueCardViewModelTest : AndroidTest() {
             WorkflowActionConfigurationIssueCard(ERROR_ASSET),
             analyticsManager,
             aptoPlatform,
-            issueCardAdditionalRepo
+            issueCardAdditionalRepo,
+            metadataRepo
         )
     }
 
@@ -204,9 +234,9 @@ class IssueCardViewModelTest : AndroidTest() {
 
     private fun configureIssueCardApi(answer: Either<Failure, Card>) {
         whenever(
-            aptoPlatform.issueCard(any(), any(), TestDataProvider.anyObject())
+            aptoPlatform.issueCard(any(), any(), any(), TestDataProvider.anyObject())
         ).thenAnswer { invocation ->
-            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(answer)
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(answer)
         }
     }
 }

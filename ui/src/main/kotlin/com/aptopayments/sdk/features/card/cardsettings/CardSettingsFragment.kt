@@ -25,6 +25,7 @@ import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_card_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
@@ -104,21 +105,21 @@ internal class CardSettingsFragment : BaseBindingFragment<FragmentCardSettingsBi
 
     override fun setupListeners() {
         super.setupListeners()
-        iv_close_button.setOnClickListener { onBackPressed() }
-        rl_add_funds.setOnClickListener { addFundsPressed() }
-        rl_get_pin.setOnClickListener { getPinPressed() }
-        rl_set_pin.setOnClickListener { setPinPressed() }
+        iv_close_button.setOnClickListenerSafe { onBackPressed() }
+        rl_add_funds.setOnClickListenerSafe { addFundsPressed() }
+        rl_get_pin.setOnClickListenerSafe { getPinPressed() }
+        rl_set_pin.setOnClickListenerSafe { setPinPressed() }
         rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             lockUnlockCard(value)
         }
         rl_detailed_card_activity.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             storeDetailedCardActivityPreference(value)
         }
-        rl_contact_support.setOnClickListener { sendCustomerSupportEmail() }
-        rl_report_stolen_card.setOnClickListener { reportLostOrStolenCard() }
-        rl_ivr_support.setOnClickListener { callIvrSupport() }
-        rl_statement.setOnClickListener { onStatementPressed() }
-        rl_google_pay.setOnClickListener { onGooglePayPressed() }
+        rl_contact_support.setOnClickListenerSafe { sendCustomerSupportEmail() }
+        rl_report_stolen_card.setOnClickListenerSafe { reportLostOrStolenCard() }
+        rl_ivr_support.setOnClickListenerSafe { callIvrSupport() }
+        rl_statement.setOnClickListenerSafe { onStatementPressed() }
+        rl_google_pay.setOnClickListenerSafe { onGooglePayPressed() }
     }
 
     private fun setupTheme() {

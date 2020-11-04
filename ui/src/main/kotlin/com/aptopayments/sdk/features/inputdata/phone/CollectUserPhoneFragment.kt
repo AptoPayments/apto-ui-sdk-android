@@ -12,6 +12,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.PhoneInputView
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_phone_input.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -98,7 +99,7 @@ internal class CollectUserPhoneFragment : BaseFragment(),
 
     override fun setupListeners() {
         super.setupListeners()
-        continue_button.setOnClickListener { onContinueButtonClicked() }
+        continue_button.setOnClickListenerSafe { onContinueButtonClicked() }
     }
 
     private fun onContinueButtonClicked() {

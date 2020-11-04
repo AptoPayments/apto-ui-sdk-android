@@ -11,6 +11,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card_success.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -78,10 +79,10 @@ internal class ActivatePhysicalCardSuccessFragment : BaseFragment(), ActivatePhy
     override fun setupListeners() {
         super.setupListeners()
         when {
-            card.features?.setPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListener {
+            card.features?.setPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListenerSafe {
                 delegate?.onSetPinClicked()
             }
-            card.features?.getPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListener {
+            card.features?.getPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListenerSafe {
                 card.features?.getPin?.type?.let {
                     when (it) {
                         is FeatureType.Voip -> delegate?.onGetPinViaVoipClicked()

@@ -53,11 +53,11 @@
         <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/add_card_ftu_continue"
             style="@style/ThemeTwo.ContinueButton"
-            android:onClick="@{() -> viewModel.onContinueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:localize="load_funds_add_card_onboarding_primary_cta" />
+            app:localize="load_funds_add_card_onboarding_primary_cta"
+            app:onClickSafe="@{() -> viewModel.onContinueClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

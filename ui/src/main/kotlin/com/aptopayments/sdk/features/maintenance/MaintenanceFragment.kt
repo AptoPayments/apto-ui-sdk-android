@@ -7,6 +7,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.StatusBarUtil
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_maintenance.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
@@ -40,7 +41,7 @@ internal class MaintenanceFragment : BaseFragment(), MaintenanceContract.View {
         }
     }
 
-    override fun setupListeners() = continue_button.setOnClickListener { networkHandler.checkMaintenanceMode() }
+    override fun setupListeners() = continue_button.setOnClickListenerSafe { networkHandler.checkMaintenanceMode() }
 
     companion object {
         fun newInstance() = MaintenanceFragment()

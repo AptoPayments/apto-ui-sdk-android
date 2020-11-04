@@ -13,6 +13,7 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.extensions.parseHtmlLinks
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_kyc_status.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -53,7 +54,7 @@ internal class KycStatusFragment : BaseFragment(), KycStatusContract.View {
 
     override fun setupListeners() {
         super.setupListeners()
-        refresh_button.setOnClickListener {
+        refresh_button.setOnClickListenerSafe {
             viewModel.getKycStatus(cardId)
         }
     }

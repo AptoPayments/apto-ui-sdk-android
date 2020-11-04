@@ -8,6 +8,7 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.repository.CardMetadataRepository
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 
 private const val ERROR_GENERIC = "GENERIC"
@@ -20,7 +21,8 @@ internal class IssueCardViewModel(
     private val actionConfiguration: WorkflowActionConfigurationIssueCard?,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
-    private val issueCardAdditionalRepository: IssueCardAdditionalFieldsRepository
+    private val issueCardAdditionalRepository: IssueCardAdditionalFieldsRepository,
+    private val cardMetadataRepository: CardMetadataRepository
 ) : BaseViewModel() {
 
     var card: MutableLiveData<Card> = MutableLiveData()
@@ -43,10 +45,16 @@ internal class IssueCardViewModel(
         showLoading()
         errorVisible.value = false
         analyticsManager.track(Event.IssueCard)
-        val additionalFields = issueCardAdditionalRepository.get()
-        aptoPlatform.issueCard(cardApplicationId, additionalFields) { result ->
+        aptoPlatform.issueCard(
+            cardApplicationId,
+            issueCardAdditionalRepository.get(),
+            cardMetadataRepository.data
+        ) { result ->
             hideLoading()
-            result.either({ handleIssueCardFailure(it) }, { card.postValue(it) })
+            result.either({ handleIssueCardFailure(it) }, {
+                cardMetadataRepository.clear()
+                card.postValue(it)
+            })
         }
     }
 

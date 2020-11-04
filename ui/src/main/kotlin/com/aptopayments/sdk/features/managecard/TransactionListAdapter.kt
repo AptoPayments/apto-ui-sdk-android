@@ -15,6 +15,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.PCICardView
 import com.aptopayments.sdk.utils.extensions.formatForTransactionList
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.toCapitalized
 import kotlinx.android.synthetic.main.include_transaction_list_header.view.*
 import kotlinx.android.synthetic.main.view_transaction_row.view.*
@@ -107,7 +108,7 @@ internal open class TransactionListAdapter(
             }
             view.card_settings_button?.let { cardSettingsButton ->
                 cardSettingsButton.backgroundTintList = ColorStateList.valueOf(UIConfig.uiPrimaryColor)
-                cardSettingsButton.setOnClickListener { transactionDelegate?.onCardSettingsTapped() }
+                cardSettingsButton.setOnClickListenerSafe { transactionDelegate?.onCardSettingsTapped() }
             }
         }
 

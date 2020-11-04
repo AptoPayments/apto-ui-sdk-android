@@ -16,6 +16,7 @@ import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
 import com.aptopayments.sdk.utils.extensions.parsePhoneNumber
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.stringFromTimeInterval
 import com.google.android.material.appbar.AppBarLayout
 import com.google.i18n.phonenumbers.NumberParseException
@@ -94,7 +95,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
             }
         }
         apto_pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view))
-        tv_resend_bttn.setOnClickListener { resendVerification() }
+        tv_resend_bttn.setOnClickListenerSafe { resendVerification() }
     }
 
     private fun resendVerification() {

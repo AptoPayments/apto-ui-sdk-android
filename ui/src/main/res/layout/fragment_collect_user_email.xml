@@ -63,8 +63,8 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_email"
-                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/llsdk_phone_input_wrapper_height"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     android:gravity="center_vertical">
@@ -76,8 +76,8 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:inputType="textEmailAddress"
-                        app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
                         android:text="@={viewModel.email}"
+                        app:onOkInSoftKeyboard="@{() -> viewModel.continueClicked()}"
                         tools:text="Email" />
                 </com.google.android.material.textfield.TextInputLayout>
             </FrameLayout>
@@ -87,12 +87,12 @@
             android:id="@+id/continue_button"
             style="@style/ThemeTwo.ContinueButton"
             android:enabled="@{viewModel.continueEnabled}"
-            android:onClick="@{() -> viewModel.continueClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scroll"
-            app:localize="collect_user_data_personal_info_call_to_action" />
+            app:localize="collect_user_data_personal_info_call_to_action"
+            app:onClickSafe="@{() -> viewModel.continueClicked()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

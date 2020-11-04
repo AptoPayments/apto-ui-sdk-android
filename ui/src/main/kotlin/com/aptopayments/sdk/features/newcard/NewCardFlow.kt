@@ -12,19 +12,25 @@ import com.aptopayments.sdk.features.disclaimer.DisclaimerFlow
 import com.aptopayments.sdk.features.inputdata.CollectUserDataFlow
 import com.aptopayments.sdk.features.issuecard.IssueCardFlow
 import com.aptopayments.sdk.features.selectbalancestore.SelectBalanceStoreFlow
+import com.aptopayments.sdk.repository.CardMetadataRepository
+import org.koin.core.inject
 
 internal class NewCardFlow(
     val cardProductId: String,
     val onBack: (Unit) -> Unit,
     val onFinish: (cardId: String) -> Unit
 ) : Flow() {
+    private val cardMetadataRepository: CardMetadataRepository by inject()
 
     private var cardApplication: CardApplication? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        AptoPlatform.applyToCard(CardProduct(id = cardProductId)) { startCardApplicationResult ->
+        AptoPlatform.applyToCard(
+            CardProduct(id = cardProductId)
+        ) { startCardApplicationResult ->
             startCardApplicationResult.either({ onInitComplete(Either.Left(it)) }) { cardApplication ->
                 this.cardApplication = cardApplication
+                cardMetadataRepository.clear()
                 initFlowFor(cardApplication = cardApplication) { initResult ->
                     initResult.either({ onInitComplete(Either.Left(it)) }) { flow ->
                         setStartElement(element = flow)
