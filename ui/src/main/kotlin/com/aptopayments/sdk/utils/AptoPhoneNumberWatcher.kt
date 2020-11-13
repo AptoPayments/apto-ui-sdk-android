@@ -7,7 +7,7 @@ import android.text.Selection
 import com.google.i18n.phonenumbers.AsYouTypeFormatter
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 
-class AptoPhoneNumberWatcher(countryCode: String, private val listener: ValidInputListener) :
+internal class AptoPhoneNumberWatcher(countryCode: String, private val listener: ValidInputListener) :
     PhoneNumberFormattingTextWatcher() {
 
     private var defaultCountryCode = "GB"

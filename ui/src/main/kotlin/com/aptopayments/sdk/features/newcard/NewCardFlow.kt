@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.newcard
 
 import com.aptopayments.mobile.data.card.CardApplication
 import com.aptopayments.mobile.data.cardproduct.CardProduct
-import com.aptopayments.mobile.data.workflowaction.*
+import com.aptopayments.mobile.data.workflowaction.WorkflowAction
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
@@ -76,17 +76,16 @@ internal class NewCardFlow(
     //
     private fun initFlowFor(cardApplication: CardApplication, onComplete: (Either<Failure, Flow>) -> Unit) {
         cardApplication.nextAction?.let { workflowAction ->
-            when (workflowAction.actionType) {
-                WorkflowActionType.SELECT_BALANCE_STORE -> initBalanceStoreFlow(
+            when (workflowAction) {
+                is WorkflowAction.SelectBalanceStoreAction -> initBalanceStoreFlow(
                     cardApplication,
                     workflowAction,
                     onComplete
                 )
-                WorkflowActionType.SHOW_DISCLAIMER -> initDisclaimerFlow(cardApplication, workflowAction, onComplete)
-                WorkflowActionType.ISSUE_CARD -> initIssueCardFlow(cardApplication, workflowAction, onComplete)
-                WorkflowActionType.COLLECT_USER_DATA -> initCollectUserDataFlow(workflowAction, onComplete)
-                else -> {
-                }
+                is WorkflowAction.ShowDisclaimerAction -> initDisclaimerFlow(cardApplication, workflowAction, onComplete)
+                is WorkflowAction.IssueCardAction -> initIssueCardFlow(cardApplication, workflowAction, onComplete)
+                is WorkflowAction.CollectUserDataAction -> initCollectUserDataFlow(workflowAction, onComplete)
+                else -> onComplete((object : Failure.FeatureFailure() {}).left())
             }
         }
     }
@@ -96,10 +95,10 @@ internal class NewCardFlow(
     //
     private fun initBalanceStoreFlow(
         cardApplication: CardApplication,
-        workflowAction: WorkflowAction,
+        workflowAction: WorkflowAction.SelectBalanceStoreAction,
         onComplete: (Either<Failure, Flow>) -> Unit
     ) {
-        (workflowAction.configuration as? WorkflowActionConfigurationSelectBalanceStore)?.let { actionConfiguration ->
+        workflowAction.configuration?.let { actionConfiguration ->
             val flow = SelectBalanceStoreFlow(
                 actionConfiguration = actionConfiguration,
                 cardApplicationId = cardApplication.id,
@@ -119,10 +118,10 @@ internal class NewCardFlow(
     //
     private fun initDisclaimerFlow(
         cardApplication: CardApplication,
-        workflowAction: WorkflowAction,
+        workflowAction: WorkflowAction.ShowDisclaimerAction,
         onComplete: (Either<Failure, Flow>) -> Unit
     ) {
-        (workflowAction.configuration as? WorkflowActionConfigurationShowDisclaimer)?.let { actionConfiguration ->
+        workflowAction.configuration?.let { actionConfiguration ->
             val flow = DisclaimerFlow(
                 actionConfiguration = actionConfiguration,
                 workflowAction = workflowAction,
@@ -144,10 +143,10 @@ internal class NewCardFlow(
     //
     private fun initIssueCardFlow(
         cardApplication: CardApplication,
-        workflowAction: WorkflowAction,
+        workflowAction: WorkflowAction.IssueCardAction,
         onComplete: (Either<Failure, Flow>) -> Unit
     ) {
-        val actionConfiguration = workflowAction.configuration as? WorkflowActionConfigurationIssueCard
+        val actionConfiguration = workflowAction.configuration
         val flow = IssueCardFlow(
             actionConfiguration = actionConfiguration,
             cardApplicationId = cardApplication.id,
@@ -165,10 +164,10 @@ internal class NewCardFlow(
     // Collect User Data
     //
     private fun initCollectUserDataFlow(
-        workflowAction: WorkflowAction,
+        workflowAction: WorkflowAction.CollectUserDataAction,
         onComplete: (Either<Failure, Flow>) -> Unit
     ) {
-        val actionConfiguration = workflowAction.configuration as? WorkflowActionCollectUserData
+        val actionConfiguration = workflowAction.configuration
         actionConfiguration?.let {
             val flow = CollectUserDataFlow(actionConfiguration, { onBack }, { showNextFlow() })
             flow.init { initResult ->

@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
 
-const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
+internal const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
 
 internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract.View {
 

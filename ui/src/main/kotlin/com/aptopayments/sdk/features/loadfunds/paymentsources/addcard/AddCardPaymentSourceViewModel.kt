@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.network.ApiKeyProvider
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.extension.toOnlyDigits
 import com.aptopayments.sdk.core.platform.BaseViewModel
@@ -23,7 +24,7 @@ internal class AddCardPaymentSourceViewModel(
     aptoPlatform: AptoPlatformProtocol
 ) : BaseViewModel() {
 
-    private val creditCardNetworkResolver = CreditCardNetworkResolver()
+    private val creditCardNetworkResolver = CreditCardNetworkResolver(ApiKeyProvider)
     private val cardNumberFieldStateResolver = CardNumberFieldStateResolver()
     private val expirationFieldStateResolver = ExpirationFieldStateResolver(DateProvider())
     private val cvvFieldStateResolver = CvvFieldStateResolver()

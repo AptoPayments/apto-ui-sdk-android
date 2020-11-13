@@ -14,7 +14,7 @@ private const val XML_NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/an
 private const val DEFAULT_NUMBER_OF_DIGITS = 6
 private const val DEFAULT_IS_PASSWORD = false
 
-class AptoPinView @JvmOverloads constructor(
+internal class AptoPinView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

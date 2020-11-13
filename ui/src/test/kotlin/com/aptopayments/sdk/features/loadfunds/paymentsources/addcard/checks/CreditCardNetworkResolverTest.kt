@@ -1,19 +1,28 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.checks
 
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.network.ApiKeyProvider
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
+
+private const val LOAD_FUNDS_TEST_CARD = "9400212999999996"
 
 class CreditCardNetworkResolverTest {
 
     private lateinit var sut: CreditCardNetworkResolver
 
+    private val apiKeyProvider: ApiKeyProvider = mock() {
+        on { isCurrentEnvironmentPrd() } doReturn true
+    }
+
     @Before
     fun setUp() {
-        sut = CreditCardNetworkResolver()
+        sut = createSut(apiKeyProvider)
     }
 
     @Test
@@ -50,6 +59,30 @@ class CreditCardNetworkResolverTest {
 
         assertEquals(CardNetwork.UNKNOWN, sut.getCardType(TestDataProvider.provideVisaValidNumbers().first()))
     }
+
+    @Test
+    fun `when system is in PRD then load funds test card is not recognized`() {
+        sut.setAllowedNetworks(listOf(Card.CardNetwork.MASTERCARD))
+
+        val result = sut.getCardType(LOAD_FUNDS_TEST_CARD)
+
+        assertEquals(CardNetwork.UNKNOWN, result)
+    }
+
+    @Test
+    fun `when system is in not PRD then load funds test card is recognized`() {
+        val apiKeyProviderInSbx: ApiKeyProvider = mock() {
+            on { isCurrentEnvironmentPrd() } doReturn false
+        }
+        val sut = createSut(apiKeyProviderInSbx)
+        sut.setAllowedNetworks(listOf(Card.CardNetwork.MASTERCARD))
+
+        val result = sut.getCardType(LOAD_FUNDS_TEST_CARD)
+
+        assertEquals(CardNetwork.TEST, result)
+    }
+
+    private fun createSut(apiKeyProvider: ApiKeyProvider) = CreditCardNetworkResolver(apiKeyProvider)
 
     private fun testCards(array: List<String>, network: CardNetwork) {
         array.forEach {

@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.inputdata
 
 import com.aptopayments.mobile.data.user.*
-import com.aptopayments.mobile.data.workflowaction.WorkflowActionCollectUserData
+import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationCollectUserData
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
@@ -25,7 +25,7 @@ private const val COLLECT_BIRTHDATE_TAG = "CollectBirthdateFragment"
 private const val COLLECT_PHONE_TAG = "CollectPhoneFragment"
 
 internal class CollectUserDataFlow(
-    private val actionConfiguration: WorkflowActionCollectUserData,
+    private val actionConfiguration: WorkflowActionConfigurationCollectUserData,
     private val onBack: (Unit) -> Unit,
     private val onFinish: () -> Unit
 ) : Flow(), CollectUserNameSurnameContract.Delegate, CollectUserEmailContract.Delegate, CollectUserIdContract.Delegate,

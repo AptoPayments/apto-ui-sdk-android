@@ -2,13 +2,13 @@ package com.aptopayments.sdk.repository
 
 private const val CARD_METADATA = "INITIALIZATION_CARD_METADATA"
 
-interface CardMetadataRepository {
+internal interface CardMetadataRepository {
     var data: String?
     fun clear() {
         data = null
     }
 }
 
-object CardMetadataRepositoryImpl : CardMetadataRepository {
+internal object CardMetadataRepositoryImpl : CardMetadataRepository {
     override var data: String? = null
 }

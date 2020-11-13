@@ -1,11 +1,11 @@
 package com.aptopayments.sdk.repository
 
-interface IssueCardAdditionalFieldsRepository {
+internal interface IssueCardAdditionalFieldsRepository {
     fun set(fields: Map<String, Any>?)
     fun get(): Map<String, Any>?
 }
 
-object IssueCardAdditionalFieldsRepositoryImpl : IssueCardAdditionalFieldsRepository {
+internal object IssueCardAdditionalFieldsRepositoryImpl : IssueCardAdditionalFieldsRepository {
 
     var fields: Map<String, Any>? = null
 

@@ -12,7 +12,7 @@ import android.util.TypedValue.applyDimension
 import androidx.core.content.ContextCompat
 import com.aptopayments.sdk.R
 
-class AptoKeyboardView : KeyboardView {
+internal class AptoKeyboardView : KeyboardView {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 

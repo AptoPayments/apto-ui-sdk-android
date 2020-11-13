@@ -46,7 +46,6 @@ internal class CardProductSelectorFlow(
                             fragmentFactory.countrySelectorFragment(allowedCountriesSet.toList(), COUNTRY_SELECTOR_TAG)
                         fragment.delegate = this
                         analyticsManager.track(Event.CardProductSelectorCountrySelectorShown)
-                        // TODO: show the card product selector if only 1 country
                         setStartElement(element = fragment as FlowPresentable)
                     }
                 }

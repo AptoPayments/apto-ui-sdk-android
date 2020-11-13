@@ -14,9 +14,11 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
+import com.aptopayments.sdk.core.usecase.SaveInitializationDataUseCase
+import com.aptopayments.sdk.core.usecase.SaveInitializationDataUseCase.InitializationData
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
-import com.aptopayments.sdk.repository.*
+import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
 import com.aptopayments.sdk.utils.FontsUtil
 import org.koin.core.module.Module
 import java.lang.ref.WeakReference
@@ -58,6 +60,8 @@ interface AptoUiSdkProtocol {
      * @param cardOptions [CardOptions] The UI SDK has multiple features that can be enabled / disabled.
      * This parameter is used to enable / disable card management features and can be used to define the card theme and fonts.
      * @param cardId String, Card id that will be opened.
+     * @param userMetadata: A string up to 256 characters that will be attached to the user after signing up.
+     * @param cardMetadata: A string up to 256 characters that will be attached to the card after issuance.
      * @param onSuccess This is the callback closure called once the Apto UI SDK has been initialized.
      * @param onError This is the callback closure called if there was a failure during the SDK initialization process.
      */
@@ -65,29 +69,35 @@ interface AptoUiSdkProtocol {
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
         cardId: String,
+        userMetadata: String? = null,
+        cardMetadata: String? = null,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     )
 
+    /**
+     * Launch the Card issuance flow.
+     *
+     * @param from, Activity, The activity from where you are starting the SDK
+     * @param cardOptions [CardOptions] The UI SDK has multiple features that can be enabled / disabled.
+     * This parameter is used to enable / disable card management features and can be used to define the card theme and fonts.
+     * @param userMetadata: A string up to 256 characters that will be attached to the user after signing up.
+     * @param cardMetadata: A string up to 256 characters that will be attached to the card after issuance.
+     * @param onSuccess This is the callback closure called once the Apto UI SDK has been initialized.
+     * @param onError This is the callback closure called if there was a failure during the SDK initialization process.
+     */
     fun startCardApplicationFlow(
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
+        userMetadata: String? = null,
+        cardMetadata: String? = null,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     )
 
-    @Deprecated(message = "Use setCard(metadata) or setUser(metadata) instead.")
+    @Deprecated(message = "Use the cardMetadata parameter when launching the SDK.")
     fun setCardIssueAdditional(fields: Map<String, Any>?)
 
-    /**
-     * @param metadata Card metadata, an arbitrary string up to 256 characters, that will be stored along with the card.
-     */
-    fun setCardMetadata(metadata: String)
-
-    /**
-     * @param metadata user metadata, an arbitrary string up to 256 characters, that will be stored along with the user.
-     */
-    fun setUserMetadata(metadata: String)
     fun userTokenPresent(): Boolean
     fun getAppVersion(activity: FragmentActivity?): String
     fun registerFirebaseToken(firebaseToken: String)
@@ -95,6 +105,8 @@ interface AptoUiSdkProtocol {
 }
 
 object AptoUiSdk : AptoUiSdkProtocol {
+
+    private val saveInitializationDataUseCase: SaveInitializationDataUseCase by lazy { AptoPlatform.koin.get() }
 
     internal var cardFlow: WeakReference<CardFlow>? = null
 
@@ -131,26 +143,42 @@ object AptoUiSdk : AptoUiSdkProtocol {
         onError: ((Failure) -> Unit)?
     ) {
         startFlow(from, cardOptions, onSuccess, onError)
+        saveInitializationDataUseCase.run(null)
     }
 
     override fun startManageCardFlow(
         from: Activity,
         cardOptions: CardOptions,
         cardId: String,
+        userMetadata: String?,
+        cardMetadata: String?,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
-        AptoPlatform.koin.get<ManageCardIdRepository>().data = cardId
+        saveInitializationDataUseCase(
+            InitializationData(
+                userMetadata = userMetadata,
+                cardMetadata = cardMetadata
+            )
+        )
         startFlow(from, cardOptions, onSuccess = onSuccess, onError = onError)
     }
 
     override fun startCardApplicationFlow(
         from: Activity,
         cardOptions: CardOptions,
+        userMetadata: String?,
+        cardMetadata: String?,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
-        AptoPlatform.koin.get<ForceIssueCardRepository>().data = true
+        saveInitializationDataUseCase(
+            InitializationData(
+                userMetadata = userMetadata,
+                cardMetadata = cardMetadata,
+                forceApplyToCard = true
+            )
+        )
         startFlow(from, cardOptions, onSuccess = onSuccess, onError = onError)
     }
 
@@ -188,14 +216,6 @@ object AptoUiSdk : AptoUiSdkProtocol {
 
     override fun setCardIssueAdditional(fields: Map<String, Any>?) {
         IssueCardAdditionalFieldsRepositoryImpl.fields = fields
-    }
-
-    override fun setCardMetadata(metadata: String) {
-        AptoPlatform.koin.get<CardMetadataRepository>().data = metadata
-    }
-
-    override fun setUserMetadata(metadata: String) {
-        AptoPlatform.koin.get<UserMetadataRepository>().data = metadata
     }
 
     override fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()
