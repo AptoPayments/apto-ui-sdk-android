@@ -672,7 +672,7 @@
     <string name="monthly_statements_list_title">Monthly Statements</string>
     <string name="monthly_statements_report_title">Statement &lt;&lt;MONTH&gt;&gt; &lt;&lt;YEAR&gt;&gt;</string>
     <string name="monthly_statements_report_error_url_expired_message">For security reasons this file has expired, please request it again</string>
-    <string name="monthly_statements_list_empty_case_message">No stataments available yet</string>
+    <string name="monthly_statements_list_empty_case_message">No statements available yet</string>
 
     <!--Auth Biometric-->
     <string name="biometric_create_pin_title">Set your Passcode</string>
@@ -718,7 +718,7 @@
     <string name="birthday_collector_id_document_type_passport">Passport</string>
     <string name="birthday_collector_id_document_type_drivers_license">Driver\'s license</string>
     <string name="collect_user_data_address_title">Your Address 🏠</string>
-    <string name="collect_user_data_address_subtitle">Please enter your current title</string>
+    <string name="collect_user_data_address_subtitle">Please enter your current address</string>
     <string name="collect_user_data_address_address_placeholder">Address</string>
     <string name="collect_user_data_address_apt_unit_placeholder">Apartment number (optional)</string>
     <string name="collect_user_data_phone_title">Your Phone Number 📲</string>

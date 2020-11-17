@@ -3,7 +3,7 @@ package com.aptopayments.sdk.repository
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.Timer
 
-private const val DETAILS_EXPIRATION_THRESHOLD_SECONDS = 90L
+private const val DETAILS_EXPIRATION_THRESHOLD_SECONDS = 180L
 private const val DETAILS_EXPIRATION_THRESHOLD_MILLI = DETAILS_EXPIRATION_THRESHOLD_SECONDS * 1000
 
 internal interface LocalCardDetailsRepository {

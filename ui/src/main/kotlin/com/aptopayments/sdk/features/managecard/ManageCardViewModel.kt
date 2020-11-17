@@ -39,8 +39,9 @@ internal class ManageCardViewModel constructor(
     private val repo: LocalCardDetailsRepository by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(cardId) }
 
+    private val _cardInfo = MutableLiveData<CardInfo>()
     val card: MutableLiveData<Card> = MutableLiveData()
-    val cardInfo = MutableLiveData<CardInfo>()
+    val cardInfo = Transformations.distinctUntilChanged(_cardInfo)
     val cardConfiguration: PCIConfiguration by lazy { PCIConfigurationBuilder().build(cardId) }
     val showPhysicalCardActivationMessage = MutableLiveData(false)
     val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
@@ -143,15 +144,7 @@ internal class ManageCardViewModel constructor(
 
     private fun updateViewModelWithCard(card: Card) {
         this.card.postValue(card)
-        cardInfo.value = CardInfo(
-            cardId = card.accountID,
-            cardHolder = card.cardHolder,
-            lastFourDigits = card.lastFourDigits,
-            cardNetwork = card.cardNetwork,
-            state = card.state,
-            orderedStatus = card.orderedStatus,
-            cardStyle = card.cardStyle
-        )
+        updateCardInfo(card)
 
         showPhysicalCardActivationMessage.postValue(card.orderedStatus == Card.OrderedStatus.ORDERED)
 
@@ -160,6 +153,18 @@ internal class ManageCardViewModel constructor(
             list.add(TransactionListItem.HeaderView)
             transactionListItems.postValue(list)
         }
+    }
+
+    private fun updateCardInfo(card: Card) {
+        _cardInfo.value = CardInfo(
+            cardId = card.accountID,
+            cardHolder = card.cardHolder,
+            lastFourDigits = card.lastFourDigits,
+            cardNetwork = card.cardNetwork,
+            state = card.state,
+            orderedStatus = card.orderedStatus,
+            cardStyle = card.cardStyle
+        )
     }
 
     fun refreshBalance(cardId: String) {

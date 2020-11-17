@@ -3,7 +3,7 @@ package com.aptopayments.sdk.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RelativeLayout
+import android.widget.FrameLayout
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.CardBackgroundStyle
 import com.aptopayments.mobile.data.card.CardStyle
@@ -24,7 +24,7 @@ class PCICardView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private lateinit var config: PCIConfiguration
     private var cardStyle: CardStyle? = null
@@ -34,7 +34,6 @@ class PCICardView @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.view_pci_card, this)
-        pci_view.hidePCIData()
         pci_click_listener.setOnClickListenerSafe {
             delegate?.cardViewTapped()
         }
