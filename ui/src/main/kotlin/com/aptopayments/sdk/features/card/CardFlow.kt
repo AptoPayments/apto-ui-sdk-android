@@ -43,8 +43,6 @@ internal class CardFlow : Flow(), KoinComponent {
     private var initialized = false
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        subscribeToNetworkAvailabilityEvent()
-        subscribeToMaintenanceModeEvent()
         if (!networkHandler.isConnected) {
             val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
             setStartElement(fragment as BaseFragment)
@@ -161,6 +159,8 @@ internal class CardFlow : Flow(), KoinComponent {
     override fun attachTo(activity: AppCompatActivity, fragmentContainer: Int) {
         super.attachTo(activity, fragmentContainer)
         subscribeToSessionInvalidEvent()
+        subscribeToNetworkAvailabilityEvent()
+        subscribeToMaintenanceModeEvent()
     }
 
     override fun detachFromActivity() {

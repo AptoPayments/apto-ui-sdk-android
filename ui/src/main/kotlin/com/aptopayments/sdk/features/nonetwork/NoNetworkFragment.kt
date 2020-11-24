@@ -17,8 +17,8 @@ import java.net.URI
 import java.util.Timer
 import kotlin.concurrent.scheduleAtFixedRate
 
-const val DELAY = 5000L
-const val PERIOD = 5000L
+const val DELAY = 2000L
+const val PERIOD = 2000L
 const val PORT = 443
 
 internal class NoNetworkFragment : BaseFragment(), NoNetworkContract.View {
