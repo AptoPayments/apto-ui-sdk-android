@@ -19,8 +19,8 @@ internal class DisclaimerFlow(
     private val workflowAction: WorkflowAction,
     private val workflowObjectId: String,
     private val cardApplicationId: String,
-    private val onBack: (Unit) -> Unit,
-    private val onAccept: (Unit) -> Unit
+    private val onBack: () -> Unit,
+    private val onAccept: () -> Unit
 ) : Flow(), DisclaimerContract.Delegate {
 
     private val aptoPlatform: AptoPlatformProtocol by inject()
@@ -46,7 +46,7 @@ internal class DisclaimerFlow(
         aptoPlatform.acceptDisclaimer(workflowObjectId, workflowAction) { result ->
             hideLoading()
             result.either(::handleFailure) {
-                onAccept(Unit)
+                onAccept.invoke()
             }
         }
     }
@@ -56,7 +56,7 @@ internal class DisclaimerFlow(
         aptoPlatform.cancelCardApplication(cardApplicationId) { result ->
             result.either(::handleFailure) {
                 aptoPlatform.logout()
-                onBack(Unit)
+                onBack.invoke()
             }
         }
     }

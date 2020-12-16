@@ -58,7 +58,8 @@ class NativeContentView @JvmOverloads constructor(
                         delegate?.onNativeContentLoaded()
                         return false
                     }
-                })
+                }
+            )
         } ?: run {
             iv_native_content_asset.remove()
             delegate?.onNativeContentLoaded()

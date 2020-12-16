@@ -60,10 +60,12 @@ class ManageCardFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-                single<AptoPlatformProtocol> { mockAptoPlatform }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                    single<AptoPlatformProtocol> { mockAptoPlatform }
+                }
+            )
         }
         sut = ManageCardFlow(cardId = cardId, contextConfiguration = mockConfig, onClose = {})
     }

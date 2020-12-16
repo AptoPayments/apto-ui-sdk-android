@@ -36,7 +36,7 @@ internal class ActivatePhysicalCardSuccessFragment : BaseFragment(), ActivatePhy
     override fun setupViewModel() {
         viewModel.apply {
             observe(getPINFinished) { delegate?.getPinFinished() }
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
     }
 

@@ -11,14 +11,13 @@ import com.aptopayments.sdk.features.card.statements.PdfRendererFragmentDouble
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
 import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Spy
 import java.io.File
+import kotlin.test.assertEquals
 
 private const val TITLE = "TITLE"
 private const val PDF_RENDERER_TAG = "PdfRendererFragment"
@@ -30,7 +29,6 @@ class CardStatsFlowTest : AndroidTest() {
     @Mock
     private lateinit var mockFragmentFactory: FragmentFactory
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Mock
@@ -46,10 +44,12 @@ class CardStatsFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single<AnalyticsServiceContract> { analyticsManager }
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single<AnalyticsServiceContract> { analyticsManager }
+                    single { mockFragmentFactory }
+                }
+            )
         }
     }
 
@@ -65,6 +65,6 @@ class CardStatsFlowTest : AndroidTest() {
 
         sut.showMonthlyStatement(statementFile)
 
-        verify(analyticsManager).track(Event.MonthlyStatementsReportStart)
+        assertEquals(Event.MonthlyStatementsReportStart, analyticsManager.lastEvent)
     }
 }

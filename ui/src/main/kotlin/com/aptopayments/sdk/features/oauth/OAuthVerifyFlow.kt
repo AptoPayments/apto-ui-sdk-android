@@ -17,7 +17,7 @@ private const val OAUTH_VERIFY_TAG = "OAuthVerifyFragment"
 internal class OAuthVerifyFlow(
     val allowedBalanceType: AllowedBalanceType,
     val oauthAttempt: OAuthAttempt,
-    val onBack: (Unit) -> Unit,
+    val onBack: () -> Unit,
     val onFinish: (oauthAttempt: OAuthAttempt) -> Unit,
     val onError: (Failure.ServerError) -> Unit
 ) : Flow(), OAuthVerifyContract.Delegate {

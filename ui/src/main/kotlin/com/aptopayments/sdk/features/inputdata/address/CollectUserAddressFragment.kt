@@ -28,7 +28,8 @@ private const val ADDRESS_CONFIG = "config"
 private const val MAPS_DEFAULT = "replace_me"
 private const val DATAPOINT_ADDRESS = "DATAPOINT_ADDRESS"
 
-internal class CollectUserAddressFragment : BaseBindingFragment<FragmentCollectUserAddressBinding>(),
+internal class CollectUserAddressFragment :
+    BaseBindingFragment<FragmentCollectUserAddressBinding>(),
     CollectUserAddressContract.View {
 
     private var initialValue: AddressDataPoint? = null

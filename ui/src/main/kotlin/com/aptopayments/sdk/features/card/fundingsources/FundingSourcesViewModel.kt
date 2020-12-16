@@ -9,7 +9,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class FundingSourcesViewModel constructor(
+internal class FundingSourcesViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
@@ -89,13 +89,15 @@ internal class FundingSourcesViewModel constructor(
         selected: String?
     ): List<FundingSourceListItem> {
         val list: ArrayList<FundingSourceListItem> = arrayListOf()
-        fundingSources.toTypedArray().sortWith(Comparator { b1, b2 ->
-            when {
-                (b1.balance?.amount ?: 0.0) > (b2.balance?.amount ?: 0.0) -> 1
-                (b1.balance?.amount ?: 0.0) == (b2.balance?.amount ?: 0.0) -> 0
-                else -> -1
+        fundingSources.toTypedArray().sortWith(
+            Comparator { b1, b2 ->
+                when {
+                    (b1.balance?.amount ?: 0.0) > (b2.balance?.amount ?: 0.0) -> 1
+                    (b1.balance?.amount ?: 0.0) == (b2.balance?.amount ?: 0.0) -> 0
+                    else -> -1
+                }
             }
-        })
+        )
         fundingSources.forEach { balance ->
             list.add(FundingSourceListItem.FundingSourceRow(balance, balance.id == selected))
         }

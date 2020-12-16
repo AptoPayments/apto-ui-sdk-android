@@ -25,7 +25,6 @@ import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -39,7 +38,6 @@ class CardProductSelectorFlowTest : AndroidTest() {
     @Mock
     private lateinit var mockAptoPlatform: AptoPlatform
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Suppress("UNCHECKED_CAST")
@@ -48,11 +46,13 @@ class CardProductSelectorFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-                single<AnalyticsServiceContract> { analyticsManager }
-                single<AptoPlatformProtocol> { mockAptoPlatform }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                    single<AnalyticsServiceContract> { analyticsManager }
+                    single<AptoPlatformProtocol> { mockAptoPlatform }
+                }
+            )
         }
         val mockCardProducts = ArrayList<CardProductSummary>()
         mockCardProducts.add(mock())

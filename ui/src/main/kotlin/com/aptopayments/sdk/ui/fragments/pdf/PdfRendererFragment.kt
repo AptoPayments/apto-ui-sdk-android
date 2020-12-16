@@ -19,8 +19,10 @@ import java.io.File
 private const val FILE_KEY = "file"
 private const val TITLE_KEY = "title"
 
-internal class PdfRendererFragment : BaseFragment(),
-    PdfRendererContract.View, KoinComponent {
+internal class PdfRendererFragment :
+    BaseFragment(),
+    PdfRendererContract.View,
+    KoinComponent {
 
     override var delegate: PdfRendererContract.Delegate? = null
     private lateinit var file: File

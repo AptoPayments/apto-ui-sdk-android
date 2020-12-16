@@ -16,10 +16,10 @@ private const val CUSTODIAN_WALLET_FUNDING_SOURCE = "custodian_wallet"
 private const val OAUTH_CREDENTIAL_TYPE = "oauth"
 
 internal class AddBalanceFlow(
-    val allowedBalanceTypes: List<AllowedBalanceType>,
-    val cardID: String,
-    var onBack: (Unit) -> Unit,
-    var onFinish: (balance: Balance) -> Unit
+    private val allowedBalanceTypes: List<AllowedBalanceType>,
+    private val cardID: String,
+    private val onBack: () -> Unit,
+    private val onFinish: (balance: Balance) -> Unit
 ) : Flow() {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -50,7 +50,7 @@ internal class AddBalanceFlow(
         )
         val flow = OAuthFlow(
             config = config,
-            onBack = { onBack(Unit) },
+            onBack = { onBack.invoke() },
             onFinish = { oauthAttempt ->
                 val custodianType = allowedBalanceTypes.firstOrNull()?.balanceType ?: ""
                 AptoPlatform.addCardFundingSource(
@@ -60,10 +60,13 @@ internal class AddBalanceFlow(
                     credentialType = OAUTH_CREDENTIAL_TYPE,
                     tokenId = oauthAttempt.tokenId
                 ) { result ->
-                    result.either({ failure -> handleAddBalanceFailure(failure) }, { balance ->
-                        hideLoading()
-                        onFinish(balance)
-                    })
+                    result.either(
+                        { failure -> handleAddBalanceFailure(failure) },
+                        { balance ->
+                            hideLoading()
+                            onFinish(balance)
+                        }
+                    )
                 }
             }
         )

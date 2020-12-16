@@ -49,7 +49,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
     override fun setupViewModel() {
         viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
         viewModel.verification.postValue(verification)
     }

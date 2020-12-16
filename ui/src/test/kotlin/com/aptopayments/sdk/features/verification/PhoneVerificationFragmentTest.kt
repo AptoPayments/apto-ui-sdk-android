@@ -29,9 +29,11 @@ class PhoneVerificationFragmentTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         startKoin {
-            modules(module {
-                viewModel { viewModel }
-            })
+            modules(
+                module {
+                    viewModel { viewModel }
+                }
+            )
         }
         sut = PhoneVerificationFragment.newInstance(verification)
         sut.verification = verification

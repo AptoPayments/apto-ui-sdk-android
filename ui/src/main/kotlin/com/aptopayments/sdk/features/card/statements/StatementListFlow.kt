@@ -15,8 +15,8 @@ private const val STATEMENT_LIST_TAG = "StatementListFragment"
 private const val PDF_RENDERER_TAG = "PdfRendererFragment"
 
 internal class StatementListFlow(
-    var onBack: () -> Unit,
-    var onFinish: () -> Unit
+    val onBack: () -> Unit,
+    val onFinish: () -> Unit
 ) : Flow(), StatementListContract.Delegate, PdfRendererContract.Delegate {
 
     val analyticsManager: AnalyticsServiceContract by inject()

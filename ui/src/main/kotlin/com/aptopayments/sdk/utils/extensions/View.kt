@@ -10,8 +10,5 @@ fun View.shake() {
 }
 
 internal fun View.setOnClickListenerSafe(onSafeClick: (View) -> Unit) {
-    val safeClickListener = SafeClickListener {
-        onSafeClick(it)
-    }
-    setOnClickListener(safeClickListener)
+    setOnClickListener(SafeClickListener { onSafeClick(it) })
 }

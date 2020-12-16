@@ -80,7 +80,7 @@ internal class InputEmailFragment : BaseFragment(), InputEmailContract.View {
             observeNotNullable(enableNextButton, ::updateContinueButtonState)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             observe(verificationData, ::updateVerificationState)
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
     }
 

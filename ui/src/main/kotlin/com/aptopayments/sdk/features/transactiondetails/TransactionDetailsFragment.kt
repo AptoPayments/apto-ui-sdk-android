@@ -40,7 +40,9 @@ private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
 private const val TRANSACTION_KEY = "TRANSACTION"
 private const val ZOOM = 16f
 
-internal class TransactionDetailsFragment : BaseFragment(), TransactionDetailsContract.View,
+internal class TransactionDetailsFragment :
+    BaseFragment(),
+    TransactionDetailsContract.View,
     OnMapReadyCallback {
 
     override var delegate: TransactionDetailsContract.Delegate? = null
@@ -192,7 +194,8 @@ internal class TransactionDetailsFragment : BaseFragment(), TransactionDetailsCo
     }
 
     private fun setupToolBar() {
-        toolbar.configure(this,
+        toolbar.configure(
+            this,
             ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))
                 .build()
         )
@@ -200,18 +203,20 @@ internal class TransactionDetailsFragment : BaseFragment(), TransactionDetailsCo
     }
 
     private fun setTitleBackgroundColor(color: Int) {
-        transaction_details_toolbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout,
-                                                                                                      verticalOffset ->
-            if (abs(verticalOffset) == appBarLayout?.totalScrollRange) {
-                // Collapsed
-                toolbar.setBackgroundColor(color)
-                collapsing_toolbar.setStatusBarScrimColor(color)
-            } else {
-                // Expanded
-                toolbar.setBackgroundColor(Color.TRANSPARENT)
-                collapsing_toolbar.setStatusBarScrimColor(Color.TRANSPARENT)
+        transaction_details_toolbar.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { appBarLayout,
+                verticalOffset ->
+                if (abs(verticalOffset) == appBarLayout?.totalScrollRange) {
+                    // Collapsed
+                    toolbar.setBackgroundColor(color)
+                    collapsing_toolbar.setStatusBarScrimColor(color)
+                } else {
+                    // Expanded
+                    toolbar.setBackgroundColor(Color.TRANSPARENT)
+                    collapsing_toolbar.setStatusBarScrimColor(Color.TRANSPARENT)
+                }
             }
-        })
+        )
         collapsing_toolbar.setBackgroundColor(color)
     }
 

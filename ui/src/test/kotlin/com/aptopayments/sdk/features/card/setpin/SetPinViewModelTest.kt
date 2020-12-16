@@ -5,14 +5,13 @@ import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SetPinViewModelTest : AndroidTest() {
 
     private lateinit var sut: SetCardPinViewModel
-    @Spy
+
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before

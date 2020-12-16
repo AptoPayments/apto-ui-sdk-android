@@ -12,7 +12,7 @@ private const val ISSUE_CARD_TAG = "IssueCardFragment"
 internal class IssueCardFlow(
     private val actionConfiguration: WorkflowActionConfigurationIssueCard?,
     private val cardApplicationId: String,
-    val onBack: (Unit) -> Unit,
+    val onBack: () -> Unit,
     val onFinish: (cardId: String) -> Unit
 ) : Flow(), IssueCardContract.Delegate {
 

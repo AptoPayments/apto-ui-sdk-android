@@ -16,7 +16,8 @@ import org.koin.core.parameter.parametersOf
 private const val CARD_ID = "CARD_ID"
 private const val PAYMENT_KEY = "PAYMENT_KEY"
 
-internal class AddFundsResultFragment : BaseBindingFragment<FragmentAddFundsResultBinding>(),
+internal class AddFundsResultFragment :
+    BaseBindingFragment<FragmentAddFundsResultBinding>(),
     AddFundsResultContract.View {
 
     override var delegate: AddFundsResultContract.Delegate? = null

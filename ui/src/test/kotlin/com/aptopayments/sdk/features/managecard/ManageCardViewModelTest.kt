@@ -1,54 +1,57 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.aptopayments.sdk.features.managecard
 
 import androidx.lifecycle.Observer
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
+import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
+import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.functional.right
+import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockitokotlin2.mock
+import com.aptopayments.sdk.utils.getOrAwaitValue
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Spy
 import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+private const val CARD_ID = "CARD_ID_1"
+
 class ManageCardViewModelTest : AndroidTest() {
 
     private lateinit var sut: ManageCardViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Mock
     private lateinit var fetchTransactionsTaskQueue: FetchTransactionsTaskQueue
 
     @Mock
-    private lateinit var mockCard: Card
-
-    @Mock
-    private lateinit var mockTransaction: Transaction
-
-    @Mock
     private lateinit var transactionsObserver: Observer<List<Transaction>?>
-
-    @Mock
-    private lateinit var transactionListItemsObserver: Observer<List<TransactionListItem>?>
 
     @Mock
     private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
 
-    private val EXPECTED_WAITLIST_VALUE = true
+    @Mock
+    private lateinit var aptoPlatform: AptoPlatformProtocol
 
     @Before
     override fun setUp() {
@@ -56,305 +59,171 @@ class ManageCardViewModelTest : AndroidTest() {
         startKoin {
             modules(listOf(applicationModule, useCaseModule))
         }
+    }
+
+    private fun createSut(transactions: List<Transaction> = emptyList()) {
+        mockFetchCard()
+        mockFetchFundingSource()
+        mockLoadTransactions(transactions)
         sut = ManageCardViewModel(
-            TestDataProvider.provideCardId(),
+            CARD_ID,
             fetchTransactionsTaskQueue,
             analyticsManager,
-            aptoUiSdkProtocol
+            aptoUiSdkProtocol,
+            aptoPlatform
         )
-        whenever(mockCard.isWaitlisted).thenReturn(EXPECTED_WAITLIST_VALUE)
-        whenever(mockTransaction.createdAt).thenReturn(ZonedDateTime.now())
-        whenever(mockTransaction.transactionId).thenReturn("")
-    }
-
-    @Test
-    fun `build items does not add section header when skipFirstHeader is true`() {
-
-        // Given
-        val transactions: MutableList<Transaction> = mutableListOf()
-        transactions.add(mockTransaction)
-
-        // When
-        val result = sut.buildItems(transactions, skipFirstHeader = true)
-
-        // Then
-        assert(result.size == 1)
-        assert(result.first().itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE)
-        assert((result.first() as TransactionListItem.TransactionRow).transaction == mockTransaction)
-    }
-
-    @Test
-    fun `build items does adds section header when skipFirstHeader is false`() {
-
-        // Given
-        val transactions: MutableList<Transaction> = mutableListOf()
-        transactions.add(mockTransaction)
-
-        // When
-        val result = sut.buildItems(transactions, skipFirstHeader = false)
-
-        // Then
-        assert(result.size == 2)
-        assert(result.first().itemType() == TransactionListItem.SECTION_HEADER_VIEW_TYPE)
-        assert(result[1].itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE)
-        assert((result[1] as TransactionListItem.TransactionRow).transaction == mockTransaction)
     }
 
     @Test
     fun `test track is called on view loaded`() {
+        createSut()
+
         sut.viewLoaded()
+
         assertTrue { analyticsManager.trackCalled }
         assertEquals(analyticsManager.lastEvent, Event.ManageCard)
     }
 
     @Test
+    fun `when no transactions then only header is present`() {
+        createSut()
+        sut.transactions.observeForever(transactionsObserver)
+
+        val result = sut.transactionListItems.getOrAwaitValue()
+
+        assertEquals(1, result.size)
+        assertTrue { result[0] is TransactionListItem.HeaderView }
+    }
+
+    @Test
+    fun `when one transaction then Header-Section-Transaction`() {
+        val transaction = TestDataProvider.provideTransaction()
+        createSut(listOf(transaction))
+        sut.transactions.observeForever(transactionsObserver)
+
+        val result = sut.transactionListItems.getOrAwaitValue()
+
+        assertEquals(3, result.size)
+        assertTrue { result[0] is TransactionListItem.HeaderView }
+        assertTrue { result[1] is TransactionListItem.SectionHeader }
+        assertTrue { result[2] is TransactionListItem.TransactionRow }
+        assertEquals(transaction, (result[2] as TransactionListItem.TransactionRow).transaction)
+    }
+
+    @Test
     fun `section header is skipped when merging list items from an append operation of the same month and year`() {
-
         // Given
-        sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(mockTransaction)
-
-        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
-        currentTransactions.add(TransactionListItem.HeaderView)
-        currentTransactions.add(TransactionListItem.SectionHeader(""))
-        currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
+        mockLoadMoreTransactions(listOf(TestDataProvider.provideTransaction()))
+        val oldTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now().minusNanos(1))
+        createSut(listOf(oldTransaction))
 
         // When
-        sut.mergeListItems(
-            newTransactions = newTransactions,
-            currentTransactionItems = currentTransactions,
-            append = true
-        )
+        sut.getMoreTransactions()
+        val result = sut.transactionListItems.getOrAwaitValue()
 
         // Then
-        assert(sut.transactionListItems.value?.size == 4)
-        assert(sut.transactionListItems.value?.first() is TransactionListItem.HeaderView)
-        assert(sut.transactionListItems.value!![1] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![2] is TransactionListItem.TransactionRow)
-        assert(sut.transactionListItems.value!![3] is TransactionListItem.TransactionRow)
+        assert(result.size == 4)
+        assert(result[0] is TransactionListItem.HeaderView)
+        assert(result[1] is TransactionListItem.SectionHeader)
+        assert(result[2] is TransactionListItem.TransactionRow)
+        assert(result[3] is TransactionListItem.TransactionRow)
     }
 
     @Test
     fun `section header and transactions are added when merging list items from an append operation of a transaction with different month`() {
-
         // Given
-        sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction = mock<Transaction>()
-        whenever(newMockTransaction.createdAt).thenReturn(ZonedDateTime.now().plusMonths(1))
-        newTransactions.add(newMockTransaction)
-
-        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
-        currentTransactions.add(TransactionListItem.HeaderView)
-        currentTransactions.add(TransactionListItem.SectionHeader(""))
-        currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
+        mockLoadMoreTransactions(
+            listOf(
+                TestDataProvider.provideTransaction(
+                    createdAt = ZonedDateTime.now().plusMonths(1)
+                )
+            )
+        )
+        val oldTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now())
+        createSut(listOf(oldTransaction))
 
         // When
-        sut.mergeListItems(
-            newTransactions = newTransactions,
-            currentTransactionItems = currentTransactions,
-            append = true
-        )
+        sut.getMoreTransactions()
+        val result = sut.transactionListItems.getOrAwaitValue()
 
         // Then
-        assert(sut.transactionListItems.value?.size == 5)
-        assert(sut.transactionListItems.value?.first() is TransactionListItem.HeaderView)
-        assert(sut.transactionListItems.value!![1] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![2] is TransactionListItem.TransactionRow)
-        assert(sut.transactionListItems.value!![3] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![4] is TransactionListItem.TransactionRow)
+        assert(result.size == 5)
+        assert(result.first() is TransactionListItem.HeaderView)
+        assert(result[1] is TransactionListItem.SectionHeader)
+        assert(result[2] is TransactionListItem.TransactionRow)
+        assert(result[3] is TransactionListItem.SectionHeader)
+        assert(result[4] is TransactionListItem.TransactionRow)
     }
 
     @Test
     fun `section header and transactions are added when merging list items from an append operation of a transaction with different year`() {
-
         // Given
-        sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction = mock<Transaction>()
-        val date = ZonedDateTime.now().plusYears(1)
-        whenever(newMockTransaction.createdAt).thenReturn(date)
-        newTransactions.add(newMockTransaction)
-
-        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
-        currentTransactions.add(TransactionListItem.HeaderView)
-        currentTransactions.add(TransactionListItem.SectionHeader(""))
-        currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
+        mockLoadMoreTransactions(
+            listOf(
+                TestDataProvider.provideTransaction(
+                    createdAt = ZonedDateTime.now().plusYears(1)
+                )
+            )
+        )
+        val oldTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now())
+        createSut(listOf(oldTransaction))
 
         // When
-        sut.mergeListItems(
-            newTransactions = newTransactions,
-            currentTransactionItems = currentTransactions,
-            append = true
-        )
+        sut.getMoreTransactions()
+        val result = sut.transactionListItems.getOrAwaitValue()
 
         // Then
-        assert(sut.transactionListItems.value?.size == 5)
-        assert(sut.transactionListItems.value?.first() is TransactionListItem.HeaderView)
-        assert(sut.transactionListItems.value!![1] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![2] is TransactionListItem.TransactionRow)
-        assert(sut.transactionListItems.value!![3] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![4] is TransactionListItem.TransactionRow)
+        assert(result.size == 5)
+        assert(result.first() is TransactionListItem.HeaderView)
+        assert(result[1] is TransactionListItem.SectionHeader)
+        assert(result[2] is TransactionListItem.TransactionRow)
+        assert(result[3] is TransactionListItem.SectionHeader)
+        assert(result[4] is TransactionListItem.TransactionRow)
     }
 
     @Test
     fun `section header and transactions are added when merging list items from pull to refresh and there are no current transactions`() {
-
         // Given
-        sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(mockTransaction)
-
-        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
-        currentTransactions.add(TransactionListItem.HeaderView)
+        val newTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now())
+        mockLoadTransactions(listOf(newTransaction), forceApiCall = true, clearCachedValue = true)
+        createSut(listOf())
 
         // When
-        sut.mergeListItems(
-            newTransactions = newTransactions,
-            currentTransactionItems = currentTransactions,
-            append = false
-        )
+        sut.refreshTransactions()
+        val result = sut.transactionListItems.getOrAwaitValue()
 
         // Then
-        assert(sut.transactionListItems.value?.size == 3)
-        assert(sut.transactionListItems.value?.first() is TransactionListItem.HeaderView)
-        assert(sut.transactionListItems.value!![1] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![2] is TransactionListItem.TransactionRow)
+        assert(result.size == 3)
+        assert(result.first() is TransactionListItem.HeaderView)
+        assert(result[1] is TransactionListItem.SectionHeader)
+        assert(result[2] is TransactionListItem.TransactionRow)
     }
 
     @Test
     fun `section header and transactions are added when merging list items from background refresh and there is one transaction`() {
-
         // Given
-        sut.transactionListItems.observeForever(transactionListItemsObserver)
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        val newMockTransaction = mock<Transaction>()
-        val date = ZonedDateTime.now().plusMonths(1)
-        whenever(newMockTransaction.createdAt).thenReturn(date)
-        newTransactions.add(newMockTransaction)
-        newTransactions.add(mockTransaction)
-
-        val currentTransactions: MutableList<TransactionListItem> = mutableListOf()
-        currentTransactions.add(TransactionListItem.HeaderView)
-        currentTransactions.add(TransactionListItem.SectionHeader(""))
-        currentTransactions.add(TransactionListItem.TransactionRow(mockTransaction))
+        val newTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now().plusMonths(1))
+        val oldTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now())
+        mockBackgroundTransactions(listOf(newTransaction, oldTransaction))
+        createSut(listOf(oldTransaction))
 
         // When
-        sut.mergeListItems(
-            newTransactions = newTransactions,
-            currentTransactionItems = currentTransactions,
-            append = false
-        )
+        val result = sut.transactionListItems.getOrAwaitValue()
 
         // Then
-        assert(sut.transactionListItems.value?.size == 5)
-        assert(sut.transactionListItems.value?.first() is TransactionListItem.HeaderView)
-        assert(sut.transactionListItems.value!![1] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![2] is TransactionListItem.TransactionRow)
-        assert(sut.transactionListItems.value!![3] is TransactionListItem.SectionHeader)
-        assert(sut.transactionListItems.value!![4] is TransactionListItem.TransactionRow)
-    }
-
-    @Test
-    fun `no update when update transactions is called with no transactions`() {
-
-        // Given
-        sut.transactions.observeForever(transactionsObserver)
-        sut.transactions.value = emptyList()
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-
-        // When
-        val result = sut.updateTransactions(transactionList = newTransactions, append = false)
-
-        // Then
-        assert(result == newTransactions)
-        assert(sut.transactions.value?.isEmpty()!!)
-    }
-
-    @Test
-    fun `transactions are appended when update transactions is called with transactions`() {
-
-        // Given
-        sut.transactions.observeForever(transactionsObserver)
-        sut.transactions.value = emptyList()
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(mockTransaction)
-
-        // When
-        val result = sut.updateTransactions(transactionList = newTransactions, append = true)
-
-        // Then
-        assert(result == newTransactions)
-        assert(sut.transactions.value?.first() == mockTransaction)
-    }
-
-    @Test
-    fun `transactions are added when update transactions is called after pull to refresh`() {
-
-        // Given
-        sut.transactions.observeForever(transactionsObserver)
-        sut.transactions.value = emptyList()
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(mockTransaction)
-
-        // When
-        val result = sut.updateTransactions(transactionList = newTransactions, append = false)
-
-        // Then
-        assert(result == newTransactions)
-        assert(sut.transactions.value?.first() == mockTransaction)
-    }
-
-    @Test
-    fun `transactions are merged when update transactions is called after background refresh`() {
-
-        // Given
-        sut.transactions.observeForever(transactionsObserver)
-        val currentTransactions: MutableList<Transaction> = mutableListOf()
-        val currentMockTransaction = mock<Transaction>()
-        val date = ZonedDateTime.now().plusMonths(1)
-        whenever(currentMockTransaction.createdAt).thenReturn(date)
-        currentTransactions.add(currentMockTransaction)
-        currentTransactions.add(mockTransaction)
-        sut.transactions.value = currentTransactions
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(mockTransaction)
-
-        // When
-        val result = sut.updateTransactions(transactionList = newTransactions, append = false)
-
-        // Then
-        assert(result.size == 2)
-        assert(sut.transactions.value?.first() == currentMockTransaction)
-        assert(sut.transactions.value!![1] == mockTransaction)
-    }
-
-    @Test
-    fun `transactions are replaced when update transactions is called with new transactions and previous ones are not present after background refresh`() {
-
-        // Given
-        sut.transactions.observeForever(transactionsObserver)
-        val currentTransactions: MutableList<Transaction> = mutableListOf()
-        currentTransactions.add(mockTransaction)
-        val newMockTransaction = mock<Transaction>()
-        val date = ZonedDateTime.now().plusMonths(1)
-        whenever(newMockTransaction.createdAt).thenReturn(date)
-        sut.transactions.value = currentTransactions
-        val newTransactions: MutableList<Transaction> = mutableListOf()
-        newTransactions.add(newMockTransaction)
-
-        // When
-        val result = sut.updateTransactions(transactionList = newTransactions, append = false)
-
-        // Then
-        assert(result.size == 1)
-        assert(sut.transactions.value?.first() == newMockTransaction)
+        assertEquals(5, result.size)
+        assert(result[0] is TransactionListItem.HeaderView)
+        assert(result[1] is TransactionListItem.SectionHeader)
+        assert(result[2] is TransactionListItem.TransactionRow)
+        assert(result[3] is TransactionListItem.SectionHeader)
+        assert(result[4] is TransactionListItem.TransactionRow)
+        assertEquals(newTransaction, (result[2] as TransactionListItem.TransactionRow).transaction)
     }
 
     @Test
     fun `whenever embedded then X is shown and Back is allowed`() {
         whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.EMBEDDED))
+        createSut()
 
         assertTrue { sut.canBackPress }
         assertTrue { sut.showXOnToolbar }
@@ -363,8 +232,78 @@ class ManageCardViewModelTest : AndroidTest() {
     @Test
     fun `whenever embedded then X is not shown and Back is not allowed`() {
         whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.STANDALONE))
+        createSut()
 
         assertFalse(sut.canBackPress)
         assertFalse(sut.showXOnToolbar)
+    }
+
+    private fun mockFetchCard() {
+        whenever(
+            aptoPlatform.fetchCard(
+                eq(CARD_ID),
+                any(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(
+                TestDataProvider.provideCard(accountID = CARD_ID).right()
+            )
+        }
+    }
+
+    private fun mockFetchFundingSource() {
+        whenever(
+            aptoPlatform.fetchCardFundingSource(
+                eq(CARD_ID),
+                any(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[2] as (Either<Failure, Balance>) -> Unit).invoke(Balance().right())
+        }
+    }
+
+    private fun mockLoadTransactions(
+        transactions: List<Transaction>,
+        forceApiCall: Boolean = false,
+        clearCachedValue: Boolean = false
+    ) {
+        whenever(
+            fetchTransactionsTaskQueue.loadTransactions(
+                eq(CARD_ID),
+                anyInt(),
+                eq(forceApiCall),
+                eq(clearCachedValue),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[4] as (Either<Failure, List<Transaction>>) -> Unit).invoke(transactions.right())
+        }
+    }
+
+    private fun mockLoadMoreTransactions(transactions: List<Transaction>) {
+        whenever(
+            fetchTransactionsTaskQueue.loadMoreTransactions(
+                eq(CARD_ID),
+                anyString(),
+                anyInt(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[3] as (Either<Failure, List<Transaction>>) -> Unit).invoke(transactions.right())
+        }
+    }
+
+    private fun mockBackgroundTransactions(transactions: List<Transaction>) {
+        whenever(
+            fetchTransactionsTaskQueue.backgroundRefresh(
+                eq(CARD_ID),
+                anyInt(),
+                TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[2] as (Either<Failure, List<Transaction>>) -> Unit).invoke(transactions.right())
+        }
     }
 }

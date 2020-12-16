@@ -21,7 +21,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val COUNTRY_CONFIG = "config"
 private const val DATAPOINT_PHONE = "DATAPOINT_PHONE"
 
-internal class CollectUserPhoneFragment : BaseFragment(),
+internal class CollectUserPhoneFragment :
+    BaseFragment(),
     CollectUserPhoneContract.View {
 
     private var initialValue: PhoneDataPoint? = null

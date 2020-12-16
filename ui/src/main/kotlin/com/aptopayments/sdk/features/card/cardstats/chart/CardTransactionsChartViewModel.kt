@@ -11,7 +11,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.threeten.bp.LocalDate
 
-internal class CardTransactionsChartViewModel constructor(
+internal class CardTransactionsChartViewModel(
     private val cardId: String,
     private val date: LocalDate,
     private val aptoPlatform: AptoPlatformProtocol

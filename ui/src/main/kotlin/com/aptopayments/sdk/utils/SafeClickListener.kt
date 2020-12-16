@@ -5,7 +5,7 @@ import android.view.View
 
 class SafeClickListener(
     private var defaultInterval: Int = 800,
-    private val onSafeCLick: (View) -> Unit
+    private val onSafeClick: (View) -> Unit
 ) : View.OnClickListener {
     private var lastTimeClicked: Long = 0
 
@@ -14,6 +14,6 @@ class SafeClickListener(
             return
         }
         lastTimeClicked = SystemClock.elapsedRealtime()
-        onSafeCLick(v)
+        onSafeClick(v)
     }
 }

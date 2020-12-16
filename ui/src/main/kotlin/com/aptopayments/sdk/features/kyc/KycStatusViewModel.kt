@@ -8,7 +8,7 @@ import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class KycStatusViewModel constructor(
+internal class KycStatusViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

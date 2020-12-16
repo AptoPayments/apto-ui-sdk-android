@@ -16,14 +16,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class VerificationViewModelTest : UnitTest() {
     private lateinit var verificationViewModel: VerificationViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Mock
@@ -40,9 +38,8 @@ class VerificationViewModelTest : UnitTest() {
 
     @Test
     fun `test for verification with non-pending status`() {
-        val verification = Verification("", "email", VerificationStatus.FAILED).apply {
-            this.verificationId = "verificationId"
-        }
+        val verification = Verification("verificationId", "email", VerificationStatus.FAILED)
+
         verificationViewModel.finishVerification(verification.verificationId) { result -> result.isLeft }
         verify(verificationLiveData, never()).postValue(verification)
     }

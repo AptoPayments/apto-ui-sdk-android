@@ -47,17 +47,17 @@ fun View.visibleIf(bool: Boolean) {
 private fun View.show(visibility: Int) { this.visibility = visibility }
 
 fun ImageView.loadFromUrl(url: String) =
-        Glide.with(this.context.applicationContext)
-                .load(url)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(this)
+    Glide.with(this.context.applicationContext)
+        .load(url)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .into(this)
 
 fun ImageView.loadFromUrlWithListener(url: String, listener: RequestListener<Drawable>) =
-        Glide.with(this.context.applicationContext)
-                .load(url)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .listener(listener)
-                .into(this)
+    Glide.with(this.context.applicationContext)
+        .load(url)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .listener(listener)
+        .into(this)
 
 fun View.setBackgroundColorKeepShape(@ColorInt color: Int) {
     this.background?.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)

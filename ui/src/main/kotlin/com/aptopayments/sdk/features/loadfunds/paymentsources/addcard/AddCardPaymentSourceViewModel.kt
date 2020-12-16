@@ -73,9 +73,12 @@ internal class AddCardPaymentSourceViewModel(
             val result = repo.addPaymentSource(card)
 
             hideLoading()
-            result.either({ handleFailure(getAddCardFailure(it)) }, {
-                cardTransactionCompleted.postValue(result.isRight)
-            })
+            result.either(
+                { handleFailure(getAddCardFailure(it)) },
+                {
+                    cardTransactionCompleted.postValue(result.isRight)
+                }
+            )
         }
     }
 

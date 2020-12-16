@@ -10,7 +10,7 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import org.koin.core.KoinComponent
 
-internal class AccountSettingsViewModel constructor(
+internal class AccountSettingsViewModel(
     private val analyticsManager: AnalyticsServiceContract,
     private val authRepository: AuthenticationRepository,
     private val showBiometricOption: ShouldShowBiometricOption

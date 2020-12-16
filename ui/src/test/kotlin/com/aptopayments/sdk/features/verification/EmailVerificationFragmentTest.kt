@@ -29,9 +29,11 @@ class EmailVerificationFragmentTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         startKoin {
-            modules(module {
-                viewModel { viewModel }
-            })
+            modules(
+                module {
+                    viewModel { viewModel }
+                }
+            )
         }
         sut = EmailVerificationFragment.newInstance(verification)
     }

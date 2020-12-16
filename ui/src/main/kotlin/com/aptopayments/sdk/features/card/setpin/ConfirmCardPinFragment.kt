@@ -6,7 +6,7 @@ import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.utils.TextInputWatcher
@@ -35,7 +35,7 @@ internal class ConfirmCardPinFragment : BaseFragment(), ConfirmCardPinContract.V
 
     override fun setupViewModel() {
         viewModel.apply {
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
     }
 

@@ -1,17 +1,13 @@
 package com.aptopayments.sdk.features.managecard
 
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
-import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.features.managecard.CardOptions
-import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -19,38 +15,33 @@ import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.ui.views.PCIConfiguration
 import com.aptopayments.sdk.utils.LiveEvent
+import com.aptopayments.sdk.utils.extensions.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
-import org.threeten.bp.format.DateTimeFormatter
-import java.lang.reflect.Modifier
-import java.util.ArrayList
 
 private const val ROWS_PER_PAGE = 20
 
-internal class ManageCardViewModel constructor(
+internal class ManageCardViewModel(
     private val cardId: String,
     private val getTransactionsQueue: FetchTransactionsTaskQueue,
-    private var analyticsManager: AnalyticsServiceContract,
-    private val aptoUiSdkProtocol: AptoUiSdkProtocol
+    private val analyticsManager: AnalyticsServiceContract,
+    private val aptoUiSdkProtocol: AptoUiSdkProtocol,
+    private val aptoPlatform: AptoPlatformProtocol
 ) : BaseViewModel(), KoinComponent {
 
     private val repo: LocalCardDetailsRepository by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(cardId) }
-
-    private val _cardInfo = MutableLiveData<CardInfo>()
-    val card: MutableLiveData<Card> = MutableLiveData()
-    val cardInfo = Transformations.distinctUntilChanged(_cardInfo)
+    private val _card: MutableLiveData<Card> = MutableLiveData()
+    val card = _card.distinctUntilChanged()
     val cardConfiguration: PCIConfiguration by lazy { PCIConfigurationBuilder().build(cardId) }
     val showPhysicalCardActivationMessage = MutableLiveData(false)
     val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
     val showFundingSourceDialog = LiveEvent<String>()
-    val transactions: MutableLiveData<List<Transaction>?> = MutableLiveData()
+    val transactions = MutableLiveData(listOf<Transaction>())
     val fundingSource = MutableLiveData<Balance?>()
-    val transactionListItems = MutableLiveData<List<TransactionListItem>>(emptyList())
-    val cardProduct: MutableLiveData<CardProduct> = MutableLiveData()
-    val transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData()
+    val transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData(false)
     val showAddToGooglePay = Transformations.map(iapHelper.showAddCardButton) { showAddCardButton ->
         aptoUiSdkProtocol.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites() && showAddCardButton
     }
@@ -59,287 +50,137 @@ internal class ManageCardViewModel constructor(
 
     private var lastTransactionId: String? = null
     var balanceLoaded = false
-    private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
+
+    val transactionListItems = MediatorLiveData<List<TransactionListItem>>()
 
     init {
         startIapHelper()
+        fetchData(forceApiCall = false, clearCachedValue = false) {
+            backgroundRefresh()
+        }
+        transactionListItems.addSource(transactions) {
+            generateTransactionList(it)
+        }
+    }
+
+    private fun generateTransactionList(transactionItems: List<Transaction>) {
+        val calculator = TransactionListCalculatorWithHeader()
+        val output = mutableListOf<TransactionListItem>()
+        output.add(TransactionListItem.HeaderView)
+        output.addAll(calculator.buildList(transactionItems))
+        transactionListItems.value = output
     }
 
     fun viewLoaded() {
         analyticsManager.track(Event.ManageCard)
     }
 
-    fun viewReady() {
-        transactionsInfoRetrieved.postValue(false)
-        fetchData(cardId, forceApiCall = false, clearCachedValue = false) {
-            backgroundRefresh(cardId = cardId)
+    fun refreshData(onComplete: (() -> Unit)) {
+        fetchData(forceApiCall = true, clearCachedValue = true, onComplete = onComplete)
+    }
+
+    fun refreshTransactions() {
+        showLoading()
+        getTransactions(forceApiCall = true, clearCachedValue = true) {
+            hideLoading()
         }
     }
 
-    fun refreshData(cardId: String, onComplete: (() -> Unit)) {
+    private fun fetchData(forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
         transactionsInfoRetrieved.postValue(false)
-        fetchData(cardId = cardId, forceApiCall = true, clearCachedValue = true, onComplete = onComplete)
-    }
-
-    fun refreshTransactions(cardId: String, onComplete: (() -> Unit)) {
-        getTransactions(cardId = cardId, forceApiCall = true, clearCachedValue = true) {
-            transactionsInfoRetrieved.postValue(true)
-            onComplete()
-        }
-    }
-
-    private fun fetchData(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
-        getCard(cardId = cardId, refresh = forceApiCall) { card ->
+        getCard(refresh = forceApiCall) { card ->
             card.cardProductID?.let {
-                getCardProduct(cardProductId = it) {
-                    getCardBalance(cardId = cardId, refresh = forceApiCall) {
-                        getTransactions(
-                            cardId = cardId,
-                            forceApiCall = forceApiCall,
-                            clearCachedValue = clearCachedValue
-                        ) {
-                            transactionsInfoRetrieved.postValue(true)
-                            onComplete()
-                        }
+                getCardBalance(refresh = forceApiCall) {
+                    getTransactions(forceApiCall = forceApiCall, clearCachedValue = clearCachedValue) {
+                        onComplete.invoke()
                     }
                 }
             }
         }
     }
 
-    private fun backgroundRefresh(cardId: String) {
-        getCard(cardId = cardId, refresh = true) { }
-        getCardBalance(cardId, refresh = true) {}
-        getBackgroundTransactions(cardId = cardId) { transactionsInfoRetrieved.postValue(true) }
+    private fun backgroundRefresh() {
+        getCard(refresh = true) { }
+        getCardBalance(refresh = true) {}
+        getBackgroundTransactions()
     }
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun getCardProduct(cardProductId: String, onComplete: (() -> Unit)? = null) {
-        AptoPlatform.fetchCardProduct(cardProductId, false) {
-            it.either(::handleFailure) { cardProduct ->
-                this.cardProduct.postValue(cardProduct)
-                onComplete?.invoke()
-                Unit
-            }
-        }
-    }
+    fun refreshCard() = getCard(refresh = true) {}
 
-    //
-    // Card operations
-    //
-    fun refreshCard(cardId: String) {
-        getCard(cardId, refresh = true) {}
-    }
-
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun getCard(cardId: String, refresh: Boolean, onComplete: ((Card) -> Unit)? = null) {
-        AptoPlatform.fetchCard(cardId = cardId, forceRefresh = refresh) { result ->
+    private fun getCard(refresh: Boolean, onComplete: ((Card) -> Unit)? = null) {
+        aptoPlatform.fetchCard(cardId = cardId, forceRefresh = refresh) { result ->
             result.either(::handleFailure) { card ->
                 updateViewModelWithCard(card)
                 onComplete?.invoke(card)
-                Unit
             }
         }
     }
 
     private fun updateViewModelWithCard(card: Card) {
-        this.card.postValue(card)
-        updateCardInfo(card)
-
+        _card.postValue(card)
         showPhysicalCardActivationMessage.postValue(card.orderedStatus == Card.OrderedStatus.ORDERED)
-
-        if (transactionListItems.value.isNullOrEmpty()) {
-            val list = ArrayList<TransactionListItem>()
-            list.add(TransactionListItem.HeaderView)
-            transactionListItems.postValue(list)
-        }
     }
 
-    private fun updateCardInfo(card: Card) {
-        _cardInfo.value = CardInfo(
-            cardId = card.accountID,
-            cardHolder = card.cardHolder,
-            lastFourDigits = card.lastFourDigits,
-            cardNetwork = card.cardNetwork,
-            state = card.state,
-            orderedStatus = card.orderedStatus,
-            cardStyle = card.cardStyle
-        )
+    fun refreshBalance() {
+        getCardBalance(refresh = true) {}
     }
 
-    fun refreshBalance(cardId: String) {
-        getCardBalance(cardId, refresh = true) {}
-    }
-
-    private fun getCardBalance(cardId: String, refresh: Boolean, onComplete: (() -> Unit)? = null) {
+    private fun getCardBalance(refresh: Boolean, onComplete: (() -> Unit)? = null) {
         // TODO: use refresh = false to read from cache
-        AptoPlatform.fetchCardFundingSource(cardId, refresh) {
+        aptoPlatform.fetchCardFundingSource(cardId, refresh) {
             balanceLoaded = true
             it.either(::handleFailure) { balance -> fundingSource.postValue(balance) }
             onComplete?.invoke()
         }
     }
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun getTransactions(cardId: String, forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
+    private fun getTransactions(
+        forceApiCall: Boolean,
+        clearCachedValue: Boolean,
+        onComplete: () -> Unit
+    ) {
         getTransactionsQueue.loadTransactions(cardId, ROWS_PER_PAGE, forceApiCall, clearCachedValue) { result ->
             result.either(::handleFailure) { transactionList ->
-                if (clearCachedValue) transactions.value = null
-                val updatedTransactions = updateTransactions(transactionList, append = false)
-                updateTransactionItems(updatedTransactions, append = false, clearCachedValue = clearCachedValue)
-                updatedTransactions.lastOrNull()?.let { lastTransactionId = it.transactionId }
+                updateTransactions(
+                    transactionList,
+                    currentList = transactions.value,
+                    append = false,
+                    clearCachedValue = true
+                )
+                transactionsInfoRetrieved.postValue(true)
                 onComplete()
             }
         }
     }
 
-    fun getMoreTransactions(cardId: String, onComplete: (Int) -> Unit) {
+    fun getMoreTransactions() {
         getTransactionsQueue.loadMoreTransactions(cardId, lastTransactionId, ROWS_PER_PAGE) { result ->
             result.either(::handleFailure) { transactionList ->
-                val updatedTransactions = updateTransactions(transactionList, append = true)
-                if (updatedTransactions.isNotEmpty()) {
-                    updateTransactionItems(updatedTransactions, append = true, clearCachedValue = false)
-                }
-                transactionList.lastOrNull()?.let { lastTransactionId = it.transactionId }
-                onComplete(transactionList.size)
+                updateTransactions(transactionList, currentList = transactions.value, append = true)
             }
         }
     }
 
-    private fun getBackgroundTransactions(cardId: String, onComplete: () -> Unit) {
+    private fun getBackgroundTransactions() {
         getTransactionsQueue.backgroundRefresh(cardId, ROWS_PER_PAGE) { result ->
             result.either(::handleFailure) { transactionList ->
-                val updatedTransactions = updateTransactions(transactionList, append = false)
-                if (updatedTransactions.isNotEmpty()) {
-                    updateTransactionItems(updatedTransactions, append = false, clearCachedValue = false)
-                }
-                updatedTransactions.lastOrNull()?.let { lastTransactionId = it.transactionId }
-                onComplete()
+                updateTransactions(transactionList, currentList = transactions.value, append = false)
+                transactionsInfoRetrieved.postValue(true)
             }
         }
     }
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun updateTransactions(transactionList: List<Transaction>, append: Boolean): List<Transaction> {
-        if (transactionList.isEmpty()) return transactionList
-        val currentTransactions: ArrayList<Transaction> = transactions.value as? ArrayList<Transaction>
-            ?: ArrayList()
-
-        if (append) {
-            currentTransactions.addAll(transactionList)
-            transactions.postValue(currentTransactions)
-            return transactionList
-        }
-
-        if (currentTransactions.isEmpty() || transactionList.last().createdAt.isAfter(currentTransactions.first().createdAt)) {
-            transactions.postValue(transactionList)
-            return transactionList
-        }
-
-        // Background refresh
-        var newTransactionIndex = 0
-        val topCachedTransactionDate = currentTransactions.first().createdAt
-        while (newTransactionIndex < transactionList.size &&
-            transactionList[newTransactionIndex].createdAt.isAfter(topCachedTransactionDate)
-        ) {
-            currentTransactions.add(0, transactionList[newTransactionIndex])
-            newTransactionIndex++
-        }
-        transactions.postValue(currentTransactions)
-        return currentTransactions
-    }
-
-    private fun updateTransactionItems(newTransactions: List<Transaction>, append: Boolean, clearCachedValue: Boolean) {
-        if (clearCachedValue) processNewTransactions(newTransactions)
-        else {
-            val currentTransactionItems: ArrayList<TransactionListItem> =
-                transactionListItems.value as ArrayList<TransactionListItem>
-            mergeListItems(newTransactions, currentTransactionItems, append)
-        }
-    }
-
-    private fun processNewTransactions(newTransactions: List<Transaction>) {
-        val transactionItemsArrayList: MutableList<TransactionListItem> = mutableListOf()
-        transactionItemsArrayList.add(TransactionListItem.HeaderView)
-        mergeListItems(newTransactions, transactionItemsArrayList, append = false)
-    }
-
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun buildItems(
-        newTransactions: List<Transaction>,
-        skipFirstHeader: Boolean = false
-    ): ArrayList<TransactionListItem> {
-        val result = ArrayList<TransactionListItem>()
-        var transactionYear = -1
-        var transactionMonth = -1
-        if (skipFirstHeader) {
-            val date = newTransactions.first().createdAt
-            transactionMonth = date.monthValue
-            transactionYear = date.year
-        }
-
-        var currentTransactionYear: Int
-        var currentTransactionMonth: Int
-        newTransactions.forEach {
-            val date = it.createdAt
-            currentTransactionMonth = date.monthValue
-            currentTransactionYear = date.year
-            if (transactionYear != currentTransactionYear || transactionMonth != currentTransactionMonth) {
-                result.add(TransactionListItem.SectionHeader(it.createdAt.format(dateFormatter)))
-                transactionYear = currentTransactionYear
-                transactionMonth = currentTransactionMonth
-            }
-            result.add(TransactionListItem.TransactionRow(it))
-        }
-        return result
-    }
-
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun mergeListItems(
-        newTransactions: List<Transaction>,
-        currentTransactionItems: MutableList<TransactionListItem>,
-        append: Boolean
+    private fun updateTransactions(
+        newList: List<Transaction>,
+        currentList: List<Transaction>?,
+        append: Boolean,
+        clearCachedValue: Boolean = false
     ) {
-        if (append) {
-            val lastCurrentTransaction = currentTransactionItems.findLast {
-                it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
-            } as TransactionListItem.TransactionRow
-            val currentDate = lastCurrentTransaction.transaction.createdAt
-            val newTransactionDate = newTransactions.first().createdAt
-            val skipFirstHeader = currentDate.monthValue == newTransactionDate.monthValue &&
-                    currentDate.year == newTransactionDate.year
-            currentTransactionItems.addAll(buildItems(newTransactions, skipFirstHeader = skipFirstHeader))
-            transactionListItems.postValue(currentTransactionItems)
-            return
-        }
+        val merger = TransactionListMerger()
+        val list = merger.merge(newList, currentList, append, clearCachedValue)
 
-        if (currentTransactionItems.size < 2) {
-            currentTransactionItems.addAll(buildItems(newTransactions, skipFirstHeader = false))
-            transactionListItems.postValue(currentTransactionItems)
-            return
-        }
-
-        val mostRecentCurrentTransaction = (currentTransactionItems.find {
-            it.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE
-        } as TransactionListItem.TransactionRow).transaction
-        val oldestNewTransaction = newTransactions.last()
-        val result: ArrayList<TransactionListItem> = ArrayList()
-
-        // First item is card line item
-        result.add(currentTransactionItems.first())
-        result.addAll(buildItems(newTransactions))
-
-        if (oldestNewTransaction.createdAt <= mostRecentCurrentTransaction.createdAt) {
-            // Find the point where the new transactions overlap with the old ones
-            val index = currentTransactionItems.indexOfFirst { transactionItem ->
-                transactionItem.itemType() == TransactionListItem.TRANSACTION_ROW_VIEW_TYPE &&
-                        (transactionItem as TransactionListItem.TransactionRow).transaction.createdAt <= oldestNewTransaction.createdAt
-            }
-            if (index != -1) {
-                result.addAll(currentTransactionItems.subList(index, currentTransactionItems.size - 1))
-            }
-        }
-        transactionListItems.postValue(result)
+        list.lastOrNull()?.let { lastTransactionId = it.transactionId }
+        transactions.postValue(list)
     }
 
     private fun startIapHelper() {

@@ -63,7 +63,8 @@ internal class AccountSettingsFlow(
                     "biometric_change_pin_success_message".localized(),
                     MessageBanner.MessageType.SUCCESS
                 )
-            })
+            }
+        )
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow, false) } }
     }
 

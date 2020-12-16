@@ -15,9 +15,9 @@ internal class ShouldAuthenticateOnStartUpUseCase(
     override fun run(): Either<Failure, Boolean> {
         return Either.Right(
             AptoUiSdk.cardOptions.authenticateOnStartup() &&
-                    authStateProviderImpl.userTokenPresent() &&
-                    (authenticationRepo.isAuthenticationNeedSaved() || authenticationRepo.isAuthTimeInvalid()) &&
-                    authenticationRepo.isPasscodeSet()
+                authStateProviderImpl.userTokenPresent() &&
+                (authenticationRepo.isAuthenticationNeedSaved() || authenticationRepo.isAuthTimeInvalid()) &&
+                authenticationRepo.isPasscodeSet()
         )
     }
 }

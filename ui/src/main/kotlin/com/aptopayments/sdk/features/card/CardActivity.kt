@@ -60,11 +60,14 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
     }
 
     private fun tryToShowAuthenticationScreen() {
-        shouldAuthenticateOnStartupUseCase().either({}, { authenticationNeeded ->
-            if (authenticationNeeded) {
-                authenticate(FORCED)
+        shouldAuthenticateOnStartupUseCase().either(
+            {},
+            { authenticationNeeded ->
+                if (authenticationNeeded) {
+                    authenticate(FORCED)
+                }
             }
-        })
+        )
     }
 
     override fun onPause() {
@@ -115,10 +118,14 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
         val confirm = "biometric_verify_pin_forgot_alert_confirm".localized()
         val cancel = "biometric_verify_pin_forgot_alert_cancel".localized()
 
-        confirm(title, message, confirm, cancel, {
-            forgotPinUseCase()
-            cleanAuth()
-        }, {})
+        confirm(
+            title, message, confirm, cancel,
+            {
+                forgotPinUseCase()
+                cleanAuth()
+            },
+            {}
+        )
     }
 
     private fun cleanAuth() {

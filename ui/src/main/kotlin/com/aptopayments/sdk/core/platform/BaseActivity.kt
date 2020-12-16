@@ -73,11 +73,13 @@ abstract class BaseActivity : AppCompatActivity() {
         text: String,
         confirm: String,
         cancel: String,
-        onConfirm: (Unit) -> Unit,
-        onCancel: (Unit) -> Unit
+        onConfirm: () -> Unit,
+        onCancel: () -> Unit
     ) {
-        val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(this,
-            confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+        val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(
+            this,
+            confirm, cancel, { onConfirm.invoke() }, { onCancel.invoke() }
+        )
         themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
     }
 

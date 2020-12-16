@@ -12,8 +12,10 @@ import org.koin.core.inject
 private const val ADD_CARD_TAG = "AddCardDetailsFragment"
 private const val ADD_CARD_ONBOARDING_TAG = "AddCardOnboardingFragment"
 
-internal class AddPaymentSourceFlow(private val cardId: String, private var onClose: () -> Unit) : Flow(),
-    AddCardPaymentSourceContract.Delegate, AddCardOnboardingContract.Delegate {
+internal class AddPaymentSourceFlow(private val cardId: String, private var onClose: () -> Unit) :
+    Flow(),
+    AddCardPaymentSourceContract.Delegate,
+    AddCardOnboardingContract.Delegate {
 
     private val repository: PaymentSourcesRepository by inject()
 

@@ -62,8 +62,8 @@ object StatusBarUtil {
         // As per http://stackoverflow.com/a/2241471
         return sqrt(
             red.toDouble() * red.toDouble() * .299 +
-                    green.toDouble() * green.toDouble() * .587 +
-                    blue.toDouble() * blue.toDouble() * .114
+                green.toDouble() * green.toDouble() * .587 +
+                blue.toDouble() * blue.toDouble() * .114
         ).toInt()
     }
 }

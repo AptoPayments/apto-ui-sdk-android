@@ -32,9 +32,11 @@ class VoipFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                }
+            )
         }
         sut = VoipFlow(cardId = cardId, onBack = {}, onFinish = {}, action = mockAction)
     }

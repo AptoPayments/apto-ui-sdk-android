@@ -14,7 +14,7 @@ import com.aptopayments.sdk.utils.CountDown
 
 const val COUNTDOWN_TIME = 45
 
-internal class VerificationViewModel constructor(
+internal class VerificationViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
     var verification: MutableLiveData<Verification> = MutableLiveData()

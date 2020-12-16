@@ -43,9 +43,14 @@ private const val WAITLIST_TAG = "WaitlistFragment"
 internal class ManageCardFlow(
     val cardId: String,
     val contextConfiguration: ContextConfiguration,
-    var onClose: (Unit) -> Unit
-) : Flow(), ManageCardContract.Delegate, FundingSourceContract.Delegate, CardSettingsContract.Delegate,
-    ContentPresenterContract.Delegate, TransactionDetailsContract.Delegate, WaitlistContract.Delegate {
+    var onClose: () -> Unit
+) : Flow(),
+    ManageCardContract.Delegate,
+    FundingSourceContract.Delegate,
+    CardSettingsContract.Delegate,
+    ContentPresenterContract.Delegate,
+    TransactionDetailsContract.Delegate,
+    WaitlistContract.Delegate {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
 
@@ -55,44 +60,48 @@ internal class ManageCardFlow(
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         aptoPlatformProtocol.fetchCard(cardId = cardId, forceRefresh = false) { result ->
-            result.either({ onInitComplete(Either.Left(it)) }, { card ->
-                when (card.kycStatus) {
-                    KycStatus.PASSED -> {
-                        if (card.isWaitlisted == true) {
-                            card.cardProductID?.let {
-                                aptoPlatformProtocol.fetchCardProduct(it, true) { getCardProductResult ->
-                                    getCardProductResult.either(
-                                        { onInitComplete(Either.Left(ManageCardInitFailure())) },
-                                        { cardProduct ->
-                                            val fragment =
-                                                fragmentFactory.waitlistFragment(
-                                                    card.accountID,
-                                                    cardProduct,
-                                                    WAITLIST_TAG
-                                                )
-                                            fragment.delegate = this
-                                            setStartElement(fragment as BaseFragment)
-                                            onInitComplete(Either.Right(Unit))
-                                        })
-                                }
-                            } ?: onInitComplete(Either.Left(ManageCardInitFailure()))
-                        } else {
-                            val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
-                            fragment.delegate = this
-                            setStartElement(fragment as BaseFragment)
-                            onInitComplete(Either.Right(Unit))
-                        }
-                    }
-                    else -> {
-                        initKycFlow(card = card) { initResult ->
-                            initResult.either({ onInitComplete(Either.Left(it)) }) { flow ->
-                                setStartElement(element = flow)
+            result.either(
+                { onInitComplete(Either.Left(it)) },
+                { card ->
+                    when (card.kycStatus) {
+                        KycStatus.PASSED -> {
+                            if (card.isWaitlisted == true) {
+                                card.cardProductID?.let {
+                                    aptoPlatformProtocol.fetchCardProduct(it, true) { getCardProductResult ->
+                                        getCardProductResult.either(
+                                            { onInitComplete(Either.Left(ManageCardInitFailure())) },
+                                            { cardProduct ->
+                                                val fragment =
+                                                    fragmentFactory.waitlistFragment(
+                                                        card.accountID,
+                                                        cardProduct,
+                                                        WAITLIST_TAG
+                                                    )
+                                                fragment.delegate = this
+                                                setStartElement(fragment as BaseFragment)
+                                                onInitComplete(Either.Right(Unit))
+                                            }
+                                        )
+                                    }
+                                } ?: onInitComplete(Either.Left(ManageCardInitFailure()))
+                            } else {
+                                val fragment = fragmentFactory.manageCardFragment(card.accountID, MANAGE_CARD_TAG)
+                                fragment.delegate = this
+                                setStartElement(fragment as BaseFragment)
                                 onInitComplete(Either.Right(Unit))
+                            }
+                        }
+                        else -> {
+                            initKycFlow(card = card) { initResult ->
+                                initResult.either({ onInitComplete(Either.Left(it)) }) { flow ->
+                                    setStartElement(element = flow)
+                                    onInitComplete(Either.Right(Unit))
+                                }
                             }
                         }
                     }
                 }
-            })
+            )
         }
     }
 
@@ -126,7 +135,7 @@ internal class ManageCardFlow(
     //
     // Manage Card
     //
-    override fun onBackFromManageCard() = onClose(Unit)
+    override fun onBackFromManageCard() = onClose.invoke()
 
     //
     // Transaction Details
@@ -175,7 +184,8 @@ internal class ManageCardFlow(
                 onFinish = {
                     refreshCard()
                     showFundingSourcesDialog(selectedBalanceID)
-                })
+                }
+            )
         }
         flow?.init { initResult ->
             initResult.either(::handleFailure) {
@@ -310,8 +320,10 @@ internal class ManageCardFlow(
     }
 
     override fun showVoip(action: Action) {
-        val flow = VoipFlow(cardId = cardId, action = action, onBack = { popFlow(animated = true) },
-            onFinish = { popFlow(animated = true) })
+        val flow = VoipFlow(
+            cardId = cardId, action = action, onBack = { popFlow(animated = true) },
+            onFinish = { popFlow(animated = true) }
+        )
         flow.init { initResult ->
             initResult.either(::handleFailure) { push(flow = flow) }
         }
@@ -328,7 +340,8 @@ internal class ManageCardFlow(
     override fun onAddFunds() {
         val flow = AddFundsFlow(
             cardId = cardId,
-            onClose = { popFlow(true) })
+            onClose = { popFlow(true) }
+        )
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 

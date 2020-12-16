@@ -9,11 +9,6 @@ fun <L, R> Either<L, R>.shouldBeRightAndEqualTo(value: R) {
     runIfRight { assertEquals(value, it) }
 }
 
-fun <L, R> Either<L, R>.shouldBeLeftAndEqualTo(value: L) {
-    assertTrue(this.isLeft)
-    this.runIfLeft { assertEquals(value, it) }
-}
-
 fun <L, R> Either<L, R>.shouldBeLeftAndInstanceOf(value: Class<*>) {
     assertTrue(this.isLeft)
     this.runIfLeft { assertTrue(value.isInstance(it)) }

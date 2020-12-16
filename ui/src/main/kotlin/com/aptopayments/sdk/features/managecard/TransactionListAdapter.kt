@@ -35,11 +35,9 @@ internal open class TransactionListAdapter(
     var delegate: Delegate? = null
     private var transactionListItems: List<TransactionListItem> = listOf()
 
-    init {
-        lifecycleOwner.observeNotNullable(viewModel.transactionListItems) {
-            transactionListItems = it
-            notifyDataSetChanged()
-        }
+    fun setItems(list: List<TransactionListItem>) {
+        transactionListItems = list
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = transactionListItems.size
@@ -53,7 +51,7 @@ internal open class TransactionListAdapter(
         return when (viewType) {
             TransactionListItem.HEADER_VIEW_TYPE -> {
                 val view = inflater.inflate(R.layout.include_transaction_list_header, parent, false)
-                ViewHolderHeader(view, delegate, lifecycleOwner)
+                ViewHolderHeader(view)
             }
             TransactionListItem.SECTION_HEADER_VIEW_TYPE -> {
                 val view = inflater.inflate(R.layout.view_transaction_section_title, parent, false)
@@ -61,7 +59,7 @@ internal open class TransactionListAdapter(
             }
             TransactionListItem.TRANSACTION_ROW_VIEW_TYPE -> {
                 val view = inflater.inflate(R.layout.view_transaction_row, parent, false)
-                ViewHolderTransaction(view) { transaction: Transaction -> delegate?.onTransactionTapped(transaction) }
+                ViewHolderTransaction(view) { delegate?.onTransactionTapped(it) }
             }
             else -> {
                 throw IllegalArgumentException("Unexpected transaction view type")
@@ -84,11 +82,7 @@ internal open class TransactionListAdapter(
         abstract fun bind(item: TransactionListItem, position: Int)
     }
 
-    inner class ViewHolderHeader(
-        view: View,
-        transactionDelegate: Delegate?,
-        lifecycleOwner: LifecycleOwner
-    ) : BaseViewHolder(view) {
+    inner class ViewHolderHeader(view: View) : BaseViewHolder(view) {
 
         init {
             view.view_card_top_background?.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
@@ -97,7 +91,7 @@ internal open class TransactionListAdapter(
                 cardView.setConfiguration(viewModel.cardConfiguration)
                 with(lifecycleOwner) {
                     observeNullable(viewModel.fundingSource) { cardView.setValidFundingSource(it?.state == Balance.BalanceState.VALID) }
-                    observeNullable(viewModel.cardInfo) { cardView.setCardInfo(it) }
+                    observeNullable(viewModel.card) { card -> card?.let { cardView.setCardInfo(CardInfo.fromCard(it)) } }
                     observeNotNullable(viewModel.showCardDetails) { cardView.showCardDetails(it) }
                 }
                 cardView.delegate = object : PCICardView.Delegate {
@@ -108,7 +102,7 @@ internal open class TransactionListAdapter(
             }
             view.card_settings_button?.let { cardSettingsButton ->
                 cardSettingsButton.backgroundTintList = ColorStateList.valueOf(UIConfig.uiPrimaryColor)
-                cardSettingsButton.setOnClickListenerSafe { transactionDelegate?.onCardSettingsTapped() }
+                cardSettingsButton.setOnClickListenerSafe { delegate?.onCardSettingsTapped() }
             }
         }
 
@@ -157,7 +151,7 @@ internal open class TransactionListAdapter(
             }
             view.tv_transaction_native_amount.goneIf(transaction.localAmount == transaction.nativeBalance)
             view.ll_separator.invisibleIf(isLastPositionOfSection(position))
-            view.ll_transaction_row.setOnClickListener { listener.invoke(transaction) }
+            view.ll_transaction_row.setOnClickListenerSafe { listener.invoke(transaction) }
         }
 
         private fun setState(transaction: Transaction) {

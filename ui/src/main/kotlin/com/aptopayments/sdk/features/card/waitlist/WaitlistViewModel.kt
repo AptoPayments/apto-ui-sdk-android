@@ -7,7 +7,7 @@ import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class WaitlistViewModel constructor(
+internal class WaitlistViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

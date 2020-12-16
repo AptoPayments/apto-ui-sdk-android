@@ -19,7 +19,9 @@ import org.threeten.bp.LocalDate
 
 private const val CARD_ID_KEY = "CARD_ID"
 
-internal class CardMonthlyStatsFragment : BaseFragment(), CardMonthlyStatsContract.View,
+internal class CardMonthlyStatsFragment :
+    BaseFragment(),
+    CardMonthlyStatsContract.View,
     CardMonthlyStatsAdapter.Delegate {
 
     private lateinit var cardId: String
@@ -68,7 +70,7 @@ internal class CardMonthlyStatsFragment : BaseFragment(), CardMonthlyStatsContra
         .replace("<<YEAR>>", LocalDate.now().yearToString())
 
     override fun setupViewModel() {
-        viewModel.apply { failure(failure) { handleFailure(it) } }
+        viewModel.apply { observe(failure) { handleFailure(it) } }
         observeNotNullable(viewModel.previousMonthName) { configureMonthTitle(title_previous_month, it) }
         observeNotNullable(viewModel.currentMonthName) { configureMonthTitle(title_current_month, it) }
         observeNotNullable(viewModel.nextMonthName) { configureMonthTitle(title_next_month, it) }

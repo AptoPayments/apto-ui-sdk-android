@@ -6,7 +6,7 @@ import com.aptopayments.sdk.utils.extensions.formatForTransactionDetails
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class TransactionDetailsViewModel constructor(
+internal class TransactionDetailsViewModel(
     val transaction: Transaction,
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {

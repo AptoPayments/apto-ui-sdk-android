@@ -11,8 +11,8 @@ private const val VOIP_TAG = "VoipFragment"
 internal class VoipFlow(
     val cardId: String,
     val action: Action,
-    val onBack: (Unit) -> Unit,
-    val onFinish: (Unit) -> Unit
+    val onBack: () -> Unit,
+    val onFinish: () -> Unit
 ) : Flow(), VoipContract.Delegate {
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val fragment = fragmentFactory.getVoipFragment(cardId, action, VOIP_TAG)
@@ -27,7 +27,7 @@ internal class VoipFlow(
         }
     }
 
-    override fun onVoipCallFinished() = onFinish(Unit)
+    override fun onVoipCallFinished() = onFinish.invoke()
 
     override fun onVoipCallError(error: String?) {
         error?.let { notify(message = it) }

@@ -1,8 +1,6 @@
 package com.aptopayments.sdk.features.voip
 
 import com.aptopayments.mobile.analytics.Event
-import com.aptopayments.mobile.data.voip.Action
-import com.aptopayments.mobile.data.voip.VoipCall
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.nhaarman.mockitokotlin2.given
@@ -10,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -19,14 +16,9 @@ class VoipViewModelTest : AndroidTest() {
 
     private lateinit var sut: VoipViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
     @Mock
-    private lateinit var mockCall: VoipCall
-    @Mock
     private lateinit var mockVoipHandler: VoipContract.Handler
-    private val cardID = "TEST_CARD_ID"
-    private val action = Action.LISTEN_PIN
 
     @Before
     override fun setUp() {

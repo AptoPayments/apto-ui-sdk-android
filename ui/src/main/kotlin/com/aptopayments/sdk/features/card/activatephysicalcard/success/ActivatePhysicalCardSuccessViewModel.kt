@@ -9,7 +9,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.PhoneDialer
 
-internal class ActivatePhysicalCardSuccessViewModel constructor(
+internal class ActivatePhysicalCardSuccessViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), PhoneDialer.Delegate {
 

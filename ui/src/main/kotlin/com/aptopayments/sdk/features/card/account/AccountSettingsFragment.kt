@@ -119,12 +119,14 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
     }
 
     private fun showConfirmLogOutDialog() {
-        confirm(title = "account_settings.logout.confirm_logout.title".localized(),
+        confirm(
+            title = "account_settings.logout.confirm_logout.title".localized(),
             text = "account_settings.logout.confirm_logout.message".localized(),
             confirm = "account_settings.logout.confirm_logout.ok_button".localized(),
             cancel = "account_settings_logout_confirm_logout_cancel_button".localized(),
             onConfirm = { delegate?.onLogOut() },
-            onCancel = { })
+            onCancel = { }
+        )
     }
 
     private fun sendCustomerSupportEmail() = contextConfiguration?.projectConfiguration?.supportEmailAddress?.let {

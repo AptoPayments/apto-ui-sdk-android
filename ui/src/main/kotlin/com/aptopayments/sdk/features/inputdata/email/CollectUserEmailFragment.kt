@@ -19,7 +19,8 @@ import org.koin.core.parameter.parametersOf
 
 private const val DATAPOINT_EMAIL = "DATAPOINT_EMAIL"
 
-internal class CollectUserEmailFragment : BaseBindingFragment<FragmentCollectUserEmailBinding>(),
+internal class CollectUserEmailFragment :
+    BaseBindingFragment<FragmentCollectUserEmailBinding>(),
     CollectUserEmailContract.View {
 
     private var initialValue: EmailDataPoint? = null

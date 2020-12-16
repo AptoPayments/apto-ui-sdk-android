@@ -30,9 +30,11 @@ class SetPinFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                }
+            )
         }
         sut = SetCardPinFlow(cardId = "TEST_CARD_ID", onBack = {}, onFinish = {})
     }

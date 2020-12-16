@@ -42,7 +42,7 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
         observe(viewModel.statementList, ::updateAdapter)
         observeNotNullable(viewModel.file) { file -> handleFileDownloaded(file) }
         observeNotNullable(viewModel.statementListEmpty) { configureEmptyStateVisibility(it) }
-        failure(viewModel.failure) { handleFailure(it) }
+        observe(viewModel.failure) { handleFailure(it) }
     }
 
     override fun viewLoaded() {

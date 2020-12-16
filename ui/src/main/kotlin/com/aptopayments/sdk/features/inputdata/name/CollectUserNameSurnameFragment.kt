@@ -21,7 +21,8 @@ import org.koin.core.parameter.parametersOf
 
 private const val DATAPOINT_NAME = "DATAPOINT_NAME"
 
-internal class CollectUserNameSurnameFragment : BaseBindingFragment<FragmentCollectUserNameBinding>(),
+internal class CollectUserNameSurnameFragment :
+    BaseBindingFragment<FragmentCollectUserNameBinding>(),
     CollectUserNameSurnameContract.View {
 
     private var initialValue: NameDataPoint? = null

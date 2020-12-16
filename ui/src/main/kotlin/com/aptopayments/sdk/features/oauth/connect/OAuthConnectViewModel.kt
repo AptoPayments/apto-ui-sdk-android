@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-internal class OAuthConnectViewModel constructor(
+internal class OAuthConnectViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext

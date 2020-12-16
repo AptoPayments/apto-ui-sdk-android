@@ -55,7 +55,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
         viewModel.apply {
             observe(pinEntryState, ::handlePinEntryState)
             observe(resendButtonState, ::handleResendButtonState)
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
         viewModel.verification.postValue(verification)
     }

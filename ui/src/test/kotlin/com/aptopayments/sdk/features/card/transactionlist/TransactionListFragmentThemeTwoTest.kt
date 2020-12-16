@@ -3,10 +3,8 @@ package com.aptopayments.sdk.features.card.transactionlist
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.sdk.core.data.TestDataProvider
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -25,32 +23,13 @@ class TransactionListFragmentThemeTwoTest : AndroidTest() {
     override fun setUp() {
         super.setUp()
         startKoin {
-            modules(module {
-                viewModel { viewModel }
-            })
+            modules(
+                module {
+                    viewModel { viewModel }
+                }
+            )
         }
         sut = TransactionListFragment.newInstance(cardId, config)
-        sut.cardId = cardId
-        sut.config = config
-    }
-
-    @Ignore
-    @Test
-    fun `on fragment presented call view model to fetch transactions`() {
-        // Given
-        doNothing().whenever(viewModel).fetchTransaction(
-            eq(cardId), eq(config.startDate), eq(config.endDate),
-            eq(config.mcc), TestDataProvider.anyObject()
-        )
-
-        // When
-        sut.onPresented()
-
-        // Then
-        verify(viewModel).fetchTransaction(
-            eq(cardId), eq(config.startDate), eq(config.endDate), eq(config.mcc),
-            TestDataProvider.anyObject()
-        )
     }
 
     @Test

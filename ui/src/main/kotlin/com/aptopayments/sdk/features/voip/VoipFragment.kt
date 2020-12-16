@@ -14,7 +14,7 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.voip.Action
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
+import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.observeNullable
 import com.aptopayments.sdk.core.extension.show
@@ -69,7 +69,7 @@ internal class VoipFragment : BaseFragment(), VoipContract.View, KeyboardView.On
         viewModel.apply {
             observeNullable(callState) { callStateChanged(it) }
             observeNullable(elapsedTime) { updateElapsedTime(it) }
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
     }
 

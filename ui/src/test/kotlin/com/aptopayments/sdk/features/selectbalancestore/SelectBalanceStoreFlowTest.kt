@@ -23,7 +23,6 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -34,7 +33,6 @@ class SelectBalanceStoreFlowTest : UnitTest() {
     private lateinit var mockFragmentFactory: FragmentFactory
     private val cardApplicationId = "TEST_CARD_APPLICATION_ID"
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
     @Mock
     private lateinit var mockAptoPlatform: AptoPlatform
@@ -43,17 +41,21 @@ class SelectBalanceStoreFlowTest : UnitTest() {
     fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-                single<AnalyticsServiceContract> { analyticsManager }
-                single<AptoPlatformProtocol> { mockAptoPlatform }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                    single<AnalyticsServiceContract> { analyticsManager }
+                    single<AptoPlatformProtocol> { mockAptoPlatform }
+                }
+            )
         }
         val testAllowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val testAllowedBalanceTypeList = listOf(testAllowedBalanceType)
         val mockActionConfig = WorkflowActionConfigurationSelectBalanceStore(testAllowedBalanceTypeList, null)
-        sut = SelectBalanceStoreFlow(actionConfiguration = mockActionConfig,
-            cardApplicationId = cardApplicationId, onBack = {}, onFinish = {})
+        sut = SelectBalanceStoreFlow(
+            actionConfiguration = mockActionConfig,
+            cardApplicationId = cardApplicationId, onBack = {}, onFinish = {}
+        )
     }
 
     @Test

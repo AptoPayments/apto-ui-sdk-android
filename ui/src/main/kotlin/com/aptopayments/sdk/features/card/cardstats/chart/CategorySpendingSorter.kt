@@ -6,11 +6,13 @@ import com.aptopayments.mobile.data.transaction.MCC
 class CategorySpendingSorter {
 
     fun sortByName(categorySpending: List<CategorySpending>) =
-        categorySpending.sortedWith(compareBy {
-            if (it.categoryId.isEmpty()) {
-                null
-            } else {
-                MCC(it.categoryId).toLocalizedString()
+        categorySpending.sortedWith(
+            compareBy {
+                if (it.categoryId.isEmpty()) {
+                    null
+                } else {
+                    MCC(it.categoryId).toLocalizedString()
+                }
             }
-        })
+        )
 }

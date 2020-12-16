@@ -10,13 +10,11 @@ import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
-import org.mockito.Spy
 
 class StatementListViewModelTest : AndroidTest(), KoinTest {
 
     private lateinit var sut: StatementListViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before

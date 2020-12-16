@@ -166,11 +166,11 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         }
     }
 
-    protected fun popAllFragments(onComplete: ((Unit) -> Unit)?) {
+    protected fun popAllFragments(onComplete: (() -> Unit)?) {
         fragmentManager?.beginTransaction()?.apply {
             fragmentManager?.fragments?.forEach { remove(it) }
             commit()
-            runOnCommit { onComplete?.invoke(Unit) }
+            runOnCommit { onComplete?.invoke() }
         }
     }
 
@@ -192,12 +192,14 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         text: String,
         confirm: String,
         cancel: String,
-        onConfirm: (Unit) -> Unit,
-        onCancel: (Unit) -> Unit
+        onConfirm: () -> Unit,
+        onCancel: () -> Unit
     ) {
         rootActivity()?.let {
-            val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(it,
-                confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+            val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(
+                it,
+                confirm, cancel, { onConfirm() }, { onCancel() }
+            )
             themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
         }
     }

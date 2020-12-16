@@ -9,7 +9,7 @@ import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class OAuthVerifyViewModel constructor(
+internal class OAuthVerifyViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

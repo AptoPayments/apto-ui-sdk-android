@@ -11,9 +11,9 @@ private const val SET_PIN_TAG = "SetCardPinFragment"
 private const val CONFIRM_PIN_TAG = "ConfirmCardPinFragment"
 
 internal class SetCardPinFlow(
-    var cardId: String,
-    var onBack: (Unit) -> Unit,
-    var onFinish: (Unit) -> Unit
+    val cardId: String,
+    val onBack: () -> Unit,
+    val onFinish: () -> Unit
 ) : Flow(), SetCardPinContract.Delegate, ConfirmCardPinContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -41,7 +41,7 @@ internal class SetCardPinFlow(
         push(fragment as BaseFragment)
     }
 
-    override fun onCloseFromSetPin() = onBack(Unit)
+    override fun onCloseFromSetPin() = onBack.invoke()
 
     //
     // Confirm Pin
@@ -53,7 +53,7 @@ internal class SetCardPinFlow(
         AptoPlatform.changeCardPin(cardId, pin) { result ->
             result.either(::handleFailure) {
                 hideLoading()
-                onFinish(Unit)
+                onFinish.invoke()
             }
         }
     }

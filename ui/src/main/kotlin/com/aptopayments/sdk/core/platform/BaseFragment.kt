@@ -94,12 +94,14 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
         text: String,
         confirm: String,
         cancel: String,
-        onConfirm: (Unit) -> Unit,
-        onCancel: (Unit) -> Unit
+        onConfirm: () -> Unit,
+        onCancel: () -> Unit
     ) {
         activity?.let {
-            val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(it,
-                confirm, cancel, { onConfirm(Unit) }, { onCancel(Unit) })
+            val alertDialogBuilder = ViewUtils.getAlertDialogBuilder(
+                it,
+                confirm, cancel, { onConfirm.invoke() }, { onCancel.invoke() }
+            )
             themeManager().getAlertDialog(alertDialogBuilder, title, text).show()
         }
     }
@@ -120,6 +122,9 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
             is Failure.UserSessionExpired -> {
                 aptoPlatformProtocol.logout()
                 notify("session_expired_error".localized())
+            }
+            is Failure.RateLimitFailure -> {
+                notify("failure_server_error".localized(), "error_transport_rate_limiter".localized())
             }
         }
     }

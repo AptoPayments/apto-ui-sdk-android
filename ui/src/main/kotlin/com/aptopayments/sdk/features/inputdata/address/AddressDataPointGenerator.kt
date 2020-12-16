@@ -67,9 +67,9 @@ private class Address(components: List<AddressComponent>) {
 
     fun hasAllFieldsSet() =
         streetNumber.isNotEmpty() &&
-                street.isNotEmpty() &&
-                city.isNotEmpty() &&
-                state.isNotEmpty() &&
-                country.isNotEmpty() &&
-                postalCode.isNotEmpty()
+            street.isNotEmpty() &&
+            city.isNotEmpty() &&
+            state.isNotEmpty() &&
+            country.isNotEmpty() &&
+            postalCode.isNotEmpty()
 }

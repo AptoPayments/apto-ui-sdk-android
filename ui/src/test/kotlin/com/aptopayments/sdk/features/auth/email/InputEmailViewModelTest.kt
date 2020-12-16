@@ -15,7 +15,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -23,7 +22,6 @@ class InputEmailViewModelTest : UnitTest() {
 
     private lateinit var inputEmailViewModel: InputEmailViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Mock
@@ -40,9 +38,7 @@ class InputEmailViewModelTest : UnitTest() {
 
     @Test
     fun `test for verification with non-pending status`() {
-        val verification = Verification("", "email", VerificationStatus.FAILED).apply {
-            this.verificationId = "verificationId"
-        }
+        val verification = Verification("verificationId", "email", VerificationStatus.FAILED)
         inputEmailViewModel.handleVerification(verification)
         verify(verificationLiveData, never()).postValue(verification)
     }

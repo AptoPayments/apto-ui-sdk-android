@@ -7,7 +7,6 @@ import com.aptopayments.mobile.data.card.KycStatus
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.failure
 import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
@@ -38,7 +37,7 @@ internal class KycStatusFragment : BaseFragment(), KycStatusContract.View {
     override fun setupViewModel() {
         viewModel.apply {
             observe(kycStatus, ::handleKycStatus)
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
             observeNotNullable(viewModel.loading) { handleLoading(it) }
         }
     }

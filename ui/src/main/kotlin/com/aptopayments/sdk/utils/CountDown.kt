@@ -13,7 +13,7 @@ class CountDown {
 
     private var timer: Timer? = null
 
-    fun start(seconds: Int, fireBlock: (Int) -> Unit, endBlock: (Unit) -> Unit) {
+    fun start(seconds: Int, fireBlock: (Int) -> Unit, endBlock: () -> Unit) {
         val finishTime = LocalDateTime.now().plusSeconds(seconds.toLong())
         timer = Timer()
         timer?.scheduleAtFixedRate(delay = DELAY, period = PERIOD) {
@@ -21,7 +21,7 @@ class CountDown {
             val diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMs)
             if (diffInSec <= 0) {
                 stop()
-                endBlock(Unit)
+                endBlock.invoke()
             } else {
                 fireBlock(diffInSec.toInt())
             }

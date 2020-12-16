@@ -24,4 +24,5 @@ open class RegexInputFilter(private val regex: Regex, private val onFail: (() ->
 }
 
 class NameInputFilter(onFail: (() -> Unit)?) : RegexInputFilter(
-    NAME_REGEX.toRegex(), onFail)
+    NAME_REGEX.toRegex(), onFail
+)

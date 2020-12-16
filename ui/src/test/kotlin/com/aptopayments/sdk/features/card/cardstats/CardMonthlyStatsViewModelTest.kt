@@ -22,7 +22,6 @@ import org.koin.test.KoinTest
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Spy
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -40,7 +39,6 @@ class CardMonthlyStatsViewModelTest : AndroidTest(), KoinTest {
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Mock

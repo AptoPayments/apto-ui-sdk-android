@@ -9,7 +9,7 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.LiveEvent
 import org.threeten.bp.LocalDate
 
-internal class CollectUserBirthdateViewModel constructor(
+internal class CollectUserBirthdateViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

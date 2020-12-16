@@ -6,7 +6,7 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.mobile.repository.transaction.TransactionListFilters
 
-class FetchTransactionsTaskQueue constructor(private val aptoPlatformProtocol: AptoPlatformProtocol) {
+class FetchTransactionsTaskQueue(private val aptoPlatformProtocol: AptoPlatformProtocol) {
     private var loadOperation: FetchTransactionsTask? = null
     private var loadMoreOperation: FetchTransactionsTask? = null
     private var backgroundRefreshOperation: FetchTransactionsTask? = null

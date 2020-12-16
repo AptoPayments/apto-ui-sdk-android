@@ -26,9 +26,11 @@ class OAuthVerifyFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                }
+            )
         }
     }
 
@@ -39,8 +41,10 @@ class OAuthVerifyFlowTest : AndroidTest() {
         val fragmentDouble = OAuthVerifyFragmentDouble(mockDelegate).apply { this.TAG = tag }
         val allowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val oAuthAttempt = TestDataProvider.provideOAuthAttempt()
-        val sut = OAuthVerifyFlow(allowedBalanceType = allowedBalanceType, oauthAttempt = oAuthAttempt,
-            onBack = {}, onFinish = {}, onError = {})
+        val sut = OAuthVerifyFlow(
+            allowedBalanceType = allowedBalanceType, oauthAttempt = oAuthAttempt,
+            onBack = {}, onFinish = {}, onError = {}
+        )
         given {
             mockFragmentFactory.oauthVerifyFragment(
                 datapoints = oAuthAttempt.userData!!,

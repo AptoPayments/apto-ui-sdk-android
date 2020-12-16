@@ -17,7 +17,7 @@ import org.koin.core.inject
 
 internal class NewCardFlow(
     val cardProductId: String,
-    val onBack: (Unit) -> Unit,
+    val onBack: () -> Unit,
     val onFinish: (cardId: String) -> Unit
 ) : Flow() {
     private val cardMetadataRepository: CardMetadataRepository by inject()
@@ -102,7 +102,7 @@ internal class NewCardFlow(
             val flow = SelectBalanceStoreFlow(
                 actionConfiguration = actionConfiguration,
                 cardApplicationId = cardApplication.id,
-                onBack = { onBack(Unit) },
+                onBack = { onBack.invoke() },
                 onFinish = { showNextFlow() }
             )
             flow.init { initResult ->

@@ -25,7 +25,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val ACCOUNT_ID_KEY = "ACCOUNT_ID"
 private const val SELECTED_BALANCE_ID_KEY = "SELECTED_BALANCE_ID"
 
-internal class FundingSourceDialogFragment : BaseDialogFragment(), FundingSourceContract.View,
+internal class FundingSourceDialogFragment :
+    BaseDialogFragment(),
+    FundingSourceContract.View,
     FundingSourceAdapter.Delegate {
 
     override var delegate: FundingSourceContract.Delegate? = null
@@ -57,7 +59,7 @@ internal class FundingSourceDialogFragment : BaseDialogFragment(), FundingSource
         viewModel.apply {
             observe(fundingSourceListItems, ::handleBalanceList)
             observe(state, ::updateProgressState)
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
         }
     }
 
@@ -143,15 +145,17 @@ internal class FundingSourceDialogFragment : BaseDialogFragment(), FundingSource
     }
 
     override fun onFundingSourceTapped(balance: Balance) = viewModel.setCardFundingSource(mAccountId, balance.id) {
-        delegate?.onFundingSourceSelected(onFinish = {
-            if (it) {
-                notify(
-                    message = "manage_card.funding_source_selector.success.message".localized(),
-                    messageType = MessageBanner.MessageType.HEADS_UP,
-                    title = "manage_card.funding_source_selector.success.title".localized()
-                )
+        delegate?.onFundingSourceSelected(
+            onFinish = {
+                if (it) {
+                    notify(
+                        message = "manage_card.funding_source_selector.success.message".localized(),
+                        messageType = MessageBanner.MessageType.HEADS_UP,
+                        title = "manage_card.funding_source_selector.success.title".localized()
+                    )
+                }
             }
-        })
+        )
     }
 
     override fun onAddFundingSourceTapped() {

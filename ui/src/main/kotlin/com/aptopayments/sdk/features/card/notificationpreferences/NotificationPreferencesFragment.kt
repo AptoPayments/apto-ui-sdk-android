@@ -38,7 +38,7 @@ internal class NotificationPreferencesFragment : BaseFragment(), NotificationPre
         viewModel.apply {
             observe(notificationPreferencesList, ::handleNotificationPreferencesList)
             observe(secondaryChannel, ::setHeader)
-            failure(failure) {
+            observe(failure) {
                 hideLoading()
                 handleFailure(it)
             }

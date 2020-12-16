@@ -9,9 +9,9 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 private const val KYC_STATUS_TAG = "KycStatusFragment"
 
 internal class KycStatusFlow(
-    var card: Card,
-    var onClose: (Unit) -> Unit,
-    var onKycPassed: (Unit) -> Unit
+    private val card: Card,
+    private val onClose: () -> Unit,
+    private val onKycPassed: () -> Unit
 ) : Flow(), KycStatusContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -32,7 +32,7 @@ internal class KycStatusFlow(
         }
     }
 
-    override fun onKycPassed() = onKycPassed(Unit)
+    override fun onKycPassed() = onKycPassed.invoke()
 
-    override fun onKycClosed() = onClose(Unit)
+    override fun onKycClosed() = onClose.invoke()
 }

@@ -22,7 +22,7 @@ class TextInputWatcher(
 
     private fun isValidInput(input: String) =
         isMinLengthValid(input) &&
-                (regexValidator?.let { it.toRegex().matches(input) && isMinLengthValid(input) } ?: true)
+            (regexValidator?.let { it.toRegex().matches(input) && isMinLengthValid(input) } ?: true)
 
     private fun isMinLengthValid(input: String) = input.length >= minNumberCharacters
 

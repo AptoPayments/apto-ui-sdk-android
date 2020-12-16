@@ -26,10 +26,15 @@ private const val COLLECT_PHONE_TAG = "CollectPhoneFragment"
 
 internal class CollectUserDataFlow(
     private val actionConfiguration: WorkflowActionConfigurationCollectUserData,
-    private val onBack: (Unit) -> Unit,
+    private val onBack: () -> Unit,
     private val onFinish: () -> Unit
-) : Flow(), CollectUserNameSurnameContract.Delegate, CollectUserEmailContract.Delegate, CollectUserIdContract.Delegate,
-    CollectUserAddressContract.Delegate, CollectUserBirthdateContract.Delegate, CollectUserPhoneContract.Delegate {
+) : Flow(),
+    CollectUserNameSurnameContract.Delegate,
+    CollectUserEmailContract.Delegate,
+    CollectUserIdContract.Delegate,
+    CollectUserAddressContract.Delegate,
+    CollectUserBirthdateContract.Delegate,
+    CollectUserPhoneContract.Delegate {
 
     private val aptoPlatform: AptoPlatformProtocol by inject()
     private var step = 0
@@ -141,7 +146,7 @@ internal class CollectUserDataFlow(
             step--
             popFragment()
         } else {
-            onBack(Unit)
+            onBack.invoke()
         }
     }
 

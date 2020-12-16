@@ -27,7 +27,6 @@ class PCICardView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private lateinit var config: PCIConfiguration
-    private var cardStyle: CardStyle? = null
     private var hasValidFundingSource = true
     private var cardState = Card.CardState.ACTIVE
     var delegate: Delegate? = null
@@ -67,15 +66,9 @@ class PCICardView @JvmOverloads constructor(
     }
 
     fun setCardInfo(cardInfo: CardInfo?) {
-        setCardStyle(cardInfo?.cardStyle)
-        setCardNetwork(cardInfo?.cardNetwork)
-        setCardState(cardInfo?.state)
         initialize(config, cardInfo?.lastFourDigits ?: "0000", cardInfo?.cardHolder ?: "")
-    }
-
-    private fun setCardNetwork(cardNetwork: Card.CardNetwork?) {
-        setNetworkImage(cardNetwork)
-        updateNetworkLogoIconForCurrentCardStyle()
+        setCardStyle(cardInfo)
+        setCardState(cardInfo?.state)
     }
 
     private fun setNetworkImage(cardNetwork: Card.CardNetwork?) {
@@ -92,11 +85,11 @@ class PCICardView @JvmOverloads constructor(
         }
     }
 
-    private fun setCardStyle(style: CardStyle?) {
-        this.cardStyle = style
-        setCardBackground(style)
-        setCardLogo(style)
-        setTextStyles(style)
+    private fun setCardStyle(cardInfo: CardInfo?) {
+        setCardBackground(cardInfo?.cardStyle)
+        setCardNetwork(cardInfo)
+        setCardLogo(cardInfo?.cardStyle)
+        setTextStyles(cardInfo?.cardStyle)
     }
 
     private fun setTextStyles(style: CardStyle?) {
@@ -110,7 +103,11 @@ class PCICardView @JvmOverloads constructor(
             else -> card_container.setBackgroundColor(UIConfig.uiPrimaryColor)
         }
         iv_background_image.visibleIf(style?.background is CardBackgroundStyle.Image)
-        updateNetworkLogoIconForCurrentCardStyle()
+    }
+
+    private fun setCardNetwork(cardInfo: CardInfo?) {
+        setNetworkImage(cardInfo?.cardNetwork)
+        updateNetworkLogoIconForCurrentCardStyle(cardInfo?.cardStyle)
     }
 
     private fun setCardLogo(style: CardStyle?) {
@@ -118,11 +115,11 @@ class PCICardView @JvmOverloads constructor(
         card_logo.visibleIf(style?.background?.logo != null)
     }
 
-    private fun updateNetworkLogoIconForCurrentCardStyle() {
+    private fun updateNetworkLogoIconForCurrentCardStyle(cardStyle: CardStyle?) {
         network_logo.goneIf(cardStyle?.background is CardBackgroundStyle.Image)
     }
 
-    fun setCardState(state: Card.CardState?) {
+    private fun setCardState(state: Card.CardState?) {
         cardState = state ?: Card.CardState.INACTIVE
         updateCardState()
     }
@@ -155,8 +152,8 @@ class PCICardView @JvmOverloads constructor(
     }
 
     private fun showCardDisabled() {
-        card_error_overlay.remove()
         card_disabled_overlay.show()
+        card_error_overlay.remove()
     }
 
     fun showCardDetails(value: Boolean) {

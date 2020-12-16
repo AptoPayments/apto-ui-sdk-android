@@ -19,18 +19,21 @@ private const val ADD_FUNDS_TAG = "AddFundsFragment"
 private const val RESULT_TAG = "AddFundsResultFragment"
 private const val CONTENT_PRESENTER_TAG = "ContentPresenterFragment"
 
-internal class AddFundsFlow(private val cardId: String, private var onClose: () -> Unit) : Flow(),
-    PaymentSourcesListContract.Delegate, AddFundsContract.Delegate, AddFundsResultContract.Delegate,
+internal class AddFundsFlow(private val cardId: String, private var onClose: () -> Unit) :
+    Flow(),
+    PaymentSourcesListContract.Delegate,
+    AddFundsContract.Delegate,
+    AddFundsResultContract.Delegate,
     ContentPresenterContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-            val fragment = fragmentFactory.addFundsFragment(
-                cardId = cardId,
-                tag = ADD_FUNDS_TAG
-            )
-            fragment.delegate = this
-            setStartElement(element = fragment as FlowPresentable)
-            onInitComplete(Either.Right(Unit))
+        val fragment = fragmentFactory.addFundsFragment(
+            cardId = cardId,
+            tag = ADD_FUNDS_TAG
+        )
+        fragment.delegate = this
+        setStartElement(element = fragment as FlowPresentable)
+        onInitComplete(Either.Right(Unit))
     }
 
     override fun restoreState() {
@@ -61,7 +64,8 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
             cardId = cardId,
             onClose = {
                 popFlow(true)
-            })
+            }
+        )
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 

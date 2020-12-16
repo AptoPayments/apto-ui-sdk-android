@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier
 private const val COUNTRY_SELECTOR_TAG = "CountrySelectorFragment"
 
 internal class CardProductSelectorFlow(
-    val onBack: (Unit) -> Unit,
+    val onBack: () -> Unit,
     val onFinish: (cardProductId: String) -> Unit
 ) : Flow(), CountrySelectorContract.Delegate {
 
@@ -28,29 +28,32 @@ internal class CardProductSelectorFlow(
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         aptoPlatformProtocol.fetchCardProducts { result ->
-            result.either({ onInitComplete(Either.Left(it)) }, { cardProductList ->
-                when (cardProductList.size) {
-                    0 -> onInitComplete(Either.Left(CardProductSelectorInitFailure()))
-                    1 -> onFinish(cardProductList[0].id)
-                    else -> {
-                        val allowedCountriesSet = mutableSetOf<Country>()
-                        cardProductList.forEach { cardProduct ->
-                            cardProduct.countries?.forEach { allowedCountry ->
-                                val cardProductArrayList = countryCardProductMap[allowedCountry] ?: ArrayList()
-                                cardProductArrayList.add(cardProduct.id)
-                                countryCardProductMap[allowedCountry] = cardProductArrayList
-                                allowedCountriesSet.add(Country(allowedCountry))
+            result.either(
+                { onInitComplete(Either.Left(it)) },
+                { cardProductList ->
+                    when (cardProductList.size) {
+                        0 -> onInitComplete(Either.Left(CardProductSelectorInitFailure()))
+                        1 -> onFinish(cardProductList[0].id)
+                        else -> {
+                            val allowedCountriesSet = mutableSetOf<Country>()
+                            cardProductList.forEach { cardProduct ->
+                                cardProduct.countries?.forEach { allowedCountry ->
+                                    val cardProductArrayList = countryCardProductMap[allowedCountry] ?: ArrayList()
+                                    cardProductArrayList.add(cardProduct.id)
+                                    countryCardProductMap[allowedCountry] = cardProductArrayList
+                                    allowedCountriesSet.add(Country(allowedCountry))
+                                }
                             }
+                            val fragment =
+                                fragmentFactory.countrySelectorFragment(allowedCountriesSet.toList(), COUNTRY_SELECTOR_TAG)
+                            fragment.delegate = this
+                            analyticsManager.track(Event.CardProductSelectorCountrySelectorShown)
+                            setStartElement(element = fragment as FlowPresentable)
                         }
-                        val fragment =
-                            fragmentFactory.countrySelectorFragment(allowedCountriesSet.toList(), COUNTRY_SELECTOR_TAG)
-                        fragment.delegate = this
-                        analyticsManager.track(Event.CardProductSelectorCountrySelectorShown)
-                        setStartElement(element = fragment as FlowPresentable)
                     }
+                    onInitComplete(Either.Right(Unit))
                 }
-                onInitComplete(Either.Right(Unit))
-            })
+            )
         }
     }
 
@@ -75,7 +78,7 @@ internal class CardProductSelectorFlow(
 
     override fun onBackFromCountrySelector() {
         analyticsManager.track(Event.CardProductSelectorCountrySelectorClosed)
-        onBack(Unit)
+        onBack.invoke()
     }
 
     internal class CardProductSelectorInitFailure : Failure.FeatureFailure()

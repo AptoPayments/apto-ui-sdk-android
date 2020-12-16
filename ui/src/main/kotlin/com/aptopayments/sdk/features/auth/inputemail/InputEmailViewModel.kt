@@ -8,7 +8,7 @@ import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class InputEmailViewModel constructor(
+internal class InputEmailViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

@@ -51,10 +51,13 @@ internal class IssueCardViewModel(
             cardMetadataRepository.data
         ) { result ->
             hideLoading()
-            result.either({ handleIssueCardFailure(it) }, {
-                cardMetadataRepository.clear()
-                card.postValue(it)
-            })
+            result.either(
+                { handleIssueCardFailure(it) },
+                {
+                    cardMetadataRepository.clear()
+                    card.postValue(it)
+                }
+            )
         }
     }
 

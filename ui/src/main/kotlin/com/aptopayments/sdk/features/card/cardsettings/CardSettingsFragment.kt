@@ -37,7 +37,8 @@ private const val CARD_KEY = "CARD"
 private const val CARD_PRODUCT_KEY = "CARD_PRODUCT"
 private const val PROJECT_CONFIGURATION_KEY = "PROJECT_CONFIGURATION"
 
-internal class CardSettingsFragment : BaseBindingFragment<FragmentCardSettingsBinding>(),
+internal class CardSettingsFragment :
+    BaseBindingFragment<FragmentCardSettingsBinding>(),
     CardSettingsContract.View {
 
     private lateinit var card: Card
@@ -72,7 +73,7 @@ internal class CardSettingsFragment : BaseBindingFragment<FragmentCardSettingsBi
         viewModel.apply {
             observe(cardLocked, ::handleCardLocked)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
-            failure(viewModel.failure) { handleFailure(it) }
+            observe(viewModel.failure) { handleFailure(it) }
             observeNotNullable(cardDetailsClicked) { manageCardDetails() }
             observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
             observeNotNullable(showContentPresenter) { showContentPresenter(it.first, it.second) }
@@ -81,9 +82,11 @@ internal class CardSettingsFragment : BaseBindingFragment<FragmentCardSettingsBi
 
     private fun handleAuthenticateCardDetails(authenticationNeeded: Boolean) {
         if (authenticationNeeded) {
-            (activity as CardActivity).authenticate(AuthenticationView.AuthType.OPTIONAL,
+            (activity as CardActivity).authenticate(
+                AuthenticationView.AuthType.OPTIONAL,
                 onCancelled = { viewModel.cardDetailsAuthenticationError() },
-                onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() })
+                onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() }
+            )
         }
     }
 

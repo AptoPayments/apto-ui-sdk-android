@@ -87,7 +87,8 @@ internal class PaymentSourcesListViewModel(
                 subtitle = "load_funds_payment_methods_new_card_element_subtitle".localized(),
                 showFourDots = false,
                 logo = CardNetwork.UNKNOWN.icon
-            ), false, PaymentSourcesListItem.Type.NEW
+            ),
+            false, PaymentSourcesListItem.Type.NEW
         )
 
     sealed class Actions {

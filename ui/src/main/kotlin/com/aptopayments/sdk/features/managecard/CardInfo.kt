@@ -11,4 +11,18 @@ data class CardInfo(
     val orderedStatus: Card.OrderedStatus,
     val cardStyle: CardStyle?,
     val cardHolder: String
-)
+) {
+    companion object {
+        fun fromCard(card: Card): CardInfo {
+            return CardInfo(
+                cardId = card.accountID,
+                cardHolder = card.cardHolder,
+                lastFourDigits = card.lastFourDigits,
+                cardNetwork = card.cardNetwork,
+                state = card.state,
+                orderedStatus = card.orderedStatus,
+                cardStyle = card.cardStyle
+            )
+        }
+    }
+}

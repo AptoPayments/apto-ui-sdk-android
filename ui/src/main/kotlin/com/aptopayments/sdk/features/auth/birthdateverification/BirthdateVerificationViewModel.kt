@@ -16,7 +16,7 @@ import org.threeten.bp.format.DateTimeFormatter
 
 private const val AUTH_TYPE = "birthdate"
 
-internal class BirthdateVerificationViewModel constructor(
+internal class BirthdateVerificationViewModel(
     private val verification: Verification,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol

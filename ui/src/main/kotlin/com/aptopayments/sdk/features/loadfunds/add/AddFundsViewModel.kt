@@ -86,14 +86,17 @@ internal class AddFundsViewModel(
     }
 
     private fun processLoadFundsResult(result: Either<Failure, Payment>) {
-        result.either({ unableToLoadFunds(it) }, { payment ->
-            if (payment.status == PaymentStatus.FAILED) {
-                unableToLoadFunds()
-            } else {
-                action.value = Actions.PaymentResult(payment)
-                updateSelectedPaymentSource()
+        result.either(
+            { unableToLoadFunds(it) },
+            { payment ->
+                if (payment.status == PaymentStatus.FAILED) {
+                    unableToLoadFunds()
+                } else {
+                    action.value = Actions.PaymentResult(payment)
+                    updateSelectedPaymentSource()
+                }
             }
-        })
+        )
     }
 
     private fun updateSelectedPaymentSource() {
@@ -128,17 +131,23 @@ internal class AddFundsViewModel(
 
     private fun getBalanceId() {
         aptoPlatform.fetchCardFundingSource(cardId, false) { result ->
-            result.either({ handleFailure(it) }, {
-                balanceId = it.id
-            })
+            result.either(
+                { handleFailure(it) },
+                {
+                    balanceId = it.id
+                }
+            )
         }
     }
 
     private fun getFundingLimits() {
         aptoPlatform.fetchCard(cardId, false) { result ->
-            result.either({ handleFailure(it) }, {
-                fundingLimits = it.features?.funding?.limits
-            })
+            result.either(
+                { handleFailure(it) },
+                {
+                    fundingLimits = it.features?.funding?.limits
+                }
+            )
         }
     }
 

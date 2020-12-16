@@ -19,7 +19,8 @@ import org.koin.core.parameter.parametersOf
 
 private const val CARD_ID_KEY = "CARD_ID_KEY"
 
-internal class AddCardOnboardingFragment : BaseBindingFragment<FragmentAddCardOnboardingBinding>(),
+internal class AddCardOnboardingFragment :
+    BaseBindingFragment<FragmentAddCardOnboardingBinding>(),
     AddCardOnboardingContract.View {
 
     override var delegate: AddCardOnboardingContract.Delegate? = null

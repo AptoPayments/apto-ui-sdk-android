@@ -21,6 +21,7 @@ import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPr
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinViewModel
 import com.aptopayments.sdk.features.card.setpin.SetCardPinViewModel
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
+import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
 import com.aptopayments.sdk.features.disclaimer.DisclaimerViewModel
@@ -61,7 +62,7 @@ val viewModelModule = module {
     viewModel { FundingSourcesViewModel(get()) }
     viewModel { KycStatusViewModel(get()) }
     single { FetchTransactionsTaskQueue(get()) }
-    viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get()) }
+    viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get(), get()) }
     viewModel { ActivatePhysicalCardViewModel(get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
     viewModel { (card: Card, cardProduct: CardProduct) ->
@@ -78,7 +79,14 @@ val viewModelModule = module {
     viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->
         IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get(), get())
     }
-    viewModel { TransactionListViewModel(get()) }
+    viewModel { (cardId: String, config: TransactionListConfig) ->
+        TransactionListViewModel(
+            cardId,
+            config,
+            get(),
+            get()
+        )
+    }
     viewModel { WaitlistViewModel(get()) }
     viewModel { SetCardPinViewModel(get()) }
     viewModel { ConfirmCardPinViewModel(get()) }

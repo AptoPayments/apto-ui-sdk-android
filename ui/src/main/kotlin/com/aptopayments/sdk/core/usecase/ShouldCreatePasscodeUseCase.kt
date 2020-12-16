@@ -11,7 +11,7 @@ internal class ShouldCreatePasscodeUseCase(private val authenticationRepository:
     override fun run(): Either<Failure, Boolean> {
         return Either.Right(
             !authenticationRepository.isPasscodeSet() &&
-                    (AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI())
+                (AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI())
         )
     }
 }

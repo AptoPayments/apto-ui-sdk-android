@@ -35,7 +35,9 @@ import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
 import java.util.Locale
 
-internal class CardTransactionsChart : BaseFragment(), CardTransactionsChartContract.View,
+internal class CardTransactionsChart :
+    BaseFragment(),
+    CardTransactionsChartContract.View,
     OnChartValueSelectedListener,
     CategoryListAdapter.Delegate {
 
@@ -56,7 +58,7 @@ internal class CardTransactionsChart : BaseFragment(), CardTransactionsChartCont
 
     override fun setupViewModel() {
         viewModel.apply {
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
             observeNotNullable(categorySpending) {
                 updateChartData(it)
                 showViews()

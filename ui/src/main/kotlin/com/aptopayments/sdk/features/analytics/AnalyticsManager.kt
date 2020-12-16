@@ -4,7 +4,7 @@ import android.app.Application
 import com.aptopayments.mobile.analytics.Event
 import org.json.JSONObject
 
-internal class AnalyticsManager constructor(context: Application) : AnalyticsServiceContract {
+internal class AnalyticsManager(context: Application) : AnalyticsServiceContract {
 
     private var service = MixpanelAnalyticsService(context)
 

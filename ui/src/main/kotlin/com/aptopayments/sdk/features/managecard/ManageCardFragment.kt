@@ -35,14 +35,16 @@ private const val FIVE_SECONDS = 5
 private const val CARD_ID_KEY = "CARD_ID"
 private const val REQUEST_CODE_PUSH_PROVISIONING = 1100
 
-internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
-    TransactionListAdapter.Delegate, SwipeRefreshLayout.OnRefreshListener {
+internal class ManageCardFragment :
+    BaseFragment(),
+    ManageCardContract.View,
+    TransactionListAdapter.Delegate,
+    SwipeRefreshLayout.OnRefreshListener {
     override var delegate: ManageCardContract.Delegate? = null
     private lateinit var cardId: String
     private val viewModel: ManageCardViewModel by viewModel { parametersOf(cardId) }
     private lateinit var transactionListAdapter: TransactionListAdapter
     private var scrollListener: EndlessRecyclerViewScrollListener? = null
-    private var clicksAllowed = true
     private var previousMessageShownAt = LocalDateTime.of(2010, 1, 1, 0, 0, 0)
 
     override fun layoutId(): Int = R.layout.fragment_manage_card
@@ -55,7 +57,6 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
 
     override fun onPresented() {
         super.onPresented()
-        clicksAllowed = true
         customizeSecondaryNavigationStatusBar()
         configureMenuVisibility()
     }
@@ -84,17 +85,18 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
                 transactionsInfoRetrieved,
                 showAddToGooglePay
             ) { transactions, transactionInfoRetrieved, showAddToGooglePay ->
-                handleEmptyCase(transactions, transactionInfoRetrieved, showAddToGooglePay!!)
+                handleEmptyCase(transactions, transactionInfoRetrieved, showAddToGooglePay ?: false)
             }
             observeNullable(fundingSource, ::handleBalance)
-            observeNullable(cardInfo) {
+            observeNullable(card) {
                 it?.cardStyle?.balanceSelectorAsset?.let { url ->
                     bv_balance_view.setSelectBalanceIcon(url)
                 }
             }
-            failure(failure) { handleFailure(it) }
+            observe(failure) { handleFailure(it) }
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             observeNullable(viewModel.showFundingSourceDialog) { delegate?.onFundingSourceTapped(it) }
+            observeNotNullable(viewModel.transactionListItems) { transactionListAdapter.setItems(it) }
         }
     }
 
@@ -142,10 +144,7 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
     }
 
     override fun onTransactionTapped(transaction: Transaction) {
-        if (clicksAllowed) {
-            clicksAllowed = false
-            delegate?.onTransactionTapped(transaction)
-        }
+        delegate?.onTransactionTapped(transaction)
     }
 
     override fun setupUI() {
@@ -189,7 +188,7 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
     private fun setOffsetChangedListener() {
         abl_manage_card.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
             override fun onStateChanged(offsetPercent: Float) {
-                swipe_refresh_container.isEnabled = offsetPercent == 0.0f
+                swipe_refresh_container.isEnabled = offsetPercent <= 0.4f
                 abl_manage_card.post {
                     bv_balance_view?.applyAlphaAndTextSize(offsetPercent)
                     animateBackground(offsetPercent)
@@ -216,9 +215,7 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
         val linearLayoutManager = LinearLayoutManager(context)
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                viewModel.getMoreTransactions(cardId) { newTransactionCount ->
-                    if (newTransactionCount > 0) transactionListAdapter.notifyDataSetChanged()
-                }
+                viewModel.getMoreTransactions()
             }
         }
         transactionListAdapter.delegate = this
@@ -233,15 +230,10 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
 
     // Refresh listener
     override fun onRefresh() {
-        viewModel.refreshData(cardId) {
+        viewModel.refreshData {
             scrollListener?.resetState()
             swipe_refresh_container?.isRefreshing = false
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.viewReady()
     }
 
     override fun onResume() {
@@ -255,16 +247,11 @@ internal class ManageCardFragment : BaseFragment(), ManageCardContract.View,
         }
     }
 
-    override fun refreshCardData() = viewModel.refreshCard(cardId = cardId)
+    override fun refreshCardData() = viewModel.refreshCard()
 
-    override fun refreshBalance() = viewModel.refreshBalance(cardId = cardId)
+    override fun refreshBalance() = viewModel.refreshBalance()
 
-    override fun refreshTransactions() {
-        showLoading()
-        viewModel.refreshTransactions(cardId = cardId) {
-            hideLoading()
-        }
-    }
+    override fun refreshTransactions() = viewModel.refreshTransactions()
 
     override fun viewLoaded() = viewModel.viewLoaded()
 

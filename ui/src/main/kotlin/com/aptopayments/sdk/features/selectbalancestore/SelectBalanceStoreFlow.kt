@@ -22,10 +22,10 @@ import org.koin.core.inject
 import java.lang.reflect.Modifier
 
 internal class SelectBalanceStoreFlow(
-    var actionConfiguration: WorkflowActionConfigurationSelectBalanceStore,
-    var cardApplicationId: String,
-    var onBack: (Unit) -> Unit,
-    var onFinish: (oauthAttempt: OAuthAttempt) -> Unit
+    val actionConfiguration: WorkflowActionConfigurationSelectBalanceStore,
+    val cardApplicationId: String,
+    val onBack: () -> Unit,
+    val onFinish: (oauthAttempt: OAuthAttempt) -> Unit
 ) : Flow() {
 
     private val aptoPlatformProtocol: AptoPlatformProtocol by inject()
@@ -57,7 +57,8 @@ internal class SelectBalanceStoreFlow(
     }
 
     private fun showRevokedTokenDialog(error: Failure.ServerError) {
-        confirm(title = "select_balance_store.login.error.title".localized(),
+        confirm(
+            title = "select_balance_store.login.error.title".localized(),
             text = error.errorMessage(),
             confirm = "select_balance_store.login.error.ok_button".localized(),
             cancel = "",
@@ -85,7 +86,7 @@ internal class SelectBalanceStoreFlow(
         )
         val flow = OAuthFlow(
             config = config,
-            onBack = { onBack(Unit) },
+            onBack = { onBack.invoke() },
             onFinish = { oauthAttempt -> verifyOAuthData(allowedBalanceType, oauthAttempt, onComplete) }
         )
         flow.init { initResult ->
@@ -103,7 +104,7 @@ internal class SelectBalanceStoreFlow(
         verifyFlow = OAuthVerifyFlow(
             allowedBalanceType = allowedBalanceType,
             oauthAttempt = oauthAttempt,
-            onBack = { onBack(Unit) },
+            onBack = { onBack.invoke() },
             onFinish = { result -> confirmAddressIfNeeded(allowedBalanceType, result) },
             onError = { error -> handleError(error) }
         )
@@ -115,11 +116,14 @@ internal class SelectBalanceStoreFlow(
     }
 
     private fun confirmAddressIfNeeded(allowedBalanceType: AllowedBalanceType, oauthAttempt: OAuthAttempt) {
-        (oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)
-            ?.firstOrNull() as? AddressDataPoint)?.let { address ->
+        (
+            oauthAttempt.userData?.getDataPointsOf(DataPoint.Type.ADDRESS)
+                ?.firstOrNull() as? AddressDataPoint
+            )?.let { address ->
             val message = "select_balance_store.oauth_confirm.address.confirmation_message".localized()
                 .replace("<<ADDRESS>>", address.toStringRepresentation())
-            confirm(title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
+            confirm(
+                title = "select_balance_store.oauth_confirm.address.confirmation_title".localized(),
                 text = message,
                 confirm = "select_balance_store.oauth_confirm.address.ok_button".localized(),
                 cancel = "select_balance_store.oauth_confirm.address.cancel_button".localized(),
@@ -133,15 +137,18 @@ internal class SelectBalanceStoreFlow(
         oauthAttempt.userData?.let { userData ->
             showLoading()
             aptoPlatformProtocol.saveOauthUserData(userData, allowedBalanceType, oauthAttempt.tokenId) { result ->
-                result.either({ handleError(it) }, {
-                    hideLoading()
-                    if (it.result == OAuthUserDataUpdateResult.VALID) {
-                        selectBalanceStore(oauthAttempt)
-                    } else {
-                        notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized())
-                        it.userData?.let { userData -> verifyFlow.showUpdatedUserData(userData) }
+                result.either(
+                    { handleError(it) },
+                    {
+                        hideLoading()
+                        if (it.result == OAuthUserDataUpdateResult.VALID) {
+                            selectBalanceStore(oauthAttempt)
+                        } else {
+                            notify("select_balance_store.oauth_confirm.updated_pii_message.message".localized())
+                            it.userData?.let { userData -> verifyFlow.showUpdatedUserData(userData) }
+                        }
                     }
-                })
+                )
             }
         } ?: selectBalanceStore(oauthAttempt)
     }

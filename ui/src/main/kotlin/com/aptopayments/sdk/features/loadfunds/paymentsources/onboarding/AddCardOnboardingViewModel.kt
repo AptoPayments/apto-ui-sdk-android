@@ -33,19 +33,25 @@ internal class AddCardOnboardingViewModel(
         showLoading()
         aptoPlatform.fetchCard(cardId, false) { result ->
             hideLoading()
-            result.either({ handleFailure(it) }, { card ->
-                _secondDescription.value = createSecondDescription(card.features?.funding?.softDescriptor ?: "")
-                fetchCompanyName(card.cardProductID)
-            })
+            result.either(
+                { handleFailure(it) },
+                { card ->
+                    _secondDescription.value = createSecondDescription(card.features?.funding?.softDescriptor ?: "")
+                    fetchCompanyName(card.cardProductID)
+                }
+            )
         }
     }
 
     private fun fetchCompanyName(cardProductId: String?) {
         cardProductId?.let {
             aptoPlatform.fetchCardProduct(cardProductId, false) { result ->
-                result.either({ handleFailure(it) }, { cardProduct ->
-                    _firstDescription.value = createFirstDescription(cardProduct.name)
-                })
+                result.either(
+                    { handleFailure(it) },
+                    { cardProduct ->
+                        _firstDescription.value = createFirstDescription(cardProduct.name)
+                    }
+                )
             }
         }
     }

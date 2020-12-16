@@ -123,11 +123,14 @@ internal class AuthenticationView @JvmOverloads constructor(
     private fun showBiometricDialogIfPossible(activity: BaseActivity) {
         secret_pin_view.invisibleIf(isOnlyBiometricsMethod())
         if (!isOnlyPinMethod()) {
-            canAskBiometricsUseCase().either({}, { canAsk ->
-                if (canAsk) {
-                    showBiometricDialog(activity)
+            canAskBiometricsUseCase().either(
+                {},
+                { canAsk ->
+                    if (canAsk) {
+                        showBiometricDialog(activity)
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -149,7 +152,8 @@ internal class AuthenticationView @JvmOverloads constructor(
                 if (isOnlyBiometricsMethod() && isAuthOptional()) {
                     authCancelled()
                 }
-            })
+            }
+        )
     }
 
     private fun getBiometricsCancelText() =
@@ -164,13 +168,16 @@ internal class AuthenticationView @JvmOverloads constructor(
     }
 
     override fun onPinEntered(currentPin: String) {
-        verifyPasscodeUseCase(currentPin).either({}, { isCorrect ->
-            if (isCorrect) {
-                authenticationEndedCorrectly()
-            } else {
-                pinEnteredWrong()
+        verifyPasscodeUseCase(currentPin).either(
+            {},
+            { isCorrect ->
+                if (isCorrect) {
+                    authenticationEndedCorrectly()
+                } else {
+                    pinEnteredWrong()
+                }
             }
-        })
+        )
     }
 
     private fun pinEnteredWrong() {

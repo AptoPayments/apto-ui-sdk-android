@@ -27,11 +27,16 @@ private const val BIRTHDATE_VERIFICATION_TAG = "BirthdateVerificationFragment"
 private const val INPUT_EMAIL_TAG = "InputEmailFragment"
 
 internal class AuthFlow(
-    val contextConfiguration: ContextConfiguration,
-    var onBack: (Unit) -> Unit,
-    var onFinish: (userToken: String) -> Unit
-) : Flow(), InputPhoneContract.Delegate, InputEmailContract.Delegate, PhoneVerificationContract.Delegate,
-    EmailVerificationContract.Delegate, BirthdateVerificationContract.Delegate, KoinComponent {
+    private val contextConfiguration: ContextConfiguration,
+    private val onBack: () -> Unit,
+    private val onFinish: (userToken: String) -> Unit
+) : Flow(),
+    InputPhoneContract.Delegate,
+    InputEmailContract.Delegate,
+    PhoneVerificationContract.Delegate,
+    EmailVerificationContract.Delegate,
+    BirthdateVerificationContract.Delegate,
+    KoinComponent {
 
     private val analyticsManager: AnalyticsServiceContract by inject()
     private val userMetadataRepository: UserMetadataRepository by inject()
@@ -54,7 +59,7 @@ internal class AuthFlow(
         (fragmentWithTag(EMAIL_VERIFICATION_TAG) as? EmailVerificationContract.View)?.let { it.delegate = this }
     }
 
-    override fun onBackFromInputPhone() = onBack(Unit)
+    override fun onBackFromInputPhone() = onBack()
 
     override fun onPhoneVerificationStarted(verification: Verification) {
         val fragment = fragmentFactory.phoneVerificationFragment(verification, PHONE_VERIFICATION_TAG)
@@ -62,7 +67,7 @@ internal class AuthFlow(
         push(fragment as BaseFragment)
     }
 
-    override fun onBackFromInputEmail() = onBack(Unit)
+    override fun onBackFromInputEmail() = onBack.invoke()
 
     override fun onEmailVerificationStarted(verification: Verification) {
         val fragment = fragmentFactory.emailVerificationFragment(verification, EMAIL_VERIFICATION_TAG)

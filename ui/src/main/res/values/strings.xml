@@ -570,6 +570,7 @@
     <string name="maintenance_retry_title">Try again</string>
 
     <!--Friendly error messages-->
+    <string name="error_transport_rate_limiter">Please try again in one minute.</string>
     <string name="error_transport_invalid_session">For your security, your session has timed out due to inactivity.</string>
     <string name="error_transport_session_expired">User session has expired. Please sign in with your credentials.</string>
     <string name="error_transport_empty_session">For your security, your session has timed out due to inactivity.</string>

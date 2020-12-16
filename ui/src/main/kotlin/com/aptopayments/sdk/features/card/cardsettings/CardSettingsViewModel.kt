@@ -23,7 +23,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
-internal class CardSettingsViewModel constructor(
+internal class CardSettingsViewModel(
     private var card: Card,
     private val cardProduct: CardProduct,
     private val analyticsManager: AnalyticsServiceContract,
@@ -70,23 +70,23 @@ internal class CardSettingsViewModel constructor(
         phoneDialer.dialPhone(phone.toStringRepresentation(), null)
     }
 
-    fun unlockCard(onComplete: (Unit) -> Unit) {
+    fun unlockCard(onComplete: () -> Unit) {
         card.accountID.let { accountId ->
             aptoPlatform.unlockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     updateCard(it)
-                    onComplete(Unit)
+                    onComplete.invoke()
                 }
             }
         }
     }
 
-    fun lockCard(onComplete: (Unit) -> Unit) {
+    fun lockCard(onComplete: () -> Unit) {
         card.accountID.let { accountId ->
             aptoPlatform.lockCard(accountId) { result ->
                 result.either(::handleFailure) {
                     updateCard(card)
-                    onComplete(Unit)
+                    onComplete.invoke()
                 }
             }
         }
@@ -97,13 +97,16 @@ internal class CardSettingsViewModel constructor(
     }
 
     fun cardDetailsPressed() {
-        canAskBiometricsUseCase().either({}, { canAsk ->
-            if (canAsk) {
-                checkIfAuthNeeded()
-            } else {
-                cardDetailsAuthenticationSuccessful()
+        canAskBiometricsUseCase().either(
+            {},
+            { canAsk ->
+                if (canAsk) {
+                    checkIfAuthNeeded()
+                } else {
+                    cardDetailsAuthenticationSuccessful()
+                }
             }
-        })
+        )
     }
 
     fun onFaqPressed() {

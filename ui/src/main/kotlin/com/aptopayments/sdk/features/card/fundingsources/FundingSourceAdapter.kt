@@ -82,7 +82,7 @@ internal class FundingSourceAdapter(
 
     fun capitalizeString(stringToCapitalize: String): String {
         return stringToCapitalize.toUpperCase(Locale.getDefault())[0] +
-                stringToCapitalize.substring(1, stringToCapitalize.length)
+            stringToCapitalize.substring(1, stringToCapitalize.length)
     }
 
     private fun customizeAddFundingSourceView(viewHolder: ViewHolder, position: Int) {

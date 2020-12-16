@@ -63,7 +63,7 @@ internal class OAuthVerifyFragment : BaseFragment(), OAuthVerifyContract.View {
             observe(address) { updateRow(tv_address_label, tv_address, it) }
             observe(phone) { updateRow(tv_phone_label, tv_phone, it) }
             observe(birthdate) { updateRow(tv_date_of_birth_label, tv_date_of_birth, it) }
-            failure(failure) {
+            observe(failure) {
                 if (it is Failure.ServerError && it.isOauthTokenRevokedError()) delegate?.onRevokedTokenError(it)
                 else handleFailure(it)
             }

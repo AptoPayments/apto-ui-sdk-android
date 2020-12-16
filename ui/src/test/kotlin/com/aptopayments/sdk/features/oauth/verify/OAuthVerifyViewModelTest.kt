@@ -5,7 +5,6 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Spy
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -13,7 +12,6 @@ class OAuthVerifyViewModelTest : UnitTest() {
 
     private lateinit var sut: OAuthVerifyViewModel
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before

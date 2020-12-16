@@ -18,10 +18,10 @@ private const val ACTIVATE_PHYSICAL_CARD_TAG = "ActivatePhysicalCardFragment"
 private const val ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG = "ActivatePhysicalCardSuccessFragment"
 
 internal class ActivatePhysicalCardFlow(
-    var card: Card,
-    var onBack: (Unit) -> Unit,
-    var onFinish: (Unit) -> Unit,
-    var onPhysicalCardActivated: (Unit) -> Unit
+    val card: Card,
+    val onBack: () -> Unit,
+    val onFinish: () -> Unit,
+    val onPhysicalCardActivated: () -> Unit
 ) : Flow(), ActivatePhysicalCardContract.Delegate, ActivatePhysicalCardSuccessContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -47,17 +47,17 @@ internal class ActivatePhysicalCardFlow(
         val fragment = fragmentFactory.activatePhysicalCardSuccessFragment(card, ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
-        onPhysicalCardActivated(Unit)
+        onPhysicalCardActivated.invoke()
     }
 
-    override fun onBackFromActivatePhysicalCard() = onBack(Unit)
+    override fun onBackFromActivatePhysicalCard() = onBack.invoke()
 
     //
     // Success
     //
-    override fun getPinFinished() = onFinish(Unit)
+    override fun getPinFinished() = onFinish.invoke()
 
-    override fun onCloseFromActivatePhysicalCardSuccess() = onFinish(Unit)
+    override fun onCloseFromActivatePhysicalCardSuccess() = onFinish.invoke()
 
     override fun onSetPinClicked() {
         val flow = SetCardPinFlow(
@@ -72,7 +72,7 @@ internal class ActivatePhysicalCardFlow(
                         messageType = MessageBanner.MessageType.HEADS_UP
                     )
                 }
-                onFinish(Unit)
+                onFinish.invoke()
             }
         )
         flow.init { initResult ->
@@ -87,7 +87,7 @@ internal class ActivatePhysicalCardFlow(
             onBack = { popFlow(animated = true) },
             onFinish = {
                 popFlow(animated = true)
-                onFinish(Unit)
+                onFinish.invoke()
             }
         )
         flow.init { initResult ->

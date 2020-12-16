@@ -11,8 +11,8 @@ private const val PASSCODE_PIN_TAG = "PasscodeFragment"
 
 internal class CreatePasscodeFlow(
     private val mode: PasscodeMode,
-    var onFinish: () -> Unit,
-    var onBack: (() -> Unit)? = null
+    val onFinish: () -> Unit,
+    val onBack: (() -> Unit)? = null
 ) : Flow(), PasscodeContract.Delegate {
 
     private val savePasscodeUseCase: SavePasscodeUseCase by inject()

@@ -22,7 +22,6 @@ import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
-import org.mockito.Spy
 
 internal class AuthFlowTest : AndroidTest() {
 
@@ -52,7 +51,6 @@ internal class AuthFlowTest : AndroidTest() {
     @Mock
     private lateinit var countries: List<Country>
 
-    @Spy
     private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
 
     @Before
@@ -60,10 +58,12 @@ internal class AuthFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single<AnalyticsServiceContract> { analyticsManager }
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single<AnalyticsServiceContract> { analyticsManager }
+                    single { mockFragmentFactory }
+                }
+            )
         }
     }
 

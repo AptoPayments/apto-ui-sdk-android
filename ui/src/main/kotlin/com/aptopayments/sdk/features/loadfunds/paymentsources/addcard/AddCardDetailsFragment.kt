@@ -24,7 +24,8 @@ import org.koin.core.parameter.parametersOf
 private const val CARD_ID_KEY = "CARD_ID_KEY"
 private const val DATE_MASK = "[00]/[00]"
 
-internal class AddCardDetailsFragment : BaseBindingFragment<FragmentAddCardPaymentSourceBinding>(),
+internal class AddCardDetailsFragment :
+    BaseBindingFragment<FragmentAddCardPaymentSourceBinding>(),
     AddCardPaymentSourceContract.View {
 
     override var delegate: AddCardPaymentSourceContract.Delegate? = null

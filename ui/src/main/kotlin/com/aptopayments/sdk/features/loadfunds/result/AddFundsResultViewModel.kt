@@ -32,11 +32,14 @@ internal class AddFundsResultViewModel(
     ) {
         showLoading()
         aptoPlatform.fetchCard(cardId, false) { cardResult ->
-            cardResult.either({ handleFailure(it) }, { card ->
-                _resultElement.value = mapper.map(payment, card.features?.funding?.softDescriptor)
-                hideLoading()
-                fetchAgreement(card)
-            })
+            cardResult.either(
+                { handleFailure(it) },
+                { card ->
+                    _resultElement.value = mapper.map(payment, card.features?.funding?.softDescriptor)
+                    hideLoading()
+                    fetchAgreement(card)
+                }
+            )
         }
     }
 
@@ -53,9 +56,12 @@ internal class AddFundsResultViewModel(
     private fun fetchAgreement(card: Card) {
         card.cardProductID?.let { id ->
             aptoPlatform.fetchCardProduct(id, false) { cardProductResult ->
-                cardProductResult.either({ handleFailure(it) }, { cardProduct ->
-                    this.cardHolderAgreement = cardProduct.cardholderAgreement
-                })
+                cardProductResult.either(
+                    { handleFailure(it) },
+                    { cardProduct ->
+                        this.cardHolderAgreement = cardProduct.cardholderAgreement
+                    }
+                )
             }
         }
     }

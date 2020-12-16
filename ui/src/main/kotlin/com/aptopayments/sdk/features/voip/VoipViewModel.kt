@@ -11,7 +11,7 @@ import org.json.JSONObject
 import java.util.Timer
 import kotlin.concurrent.timer
 
-internal class VoipViewModel constructor(
+internal class VoipViewModel(
     private val analyticsManager: AnalyticsServiceContract,
     private val voipHandler: VoipContract.Handler
 ) : BaseViewModel() {

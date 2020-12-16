@@ -4,7 +4,7 @@ import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class ConfirmCardPinViewModel constructor(
+internal class ConfirmCardPinViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 

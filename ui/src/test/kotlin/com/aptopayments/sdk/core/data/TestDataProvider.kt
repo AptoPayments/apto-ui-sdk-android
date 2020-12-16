@@ -15,6 +15,7 @@ import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.payment.PaymentStatus
 import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.data.stats.CategorySpending
+import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.DataPointList
 import com.aptopayments.mobile.data.user.Verification
@@ -207,6 +208,37 @@ class TestDataProvider {
             source = providePaymentSourcesCard(),
             approvalCode = "123456",
             createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC)
+        )
+
+        fun provideMoney(amount: Double = 10.0, currency: String = "USD") = Money(currency, amount)
+
+        fun provideTransaction(
+            transactionId: String = "transaction_1234",
+            createdAt: ZonedDateTime = ZonedDateTime.now()
+        ) = Transaction(
+            transactionId,
+            transactionType = Transaction.TransactionType.PURCHASE,
+            createdAt = createdAt,
+            transactionDescription = null,
+            lastMessage = null,
+            declineCode = null,
+            merchant = null,
+            store = null,
+            localAmount = provideMoney(),
+            billingAmount = provideMoney(),
+            holdAmount = provideMoney(0.0),
+            cashbackAmount = provideMoney(0.0),
+            feeAmount = provideMoney(0.0),
+            nativeBalance = provideMoney(),
+            settlement = null,
+            ecommerce = null,
+            international = null,
+            cardPresent = null,
+            emv = null,
+            cardNetwork = Card.CardNetwork.VISA,
+            state = Transaction.TransactionState.COMPLETE,
+            adjustments = null,
+            fundingSourceName = null
         )
     }
 }

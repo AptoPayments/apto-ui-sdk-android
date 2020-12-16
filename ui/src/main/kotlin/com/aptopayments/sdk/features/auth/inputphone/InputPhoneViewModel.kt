@@ -13,7 +13,7 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 
-internal class InputPhoneViewModel constructor(
+internal class InputPhoneViewModel(
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
     private val aptoUiSdkProtocol: AptoUiSdkProtocol

@@ -19,7 +19,9 @@ import kotlin.properties.Delegates
 
 private const val ALLOWED_COUNTRIES_KEY = "ALLOWED_COUNTRIES"
 
-internal class CountrySelectorFragment : BaseFragment(), CountrySelectorContract.View,
+internal class CountrySelectorFragment :
+    BaseFragment(),
+    CountrySelectorContract.View,
     CountryListAdapter.Delegate {
 
     // Wrapper class required to be able to use Delegates.observable because the Delegates do not support null as the

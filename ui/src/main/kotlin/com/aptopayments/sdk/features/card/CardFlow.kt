@@ -43,6 +43,8 @@ internal class CardFlow : Flow(), KoinComponent {
     private var initialized = false
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
+        subscribeToNetworkAvailabilityEvent()
+        subscribeToMaintenanceModeEvent()
         if (!networkHandler.isConnected) {
             val fragment = fragmentFactory.noNetworkFragment(NO_NETWORK_TAG)
             setStartElement(fragment as BaseFragment)
@@ -51,11 +53,14 @@ internal class CardFlow : Flow(), KoinComponent {
             return
         }
         initialFlow { result ->
-            result.either({ onInitComplete(Either.Left(it)) }, { flow ->
-                setStartElement(element = flow)
-                initialized = true
-                onInitComplete(Either.Right(Unit))
-            })
+            result.either(
+                { onInitComplete(Either.Left(it)) },
+                { flow ->
+                    setStartElement(element = flow)
+                    initialized = true
+                    onInitComplete(Either.Right(Unit))
+                }
+            )
         }
     }
 
@@ -63,41 +68,50 @@ internal class CardFlow : Flow(), KoinComponent {
 
     private fun initialFlow(onInitComplete: (Either<Failure, Flow>) -> Unit) {
         AptoPlatform.fetchContextConfiguration(false) { result ->
-            result.either({ onInitComplete(Either.Left(it)) }, { configuration ->
-                this.contextConfiguration = configuration
-                val trackerAccessToken = contextConfiguration.projectConfiguration.trackerAccessToken
-                if (contextConfiguration.projectConfiguration.isTrackerActive == true) {
-                    trackerAccessToken?.let { token ->
-                        if (token.isNotEmpty()) analyticsManager.initialize(token)
+            result.either(
+                { onInitComplete(Either.Left(it)) },
+                { configuration ->
+                    this.contextConfiguration = configuration
+                    val trackerAccessToken = contextConfiguration.projectConfiguration.trackerAccessToken
+                    if (contextConfiguration.projectConfiguration.isTrackerActive == true) {
+                        trackerAccessToken?.let { token ->
+                            if (token.isNotEmpty()) analyticsManager.initialize(token)
+                        }
+                    }
+                    if (!aptoPlatformProtocol.userTokenPresent()) {
+                        initAuthFlow(onInitComplete)
+                    } else {
+                        initNewOrExistingCardFlow { initResult ->
+                            initResult.either(
+                                { failure ->
+                                    when (failure) {
+                                        is Failure.UserSessionExpired -> initAuthFlow(onInitComplete)
+                                        else -> onInitComplete(Either.Left(failure))
+                                    }
+                                },
+                                { flow -> onInitComplete(Either.Right(flow)) }
+                            )
+                        }
                     }
                 }
-                if (!aptoPlatformProtocol.userTokenPresent()) {
-                    initAuthFlow(onInitComplete)
-                } else {
-                    initNewOrExistingCardFlow { initResult ->
-                        initResult.either({ failure ->
-                            when (failure) {
-                                is Failure.UserSessionExpired -> initAuthFlow(onInitComplete)
-                                else -> onInitComplete(Either.Left(failure))
-                            }
-                        }, { flow -> onInitComplete(Either.Right(flow)) })
-                    }
-                }
-            })
+            )
         }
     }
 
     private fun initNewOrExistingCardFlow(onComplete: (Either<Failure, Flow>) -> Unit) {
         newOrExistingFlowUseCase { result ->
-            result.either({ onComplete(it.left()) }, { action ->
-                when (action) {
-                    is Action.ContinueFlowWithCard -> initSetLoginPinFlow(
-                        cardId = action.cardId,
-                        onInitComplete = onComplete
-                    )
-                    Action.ContinueWithCardProductSelectorFlow -> initCardProductSelectorFlow(onComplete)
+            result.either(
+                { onComplete(it.left()) },
+                { action ->
+                    when (action) {
+                        is Action.ContinueFlowWithCard -> initSetLoginPinFlow(
+                            cardId = action.cardId,
+                            onInitComplete = onComplete
+                        )
+                        Action.ContinueWithCardProductSelectorFlow -> initCardProductSelectorFlow(onComplete)
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -159,8 +173,6 @@ internal class CardFlow : Flow(), KoinComponent {
     override fun attachTo(activity: AppCompatActivity, fragmentContainer: Int) {
         super.attachTo(activity, fragmentContainer)
         subscribeToSessionInvalidEvent()
-        subscribeToNetworkAvailabilityEvent()
-        subscribeToMaintenanceModeEvent()
     }
 
     override fun detachFromActivity() {
@@ -195,7 +207,6 @@ internal class CardFlow : Flow(), KoinComponent {
                         result.either(::handleFailure) { flow ->
                             push(flow, animated = false)
                             initialized = true
-                            Unit
                         }
                     }
                 }

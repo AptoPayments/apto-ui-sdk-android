@@ -28,7 +28,8 @@ class BiometricWrapper(private val context: Context) {
             .setNegativeButtonText(negativeButtonTitle)
             .build()
 
-        val biometricPrompt = BiometricPrompt(activity, ContextCompat.getMainExecutor(activity),
+        val biometricPrompt = BiometricPrompt(
+            activity, ContextCompat.getMainExecutor(activity),
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
@@ -39,7 +40,8 @@ class BiometricWrapper(private val context: Context) {
                     super.onAuthenticationSucceeded(result)
                     onAuthSuccess.invoke()
                 }
-            })
+            }
+        )
 
         biometricPrompt.authenticate(promptInfo)
     }

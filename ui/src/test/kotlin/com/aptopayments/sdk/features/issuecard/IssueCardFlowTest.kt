@@ -33,9 +33,11 @@ class IssueCardFlowTest : AndroidTest() {
         super.setUp()
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
-            modules(module {
-                single { mockFragmentFactory }
-            })
+            modules(
+                module {
+                    single { mockFragmentFactory }
+                }
+            )
         }
     }
 
@@ -49,7 +51,8 @@ class IssueCardFlowTest : AndroidTest() {
             cardApplicationId = cardApplicationId,
             actionConfiguration = conf,
             onBack = {},
-            onFinish = {})
+            onFinish = {}
+        )
 
         // When
         sut.init {}

@@ -24,7 +24,8 @@ import org.koin.core.parameter.parametersOf
 private const val CONFIGURATION_BUNDLE = "CONFIGURATION_BUNDLE"
 private const val DATAPOINT_ID = "DATAPOINT_ID"
 
-internal class CollectUserIdFragment : BaseBindingFragment<FragmentCollectUserIdBinding>(),
+internal class CollectUserIdFragment :
+    BaseBindingFragment<FragmentCollectUserIdBinding>(),
     CollectUserIdContract.View {
 
     private lateinit var idTypeAdapter: CustomArrayAdapter<String>
