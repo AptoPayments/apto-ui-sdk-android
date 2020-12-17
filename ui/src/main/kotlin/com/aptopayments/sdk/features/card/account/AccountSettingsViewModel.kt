@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.card.account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.usecase.ShouldShowBiometricOption
@@ -42,7 +43,7 @@ internal class AccountSettingsViewModel(
     }
 
     private fun isSecurityAvailable() =
-        AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI()
+        AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS
 
     private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it })
 

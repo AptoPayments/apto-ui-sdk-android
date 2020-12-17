@@ -29,7 +29,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
     override var delegate: EmailVerificationContract.Delegate? = null
     private val viewModel: VerificationViewModel by viewModel()
     private lateinit var verification: Verification
-    private lateinit var emailAddress: String
+    private var emailAddress: String? = null
 
     override fun layoutId() = R.layout.fragment_email_verification
 
@@ -37,7 +37,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
 
     override fun setUpArguments() {
         verification = requireArguments()[VERIFICATION_BUNDLE] as Verification
-        emailAddress = verification.verificationDataPoint!!
+        emailAddress = verification.verificationDataPoint
     }
 
     override fun onPresented() {
@@ -63,7 +63,11 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
     override fun viewLoaded() = viewModel.viewLoaded(DataPoint.Type.EMAIL)
 
     private fun setupTexts() {
-        tv_email_label.text = emailAddress
+        tv_email_label.text = emailAddress ?: ""
+        if (emailAddress == null) {
+            tv_email_label.hide()
+            tv_verification_code_header.text = "auth_verify_email_explanation_empty_data".localized()
+        }
     }
 
     private fun applyFontsAndColors() {
@@ -111,7 +115,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
             result.either(::handleFailure) { verification ->
                 when (verification.status) {
                     VerificationStatus.PASSED -> {
-                        val dataPoint = EmailDataPoint(verification = verification, email = emailAddress)
+                        val dataPoint = EmailDataPoint(verification = verification, email = emailAddress ?: "")
                         delegate?.onEmailVerificationPassed(dataPoint)
                     }
                     VerificationStatus.FAILED, VerificationStatus.PENDING -> {

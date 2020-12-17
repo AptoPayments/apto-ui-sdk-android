@@ -9,11 +9,13 @@ import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.FeatureStatus
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.content.Content
+import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
-import com.aptopayments.sdk.core.usecase.ShouldAuthenticateWithPINOnPCIUseCase
+import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnPCIUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
@@ -32,22 +34,13 @@ internal class CardSettingsViewModel(
 ) : BaseViewModel(), KoinComponent {
 
     private val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
-    private val shouldAuthenticateWithPINOnPCIUseCase: ShouldAuthenticateWithPINOnPCIUseCase by inject()
+    private val shouldAuthenticateWithOnPCIUseCase: ShouldAuthenticateOnPCIUseCase by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(card.cardProductID) }
 
     private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
-    private val _showGetPin = MutableLiveData(false)
-    private val _showSetPin = MutableLiveData(false)
-    private val _showIvrSupport = MutableLiveData(false)
-    private val _showAddFunds = MutableLiveData(false)
-    private val _cardLocked = MutableLiveData(false)
-
-    val showGetPin: LiveData<Boolean> = _showGetPin
-    val showSetPin: LiveData<Boolean> = _showSetPin
-    val showIvrSupport: LiveData<Boolean> = _showIvrSupport
-    val showAddFunds: LiveData<Boolean> = _showAddFunds
-    val cardLocked: LiveData<Boolean> = _cardLocked
+    private val _cardUiState = MutableLiveData<CardUiState>()
+    val cardUiState = _cardUiState as LiveData<CardUiState>
 
     val showLegalSection = shouldShowLegalSection(cardProduct)
     val showFaq = cardProduct.faq != null
@@ -57,9 +50,7 @@ internal class CardSettingsViewModel(
 
     val showAddToGooglePay = shouldShowAddToGooglePay()
 
-    val cardDetailsClicked = LiveEvent<Boolean>()
-    val authenticateCardDetails = LiveEvent<Boolean>()
-    val showContentPresenter = LiveEvent<Pair<Content, String>>()
+    val action = LiveEvent<Action>()
 
     init {
         updateCardValues(card)
@@ -70,25 +61,19 @@ internal class CardSettingsViewModel(
         phoneDialer.dialPhone(phone.toStringRepresentation(), null)
     }
 
-    fun unlockCard(onComplete: () -> Unit) {
-        card.accountID.let { accountId ->
-            aptoPlatform.unlockCard(accountId) { result ->
-                result.either(::handleFailure) {
-                    updateCard(it)
-                    onComplete.invoke()
-                }
-            }
+    fun unlockCard() {
+        showLoading()
+        aptoPlatform.unlockCard(card.accountID) { result ->
+            hideLoading()
+            onLockUnlockFinished(result)
         }
     }
 
-    fun lockCard(onComplete: () -> Unit) {
-        card.accountID.let { accountId ->
-            aptoPlatform.lockCard(accountId) { result ->
-                result.either(::handleFailure) {
-                    updateCard(card)
-                    onComplete.invoke()
-                }
-            }
+    fun lockCard() {
+        showLoading()
+        aptoPlatform.lockCard(card.accountID) { result ->
+            hideLoading()
+            onLockUnlockFinished(result)
         }
     }
 
@@ -126,15 +111,21 @@ internal class CardSettingsViewModel(
     }
 
     private fun showContentPresenter(content: Content?, title: String) {
-        content?.let { showContentPresenter.value = Pair(it, title) }
+        content?.let {
+            action.value = Action.ContentPresenter(it, title)
+        }
     }
 
     private fun updateCardValues(card: Card) {
-        _showGetPin.postValue(card.features?.getPin?.status == FeatureStatus.ENABLED)
-        _showSetPin.postValue(card.features?.setPin?.status == FeatureStatus.ENABLED)
-        _showIvrSupport.postValue(card.features?.ivrSupport?.status == FeatureStatus.ENABLED)
-        _cardLocked.postValue(card.state != Card.CardState.ACTIVE)
-        _showAddFunds.postValue(card.features?.funding?.isEnabled)
+        _cardUiState.value =
+            CardUiState(
+                showGetPin = card.features?.getPin?.status == FeatureStatus.ENABLED,
+                showSetPin = card.features?.setPin?.status == FeatureStatus.ENABLED,
+                showIvrSupport = card.features?.ivrSupport?.status == FeatureStatus.ENABLED,
+                cardLocked = card.state != Card.CardState.ACTIVE,
+                showAddFunds = card.features?.funding?.isEnabled ?: false,
+                showPasscode = card.features?.passcode?.isEnabled ?: false
+            )
     }
 
     private fun shouldShowLegalSection(cardProduct: CardProduct) =
@@ -146,9 +137,9 @@ internal class CardSettingsViewModel(
     }
 
     private fun checkIfAuthNeeded() {
-        shouldAuthenticateWithPINOnPCIUseCase().runIfRight { needsAuthenticate ->
+        shouldAuthenticateWithOnPCIUseCase().runIfRight { needsAuthenticate ->
             if (needsAuthenticate) {
-                authenticateCardDetails.postValue(true)
+                action.postValue(Action.AuthenticateCardDetails)
             } else {
                 cardDetailsAuthenticationSuccessful()
             }
@@ -160,10 +151,43 @@ internal class CardSettingsViewModel(
 
     fun cardDetailsAuthenticationSuccessful() {
         cardDetailsRepo.showCardDetails()
-        cardDetailsClicked.postValue(true)
+        action.postValue(Action.ShowCardDetails)
     }
 
     fun cardDetailsAuthenticationError() {
         cardDetailsRepo.hideCardDetails()
     }
+
+    fun setPasscodePressed() {
+        if (card.state == Card.CardState.ACTIVE) {
+            action.value = Action.SetCardPasscode
+        } else {
+            action.value = Action.SetCardPasscodeErrorDisabled
+        }
+    }
+
+    private fun onLockUnlockFinished(result: Either<Failure, Card>) {
+        result.either(::handleFailure) { card ->
+            updateCard(card)
+            action.postValue(Action.CardStateChanged)
+        }
+    }
+
+    internal sealed class Action {
+        class ContentPresenter(val content: Content, val title: String) : Action()
+        object ShowCardDetails : Action()
+        object AuthenticateCardDetails : Action()
+        object SetCardPasscode : Action()
+        object CardStateChanged : Action()
+        object SetCardPasscodeErrorDisabled : Action()
+    }
+
+    internal data class CardUiState(
+        val showGetPin: Boolean = false,
+        val showSetPin: Boolean = false,
+        val showIvrSupport: Boolean = false,
+        val cardLocked: Boolean = false,
+        val showAddFunds: Boolean = false,
+        val showPasscode: Boolean = false
+    )
 }

@@ -20,6 +20,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.ActivatePhysicalC
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardstats.CardStatsFlow
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
+import com.aptopayments.sdk.features.card.passcode.CardPasscodeFlow
 import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
@@ -342,6 +343,11 @@ internal class ManageCardFlow(
             cardId = cardId,
             onClose = { popFlow(true) }
         )
+        flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
+    }
+
+    override fun onSetCardPasscode() {
+        val flow = CardPasscodeFlow(cardId = cardId) { popAnimatedFlow() }
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 

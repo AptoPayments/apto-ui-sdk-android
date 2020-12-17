@@ -26,6 +26,7 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsContract
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
+import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartFragment
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinContract
 import com.aptopayments.sdk.features.card.setpin.SetCardPinContract
 import com.aptopayments.sdk.features.card.statements.StatementListContract
@@ -105,6 +106,7 @@ internal interface FragmentFactory {
         actionConfiguration: WorkflowActionConfigurationIssueCard?,
         tag: String
     ): IssueCardContract.View
+
     fun transactionListFragment(
         cardId: String,
         config: TransactionListConfig,
@@ -113,7 +115,9 @@ internal interface FragmentFactory {
 
     fun waitlistFragment(cardId: String, cardProduct: CardProduct, tag: String): WaitlistContract.View
     fun setPinFragment(tag: String): SetCardPinContract.View
-    fun confirmPinFragment(pin: String, tag: String): ConfirmCardPinContract.View
+    fun confirmPinFragment(cardId: String, pin: String, tag: String): ConfirmCardPinContract.View
+    fun setPasscodeFragment(tag: String): SetCardPinContract.View
+    fun confirmPasscodeFragment(cardId: String, pin: String, verificationId: String?, tag: String): ConfirmCardPinContract.View
     fun getVoipFragment(cardId: String, action: Action, tag: String): VoipContract.View
     fun statementListFragment(tag: String): StatementListContract.View
     fun pdfRendererFragment(title: String, file: File, tag: String): PdfRendererContract.View
@@ -126,11 +130,13 @@ internal interface FragmentFactory {
         config: IdDataPointConfiguration,
         tag: String
     ): CollectUserIdContract.View
+
     fun collectAddressFragment(
         initialValue: AddressDataPoint?,
         config: AllowedCountriesConfiguration,
         tag: String
     ): CollectUserAddressContract.View
+
     fun collectBirthdateFragment(initialValue: BirthdateDataPoint?, tag: String): CollectUserBirthdateContract.View
     fun collectPhoneFragment(
         initialValue: PhoneDataPoint?,
@@ -143,4 +149,5 @@ internal interface FragmentFactory {
     fun paymentSourcesList(tag: String): PaymentSourcesListContract.View
     fun addFundsFragment(cardId: String, tag: String): AddFundsContract.View
     fun addFundsResultFragment(cardId: String, payment: Payment, tag: String): AddFundsResultFragment
+    fun cardPasscodeStartFragment(cardId: String, tag: String): CardPasscodeStartFragment
 }

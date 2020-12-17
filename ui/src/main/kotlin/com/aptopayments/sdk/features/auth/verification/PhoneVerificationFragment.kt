@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.auth.verification
 
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
+import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.PhoneDataPoint
@@ -34,7 +35,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
     private val viewModel: VerificationViewModel by viewModel()
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     lateinit var verification: Verification
-    private lateinit var phoneNumber: String
+    private var phoneNumber: String? = null
 
     override fun layoutId() = R.layout.fragment_phone_verification
 
@@ -42,7 +43,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
 
     override fun setUpArguments() {
         verification = requireArguments()[VERIFICATION_BUNDLE] as Verification
-        phoneNumber = verification.verificationDataPoint!!
+        phoneNumber = verification.verificationDataPoint
     }
 
     override fun onPresented() {
@@ -119,7 +120,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
                         try {
                             val dataPoint = PhoneDataPoint(
                                 verification = verification,
-                                phoneNumber = phoneNumber.parsePhoneNumber()
+                                phoneNumber = phoneNumber?.parsePhoneNumber() ?: PhoneNumber("", "")
                             )
                             delegate?.onPhoneVerificationPassed(dataPoint)
                         } catch (exception: NumberParseException) {

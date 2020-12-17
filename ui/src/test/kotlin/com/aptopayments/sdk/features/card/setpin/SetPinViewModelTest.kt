@@ -22,7 +22,7 @@ class SetPinViewModelTest : AndroidTest() {
 
     @Test
     fun `test track is called on view loaded in set pin mode`() {
-        sut.viewLoaded()
+        sut.trackEvent()
         assertTrue { analyticsManager.trackCalled }
         assertEquals(analyticsManager.lastEvent, Event.ManageCardSetPin)
     }

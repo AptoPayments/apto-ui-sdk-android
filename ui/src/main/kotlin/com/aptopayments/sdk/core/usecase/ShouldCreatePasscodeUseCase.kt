@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.repository.AuthenticationRepository
@@ -11,7 +12,7 @@ internal class ShouldCreatePasscodeUseCase(private val authenticationRepository:
     override fun run(): Either<Failure, Boolean> {
         return Either.Right(
             !authenticationRepository.isPasscodeSet() &&
-                (AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticateWithPINOnPCI())
+                (AptoUiSdk.cardOptions.authenticateOnStartup() || AptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS)
         )
     }
 }

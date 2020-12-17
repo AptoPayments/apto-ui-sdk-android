@@ -12,6 +12,8 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.Mock
 
+private const val CARD_ID = "CARD_ID"
+
 class SetPinFlowTest : AndroidTest() {
 
     private lateinit var sut: SetCardPinFlow
@@ -36,7 +38,7 @@ class SetPinFlowTest : AndroidTest() {
                 }
             )
         }
-        sut = SetCardPinFlow(cardId = "TEST_CARD_ID", onBack = {}, onFinish = {})
+        sut = SetCardPinFlow(cardId = CARD_ID, onBack = {}, onFinish = {})
     }
 
     @Test
@@ -62,13 +64,13 @@ class SetPinFlowTest : AndroidTest() {
         val pin = "1234"
         val fragmentDouble = ConfirmPinFragmentDouble(mockConfirmPinDelegate).apply { this.TAG = tag }
         given {
-            mockFragmentFactory.confirmPinFragment(pin, tag)
+            mockFragmentFactory.confirmPinFragment(cardId = CARD_ID, pin = pin, tag = tag)
         }.willReturn(fragmentDouble)
 
         // When
         sut.setPinFinished(pin)
 
         // Then
-        verify(mockFragmentFactory).confirmPinFragment(pin, tag)
+        verify(mockFragmentFactory).confirmPinFragment(cardId = CARD_ID, pin = pin, tag = tag)
     }
 }

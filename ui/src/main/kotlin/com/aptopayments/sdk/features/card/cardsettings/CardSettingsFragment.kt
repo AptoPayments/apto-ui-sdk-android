@@ -20,9 +20,11 @@ import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCardSettingsBinding
 import com.aptopayments.sdk.features.card.CardActivity
+import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
 import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
+import com.aptopayments.sdk.utils.MessageBanner.MessageType
 import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
@@ -71,31 +73,36 @@ internal class CardSettingsFragment :
 
     override fun setupViewModel() {
         viewModel.apply {
-            observe(cardLocked, ::handleCardLocked)
+            observeNotNullable(cardUiState, ::handleCardLocked)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             observe(viewModel.failure) { handleFailure(it) }
-            observeNotNullable(cardDetailsClicked) { manageCardDetails() }
-            observeNotNullable(authenticateCardDetails) { value -> handleAuthenticateCardDetails(value) }
-            observeNotNullable(showContentPresenter) { showContentPresenter(it.first, it.second) }
+            observeNullable(action) {
+                when (it) {
+                    is Action.ContentPresenter -> showContentPresenter(it.content, it.title)
+                    is Action.ShowCardDetails -> manageCardDetails()
+                    is Action.AuthenticateCardDetails -> handleAuthenticateCardDetails()
+                    is Action.CardStateChanged -> delegate?.onCardStateChanged()
+                    is Action.SetCardPasscodeErrorDisabled -> cardPasscodeErrorCardDisabled()
+                    is Action.SetCardPasscode -> delegate?.onSetCardPasscode()
+                }
+            }
         }
     }
 
-    private fun handleAuthenticateCardDetails(authenticationNeeded: Boolean) {
-        if (authenticationNeeded) {
-            (activity as CardActivity).authenticate(
-                AuthenticationView.AuthType.OPTIONAL,
-                onCancelled = { viewModel.cardDetailsAuthenticationError() },
-                onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() }
-            )
-        }
+    private fun handleAuthenticateCardDetails() {
+        (activity as CardActivity).authenticate(
+            AuthenticationView.AuthType.OPTIONAL,
+            onCancelled = { viewModel.cardDetailsAuthenticationError() },
+            onAuthenticated = { viewModel.cardDetailsAuthenticationSuccessful() }
+        )
     }
 
     private fun manageCardDetails() {
         onBackPressed()
     }
 
-    private fun handleCardLocked(value: Boolean?) {
-        if (rl_lock_card.sw_tv_section_switch_switch.isChecked != value) {
+    private fun handleCardLocked(cardUiState: CardSettingsViewModel.CardUiState) {
+        if (rl_lock_card.sw_tv_section_switch_switch.isChecked != cardUiState.cardLocked) {
             silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard)
         }
     }
@@ -202,13 +209,7 @@ internal class CardSettingsFragment :
                 text = "card_settings.settings.confirm_lock_card.message".localized(),
                 confirm = "card_settings.settings.confirm_lock_card.ok_button".localized(),
                 cancel = "card_settings.settings.confirm_lock_card.cancel_button".localized(),
-                onConfirm = {
-                    showLoading()
-                    viewModel.lockCard {
-                        hideLoading()
-                        delegate?.onCardStateChanged()
-                    }
-                },
+                onConfirm = { viewModel.lockCard() },
                 onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
             )
         } else {
@@ -217,13 +218,7 @@ internal class CardSettingsFragment :
                 text = "card_settings.settings.confirm_unlock_card.message".localized(),
                 confirm = "card_settings.settings.confirm_unlock_card.ok_button".localized(),
                 cancel = "card_settings.settings.confirm_unlock_card.cancel_button".localized(),
-                onConfirm = {
-                    showLoading()
-                    viewModel.unlockCard {
-                        hideLoading()
-                        delegate?.onCardStateChanged()
-                    }
-                },
+                onConfirm = { viewModel.unlockCard() },
                 onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
             )
         }
@@ -256,7 +251,7 @@ internal class CardSettingsFragment :
             confirm = "card_settings.settings.confirm_report_lost_card.ok_button".localized(),
             cancel = "card_settings.settings.confirm_report_lost_card.cancel_button".localized(),
             onConfirm = {
-                viewModel.lockCard { }
+                viewModel.lockCard()
                 projectConfiguration.supportEmailAddress?.let { recipientAddress ->
                     delegate?.showMailComposer(
                         recipient = recipientAddress,
@@ -285,6 +280,13 @@ internal class CardSettingsFragment :
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()
+
+    private fun cardPasscodeErrorCardDisabled() {
+        notify(
+            message = "manage_card_set_passcode_error_card_not_enabled".localized(),
+            type = MessageType.ERROR
+        )
+    }
 
     companion object {
         fun newInstance(card: Card, cardProduct: CardProduct, projectConfiguration: ProjectConfiguration) =

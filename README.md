@@ -107,7 +107,7 @@ android {
     dependencies {
 		...
 
-		implementation 'com.aptopayments.sdk:ui:3.5.0'
+		implementation 'com.aptopayments.sdk:ui:3.6.0'
 
 		...
 	}
@@ -239,7 +239,7 @@ Parameter|Default Value|Description
 `showDetailedCardActivityOption`|`false`|Controls if the Detailed Card Activity selector is displayed on the **Card settings** screen. If the selector is activated, all transactions are shown, including declines, balance inquiries, etc.
 `showMonthlyStatementsOption`|`true`|Controls if the Monthly Statements menu is displayed on the **Card settings** screen. The menu enables users to view their monthly statements.
 `authenticateOnStartup`|`false`|Controls if the user must authenticate their account (using a Passcode or Biometrics) when the app opens or after returning from background mode. Enabling this option will require the user to create a Passcode when signing up.
-`authenticateWithPINOnPCI`|`false`|Controls if the user must authenticate using their Passcode instead of the SMS/email code, prior to viewing their full card data. <br/><br/>**Note:** If biometric authentication is enabled, it will appear first. The user may choose to cancel biometric authentication and use their Passcode instead.
+`authenticateOnPCI`|`NONE`|Controls if the user must authenticate using their Passcode instead of the SMS/email code, prior to viewing their full card data. Options are Pin_Or_Biometrics, Biometrics, or None <br/><br/>**Note:** If biometric authentication is enabled, it will appear first. The user may choose to cancel biometric authentication and use their Passcode instead.
 `darkThemeEnabled`|`true`|Controls if the UI's dark theme is enabled. *(Only available on devices with Android 10+ / API 29+)*.<br/><br/>**Note:** If this value is set to `true`, you should also change your app theme to support the *DayNight Theme*. See [darkThemeEnabled Parameter](#user-content-darkthemeenabled-parameter)
 `inAppProvisioningEnabled`|`false`|This feature will be available in the future, and will require an additional Google authorization.
 `openingMode`|`CardOptions.OpeningMode.STANDALONE`|Defines how the UI opens and closes.<ul><li>**`CardOptions.OpeningMode.EMBEDDED`**: This displays a close button on the manage card screen, enabling the user to close the screen and return to the host app. This mode is the recommended when starting the Apto UI SDK from an existing app.</li><li>**`CardOptions.OpeningMode.STANDALONE`**: This does not display a close button on the manage card screen. The card UI can only be closed when the user logs out of the app. Use this mode when the host app only uses the Apto UI SDK.</li></ul>

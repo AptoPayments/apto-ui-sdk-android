@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="@{viewModel.showAddFunds ? @dimen/_0sdp : @dimen/_14sdp}">
+                    android:paddingTop="@{viewModel.cardUiState.showAddFunds ? @dimen/_0sdp : @dimen/_14sdp}">
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_add_funds"
@@ -49,7 +49,7 @@
                         app:optionDescription="card_settings_settings_load_funds_subtitle"
                         app:optionShowDivider="false"
                         app:optionTitle="card_settings_settings_load_funds_title"
-                        app:visibleIf="@{viewModel.showAddFunds}"
+                        app:visibleIf="@{viewModel.cardUiState.showAddFunds}"
                         tools:visibility="visible" />
 
                     <com.aptopayments.sdk.ui.views.SectionHeaderView
@@ -72,7 +72,7 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings.settings.get_pin.description"
                         app:optionTitle="card_settings.settings.get_pin.title"
-                        app:visibleIf="@{viewModel.showGetPin}" />
+                        app:visibleIf="@{viewModel.cardUiState.showGetPin}" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_set_pin"
@@ -80,7 +80,15 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings.settings.set_pin.description"
                         app:optionTitle="card_settings.settings.set_pin.title"
-                        app:visibleIf="@{viewModel.showSetPin}" />
+                        app:visibleIf="@{viewModel.cardUiState.showSetPin}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:onClickSafe="@{() -> viewModel.setPasscodePressed()}"
+                        app:optionDescription="card_settings_settings_passcode_subtitle"
+                        app:optionTitle="card_settings_settings_passcode_title"
+                        app:visibleIf="@{viewModel.cardUiState.showPasscode}" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_card_info"
@@ -132,7 +140,7 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings_help_ivr_support_description"
                         app:optionTitle="card_settings_help_ivr_support_title"
-                        app:visibleIf="@{viewModel.showIvrSupport}" />
+                        app:visibleIf="@{viewModel.cardUiState.showIvrSupport}" />
 
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView

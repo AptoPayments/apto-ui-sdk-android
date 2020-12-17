@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.features.managecard.CardOptions
+import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.repository.AuthenticationRepository
@@ -23,33 +24,37 @@ internal class ShouldCreatePasscodeUseCaseTest : UnitTest() {
 
     @Test
     fun whenPinSetNoPinNeed() {
-        checkCase(pinSet = true, pinOnStartup = true, pinOnPCI = false, resultExpected = false)
-        checkCase(pinSet = true, pinOnStartup = false, pinOnPCI = true, resultExpected = false)
-        checkCase(pinSet = true, pinOnStartup = true, pinOnPCI = true, resultExpected = false)
+        checkCase(pinSet = true, pinOnStartup = true, pciAuth = PCIAuthType.NONE, resultExpected = false)
+        checkCase(pinSet = true, pinOnStartup = true, pciAuth = PCIAuthType.BIOMETRICS, resultExpected = false)
+        checkCase(pinSet = true, pinOnStartup = false, pciAuth = PCIAuthType.PIN_OR_BIOMETRICS, resultExpected = false)
+        checkCase(pinSet = true, pinOnStartup = true, pciAuth = PCIAuthType.PIN_OR_BIOMETRICS, resultExpected = false)
     }
 
     @Test
-    fun whenNoPinSetThenNeedsIfAnyFeatureFlagIsOn() {
-        checkCase(pinSet = false, pinOnStartup = false, pinOnPCI = false, resultExpected = false)
-        checkCase(pinSet = false, pinOnStartup = true, pinOnPCI = false, resultExpected = true)
-        checkCase(pinSet = false, pinOnStartup = false, pinOnPCI = true, resultExpected = true)
-        checkCase(pinSet = false, pinOnStartup = true, pinOnPCI = true, resultExpected = true)
+    fun whenNoPinSetThenNeedsIfAnyFeatureFlagIsOnPin() {
+        checkCase(pinSet = false, pinOnStartup = false, pciAuth = PCIAuthType.NONE, resultExpected = false)
+        checkCase(pinSet = false, pinOnStartup = true, pciAuth = PCIAuthType.NONE, resultExpected = true)
+        checkCase(pinSet = false, pinOnStartup = false, pciAuth = PCIAuthType.BIOMETRICS, resultExpected = false)
+        checkCase(pinSet = false, pinOnStartup = true, pciAuth = PCIAuthType.BIOMETRICS, resultExpected = true)
+        checkCase(pinSet = false, pinOnStartup = false, pciAuth = PCIAuthType.PIN_OR_BIOMETRICS, resultExpected = true)
+        checkCase(pinSet = false, pinOnStartup = true, pciAuth = PCIAuthType.PIN_OR_BIOMETRICS, resultExpected = true)
     }
 
     private fun checkCase(
         pinSet: Boolean,
         pinOnStartup: Boolean,
-        pinOnPCI: Boolean,
+        pciAuth: PCIAuthType,
         resultExpected: Boolean
     ) {
         whenever(authenticationRepo.isPasscodeSet()).thenReturn(pinSet)
-        configureFlags(startup = pinOnStartup, pci = pinOnPCI)
+        configureFlags(startup = pinOnStartup, pci = pciAuth)
         val result = sut()
 
         result.shouldBeRightAndEqualTo(resultExpected)
     }
 
-    private fun configureFlags(startup: Boolean, pci: Boolean) {
-        AptoUiSdk.cardOptions = CardOptions(authenticateOnStartup = startup, authenticateWithPINOnPCI = pci)
+    private fun configureFlags(startup: Boolean, pci: PCIAuthType) {
+        AptoUiSdk.cardOptions =
+            CardOptions(authenticateOnStartup = startup, authenticateOnPCI = pci)
     }
 }

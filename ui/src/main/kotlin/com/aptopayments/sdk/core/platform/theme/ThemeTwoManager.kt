@@ -72,11 +72,7 @@ internal object ThemeTwoManager : ThemeManager {
     }
 
     override fun customizeSubmitButton(textView: TextView) {
-        setFontType(textView, MEDIUM)
-        textView.apply {
-            setTextColor(UIConfig.textButtonColor)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
-        }
+        setButtonFont(textView)
         val color = UIConfig.uiPrimaryColor
         val cornerRadius = UIConfig.buttonCornerRadius
         val enabledBackground = buttonGradientDrawable(cornerRadius, color)
@@ -85,6 +81,19 @@ internal object ThemeTwoManager : ThemeManager {
         states.addState(intArrayOf(android.R.attr.state_enabled), enabledBackground)
         states.addState(intArrayOf(-android.R.attr.state_enabled), disabledBackground)
         textView.background = states
+    }
+
+    override fun customizeColorlessButton(textView: TextView) {
+        setButtonFont(textView)
+        textView.setTextColor(UIConfig.textPrimaryColor)
+    }
+
+    private fun setButtonFont(textView: TextView) {
+        setFontType(textView, MEDIUM)
+        textView.apply {
+            setTextColor(UIConfig.textButtonColor)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+        }
     }
 
     private fun buttonGradientDrawable(cornerRadius: Float, color: Int, alpha: Int = 255): GradientDrawable {

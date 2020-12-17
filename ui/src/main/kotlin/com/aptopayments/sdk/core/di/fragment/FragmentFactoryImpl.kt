@@ -27,6 +27,9 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsFragment
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChart
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceDialogFragment
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesFragment
+import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeFragment
+import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeFragment
+import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartFragment
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinFragment
 import com.aptopayments.sdk.features.card.setpin.SetCardPinFragment
 import com.aptopayments.sdk.features.card.statements.StatementListFragment
@@ -158,8 +161,13 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun setPinFragment(tag: String) = SetCardPinFragment().apply { this.TAG = tag }
 
-    override fun confirmPinFragment(pin: String, tag: String) =
-        ConfirmCardPinFragment.newInstance(pin).apply { this.TAG = tag }
+    override fun confirmPinFragment(cardId: String, pin: String, tag: String) =
+        ConfirmCardPinFragment.newInstance(cardId, pin).apply { this.TAG = tag }
+
+    override fun setPasscodeFragment(tag: String) = SetCardPasscodeFragment().apply { this.TAG = tag }
+
+    override fun confirmPasscodeFragment(cardId: String, pin: String, verificationId: String?, tag: String) =
+        ConfirmCardPasscodeFragment.newInstance(cardId = cardId, pin = pin, verificationId = verificationId).apply { this.TAG = tag }
 
     override fun getVoipFragment(cardId: String, action: Action, tag: String) =
         VoipFragment.newInstance(cardId, action).apply { this.TAG = tag }
@@ -210,4 +218,7 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun addFundsResultFragment(cardId: String, payment: Payment, tag: String) =
         AddFundsResultFragment.newInstance(cardId, payment, tag)
+
+    override fun cardPasscodeStartFragment(cardId: String, tag: String) =
+        CardPasscodeStartFragment.newInstance(cardId, tag)
 }

@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
@@ -15,5 +16,5 @@ internal class ShouldShowBiometricOption(
     }
 
     private fun isSecurityAvailable() =
-        uiSdkProtocol.cardOptions.authenticateOnStartup() || uiSdkProtocol.cardOptions.authenticateWithPINOnPCI()
+        uiSdkProtocol.cardOptions.authenticateOnStartup() || uiSdkProtocol.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS
 }

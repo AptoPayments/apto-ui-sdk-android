@@ -24,6 +24,7 @@ interface ThemeManager {
     fun customizeToolbarTitle(textView: TextView)
     fun customizeHighlightTitleLabel(textView: TextView)
     fun customizeSubmitButton(textView: TextView)
+    fun customizeColorlessButton(textView: TextView)
     fun customizeLargeTitleLabel(textView: TextView)
     fun customizeRegularTextLabel(textView: TextView)
     fun customizeSectionHeader(textView: TextView)

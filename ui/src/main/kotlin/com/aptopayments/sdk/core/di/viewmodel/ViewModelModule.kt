@@ -18,6 +18,9 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsViewModel
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartViewModel
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
+import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeViewModel
+import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeViewModel
+import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewModel
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinViewModel
 import com.aptopayments.sdk.features.card.setpin.SetCardPinViewModel
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
@@ -89,7 +92,24 @@ val viewModelModule = module {
     }
     viewModel { WaitlistViewModel(get()) }
     viewModel { SetCardPinViewModel(get()) }
-    viewModel { ConfirmCardPinViewModel(get()) }
+    viewModel { (cardId: String, pin: String) ->
+        ConfirmCardPinViewModel(
+            cardId = cardId,
+            previousPin = pin,
+            get(),
+            get()
+        )
+    }
+    viewModel { SetCardPasscodeViewModel(get()) }
+    viewModel { (cardId: String, pin: String, verificationId: String?) ->
+        ConfirmCardPasscodeViewModel(
+            cardId = cardId,
+            previousPin = pin,
+            verificationId = verificationId,
+            get(),
+            get()
+        )
+    }
     viewModel { VoipViewModel(get(), get()) }
     viewModel { StatementListViewModel(get()) }
     viewModel { CreatePasscodeViewModel(get()) }
@@ -107,4 +127,5 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> AddFundsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, payment: Payment) -> AddFundsResultViewModel(cardId, payment, get(), get()) }
     viewModel { (cardId: String) -> AddCardOnboardingViewModel(cardId, get(), get()) }
+    viewModel { (cardId: String) -> CardPasscodeStartViewModel(cardId, get(), get()) }
 }

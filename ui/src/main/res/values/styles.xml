@@ -107,17 +107,26 @@
         <item name="android:inputType">textPersonName|textCapWords|textNoSuggestions</item>
     </style>
 
-    <style name="ThemeTwo.ContinueButton" parent="ThemeTwo">
+
+    <style name="AptoButton" parent="ThemeTwo" >
         <item name="android:layout_height">@dimen/llsdk_big_button_height</item>
         <item name="android:layout_marginLeft">@dimen/llsdk_medium_margin</item>
         <item name="android:layout_marginRight">@dimen/llsdk_medium_margin</item>
-        <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">@dimen/llsdk_big_button_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/llsdk_big_button_bottom_margin</item>
-        <item name="android:layout_alignParentBottom">true</item>
         <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ThemeTwo.ContinueButton" parent="AptoButton">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="ThemeTwo.UncoloredButton" parent="AptoButton">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="ThemeTwo.BirthDate" parent="ThemeTwo">

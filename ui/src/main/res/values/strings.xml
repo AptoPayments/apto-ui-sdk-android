@@ -85,6 +85,7 @@
     <!-- Verification Email -->
     <string name="auth_verify_email_title">Verify email address</string>
     <string name="auth_verify_email_explanation">Enter the code that was sent to</string>
+    <string name="auth_verify_email_explanation_empty_data">Enter the code that was sent to your email address</string>
     <string name="auth_verify_email_resend_button_title">Re-send code</string>
     <string name="auth_verify_email_footer">Having problems entering your code?</string>
     <string name="auth_verify_email_expired_pin_text">Code expired, too many attempts.\nPlease request a new code via your email address</string>
@@ -356,6 +357,9 @@
     <string name="card_settings_help_monthly_statements_description">Download transactions info into a PDF</string>
     <string name="card_settings_settings_load_funds_title">Add Money</string>
     <string name="card_settings_settings_load_funds_subtitle">Add funds to your balance</string>
+
+    <string name="card_settings_settings_passcode_title">Set Secure Passcode</string>
+    <string name="card_settings_settings_passcode_subtitle">Set passcode used in online transactions</string>
 
     <!-- card management enable/disable dialog -->
     <string name="enable_card_message">You are activating your card. Are you sure?</string>
@@ -660,6 +664,21 @@
     <string name="manage_card_confirm_pin_pin_created_message">You\'ve successfully created your PIN. Your physical card is now ready to use.</string>
     <string name="manage_card_confirm_pin_pin_updated_title">Congrats!</string>
     <string name="manage_card_confirm_pin_pin_updated_message">You\'ve successfully changed your PIN.</string>
+
+    <!--Set Card Passcode-->
+    <string name="manage_card_set_passcode_start_title">Set Secure Passcode</string>
+    <string name="manage_card_set_passcode_start_description">Some online transactions using your card require a secure passcode verification. This is different from your PIN used in physical card transactions. You can set your passcode here.\n\nBefore we set your passcode, we first need to verify you with a one time code.\n\nOnce your passcode is set, you can update it at any time.</string>
+    <string name="manage_card_set_passcode_start_primary_cta">Set Passcode</string>
+    <string name="manage_card_set_passcode_start_secondary_cta">Cancel</string>
+    <string name="manage_card_set_passcode_set_title">Set Passcode</string>
+    <string name="manage_card_set_passcode_set_description">Set a passcode for use in online transactions.</string>
+    <string name="manage_card_set_passcode_error_card_not_enabled">Please enable your card before setting the Passcode</string>
+    <string name="manage_card_set_passcode_confirm_title">Confirm Passcode</string>
+    <string name="manage_card_set_passcode_confirm_description">Re-enter your passcode. \nYour passcode will be effective immediately.</string>
+    <string name="manage_card_confirm_passcode_error_wrong_code_title">Error</string>
+    <string name="manage_card_confirm_passcode_error_wrong_code_message">Looks like your passcode didn\'t match. Please re-enter and try again.</string>
+    <string name="manage_card_confirm_passcode_success_title">Congrats!</string>
+    <string name="manage_card_confirm_passcode_success_message">You\'ve successfully changed your Passcode.</string>
 
     <!--VoIP-->
     <string name="manage_card_get_pin_voip_title">Card Help</string>

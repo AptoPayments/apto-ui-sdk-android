@@ -1,12 +1,11 @@
 package com.aptopayments.sdk.features.card.setpin
 
 import com.aptopayments.mobile.analytics.Event
-import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
-internal class SetCardPinViewModel(
-    private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel() {
+internal class SetCardPinViewModel(analyticsManager: AnalyticsServiceContract) :
+    CardPinViewModel(analyticsManager, Event.ManageCardSetPin) {
 
-    fun viewLoaded() = analyticsManager.track(Event.ManageCardSetPin)
+    override val title = "manage_card_set_pin_title"
+    override val description = "manage_card_set_pin_explanation"
 }

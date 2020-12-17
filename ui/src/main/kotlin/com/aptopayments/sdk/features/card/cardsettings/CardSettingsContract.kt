@@ -16,6 +16,7 @@ interface CardSettingsContract {
         fun showVoip(action: Action)
         fun showStatement()
         fun onAddFunds()
+        fun onSetCardPasscode()
     }
 
     interface View {

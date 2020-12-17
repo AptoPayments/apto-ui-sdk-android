@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.extension.localized
+import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.removeAnimated
@@ -150,7 +151,7 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
     private fun getAuthType(onlyPin: Boolean) =
         if (onlyPin) {
             AuthenticationView.AuthMethod.ONLY_PIN
-        } else if (AptoUiSdk.cardOptions.authenticateWithPINOnPCI() || AptoUiSdk.cardOptions.authenticateOnStartup()) {
+        } else if (AptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS || AptoUiSdk.cardOptions.authenticateOnStartup()) {
             AuthenticationView.AuthMethod.BOTH
         } else {
             AuthenticationView.AuthMethod.ONLY_BIOMETRICS
