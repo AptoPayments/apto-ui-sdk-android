@@ -32,7 +32,7 @@
             android:layout_marginRight="@dimen/_14sdp"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_refresh_button"
-            tools:tint="@color/button_active" />
+            tools:tint="@color/colorPrimary" />
     </RelativeLayout>
 
     <View
@@ -61,7 +61,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/_5sdp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:listitem="@layout/funding_sources_detail" />
 
             <RelativeLayout
                 android:id="@+id/no_funding_sources_holder"
@@ -116,6 +117,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginBottom="@dimen/llsdk_medium_margin"
-            android:progressTint="@color/button_active" />
+            tools:indeterminateTint="@color/colorPrimary" />
     </RelativeLayout>
 </RelativeLayout>

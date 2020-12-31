@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.card.fundingsources
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
@@ -19,6 +20,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.State
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
+import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_funding_sources_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -128,6 +130,7 @@ internal class FundingSourceDialogFragment :
             customizeEmptyCase(tv_no_funding_sources)
             customizeSubmitButton(add_funding_source_button)
             view?.let { customizeRoundedBackground(it) }
+            progress_bar.indeterminateDrawable.setColorFilterCompat(UIConfig.uiPrimaryColor, PorterDuff.Mode.SRC_IN)
         }
         refresh_button.setColorFilter(UIConfig.uiPrimaryColor)
     }

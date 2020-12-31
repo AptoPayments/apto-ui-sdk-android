@@ -17,20 +17,32 @@ import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.SendEmailUtil
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
+import com.aptopayments.sdk.utils.chatbot.ChatbotActivityLauncher
+import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
 import kotlinx.android.synthetic.main.fragment_account_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
 import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 
-internal const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
+private const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
+private const val CARD_ID = "CARD_ID"
 
 internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract.View {
 
     override var delegate: AccountSettingsContract.Delegate? = null
-    private var contextConfiguration: ContextConfiguration? = null
-    private val viewModel: AccountSettingsViewModel by viewModel()
+    private lateinit var contextConfiguration: ContextConfiguration
+    private lateinit var cardId: String
+
+    private val viewModel: AccountSettingsViewModel by viewModel {
+        parametersOf(
+            cardId,
+            contextConfiguration.projectConfiguration
+        )
+    }
     private val uiSdkProtocol: AptoUiSdkProtocol by inject()
+    private val chatbotLauncher: ChatbotActivityLauncher by inject()
 
     override fun layoutId(): Int = R.layout.fragment_account_settings
 
@@ -41,10 +53,23 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
             silentlySetSwitch(it, rl_fingerprint.sw_tv_section_switch_switch) { fingerprintChanged() }
             rl_fingerprint.sw_tv_section_switch_switch.isChecked = it
         }
+        observeNotNullable(viewModel.action) { action ->
+            when (action) {
+                is AccountSettingsViewModel.Action.CustomerSupportEmail -> sendCustomerSupportEmail()
+                is AccountSettingsViewModel.Action.LaunchChatbot -> launchChatbot(action.param)
+            }
+        }
+    }
+
+    private fun launchChatbot(params: ChatbotParameters) {
+        activity?.let {
+            chatbotLauncher.show(it, params)
+        }
     }
 
     override fun setUpArguments() {
         contextConfiguration = requireArguments()[ACCOUNT_SETTINGS_BUNDLE] as ContextConfiguration
+        cardId = requireArguments()[CARD_ID] as String
     }
 
     override fun setupUI() {
@@ -76,7 +101,7 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
     override fun setupListeners() {
         super.setupListeners()
         iv_close_button.setOnClickListenerSafe { onBackPressed() }
-        rl_contact_support.setOnClickListenerSafe { sendCustomerSupportEmail() }
+        rl_contact_support.setOnClickListenerSafe { viewModel.onCustomerSupport() }
         rl_sign_out.setOnClickListenerSafe { showConfirmLogOutDialog() }
         rl_notifications.setOnClickListenerSafe { delegate?.showNotificationPreferences() }
         rl_statements.setOnClickListenerSafe { delegate?.onMonthlyStatementTapped() }
@@ -116,6 +141,10 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
             set("account_settings_security_fingerprint".localized())
             hideBottomSeparator()
         }
+        (rl_contact_support as SectionOptionWithSubtitleView).apply {
+            optionTitle = viewModel.supportTexts.first
+            optionSubtitle = viewModel.supportTexts.second
+        }
     }
 
     private fun showConfirmLogOutDialog() {
@@ -129,10 +158,10 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
         )
     }
 
-    private fun sendCustomerSupportEmail() = contextConfiguration?.projectConfiguration?.supportEmailAddress?.let {
+    private fun sendCustomerSupportEmail() = contextConfiguration.projectConfiguration.supportEmailAddress?.let {
         activity?.let { activity ->
-            val subject = "help.mail.subject".localized()
-            val body = "help.mail.body".localized()
+            val subject = "help_mail_subject".localized()
+            val body = "help_mail_body".localized()
             SendEmailUtil(it, subject, body).execute(activity)
         }
     }
@@ -140,8 +169,11 @@ internal class AccountSettingsFragment : BaseFragment(), AccountSettingsContract
     override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
-        fun newInstance(contextConfiguration: ContextConfiguration) = AccountSettingsFragment().apply {
-            this.arguments = Bundle().apply { putSerializable(ACCOUNT_SETTINGS_BUNDLE, contextConfiguration) }
+        fun newInstance(contextConfiguration: ContextConfiguration, cardId: String) = AccountSettingsFragment().apply {
+            this.arguments = Bundle().apply {
+                putSerializable(ACCOUNT_SETTINGS_BUNDLE, contextConfiguration)
+                putString(CARD_ID, cardId)
+            }
         }
     }
 }

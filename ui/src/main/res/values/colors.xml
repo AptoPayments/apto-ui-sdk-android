@@ -4,10 +4,6 @@
     <color name="llsdk_primary_text_color">#FF2B2D35</color>
     <color name="llsdk_secondary_text_color">#FF54565F</color>
 
-    <color name="colorSecondary">#FF2B2D35</color>
-    <color name="colorTextSecondary">#FFBBBDBD</color>
-    <color name="colorTextPrimary">#FFBBBDBD</color>
-
     <color name="divider_line_color">#f2f2f2</color>
 
     <color name="colorPrimary">#9ADE83</color>
@@ -18,9 +14,12 @@
     <color name="translucent_scrim_top">#80232325</color>
     <color name="translucent_scrim_center">#00232325</color>
 
+    <color name="base_toolbar_text_color">#3c4a5b</color>
+    <color name="base_toolbar_background_color">#ffffff</color>
+
     <!-- App Theme Colours -->
-    <color name="title_color">#FF202A36</color>
-    <color name="button_inactive">#4D0667D0</color>
-    <color name="button_active">#FF0667D0</color>
+    <color name="custom_toolbar_background_color">#FF202A36</color>
+    <color name="base_text_color">#FF202A36</color>
+    <color name="button_settings_shade">#FF202A36</color>
     <color name="button_settings_background">#FF1652F0</color>
 </resources>

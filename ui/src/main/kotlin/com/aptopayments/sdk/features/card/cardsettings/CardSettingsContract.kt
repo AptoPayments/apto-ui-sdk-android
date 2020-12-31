@@ -9,7 +9,6 @@ interface CardSettingsContract {
     interface Delegate : FragmentDelegate {
         fun onBackFromCardSettings()
         fun showContentPresenter(content: Content, title: String)
-        fun showMailComposer(recipient: String, subject: String?, body: String?)
         fun transactionsChanged()
         fun onCardStateChanged()
         fun onSetPin()

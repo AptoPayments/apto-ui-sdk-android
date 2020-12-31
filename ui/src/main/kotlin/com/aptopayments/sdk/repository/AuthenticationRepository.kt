@@ -18,6 +18,7 @@ internal interface AuthenticationRepository {
     fun saveAuthenticationTime()
     fun isAuthTimeInvalid(): Boolean
     fun saveNeedToAuthenticate()
+    fun saveAuthenticatedCorrectly()
     fun isAuthenticationNeedSaved(): Boolean
     fun isBiometricsEnabledByUser(): Boolean
     fun enableBiometrics(value: Boolean)
@@ -54,7 +55,15 @@ internal class AuthenticationRepositoryImpl(
     }
 
     override fun saveNeedToAuthenticate() {
-        sharedPref.edit().putBoolean(NEED_AUTHENTICATION, true).commit()
+        changeAuthNeed(true)
+    }
+
+    override fun saveAuthenticatedCorrectly() {
+        changeAuthNeed(false)
+    }
+
+    private fun changeAuthNeed(value: Boolean) {
+        sharedPref.edit().putBoolean(NEED_AUTHENTICATION, value).commit()
     }
 
     override fun isAuthenticationNeedSaved() = sharedPref.getBoolean(NEED_AUTHENTICATION, false)

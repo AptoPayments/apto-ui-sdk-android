@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageInfo
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.platform.AptoPlatform
@@ -21,6 +22,7 @@ import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
 import com.aptopayments.sdk.utils.FontsUtil
 import org.koin.core.module.Module
+import zendesk.chat.Chat
 import java.lang.ref.WeakReference
 
 interface AptoUiSdkProtocol {
@@ -126,6 +128,8 @@ object AptoUiSdk : AptoUiSdkProtocol {
         val list = getModuleList(extraModules)
         AptoPlatform.setUiModules(list)
         AptoPlatform.initialize(application)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
+        Chat.INSTANCE.init(application, application.getString(R.string.apto_chat_key))
     }
 
     override fun setApiKey(apiKey: String, environment: AptoSdkEnvironment) {

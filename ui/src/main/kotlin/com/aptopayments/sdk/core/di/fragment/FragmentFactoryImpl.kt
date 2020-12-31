@@ -116,8 +116,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
     override fun fundingSourceFragment(cardID: String, selectedBalanceID: String?, tag: String) =
         FundingSourceDialogFragment.newInstance(cardID, selectedBalanceID).apply { this.TAG = tag }
 
-    override fun accountSettingsFragment(contextConfiguration: ContextConfiguration, tag: String) =
-        AccountSettingsFragment.newInstance(contextConfiguration).apply { this.TAG = tag }
+    override fun accountSettingsFragment(contextConfiguration: ContextConfiguration, cardId: String, tag: String) =
+        AccountSettingsFragment.newInstance(contextConfiguration, cardId).apply { this.TAG = tag }
 
     override fun activatePhysicalCardFragment(card: Card, tag: String) =
         ActivatePhysicalCardFragment.newInstance(card).apply { this.TAG = tag }

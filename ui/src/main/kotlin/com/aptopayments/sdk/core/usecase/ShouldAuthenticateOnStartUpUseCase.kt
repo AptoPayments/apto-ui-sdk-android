@@ -9,7 +9,6 @@ import com.aptopayments.sdk.repository.AuthenticationRepository
 internal class ShouldAuthenticateOnStartUpUseCase(
     private val authStateProviderImpl: AuthStateProvider,
     private val authenticationRepo: AuthenticationRepository
-
 ) : UseCaseWithoutParams<Boolean>() {
 
     override fun run(): Either<Failure, Boolean> {

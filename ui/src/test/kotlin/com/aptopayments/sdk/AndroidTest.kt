@@ -2,8 +2,8 @@ package com.aptopayments.sdk
 
 import android.app.Application
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import com.aptopayments.mobile.platform.AptoPlatform
-import com.aptopayments.sdk.core.platform.BaseActivity
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -30,7 +30,7 @@ abstract class AndroidTest : AutoCloseKoinTest() {
 
     fun context(): Context = RuntimeEnvironment.application
 
-    fun activityContext(): Context = mock(BaseActivity::class.java)
+    fun activity(): FragmentActivity = mock(FragmentActivity::class.java)
 
     internal class ApplicationStub : Application()
 

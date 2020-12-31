@@ -135,7 +135,7 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/dialog_rounded_background"
                 android:visibility="gone"
-                tools:background="@color/colorSecondary"
+                tools:background="@android:color/background_dark"
                 tools:visibility="visible">
 
                 <ImageView
@@ -159,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
                         app:localize="transaction_details_basic_info_declined_transaction_banner_title"
-                        tools:textColor="@color/colorTextSecondary" />
+                        tools:textColor="@android:color/primary_text_dark" />
 
                     <TextView
                         android:id="@+id/tv_banner_description"
@@ -169,7 +169,7 @@
                         android:layout_marginEnd="@dimen/_16sdp"
                         android:layout_marginBottom="@dimen/_12sdp"
                         tools:text="Description"
-                        tools:textColor="@color/colorTextSecondary" />
+                        tools:textColor="@android:color/primary_text_dark" />
                 </LinearLayout>
             </RelativeLayout>
 

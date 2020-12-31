@@ -523,6 +523,8 @@
     <string name="card_settings_help_ivr_support_description">Call for customer support</string>
     <string name="card_settings_help_contact_support_title">Contact Support</string>
     <string name="card_settings_help_contact_support_description">Email our Customer Support team</string>
+    <string name="card_settings_help_chatbot_title">Get Cardholder Support</string>
+    <string name="card_settings_help_chatbot_description">Chat with Cardholder Support</string>
     <string name="card_settings_help_report_lost_card_title">Report Lost or Stolen Card</string>
     <string name="card_settings_help_report_lost_card_description">Close your card and request a replacement</string>
     <string name="card_settings_legal_faq_title">FAQ</string>

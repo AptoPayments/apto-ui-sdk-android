@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.card.cardsettings
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.card.*
 import com.aptopayments.mobile.data.cardproduct.CardProduct
+import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
@@ -11,16 +12,22 @@ import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
+import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
+import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -28,16 +35,18 @@ import kotlin.test.assertTrue
 private const val CARD_ID = "CARD_ID"
 
 @Suppress("UNCHECKED_CAST")
-class CardSettingsViewModelTest : AndroidTest() {
+internal class CardSettingsViewModelTest : AndroidTest() {
 
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
+    private val cardDetailsRepo = mock<LocalCardDetailsRepository>()
     private val cardFeatures = mock<Features>()
-    private val card = mock<Card>() {
+    private val card = mock<Card> {
         on { accountID } doReturn CARD_ID
     }
+    private val projectConfiguration = mock<ProjectConfiguration>()
     private val cardProduct = mock<CardProduct>()
     private val analytics = mock<AnalyticsServiceContract>()
     private val aptoPlatform = mock<AptoPlatform>()
@@ -47,6 +56,21 @@ class CardSettingsViewModelTest : AndroidTest() {
     }
 
     private lateinit var sut: CardSettingsViewModel
+
+    @Before
+    override fun setUp() {
+        super.setUp()
+        startKoin {
+            modules(
+                listOf(
+                    applicationModule,
+                    module {
+                        factory(override = true) { cardDetailsRepo }
+                    }
+                )
+            )
+        }
+    }
 
     @Test
     fun `when cardProduct empty sections are hidden`() {
@@ -232,7 +256,7 @@ class CardSettingsViewModelTest : AndroidTest() {
         sut = createSut()
 
         sut.onFaqPressed()
-        val content = sut.action.getOrAwaitValue() as CardSettingsViewModel.Action.ContentPresenter
+        val content = sut.action.getOrAwaitValue() as Action.ContentPresenter
 
         assertEquals(element, content.content)
         assertEquals("card_settings_legal_faq_title", content.title)
@@ -245,7 +269,7 @@ class CardSettingsViewModelTest : AndroidTest() {
         sut = createSut()
 
         sut.onCardholderAgreementPressed()
-        val content = sut.action.getOrAwaitValue() as CardSettingsViewModel.Action.ContentPresenter
+        val content = sut.action.getOrAwaitValue() as Action.ContentPresenter
 
         assertEquals(element, content.content)
         assertEquals("card_settings_legal_cardholder_agreement_title", content.title)
@@ -258,7 +282,7 @@ class CardSettingsViewModelTest : AndroidTest() {
         sut = createSut()
 
         sut.onPrivacyPolicyPressed()
-        val content = sut.action.getOrAwaitValue() as CardSettingsViewModel.Action.ContentPresenter
+        val content = sut.action.getOrAwaitValue() as Action.ContentPresenter
 
         assertEquals(element, content.content)
         assertEquals("card_settings_legal_privacy_policy_title", content.title)
@@ -271,7 +295,7 @@ class CardSettingsViewModelTest : AndroidTest() {
         sut = createSut()
 
         sut.onTermsPressed()
-        val content = sut.action.getOrAwaitValue() as CardSettingsViewModel.Action.ContentPresenter
+        val content = sut.action.getOrAwaitValue() as Action.ContentPresenter
 
         assertEquals(element, content.content)
         assertEquals("card_settings_legal_terms_of_service_title", content.title)
@@ -284,7 +308,7 @@ class CardSettingsViewModelTest : AndroidTest() {
 
         sut.setPasscodePressed()
 
-        assertTrue(sut.action.getOrAwaitValue() is CardSettingsViewModel.Action.SetCardPasscode)
+        assertTrue(sut.action.getOrAwaitValue() is Action.SetCardPasscode)
     }
 
     @Test
@@ -294,7 +318,7 @@ class CardSettingsViewModelTest : AndroidTest() {
 
         sut.setPasscodePressed()
 
-        assertTrue(sut.action.getOrAwaitValue() is CardSettingsViewModel.Action.SetCardPasscodeErrorDisabled)
+        assertTrue(sut.action.getOrAwaitValue() is Action.SetCardPasscodeErrorDisabled)
     }
 
     @Test
@@ -308,7 +332,7 @@ class CardSettingsViewModelTest : AndroidTest() {
 
         sut.lockCard()
 
-        assertTrue(sut.action.getOrAwaitValue() is CardSettingsViewModel.Action.CardStateChanged)
+        assertTrue(sut.action.getOrAwaitValue() is Action.CardStateChanged)
     }
 
     @Test
@@ -322,10 +346,35 @@ class CardSettingsViewModelTest : AndroidTest() {
 
         sut.unlockCard()
 
-        assertTrue(sut.action.getOrAwaitValue() is CardSettingsViewModel.Action.CardStateChanged)
+        assertTrue(sut.action.getOrAwaitValue() is Action.CardStateChanged)
     }
 
-    private fun createSut() = CardSettingsViewModel(card, cardProduct, analytics, aptoPlatform, aptoUiSdkProtocol)
+    @Test
+    fun `when onCustomerSupport and isChatbotActive then action is chatbot`() {
+        whenever(projectConfiguration.isChatbotActive).thenReturn(true)
+        whenever(card.accountID).thenReturn("1")
+        whenever(card.cardHolder).thenReturn("Jhon Snow")
+        sut = createSut()
+
+        sut.onCustomerSupport()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.StartChatbot)
+    }
+
+    @Test
+    fun `when onCustomerSupport and !isChatbotActive then action is CustomerSupportEmail`() {
+        whenever(projectConfiguration.isChatbotActive).thenReturn(false)
+        sut = createSut()
+
+        sut.onCustomerSupport()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.CustomerSupportEmail)
+    }
+
+    private fun createSut() =
+        CardSettingsViewModel(card, cardProduct, projectConfiguration, analytics, aptoPlatform, aptoUiSdkProtocol)
 
     private fun configureGetPin(statusResult: FeatureStatus) {
         val feature = mock<GetPin>() {

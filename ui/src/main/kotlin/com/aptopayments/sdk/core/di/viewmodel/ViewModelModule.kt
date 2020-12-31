@@ -2,6 +2,7 @@ package com.aptopayments.sdk.core.di.viewmodel
 
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.cardproduct.CardProduct
+import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
@@ -68,15 +69,24 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get(), get()) }
     viewModel { ActivatePhysicalCardViewModel(get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
-    viewModel { (card: Card, cardProduct: CardProduct) ->
-        CardSettingsViewModel(card, cardProduct, get(), get(), get())
+    viewModel { (card: Card, cardProduct: CardProduct, projectConfiguration: ProjectConfiguration) ->
+        CardSettingsViewModel(card, cardProduct, projectConfiguration, get(), get(), get())
     }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
     viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
     viewModel { NoNetworkViewModel(get()) }
     viewModel { MaintenanceViewModel(get()) }
-    viewModel { AccountSettingsViewModel(get(), get(), get()) }
+    viewModel { (cardId: String, projectConfig: ProjectConfiguration) ->
+        AccountSettingsViewModel(
+            cardId,
+            projectConfig,
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(get()) }
     viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->

@@ -30,7 +30,7 @@ internal class AccountSettingsFlow(
     val analyticsManager: AnalyticsServiceContract by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
-        val fragment = fragmentFactory.accountSettingsFragment(contextConfiguration, ACCOUNT_SETTINGS_TAG)
+        val fragment = fragmentFactory.accountSettingsFragment(contextConfiguration, cardId, ACCOUNT_SETTINGS_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))

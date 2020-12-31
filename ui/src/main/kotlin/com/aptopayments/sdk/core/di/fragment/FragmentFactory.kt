@@ -86,7 +86,7 @@ internal interface FragmentFactory {
 
     fun manageCardFragment(cardId: String, tag: String): ManageCardContract.View
     fun fundingSourceFragment(cardID: String, selectedBalanceID: String?, tag: String): FundingSourceContract.View
-    fun accountSettingsFragment(contextConfiguration: ContextConfiguration, tag: String): AccountSettingsContract.View
+    fun accountSettingsFragment(contextConfiguration: ContextConfiguration, cardId: String, tag: String): AccountSettingsContract.View
     fun activatePhysicalCardFragment(card: Card, tag: String): ActivatePhysicalCardContract.View
     fun activatePhysicalCardSuccessFragment(card: Card, tag: String): ActivatePhysicalCardSuccessContract.View
     fun cardSettingsFragment(

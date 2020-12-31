@@ -49,6 +49,7 @@ class TestDataProvider {
                 supportEmailAddress = "",
                 trackerAccessToken = "",
                 isTrackerActive = false,
+                isChatbotActive = false,
                 primaryAuthCredential = DataPoint.Type.PHONE
             )
         )
@@ -65,6 +66,7 @@ class TestDataProvider {
                 supportEmailAddress = "",
                 trackerAccessToken = "",
                 isTrackerActive = false,
+                isChatbotActive = false,
                 primaryAuthCredential = DataPoint.Type.EMAIL
             )
         )

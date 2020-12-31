@@ -22,6 +22,7 @@ import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import com.aptopayments.sdk.utils.*
+import com.aptopayments.sdk.utils.chatbot.*
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.google.android.libraries.places.api.Places
 import org.koin.android.ext.koin.androidApplication
@@ -65,6 +66,10 @@ internal val applicationModule = module {
     factory<UserMetadataRepository> { UserMetadataRepositoryImpl }
     factory<ManageCardIdRepository> { ManageCardIdRepositoryImpl }
     factory<ForceIssueCardRepository> { ForceIssueCardRepositoryImpl }
+    factory<ChatbotProvider> { ChatbotProviderImpl() }
+    factory { ChatbotConfigurator(get()) }
+    factory { (chatbotEnabled: Boolean) -> SupportTextResolver(chatbotEnabled) }
+    factory { ChatbotActivityLauncher(get()) }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

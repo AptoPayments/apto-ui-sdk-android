@@ -30,9 +30,9 @@
             android:background="@android:color/transparent"
             android:inputType="phone"
             android:maxLines="1"
-            android:textColor="@color/title_color"
             android:textCursorDrawable="@null"
-            android:textSize="@dimen/text_size_large" />
+            android:textSize="@dimen/text_size_large"
+            tools:text="12345"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </merge>

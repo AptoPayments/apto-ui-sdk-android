@@ -53,21 +53,26 @@
     </style>
 
     <style name="BaseToolbarTheme">
-        <item name="android:textColorPrimary">@color/colorTextSecondary</item>
-        <item name="android:textColorSecondary">@color/colorTextPrimary</item>
+        <item name="android:textColorPrimary">@color/base_toolbar_text_color</item>
+        <item name="android:textColorSecondary">@color/base_toolbar_text_color</item>
+        <item name="android:background">@color/base_toolbar_background_color</item>
     </style>
 
     <style name="CustomTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textColor">@color/base_toolbar_text_color</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ZendeskTheme" parent="ZendeskSdkTheme.Light">
+        <item name="android:statusBarColor">@color/base_toolbar_background_color</item>
     </style>
 
     <style name="ThemeTwo">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/title_color</item>
+        <item name="android:textColor">@color/base_text_color</item>
     </style>
 
     <style name="ThemeTwo.VerificationTextHeader" parent="ThemeTwo">

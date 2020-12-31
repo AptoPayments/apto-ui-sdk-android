@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.FeatureStatus
 import com.aptopayments.mobile.data.cardproduct.CardProduct
+import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
@@ -21,6 +22,8 @@ import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.PhoneDialer
+import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
+import com.aptopayments.sdk.utils.chatbot.SupportTextResolver
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -28,6 +31,7 @@ import org.koin.core.parameter.parametersOf
 internal class CardSettingsViewModel(
     private var card: Card,
     private val cardProduct: CardProduct,
+    private val projectConfiguration: ProjectConfiguration,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
     private val aptoUiSdk: AptoUiSdkProtocol
@@ -36,6 +40,7 @@ internal class CardSettingsViewModel(
     private val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
     private val shouldAuthenticateWithOnPCIUseCase: ShouldAuthenticateOnPCIUseCase by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(card.cardProductID) }
+    private val supportTextResolver: SupportTextResolver by inject { parametersOf(projectConfiguration.isChatbotActive) }
 
     private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
@@ -47,6 +52,7 @@ internal class CardSettingsViewModel(
     val showCardholderAgreement = cardProduct.cardholderAgreement != null
     val showTermsAndConditions = cardProduct.termsAndConditions != null
     val showPrivacyPolicy = cardProduct.privacyPolicy != null
+    val supportTexts = supportTextResolver.getTexts()
 
     val showAddToGooglePay = shouldShowAddToGooglePay()
 
@@ -173,6 +179,24 @@ internal class CardSettingsViewModel(
         }
     }
 
+    fun onCustomerSupport() {
+        action.postValue(getCustomerSupportAction())
+    }
+
+    private fun getCustomerSupportAction(): Action {
+        return if (projectConfiguration.isChatbotActive) {
+            Action.StartChatbot(
+                ChatbotParameters(
+                    name = card.cardHolder,
+                    cardId = card.accountID,
+                    cardProductId = cardProduct.id
+                )
+            )
+        } else {
+            Action.CustomerSupportEmail
+        }
+    }
+
     internal sealed class Action {
         class ContentPresenter(val content: Content, val title: String) : Action()
         object ShowCardDetails : Action()
@@ -180,6 +204,8 @@ internal class CardSettingsViewModel(
         object SetCardPasscode : Action()
         object CardStateChanged : Action()
         object SetCardPasscodeErrorDisabled : Action()
+        class StartChatbot(val param: ChatbotParameters) : Action()
+        object CustomerSupportEmail : Action()
     }
 
     internal data class CardUiState(

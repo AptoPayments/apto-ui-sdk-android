@@ -41,7 +41,7 @@
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Taxi Licence 4986"
-            tools:textColor="@color/title_color" />
+            tools:textColor="@android:color/primary_text_light" />
 
         <TextView
             android:id="@+id/tv_transaction_amount"
@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="£ 12.45"
-            tools:textColor="@color/title_color" />
+            tools:textColor="@android:color/primary_text_light" />
 
         <TextView
             android:id="@+id/tv_transaction_description"

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">replace_me</string>
+    <string name="apto_chat_key" templateMergeStrategy="preserve" translatable="false">3DHHhDdWKVp32643qoryhBvkTnCx1XI3</string>
 </resources>

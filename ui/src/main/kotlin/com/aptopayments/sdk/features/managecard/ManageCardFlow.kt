@@ -30,7 +30,6 @@ import com.aptopayments.sdk.features.loadfunds.AddFundsFlow
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.MessageBanner
-import com.aptopayments.sdk.utils.SendEmailUtil
 import org.koin.core.inject
 import java.lang.reflect.Modifier
 
@@ -289,12 +288,6 @@ internal class ManageCardFlow(
     }
 
     override fun onCloseTapped() = popFragment()
-
-    override fun showMailComposer(recipient: String, subject: String?, body: String?) {
-        rootActivity()?.let { activity ->
-            SendEmailUtil(recipient, subject, body).execute(activity)
-        }
-    }
 
     override fun onCardStateChanged() {
         manageCardFragment?.refreshCardData()

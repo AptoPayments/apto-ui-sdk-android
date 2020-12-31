@@ -26,6 +26,9 @@ To contribute to the SDK development, see [Contributions & Development](#user-co
 ## Requirements
 
 * Android SDK, minimum API Level 23 (Marshmallow)
+* One of the following for testing:
+	* Android device running Android 6.0 (API Level 23) or higher.
+	* Android emulator running Android 7.0 (API Level 24) or higher.
 * Kotlin, minimum version 1.4.0
 * Gradle, minimum version 4.0.1
 
@@ -72,6 +75,7 @@ We suggest using [Gradle](https://gradle.org) to install the SDK:
 		    jcenter()
 		    maven { url 'https://dl.bintray.com/apto/maven' }
 		    maven { url "https://jitpack.io" }
+		    maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
 			
 			...
 		}
@@ -107,7 +111,7 @@ android {
     dependencies {
 		...
 
-		implementation 'com.aptopayments.sdk:ui:3.6.0'
+		implementation 'com.aptopayments.sdk:ui:3.7.0'
 
 		...
 	}
@@ -234,13 +238,13 @@ Parameter|Default Value|Description
 ---|---|---
 `showStatsButton`|`false`|Controls the Stats button is displayed. This enables the user to see their monthly consumption statistics.<br/><br/>![Stats button](readme_images/stats.jpg)
 `showAccountSettingsButton`|`true`|Controls if the Account Settings button is displayed. This enables the user to see the account settings screen.<br/><br/>![Account Settings button](readme_images/accounts.jpg)
-`hideFundingSourcesReconnectButton`|`false`|Controls if the **Add funding source** button is shown.
+`hideFundingSourcesReconnectButton`|`false`|Controls if the reconnect button for the funding sources is shown. This enables the user to refresh the list of funding sources for their card.<br/><br/>**Note:** This is only available for certain enterprise programs.<br/><br/>![Account Settings button](readme_images/fundingSourceReconnect.png)
 `showNotificationPreferences`|`false`|Controls if the notification preferences menu is displayed on the **Card settings** screen.
 `showDetailedCardActivityOption`|`false`|Controls if the Detailed Card Activity selector is displayed on the **Card settings** screen. If the selector is activated, all transactions are shown, including declines, balance inquiries, etc.
 `showMonthlyStatementsOption`|`true`|Controls if the Monthly Statements menu is displayed on the **Card settings** screen. The menu enables users to view their monthly statements.
 `authenticateOnStartup`|`false`|Controls if the user must authenticate their account (using a Passcode or Biometrics) when the app opens or after returning from background mode. Enabling this option will require the user to create a Passcode when signing up.
-`authenticateOnPCI`|`NONE`|Controls if the user must authenticate using their Passcode instead of the SMS/email code, prior to viewing their full card data. Options are Pin_Or_Biometrics, Biometrics, or None <br/><br/>**Note:** If biometric authentication is enabled, it will appear first. The user may choose to cancel biometric authentication and use their Passcode instead.
-`darkThemeEnabled`|`true`|Controls if the UI's dark theme is enabled. *(Only available on devices with Android 10+ / API 29+)*.<br/><br/>**Note:** If this value is set to `true`, you should also change your app theme to support the *DayNight Theme*. See [darkThemeEnabled Parameter](#user-content-darkthemeenabled-parameter)
+`authenticateOnPCI`|`CardOptions.PCIAuthType.NONE`|Controls if the user must authenticate using their Passcode instead of the SMS/email code, prior to viewing their full card data. The available options for this `CardOptions.PCIAuthType` setting are:<ul><li>`PIN_OR_BIOMETRICS`</li><li>`BIOMETRICS`</li><li>`NONE`</li></ul><br/><br/>**Note:** If biometric authentication is enabled, it will appear first. The user may choose to cancel biometric authentication and use their Passcode instead.
+`darkThemeEnabled`<br/><br/>**Note:** Only available on devices with Android 10+ / API 29+.|`true`|Controls if the UI's dark theme is enabled.<br/><br/>**Note:** If this value is set to `true`, you should also change your app theme to support the *DayNight Theme*. See [darkThemeEnabled Parameter](#user-content-darkthemeenabled-parameter)
 `inAppProvisioningEnabled`|`false`|This feature will be available in the future, and will require an additional Google authorization.
 `openingMode`|`CardOptions.OpeningMode.STANDALONE`|Defines how the UI opens and closes.<ul><li>**`CardOptions.OpeningMode.EMBEDDED`**: This displays a close button on the manage card screen, enabling the user to close the screen and return to the host app. This mode is the recommended when starting the Apto UI SDK from an existing app.</li><li>**`CardOptions.OpeningMode.STANDALONE`**: This does not display a close button on the manage card screen. The card UI can only be closed when the user logs out of the app. Use this mode when the host app only uses the Apto UI SDK.</li></ul>
 `fontOptions` *(optional*)|`Phone fonts`|Specifies custom fonts for the UI. See [FontOptions Parameter](#user-content-fontoptions-parameter) for more information.
@@ -288,7 +292,7 @@ val fontOptions = FontOptions(
 
 ## Override Configurations and Keys
 
-You can set additional configurations to override keys in your `strings.xml` file found in the folder path `src/main/res/values/`. For example, replace `your_deep_link_scheme` with your custom deep linking scheme:
+You can set additional configurations to override keys in your `strings.xml` file found in the folder path `src/main/res/values/`. For example, replace `appdeeplink` with your custom deep linking scheme:
 
 ```xml
 <string name="apto_deep_link_scheme">your_deep_link_scheme</string>

@@ -34,6 +34,6 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:checked="false"
-        tools:backgroundTint="@color/button_active" />
+        tools:backgroundTint="@color/colorPrimary" />
 
 </RelativeLayout>

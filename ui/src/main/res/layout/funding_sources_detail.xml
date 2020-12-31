@@ -64,9 +64,9 @@
             android:layout_marginLeft="@dimen/_1sdp"
             android:layout_marginStart="@dimen/_1sdp"
             android:checked="false"
-            android:backgroundTint="@color/button_active"
             android:clickable="false"
-            android:focusable="false" />
+            android:focusable="false"
+            tools:backgroundTint="@color/colorPrimary" />
 
     </LinearLayout>
 

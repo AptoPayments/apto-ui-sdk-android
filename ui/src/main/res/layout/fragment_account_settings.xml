@@ -71,8 +71,8 @@
                 android:id="@+id/rl_contact_support"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/section_option_height"
-                app:optionDescription="card_settings.help.contact_support.description"
-                app:optionTitle="card_settings.help.contact_support.title" />
+                app:optionDescription="card_settings_help_contact_support_description"
+                app:optionTitle="card_settings_help_contact_support_title" />
 
             <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                 android:id="@+id/rl_statements"
