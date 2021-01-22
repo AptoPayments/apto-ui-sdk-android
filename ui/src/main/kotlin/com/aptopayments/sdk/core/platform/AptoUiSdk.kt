@@ -15,8 +15,9 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.di.viewmodel.viewModelModule
-import com.aptopayments.sdk.core.usecase.SaveInitializationDataUseCase
-import com.aptopayments.sdk.core.usecase.SaveInitializationDataUseCase.InitializationData
+import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase
+import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase.Params
+import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
@@ -45,12 +46,14 @@ interface AptoUiSdkProtocol {
      * @param from, Activity, The activity from where you are starting the SDK
      * @param cardOptions [CardOptions] The UI SDK has multiple features that can be enabled / disabled.
      * This parameter is used to enable / disable card management features and can be used to define the card theme and fonts.
+     * @param initializationData [InitializationData] This data contains information that will be stored with the user and the card when creating them.
      * @param onSuccess This is the callback closure called once the Apto UI SDK has been initialized.
      * @param onError This is the callback closure called if there was a failure during the SDK initialization process.
      */
     fun startCardFlow(
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
+        initializationData: InitializationData? = null,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     )
@@ -62,8 +65,7 @@ interface AptoUiSdkProtocol {
      * @param cardOptions [CardOptions] The UI SDK has multiple features that can be enabled / disabled.
      * This parameter is used to enable / disable card management features and can be used to define the card theme and fonts.
      * @param cardId String, Card id that will be opened.
-     * @param userMetadata: A string up to 256 characters that will be attached to the user after signing up.
-     * @param cardMetadata: A string up to 256 characters that will be attached to the card after issuance.
+     * @param initializationData This data contains information that will be stored with the user and the card when creating them.
      * @param onSuccess This is the callback closure called once the Apto UI SDK has been initialized.
      * @param onError This is the callback closure called if there was a failure during the SDK initialization process.
      */
@@ -71,8 +73,7 @@ interface AptoUiSdkProtocol {
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
         cardId: String,
-        userMetadata: String? = null,
-        cardMetadata: String? = null,
+        initializationData: InitializationData? = null,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     )
@@ -83,16 +84,14 @@ interface AptoUiSdkProtocol {
      * @param from, Activity, The activity from where you are starting the SDK
      * @param cardOptions [CardOptions] The UI SDK has multiple features that can be enabled / disabled.
      * This parameter is used to enable / disable card management features and can be used to define the card theme and fonts.
-     * @param userMetadata: A string up to 256 characters that will be attached to the user after signing up.
-     * @param cardMetadata: A string up to 256 characters that will be attached to the card after issuance.
+     * @param initializationData This data contains information that will be stored with the user and the card when creating them.
      * @param onSuccess This is the callback closure called once the Apto UI SDK has been initialized.
      * @param onError This is the callback closure called if there was a failure during the SDK initialization process.
      */
     fun startCardApplicationFlow(
         from: Activity,
         cardOptions: CardOptions = CardOptions(),
-        userMetadata: String? = null,
-        cardMetadata: String? = null,
+        initializationData: InitializationData? = null,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     )
@@ -108,7 +107,7 @@ interface AptoUiSdkProtocol {
 
 object AptoUiSdk : AptoUiSdkProtocol {
 
-    private val saveInitializationDataUseCase: SaveInitializationDataUseCase by lazy { AptoPlatform.koin.get() }
+    private val saveInitializationDataUseCase: SaveFlowConfigurationDataUseCase by lazy { AptoPlatform.koin.get() }
 
     internal var cardFlow: WeakReference<CardFlow>? = null
 
@@ -143,43 +142,36 @@ object AptoUiSdk : AptoUiSdkProtocol {
     override fun startCardFlow(
         from: Activity,
         cardOptions: CardOptions,
+        initializationData: InitializationData?,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
+        saveInitializationDataUseCase.run(Params(initializationData = initializationData))
         startFlow(from, cardOptions, onSuccess, onError)
-        saveInitializationDataUseCase.run(null)
     }
 
     override fun startManageCardFlow(
         from: Activity,
         cardOptions: CardOptions,
         cardId: String,
-        userMetadata: String?,
-        cardMetadata: String?,
+        initializationData: InitializationData?,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
-        saveInitializationDataUseCase(
-            InitializationData(
-                userMetadata = userMetadata,
-                cardMetadata = cardMetadata
-            )
-        )
+        saveInitializationDataUseCase(Params(initializationData = initializationData))
         startFlow(from, cardOptions, onSuccess = onSuccess, onError = onError)
     }
 
     override fun startCardApplicationFlow(
         from: Activity,
         cardOptions: CardOptions,
-        userMetadata: String?,
-        cardMetadata: String?,
+        initializationData: InitializationData?,
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
         saveInitializationDataUseCase(
-            InitializationData(
-                userMetadata = userMetadata,
-                cardMetadata = cardMetadata,
+            Params(
+                initializationData = initializationData,
                 forceApplyToCard = true
             )
         )

@@ -9,8 +9,9 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
+import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
-import com.aptopayments.sdk.repository.CardMetadataRepository
+import com.aptopayments.sdk.repository.InMemoryInitializationDataRepository
 import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
@@ -21,6 +22,7 @@ import org.junit.rules.TestRule
 import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val CARD_APPLICATION_ID = "CRD_12345"
@@ -48,17 +50,14 @@ class IssueCardViewModelTest : AndroidTest() {
     @Mock
     private lateinit var issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository
 
-    @Mock
-    private lateinit var metadataRepo: CardMetadataRepository
-
-    private val additionalFields = mapOf("test" to "test1")
     private val metadata = "metadata"
+    private val additionalFields = mapOf("test" to "test1")
+    private val initializationDataRepository = InMemoryInitializationDataRepository(InitializationData(cardMetadata = metadata))
 
     @Before
     override fun setUp() {
         super.setUp()
         whenever(issueCardAdditionalRepo.get()).thenReturn(additionalFields)
-        whenever(metadataRepo.data).thenReturn(metadata)
     }
 
     @Test
@@ -80,8 +79,8 @@ class IssueCardViewModelTest : AndroidTest() {
 
         verify(aptoPlatform).issueCard(any(), any(), any(), any())
         verify(analyticsManager).track(Event.IssueCard)
-        verify(metadataRepo).clear()
         assertEquals(CARD_APPLICATION_ID, captor.firstValue)
+        assertNull(initializationDataRepository.data?.cardMetadata)
         assertFalse(sut.errorVisible.getOrAwaitValue())
         assertEquals(card, sut.card.getOrAwaitValue())
     }
@@ -215,7 +214,7 @@ class IssueCardViewModelTest : AndroidTest() {
             analyticsManager,
             aptoPlatform,
             issueCardAdditionalRepo,
-            metadataRepo
+            initializationDataRepository
         )
     }
 

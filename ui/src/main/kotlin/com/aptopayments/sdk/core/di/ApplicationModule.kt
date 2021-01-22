@@ -62,8 +62,7 @@ internal val applicationModule = module {
     single { PaymentSourcesRepository(get(), get()) }
     factory { PaymentSourceElementMapper() }
     factory { PaymentResultElementMapper(get()) }
-    factory<CardMetadataRepository> { CardMetadataRepositoryImpl }
-    factory<UserMetadataRepository> { UserMetadataRepositoryImpl }
+    single<InitializationDataRepository> { InMemoryInitializationDataRepository() }
     factory<ManageCardIdRepository> { ManageCardIdRepositoryImpl }
     factory<ForceIssueCardRepository> { ForceIssueCardRepositoryImpl }
     factory<ChatbotProvider> { ChatbotProviderImpl() }

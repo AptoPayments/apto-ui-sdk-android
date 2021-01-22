@@ -16,7 +16,7 @@ import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
-import com.aptopayments.sdk.repository.UserMetadataRepository
+import com.aptopayments.sdk.repository.InitializationDataRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -39,7 +39,7 @@ internal class AuthFlow(
     KoinComponent {
 
     private val analyticsManager: AnalyticsServiceContract by inject()
-    private val userMetadataRepository: UserMetadataRepository by inject()
+    private val initializationData: InitializationDataRepository by inject()
     private var primaryVerification: Verification? = null
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
@@ -120,10 +120,15 @@ internal class AuthFlow(
     //
     private fun createUser(dataPoint: DataPoint) {
         showLoading()
-        AptoPlatform.createUser(DataPointList().add(dataPoint), userMetadataRepository.data) { result ->
+        AptoPlatform.createUser(
+            userData = DataPointList().add(dataPoint),
+            custodianUid = initializationData.data?.custodianUid,
+            metadata = initializationData.data?.userMetadata
+        ) { result ->
             hideLoading()
             result.either(::handleFailure) { user ->
-                userMetadataRepository.clear()
+                initializationData.data?.userMetadata = null
+                initializationData.data?.custodianUid = null
                 analyticsManager.createUser(user.userId)
                 onFinish(user.token)
             }

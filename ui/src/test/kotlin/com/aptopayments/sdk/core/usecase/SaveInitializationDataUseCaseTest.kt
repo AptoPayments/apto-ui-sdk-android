@@ -1,28 +1,29 @@
 package com.aptopayments.sdk.core.usecase
 
-import com.aptopayments.sdk.repository.CardMetadataRepository
+import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.repository.ForceIssueCardRepository
+import com.aptopayments.sdk.repository.InMemoryInitializationDataRepository
 import com.aptopayments.sdk.repository.ManageCardIdRepository
-import com.aptopayments.sdk.repository.UserMetadataRepository
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
+import kotlin.test.assertEquals
 
 private const val CARD_METADATA = "card"
 private const val USER_METADATA = "user"
+private const val UID = "uid"
 private const val CARD_ID = "id_1234"
 
 internal class SaveInitializationDataUseCaseTest {
 
-    private val cardMetadataRepository: CardMetadataRepository = mock()
-    private val userMetadataRepository: UserMetadataRepository = mock()
+    private val initializationDataRepository: InMemoryInitializationDataRepository = spy()
     private val manageCardIdRepository: ManageCardIdRepository = mock()
     private val applyToCardRepository: ForceIssueCardRepository = mock()
 
     private val sut =
-        SaveInitializationDataUseCase(
-            cardMetadataRepository,
-            userMetadataRepository,
+        SaveFlowConfigurationDataUseCase(
+            initializationDataRepository,
             manageCardIdRepository,
             applyToCardRepository
         )
@@ -31,15 +32,14 @@ internal class SaveInitializationDataUseCaseTest {
     fun `when null params then all repositories set to null`() {
         sut(null)
 
-        verify(cardMetadataRepository).data = null
-        verify(userMetadataRepository).data = null
+        verify(initializationDataRepository).data = null
         verify(manageCardIdRepository).data = null
         verify(applyToCardRepository).data = false
     }
 
     @Test
     fun `when manageCardId set then is saved correctly `() {
-        val data = SaveInitializationDataUseCase.InitializationData(manageCardId = CARD_ID)
+        val data = SaveFlowConfigurationDataUseCase.Params(manageCardId = CARD_ID)
 
         sut(data)
 
@@ -48,25 +48,40 @@ internal class SaveInitializationDataUseCaseTest {
 
     @Test
     fun `when cardMetadata set then is saved correctly `() {
-        val data = SaveInitializationDataUseCase.InitializationData(cardMetadata = CARD_METADATA)
+        val data = SaveFlowConfigurationDataUseCase.Params(
+            initializationData = InitializationData(cardMetadata = CARD_METADATA)
+        )
 
         sut(data)
 
-        verify(cardMetadataRepository).data = CARD_METADATA
+        assertEquals(CARD_METADATA, initializationDataRepository.data?.cardMetadata)
     }
 
     @Test
     fun `when userMetadata set then is saved correctly `() {
-        val data = SaveInitializationDataUseCase.InitializationData(userMetadata = USER_METADATA)
+        val data = SaveFlowConfigurationDataUseCase.Params(
+            initializationData = InitializationData(userMetadata = USER_METADATA)
+        )
 
         sut(data)
 
-        verify(userMetadataRepository).data = USER_METADATA
+        assertEquals(USER_METADATA, initializationDataRepository.data?.userMetadata)
+    }
+
+    @Test
+    fun `when custodianUid set then is saved correctly `() {
+        val data = SaveFlowConfigurationDataUseCase.Params(
+            initializationData = InitializationData(custodianUid = UID)
+        )
+
+        sut(data)
+
+        assertEquals(UID, initializationDataRepository.data?.custodianUid)
     }
 
     @Test
     fun `when applyToCard set then is saved correctly `() {
-        val data = SaveInitializationDataUseCase.InitializationData(forceApplyToCard = true)
+        val data = SaveFlowConfigurationDataUseCase.Params(forceApplyToCard = true)
 
         sut(data)
 

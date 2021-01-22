@@ -6,7 +6,7 @@ import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.core.usecase.ForgotPinUseCase
 import com.aptopayments.sdk.core.usecase.InitNewOrExistingFlowUseCase
 import com.aptopayments.sdk.core.usecase.OnEnterBackgroundUseCase
-import com.aptopayments.sdk.core.usecase.SaveInitializationDataUseCase
+import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase
 import com.aptopayments.sdk.core.usecase.SavePasscodeUseCase
 import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnPCIUseCase
 import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnStartUpUseCase
@@ -28,5 +28,5 @@ internal val useCaseModule = module {
     factory { DownloadStatementUseCase(get()) }
     factory { ShouldShowBiometricOption(get(), get()) }
     factory { InitNewOrExistingFlowUseCase(get(), get(), get()) }
-    factory { SaveInitializationDataUseCase(get(), get(), get(), get()) }
+    factory { SaveFlowConfigurationDataUseCase(get(), get(), get()) }
 }

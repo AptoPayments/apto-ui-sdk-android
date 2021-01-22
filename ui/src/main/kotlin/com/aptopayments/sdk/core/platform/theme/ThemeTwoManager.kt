@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.core.platform.theme
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
@@ -32,17 +31,9 @@ import com.aptopayments.sdk.utils.FontsUtil.FontType.*
 import com.aptopayments.sdk.utils.extensions.toDp
 import com.google.android.material.appbar.AppBarLayout
 
-private const val CARD_FONT_FILE = "fonts/ocraextended.ttf"
 private const val OPACITY_50_PERCENT = 128
 
 internal object ThemeTwoManager : ThemeManager {
-    private var mCardTypeface: Typeface? = null
-    private fun getCardTypeface(context: Context): Typeface {
-        return mCardTypeface ?: {
-            mCardTypeface = Typeface.createFromAsset(context.assets, CARD_FONT_FILE)
-            mCardTypeface!!
-        }()
-    }
 
     override fun customizeStatusBar(window: Window) {
         StatusBarUtil.setStatusBarColor(window, UIConfig.uiNavigationPrimaryColor, UIConfig.uiStatusBarStyle)
