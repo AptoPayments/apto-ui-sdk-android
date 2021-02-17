@@ -34,9 +34,9 @@
     <string name="personal_info_email_not_available">I don\'t have an email</string>
 
     <!-- Phone -->
-    <string name="auth_input_phone_title">Let’s get you verified 📲</string>
-    <string name="auth_input_phone_explanation">To keep your card secure, we need to send a unique code to your phone number to verify its really you. Please enter your number below.</string>
-    <string name="auth_input_phone_hint">phone number</string>
+    <string name="auth_input_phone_title">Get started</string>
+    <string name="auth_input_phone_explanation">To ensure the security of your account, please enter your phone number below and we will send you a unique code to authenticate you.</string>
+    <string name="auth_input_phone_hint">Phone number</string>
     <string name="auth_input_phone_call_to_action">Continue</string>
     <string name="auth_input_phone_error_can_not_send_sms">Looks like we can\'t send you a code, as you\'ve already requested to stop receiving SMS messages from us. Chat to our team for more help.</string>
     <string name="auth_input_phone_error_invalid_phone_number">Looks like the number you\'ve entered isn\'t a valid mobile number. Check it\'s been entered correctly and isn\'t a landline number.</string>
@@ -50,10 +50,10 @@
     <string name="auth_input_email_footer">emailaddress@example.com</string>
 
     <!-- VerificationEntity Theme Two -->
-    <string name="auth_verify_phone_title">Let’s get you verified 📲</string>
-    <string name="auth_verify_phone_explanation">Enter the 6-digit code that we\'ve just sent to your phone.</string>
-    <string name="auth_verify_phone_footer">Having problems entering your code?</string>
-    <string name="auth_verify_phone_resend_button_title">Tap here to re-send</string>
+    <string name="auth_verify_phone_title">Verify your account</string>
+    <string name="auth_verify_phone_explanation">Enter the six-digit verification code below. It may take up to a few minutes.</string>
+    <string name="auth_verify_phone_footer">Didn’t receive a code?</string>
+    <string name="auth_verify_phone_resend_button_title">Click here to send another code</string>
     <string name="auth_verify_phone_error_wrong_code_title">Error</string>
     <string name="auth_verify_phone_error_wrong_code_message">Looks like that code isn\'t valid. Please double-check the one we sent to you, or tap here to request a new one.</string>
     <string name="auth_verify_phone_resent_wait_text">Resend your code if it doesn\'t arrive in &lt;&lt;WAIT_TIME&gt;&gt;</string>
@@ -87,7 +87,7 @@
     <string name="auth_verify_email_explanation">Enter the code that was sent to</string>
     <string name="auth_verify_email_explanation_empty_data">Enter the code that was sent to your email address</string>
     <string name="auth_verify_email_resend_button_title">Re-send code</string>
-    <string name="auth_verify_email_footer">Having problems entering your code?</string>
+    <string name="auth_verify_email_footer">Didn’t receive a code?</string>
     <string name="auth_verify_email_expired_pin_text">Code expired, too many attempts.\nPlease request a new code via your email address</string>
     <string name="auth_verify_email_resent_message">A new code has been sent to your email address</string>
     <string name="auth_verify_email_error_wrong_code_title">Error</string>
@@ -173,19 +173,6 @@
     <string name="transaction_details_basic_info_category_other_mcc">Other</string>
     <string name="transaction_details_basic_info_category_unavailable">Unavailable</string>
 
-    <!-- Address -->
-    <string name="address_title">Where do you live?</string>
-    <string name="address_label">Your residential address</string>
-    <string name="address_error">Invalid address</string>
-    <string name="address_autocomplete_hint">your current address</string>
-    <string name="address_housing_type_header">Residence</string>
-    <string name="address_housing_type_hint">Select a housing type&#8230;</string>
-    <string name="address_housing_type_error">Please select a valid housing type.</string>
-
-    <!-- Apartment -->
-    <string name="apartment_title">Contact information</string>
-    <string name="address_apartment_number_hint">apartment, unit, floor, etc.</string>
-
     <!-- ID VerificationEntity -->
     <string name="id_verification_citizenship_label">Citizenship</string>
     <string name="id_verification_document_type_label">Type of document</string>
@@ -232,7 +219,7 @@
     <!-- Disclaimer Theme 2 -->
     <string name="disclaimer_disclaimer_call_to_action_title">I agree</string>
     <string name="disclaimer_disclaimer_cancel_action_button">I do not agree to the Cardholder agreement</string>
-    <string name="disclaimer_disclaimer_title">Your Cardholder agreement</string>
+    <string name="disclaimer_disclaimer_title">Cardholder agreement</string>
     <string name="disclaimer_disclaimer_cancel_action_title">Cardholder agreement</string>
     <string name="disclaimer_disclaimer_cancel_action_message">Are you sure you do not want to agree to the Cardholder agreement?</string>
     <string name="disclaimer_disclaimer_cancel_action_ok_button">Confirm</string>
@@ -720,26 +707,24 @@
     <string name="biometric_change_pin_success_title">Congratulations</string>
     <string name="biometric_change_pin_success_message">Your passcode has been changed successfully!</string>
 
-    <string name="collect_user_data_personal_info_title">First and Last Name 👋</string>
+    <string name="collect_user_data_personal_info_title">Enter your name</string>
     <string name="collect_user_data_personal_info_subtitle">Please enter your first and last names</string>
     <string name="collect_user_data_personal_info_first_name_title">First Name</string>
     <string name="collect_user_data_personal_info_last_name_title">Last Name</string>
     <string name="collect_user_data_personal_info_call_to_action">Next</string>
     <string name="collect_user_data_personal_info_email_placeholder">your@email.com</string>
-    <string name="collect_user_data_personal_info_email_title">Your Email ✉️</string>
-    <string name="collect_user_data_personal_info_email_subtitle">Please enter your email address</string>
-    <string name="birthday_collector_birthdate_title">Your Birthdate 🗓</string>
-    <string name="birthday_collector_birthdate_subtitle">Please provide your date of birth</string>
-    <string name="birthday_collector_id_document_title">Verify your ID</string>
-    <string name="birthday_collector_id_document_subtitle">Please provide your ID details</string>
+    <string name="collect_user_data_personal_info_email_title">Enter your email address</string>
+    <string name="birthday_collector_birthdate_title">Enter your birthday</string>
+    <string name="birthday_collector_id_document_title">Verify your identity</string>
+    <string name="birthday_collector_id_document_subtitle">Please provide your identification information</string>
     <string name="birthday_collector_id_document_country_label">Issued By</string>
     <string name="birthday_collector_id_document_type_label">ID Type</string>
     <string name="birthday_collector_id_document_number_label">ID Details</string>
-    <string name="birthday_collector_id_document_type_ssn">SSN</string>
+    <string name="birthday_collector_id_document_type_ssn">Social Security Number</string>
     <string name="birthday_collector_id_document_type_identity_card">Identity card</string>
     <string name="birthday_collector_id_document_type_passport">Passport</string>
     <string name="birthday_collector_id_document_type_drivers_license">Driver\'s license</string>
-    <string name="collect_user_data_address_title">Your Address 🏠</string>
+    <string name="collect_user_data_address_title">Enter your home address</string>
     <string name="collect_user_data_address_subtitle">Please enter your current address</string>
     <string name="collect_user_data_address_address_placeholder">Address</string>
     <string name="collect_user_data_address_apt_unit_placeholder">Apartment number (optional)</string>

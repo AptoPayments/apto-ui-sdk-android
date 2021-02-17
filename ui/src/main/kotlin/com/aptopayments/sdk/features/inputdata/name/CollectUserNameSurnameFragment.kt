@@ -87,7 +87,6 @@ internal class CollectUserNameSurnameFragment :
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
             customizeLargeTitleLabel(binding.tvEmailHeader)
-            customizeFormLabel(binding.tvEmailLabel)
             customizeEditText(binding.etFirstName)
             customizeEditText(binding.etLastName)
             customizeSubmitButton(binding.continueButton)

@@ -7,6 +7,7 @@ import com.aptopayments.mobile.data.user.BirthdateDataPoint
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
+import com.aptopayments.sdk.core.extension.hide
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
@@ -68,7 +69,7 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
 
     private fun setTexts() {
         tv_birthdate_title.localizedText = "birthday_collector_birthdate_title"
-        tv_birthdate_subtitle.localizedText = "birthday_collector_birthdate_subtitle"
+        tv_birthdate_subtitle.hide()
     }
 
     override fun viewLoaded() = viewModel.viewLoaded()

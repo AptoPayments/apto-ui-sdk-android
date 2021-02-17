@@ -23,6 +23,20 @@ internal class TransactionListMergerTest {
     }
 
     @Test
+    fun `given newTransactions is empty and current transactions have one transaction when merge without appending then empty list is returned`() {
+        // Given
+        val oldTransaction = TestDataProvider.provideTransaction(createdAt = ZonedDateTime.now().plusMonths(1))
+        val currentTransactions: MutableList<Transaction> = mutableListOf(oldTransaction)
+        val newTransactions: List<Transaction> = emptyList()
+
+        // When
+        val result = sut.merge(newList = newTransactions, currentList = currentTransactions, append = false)
+
+        // Then
+        assert(result.isEmpty())
+    }
+
+    @Test
     fun `transactions are appended when update transactions is called with transactions`() {
         // Given
         val transaction = TestDataProvider.provideTransaction()

@@ -45,5 +45,7 @@ internal class TransactionListMerger {
     private fun shouldOnlyKeepNewList(
         currentTransactions: MutableList<Transaction>,
         newList: List<Transaction>
-    ) = currentTransactions.isEmpty() || newList.last().createdAt.isAfter(currentTransactions.first().createdAt)
+    ) = currentTransactions.isEmpty() ||
+        newList.isEmpty() ||
+        newList.last().createdAt.isAfter(currentTransactions.first().createdAt)
 }

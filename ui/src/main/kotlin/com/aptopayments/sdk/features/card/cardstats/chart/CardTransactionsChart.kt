@@ -35,6 +35,9 @@ import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
 import java.util.Locale
 
+private const val CARD_ID = "card_id_bundle"
+private const val DATE = "date_bundle"
+
 internal class CardTransactionsChart :
     BaseFragment(),
     CardTransactionsChartContract.View,
@@ -55,6 +58,12 @@ internal class CardTransactionsChart :
     override fun layoutId(): Int = R.layout.fragment_transactions_chart
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
+
+    override fun setUpArguments() {
+        super.setUpArguments()
+        cardID = requireArguments().getString(CARD_ID)!!
+        date = requireArguments().getSerializable(DATE) as LocalDate
+    }
 
     override fun setupViewModel() {
         viewModel.apply {
@@ -298,8 +307,10 @@ internal class CardTransactionsChart :
 
     companion object {
         fun newInstance(cardID: String, date: LocalDate) = CardTransactionsChart().apply {
-            this.cardID = cardID
-            this.date = date
+            this.arguments = Bundle().apply {
+                putSerializable(CARD_ID, cardID)
+                putSerializable(DATE, date)
+            }
         }
     }
 }

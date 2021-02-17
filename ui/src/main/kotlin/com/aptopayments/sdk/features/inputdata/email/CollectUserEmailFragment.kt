@@ -59,7 +59,6 @@ internal class CollectUserEmailFragment :
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
             customizeLargeTitleLabel(binding.tvEmailHeader)
-            customizeFormLabel(binding.tvEmailLabel)
             customizeEditText(binding.etEmail)
             customizeSubmitButton(binding.continueButton)
         }
