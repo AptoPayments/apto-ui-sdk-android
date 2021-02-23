@@ -508,6 +508,7 @@
     <string name="card_settings_help_title">Help and Support</string>
     <string name="card_settings_help_ivr_support_title">Get help</string>
     <string name="card_settings_help_ivr_support_description">Call for customer support</string>
+    <string name="card_settings_help_ivr_support_no_sim">Error: no SIM card is inserted</string>
     <string name="card_settings_help_contact_support_title">Contact Support</string>
     <string name="card_settings_help_contact_support_description">Email our Customer Support team</string>
     <string name="card_settings_help_chatbot_title">Get Cardholder Support</string>

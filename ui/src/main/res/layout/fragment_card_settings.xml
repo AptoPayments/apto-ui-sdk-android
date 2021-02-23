@@ -72,7 +72,8 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings.settings.get_pin.description"
                         app:optionTitle="card_settings.settings.get_pin.title"
-                        app:visibleIf="@{viewModel.cardUiState.showGetPin}" />
+                        app:visibleIf="@{viewModel.cardUiState.showGetPin}"
+                        app:onClickSafe="@{()-> viewModel.getPinPressed()}"/>
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_set_pin"
@@ -140,8 +141,8 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings_help_ivr_support_description"
                         app:optionTitle="card_settings_help_ivr_support_title"
-                        app:visibleIf="@{viewModel.cardUiState.showIvrSupport}" />
-
+                        app:visibleIf="@{viewModel.cardUiState.showIvrSupport}"
+                        app:onClickSafe="@{()-> viewModel.onIvrSupportClicked()}"/>
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_contact_support"

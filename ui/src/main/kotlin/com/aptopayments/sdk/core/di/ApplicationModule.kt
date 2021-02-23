@@ -11,6 +11,8 @@ import com.aptopayments.sdk.core.platform.*
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
+import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledChecker
+import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledCheckerImpl
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
 import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
 import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
@@ -69,6 +71,7 @@ internal val applicationModule = module {
     factory { ChatbotConfigurator(get()) }
     factory { (chatbotEnabled: Boolean) -> SupportTextResolver(chatbotEnabled) }
     factory { ChatbotActivityLauncher(get()) }
+    factory<TelephonyEnabledChecker> { TelephonyEnabledCheckerImpl(androidContext()) }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

@@ -1,12 +1,12 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.FeatureStatus
+import com.aptopayments.mobile.data.card.FeatureType
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
@@ -21,7 +21,6 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.LiveEvent
-import com.aptopayments.sdk.utils.PhoneDialer
 import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
 import com.aptopayments.sdk.utils.chatbot.SupportTextResolver
 import org.koin.core.KoinComponent
@@ -41,6 +40,7 @@ internal class CardSettingsViewModel(
     private val shouldAuthenticateWithOnPCIUseCase: ShouldAuthenticateOnPCIUseCase by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(card.cardProductID) }
     private val supportTextResolver: SupportTextResolver by inject { parametersOf(projectConfiguration.isChatbotActive) }
+    private val telephonyEnabledChecker: TelephonyEnabledChecker by inject()
 
     private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
@@ -62,9 +62,21 @@ internal class CardSettingsViewModel(
         updateCardValues(card)
     }
 
-    fun dial(phone: PhoneNumber, from: Context) {
-        val phoneDialer = PhoneDialer(from)
-        phoneDialer.dialPhone(phone.toStringRepresentation(), null)
+    fun getPinPressed() {
+        when (val type = card.features?.getPin?.type) {
+            is FeatureType.Voip -> action.postValue(Action.CallVoIpListenPin)
+            is FeatureType.Ivr -> onGetPinWithIvr(type)
+        }
+    }
+
+    private fun onGetPinWithIvr(type: FeatureType.Ivr) {
+        if (telephonyEnabledChecker.isEnabled()) {
+            type.ivrPhone?.let {
+                action.postValue(Action.CallIvr(it))
+            }
+        } else {
+            action.postValue(Action.ShowNoSimInsertedError)
+        }
     }
 
     fun unlockCard() {
@@ -127,11 +139,15 @@ internal class CardSettingsViewModel(
             CardUiState(
                 showGetPin = card.features?.getPin?.status == FeatureStatus.ENABLED,
                 showSetPin = card.features?.setPin?.status == FeatureStatus.ENABLED,
-                showIvrSupport = card.features?.ivrSupport?.status == FeatureStatus.ENABLED,
+                showIvrSupport = isIvrEnabled(card),
                 cardLocked = card.state != Card.CardState.ACTIVE,
                 showAddFunds = card.features?.funding?.isEnabled ?: false,
                 showPasscode = card.features?.passcode?.isEnabled ?: false
             )
+    }
+
+    private fun isIvrEnabled(card: Card): Boolean {
+        return card.features?.ivrSupport?.status == FeatureStatus.ENABLED && card.features?.ivrSupport?.ivrPhone != null
     }
 
     private fun shouldShowLegalSection(cardProduct: CardProduct) =
@@ -183,6 +199,16 @@ internal class CardSettingsViewModel(
         action.postValue(getCustomerSupportAction())
     }
 
+    fun onIvrSupportClicked() {
+        val phone = card.features?.ivrSupport?.ivrPhone
+        val nextAction = if (telephonyEnabledChecker.isEnabled() && phone != null) {
+            Action.CallIvr(phone)
+        } else {
+            Action.ShowNoSimInsertedError
+        }
+        action.postValue(nextAction)
+    }
+
     private fun getCustomerSupportAction(): Action {
         return if (projectConfiguration.isChatbotActive) {
             Action.StartChatbot(
@@ -206,6 +232,9 @@ internal class CardSettingsViewModel(
         object SetCardPasscodeErrorDisabled : Action()
         class StartChatbot(val param: ChatbotParameters) : Action()
         object CustomerSupportEmail : Action()
+        class CallIvr(val phoneNumber: PhoneNumber) : Action()
+        object ShowNoSimInsertedError : Action()
+        object CallVoIpListenPin : Action()
     }
 
     internal data class CardUiState(

@@ -1,6 +1,7 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.*
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.config.ProjectConfiguration
@@ -54,6 +55,8 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     private val aptoUiSdkProtocol = mock<AptoUiSdkProtocol> {
         on { cardOptions } doReturn cardOptionsMock
     }
+    private val telephonyEnabledChecker: TelephonyEnabledChecker = mock()
+    private val phoneNumber = PhoneNumber("1", "111111111")
 
     private lateinit var sut: CardSettingsViewModel
 
@@ -66,6 +69,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
                     applicationModule,
                     module {
                         factory(override = true) { cardDetailsRepo }
+                        factory(override = true) { telephonyEnabledChecker }
                     }
                 )
             )
@@ -124,7 +128,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
 
     @Test
     fun `when getPin is disabled then option is not shown`() {
-        configureGetPin(FeatureStatus.DISABLED)
+        configureGetPin(FeatureStatus.DISABLED, null)
         configureCardFeatures()
 
         sut = createSut()
@@ -134,7 +138,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
 
     @Test
     fun `when getPin is enabled then option is shown`() {
-        configureGetPin(FeatureStatus.ENABLED)
+        configureGetPin(FeatureStatus.ENABLED, FeatureType.Voip())
         configureCardFeatures()
 
         sut = createSut()
@@ -164,7 +168,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
 
     @Test
     fun `when ivr is disabled then option is not shown`() {
-        configureIvrSupport(FeatureStatus.DISABLED)
+        configureIvrSupport(FeatureStatus.DISABLED, null)
         configureCardFeatures()
 
         sut = createSut()
@@ -173,8 +177,18 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     }
 
     @Test
-    fun `when ivr is enabled then option is shown`() {
-        configureIvrSupport(FeatureStatus.ENABLED)
+    fun `given ivr enabled & no phone number then option is not shown`() {
+        configureIvrSupport(FeatureStatus.ENABLED, null)
+        configureCardFeatures()
+
+        sut = createSut()
+
+        assertFalse(sut.cardUiState.getOrAwaitValue().showIvrSupport)
+    }
+
+    @Test
+    fun `given ivr enabled & phone number then option is not shown`() {
+        configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
         configureCardFeatures()
 
         sut = createSut()
@@ -373,12 +387,80 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         assertTrue(action is Action.CustomerSupportEmail)
     }
 
+    @Test
+    fun `given correct sim when click on IVR then call action`() {
+        configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
+        configureCardFeatures()
+        whenever(telephonyEnabledChecker.isEnabled()).thenReturn(true)
+        sut = createSut()
+
+        sut.onIvrSupportClicked()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.CallIvr)
+        assertEquals(phoneNumber, action.phoneNumber)
+    }
+
+    @Test
+    fun `given no sim when click on IVR then Show no sim error`() {
+        configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
+        configureCardFeatures()
+        whenever(telephonyEnabledChecker.isEnabled()).thenReturn(false)
+        sut = createSut()
+
+        sut.onIvrSupportClicked()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.ShowNoSimInsertedError)
+    }
+
+    @Test
+    fun `given GetPinFeatureType-Voip when getPin is clicked then CallVoIpListenPin`() {
+        configureGetPin(FeatureStatus.ENABLED, FeatureType.Voip())
+        configureCardFeatures()
+        sut = createSut()
+
+        sut.getPinPressed()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.CallVoIpListenPin)
+    }
+
+    @Test
+    fun `given GetPinFeatureType-IVR and sim correct when getPin is clicked then CallIvr`() {
+        configureGetPin(FeatureStatus.ENABLED, FeatureType.Ivr(phoneNumber))
+        configureCardFeatures()
+        whenever(telephonyEnabledChecker.isEnabled()).thenReturn(true)
+
+        sut = createSut()
+
+        sut.getPinPressed()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.CallIvr)
+        assertEquals(phoneNumber, action.phoneNumber)
+    }
+
+    @Test
+    fun `given GetPinFeatureType-IVR and no sim when getPin is clicked then ShowNoSimInsertedError`() {
+        configureGetPin(FeatureStatus.ENABLED, FeatureType.Ivr(phoneNumber))
+        configureCardFeatures()
+        whenever(telephonyEnabledChecker.isEnabled()).thenReturn(false)
+        sut = createSut()
+
+        sut.getPinPressed()
+        val action = sut.action.getOrAwaitValue()
+
+        assertTrue(action is Action.ShowNoSimInsertedError)
+    }
+
     private fun createSut() =
         CardSettingsViewModel(card, cardProduct, projectConfiguration, analytics, aptoPlatform, aptoUiSdkProtocol)
 
-    private fun configureGetPin(statusResult: FeatureStatus) {
+    private fun configureGetPin(statusResult: FeatureStatus, featureType: FeatureType?) {
         val feature = mock<GetPin>() {
             on { status } doReturn statusResult
+            featureType?.let { on { type } doReturn featureType }
         }
         whenever(cardFeatures.getPin).thenReturn(feature)
     }
@@ -390,9 +472,10 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         whenever(cardFeatures.setPin).thenReturn(feature)
     }
 
-    private fun configureIvrSupport(statusResult: FeatureStatus) {
+    private fun configureIvrSupport(statusResult: FeatureStatus, phone: PhoneNumber?) {
         val feature = mock<Ivr>() {
             on { status } doReturn statusResult
+            on { ivrPhone } doReturn phone
         }
         whenever(cardFeatures.ivrSupport).thenReturn(feature)
     }

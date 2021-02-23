@@ -6,13 +6,13 @@ import android.view.View
 import android.widget.Switch
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.mobile.data.card.Card
-import com.aptopayments.mobile.data.card.FeatureType.*
 import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.voip.Action.LISTEN_PIN
 import com.aptopayments.mobile.extension.localized
+import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.AptoUiSdk
@@ -25,6 +25,7 @@ import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
 import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.MessageBanner.MessageType
+import com.aptopayments.sdk.utils.PhoneDialer
 import com.aptopayments.sdk.utils.SendEmailUtil
 import com.aptopayments.sdk.utils.chatbot.ChatbotActivityLauncher
 import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
@@ -90,6 +91,9 @@ internal class CardSettingsFragment :
                     is Action.CardStateChanged -> delegate?.onCardStateChanged()
                     is Action.SetCardPasscodeErrorDisabled -> cardPasscodeErrorCardDisabled()
                     is Action.SetCardPasscode -> delegate?.onSetCardPasscode()
+                    is Action.CallIvr -> callIvr(it.phoneNumber)
+                    is Action.ShowNoSimInsertedError -> showNoSimInsertedError()
+                    is Action.CallVoIpListenPin -> delegate?.showVoip(action = LISTEN_PIN)
                 }
             }
         }
@@ -123,7 +127,6 @@ internal class CardSettingsFragment :
         super.setupListeners()
         iv_close_button.setOnClickListenerSafe { onBackPressed() }
         rl_add_funds.setOnClickListenerSafe { addFundsPressed() }
-        rl_get_pin.setOnClickListenerSafe { getPinPressed() }
         rl_set_pin.setOnClickListenerSafe { setPinPressed() }
         rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             lockUnlockCard(value)
@@ -132,7 +135,6 @@ internal class CardSettingsFragment :
             storeDetailedCardActivityPreference(value)
         }
         rl_report_stolen_card.setOnClickListenerSafe { reportLostOrStolenCard() }
-        rl_ivr_support.setOnClickListenerSafe { callIvrSupport() }
         rl_statement.setOnClickListenerSafe { onStatementPressed() }
         rl_google_pay.setOnClickListenerSafe { onGooglePayPressed() }
     }
@@ -181,30 +183,15 @@ internal class CardSettingsFragment :
         delegate?.onAddFunds()
     }
 
-    private fun getPinPressed() {
-        when (val type = card.features?.getPin?.type) {
-            is Voip -> delegate?.showVoip(action = LISTEN_PIN)
-            is Ivr -> {
-                context?.let { context ->
-                    type.ivrPhone?.let {
-                        viewModel.dial(phone = it, from = context)
-                    }
-                }
-            }
-            // Unsupported get pin actions
-            is Api -> {
-            }
-            is Unknown -> {
-            }
-        }
-    }
-
     private fun setPinPressed() = delegate?.onSetPin()
 
-    private fun callIvrSupport() = context?.let { context ->
-        card.features?.ivrSupport?.ivrPhone?.let { phoneNUmber ->
-            viewModel.dial(phone = phoneNUmber, from = context)
-        }
+    private fun callIvr(phoneNumber: PhoneNumber) = context?.let { context ->
+        val phoneDialer = PhoneDialer(context)
+        phoneDialer.dialPhone(phoneNumber.toStringRepresentation(), null)
+    }
+
+    private fun showNoSimInsertedError() {
+        notify("card_settings_help_ivr_support_no_sim".localized(), MessageType.ERROR)
     }
 
     private fun onStatementPressed() {
