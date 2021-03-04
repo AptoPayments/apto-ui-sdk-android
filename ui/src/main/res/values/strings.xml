@@ -207,20 +207,11 @@
     <string name="select_balance_store_oauth_confirm_updated_pii_message_message">Looks like you’ve updated your personal details in your account.</string>
     <string name="select_balance_store_login_error_identity_not_verified_message">Account not verified</string>
 
-    <!-- Disclaimers -->
-    <string name="disclaimer_accept">Accept</string>
-    <string name="disclaimer_cancel">Cancel</string>
-    <string name="disclaimer_error">Error loading disclaimer</string>
-    <string name="disclaimer_alert_title">Disclosure</string>
-    <string name="disclaimer_alert_message">Are you sure you do not want to agree to the Disclosure?</string>
-    <string name="disclaimer_alert_confirm">CONFIRM</string>
-    <string name="disclaimer_alert_cancel">CANCEL</string>
-
-    <!-- Disclaimer Theme 2 -->
-    <string name="disclaimer_disclaimer_call_to_action_title">I agree</string>
-    <string name="disclaimer_disclaimer_cancel_action_button">I do not agree to the Cardholder agreement</string>
-    <string name="disclaimer_disclaimer_title">Cardholder agreement</string>
-    <string name="disclaimer_disclaimer_cancel_action_title">Cardholder agreement</string>
+    <!-- Disclaimer -->
+    <string name="disclaimer_disclaimer_call_to_action_title">Accept</string>
+    <string name="disclaimer_disclaimer_cancel_action_button">Decline</string>
+    <string name="disclaimer_disclaimer_title">Your Cardholder agreement</string>
+    <string name="disclaimer_disclaimer_cancel_action_title">Legal agreement</string>
     <string name="disclaimer_disclaimer_cancel_action_message">Are you sure you do not want to agree to the Cardholder agreement?</string>
     <string name="disclaimer_disclaimer_cancel_action_ok_button">Confirm</string>
     <string name="disclaimer_disclaimer_cancel_action_cancel_button">Cancel</string>
@@ -674,9 +665,10 @@
     <string name="manage_card_get_pin_voip_title">Card Help</string>
     <string name="manage_card_get_pin_voip_message">Calling..</string>
     <string name="manage_card_get_pin_voip_speaker">speaker</string>
-    <string name="manage_card_get_pin_voip_mute">mute</string>
-    <string name="manage_card_get_pin_voip_keypad">keypad</string>
-    <string name="manage_card_get_pin_voip_hide">hide</string>
+    <string name="manage_card_get_pin_voip_mute">Mute</string>
+    <string name="manage_card_get_pin_voip_keypad">Keypad</string>
+    <string name="manage_card_get_pin_voip_hide">Hide</string>
+    <string name="manage_card_get_pin_voip_reconnecting">Reconnecting</string>
 
     <!--Monthly Statements-->
     <string name="monthly_statements_list_title">Monthly Statements</string>
@@ -779,6 +771,33 @@
     <string name="load_funds_add_card_onboarding_explanation">You can instantly transfer funds from your existing bank debit card to your &lt;&lt;VALUE&gt;&gt; card account. Please note that transfers are reviewed and they can be delayed or declined if we suspect risks.</string>
     <string name="load_funds_add_card_onboarding_explanation_2">This transaction will appear in your bank account statement as: &lt;&lt;VALUE&gt;&gt;</string>
     <string name="load_funds_add_card_onboarding_primary_cta">Continue</string>
+
+    <string name="load_funds_selector_dialog_title">Add Money</string>
+    <string name="load_funds_selector_dialog_card_title">Debit Card Transfer</string>
+    <string name="load_funds_selector_dialog_card_description">Instant deposit with a debit card</string>
+    <string name="load_funds_selector_dialog_direct_deposit_title">Direct Deposit (ACH)</string>
+    <string name="load_funds_selector_dialog_direct_deposit_description">ACH transfer from an external account (2–3 days)</string>
+
+    <string name="load_funds_direct_deposit_instructions_title">Direct deposit or ACH</string>
+    <string name="load_funds_direct_deposit_instructions_description">Login to your external account to submit a direct deposit account request or ACH bank transfer. You\'ll need the information below to complete the set up:</string>
+    <string name="load_funds_direct_deposit_instructions_bank_name_title">Bank Name</string>
+    <string name="load_funds_direct_deposit_instructions_bank_name_description">Evolve Bank &amp; Trust</string>
+    <string name="load_funds_direct_deposit_instructions_account_number_title">Account Number</string>
+    <string name="load_funds_direct_deposit_instructions_routing_number_title">Routing Number</string>
+    <string name="load_funds_direct_deposit_instructions_offered_by">The &lt;&lt;VALUE&gt;&gt; account is offered by Evolve Bank &amp; Trust.</string>
+    <string name="load_funds_direct_deposit_instructions_copied_to_clipboard">Copied value to clipboard</string>
+
+    <string name="load_funds_ach_account_details_dialog_title">Account Details</string>
+    <string name="load_funds_ach_account_details_dialog_account_number">ACH Account Number</string>
+    <string name="load_funds_ach_account_details_dialog_routing_number">Routing Number</string>
+    <string name="load_funds_ach_account_details_dialog_offered_by">The &lt;&lt;VALUE&gt;&gt; account is offered by Evolve Bank &amp; Trust.</string>
+    <string name="load_funds_ach_account_details_copied_to_clipboard">Copied value to clipboard</string>
+
+    <string name="load_funds_direct_deposit_disclaimer_title">Legal</string>
+    <string name="load_funds_direct_deposit_disclaimer_accept_action_button">Accept</string>
+    <string name="load_funds_direct_deposit_disclaimer_cancel_action_button">Decline</string>
+    <string name="load_funds_direct_deposit_disclaimer_alert_title">Are you sure?</string>
+    <string name="load_funds_direct_deposit_disclaimer_alert_message">If you reject the agreement, then you will not be able to fund your card using ACH.</string>
 
     <!-- PCI SDK -->
     <string name="pcisdk_input_code_message">Enter the verification code we just sent you via SMS</string>

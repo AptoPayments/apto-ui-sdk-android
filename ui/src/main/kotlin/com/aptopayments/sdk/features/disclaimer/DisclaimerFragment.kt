@@ -13,14 +13,18 @@ import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_disclaimer.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.Serializable
 
 private const val CONTENT_KEY = "CONTENT"
+private const val CONFIGURATION_KEY = "CONFIGURATION"
 
 internal class DisclaimerFragment :
     BaseFragment(),
     DisclaimerContract.View,
     ContentPresenterContract.ViewActions {
     private lateinit var content: Content
+    private lateinit var configuration: Configuration
+
     private val viewModel: DisclaimerViewModel by viewModel()
 
     override var delegate: DisclaimerContract.Delegate? = null
@@ -31,6 +35,7 @@ internal class DisclaimerFragment :
 
     override fun setUpArguments() {
         content = requireArguments()[CONTENT_KEY] as Content
+        configuration = requireArguments()[CONFIGURATION_KEY] as Configuration
     }
 
     override fun setupViewModel() {
@@ -52,6 +57,9 @@ internal class DisclaimerFragment :
             tv_disclaimer_title.remove()
             (content as Content.Native).backgroundImage?.let { iv_background.loadFromUrl(it.toString()) }
         }
+        tv_accept_disclaimer.text = configuration.screenAcceptAgreement.localized()
+        tv_disclaimer_title.text = configuration.screenTitle.localized()
+        tv_reject_disclaimer.text = configuration.screenRejectAgreement.localized()
     }
 
     private fun setUpTheme() {
@@ -67,11 +75,11 @@ internal class DisclaimerFragment :
         tv_accept_disclaimer.setOnClickListenerSafe { delegate?.onDisclaimerAccepted() }
         tv_reject_disclaimer.setOnClickListenerSafe {
             confirm(
-                title = "disclaimer.disclaimer.cancel_action.title".localized(),
-                text = "disclaimer.disclaimer.cancel_action.message".localized(),
+                title = configuration.alertTitle.localized(),
+                text = configuration.alertText.localized(),
                 confirm = "disclaimer.disclaimer.cancel_action.ok_button".localized(),
                 cancel = "disclaimer.disclaimer.cancel_action.cancel_button".localized(),
-                onConfirm = { delegate?.onDisclaimerRejected() },
+                onConfirm = { delegate?.onDisclaimerDeclined() },
                 onCancel = { }
             )
         }
@@ -91,9 +99,20 @@ internal class DisclaimerFragment :
 
     override fun viewLoaded() = viewModel.viewLoaded()
 
+    data class Configuration(
+        val screenTitle: String = "disclaimer_disclaimer_title",
+        val screenAcceptAgreement: String = "disclaimer_disclaimer_call_to_action_title",
+        val screenRejectAgreement: String = "disclaimer_disclaimer_cancel_action_button",
+        val alertTitle: String = "disclaimer.disclaimer.cancel_action.title",
+        val alertText: String = "disclaimer.disclaimer.cancel_action.message"
+    ) : Serializable
+
     companion object {
-        fun newInstance(content: Content) = DisclaimerFragment().apply {
-            arguments = Bundle().apply { putSerializable(CONTENT_KEY, content) }
+        fun newInstance(content: Content, configuration: Configuration) = DisclaimerFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(CONTENT_KEY, content)
+                putSerializable(CONFIGURATION_KEY, configuration)
+            }
         }
     }
 }

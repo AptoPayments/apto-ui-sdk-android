@@ -6,6 +6,7 @@ import com.aptopayments.mobile.data.config.Branding
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
+import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
 import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus
@@ -241,6 +242,26 @@ class TestDataProvider {
             state = Transaction.TransactionState.COMPLETE,
             adjustments = null,
             fundingSourceName = null
+        )
+
+        fun provideBalance(
+            id: String = "",
+            state: Balance.BalanceState? = null,
+            type: String = "",
+            fundingSourceType: String = "",
+            balance: Money? = null,
+            amountSpendable: Money? = null,
+            amountHeld: Money? = null,
+            custodianWallet: CustodianWallet? = null
+        ) = Balance(
+            id = id,
+            state = state,
+            type = type,
+            fundingSourceType = fundingSourceType,
+            balance = balance,
+            amountSpendable = amountSpendable,
+            amountHeld = amountHeld,
+            custodianWallet = custodianWallet
         )
     }
 }

@@ -30,6 +30,15 @@ internal abstract class UseCaseAsync<out Type, in Params> where Type : Any {
     suspend operator fun invoke(params: Params): Either<Failure, Type> {
         return run(params)
     }
+
+    operator fun invoke(params: Params, onResult: (Either<Failure, Type>) -> Unit = {}) {
+        GlobalScope.launch {
+            val result = run(params)
+            launch(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
+    }
 }
 
 internal abstract class UseCaseAsyncWithoutParams<out Type> where Type : Any {

@@ -7,6 +7,6 @@ interface DisclaimerContract {
 
     interface Delegate {
         fun onDisclaimerAccepted()
-        fun onDisclaimerRejected()
+        fun onDisclaimerDeclined()
     }
 }

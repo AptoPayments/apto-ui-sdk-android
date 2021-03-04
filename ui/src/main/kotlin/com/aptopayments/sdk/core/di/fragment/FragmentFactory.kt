@@ -34,6 +34,7 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListContract
 import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
+import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsDialogContract
 import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
 import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressContract
 import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateContract
@@ -44,6 +45,9 @@ import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneContract
 import com.aptopayments.sdk.features.issuecard.IssueCardContract
 import com.aptopayments.sdk.features.kyc.KycStatusContract
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsContract
+import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsContract
+import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
+import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogContract
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardPaymentSourceContract
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingContract
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListContract
@@ -74,7 +78,12 @@ internal interface FragmentFactory {
     fun kycStatusFragment(kycStatus: KycStatus, cardID: String, tag: String): KycStatusContract.View
     fun noNetworkFragment(tag: String): NoNetworkContract.View
     fun maintenanceFragment(tag: String): MaintenanceContract.View
-    fun disclaimerFragment(content: Content, tag: String): DisclaimerContract.View
+    fun disclaimerFragment(
+        content: Content,
+        config: DisclaimerFragment.Configuration,
+        tag: String
+    ): DisclaimerContract.View
+
     fun oauthConnectFragment(config: OAuthConfig, tag: String): OAuthConnectContract.View
     fun contentPresenterFragment(content: Content, title: String, tag: String): ContentPresenterContract.View
     fun oauthVerifyFragment(
@@ -150,4 +159,7 @@ internal interface FragmentFactory {
     fun addFundsFragment(cardId: String, tag: String): AddFundsContract.View
     fun addFundsResultFragment(cardId: String, payment: Payment, tag: String): AddFundsResultFragment
     fun cardPasscodeStartFragment(cardId: String, tag: String): CardPasscodeStartFragment
+    fun addFundsSelectorDialogFragment(tag: String): AddFundsSelectorDialogContract.View
+    fun directDepositInstructionsFragment(cardId: String, tag: String): DirectDepositInstructionsContract.View
+    fun achAccountDetailsDialogFragment(cardId: String, tag: String): AchAccountDetailsDialogContract.View
 }

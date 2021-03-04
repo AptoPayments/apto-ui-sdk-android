@@ -45,6 +45,7 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
     private var startedAt: LocalTime? = null
     private var onRinging: (() -> Unit)? = null
     private var onEstablished: (() -> Unit)? = null
+    private var onReconnecting: (() -> Unit)? = null
     private var onComplete: (() -> Unit)? = null
     private var onError: ((String?) -> Unit)? = null
 
@@ -53,11 +54,13 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
         destination: VoipCall,
         onRinging: () -> Unit,
         onEstablished: () -> Unit,
+        onReconnecting: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) {
         this.onRinging = onRinging
         this.onEstablished = onEstablished
+        this.onReconnecting = onReconnecting
         this.onComplete = onComplete
         this.onError = onError
         val params: HashMap<String, String> = HashMap()
@@ -82,6 +85,14 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
     override fun onConnected(call: Call) {
         activeCall = call
         startedAt = LocalTime.now()
+        onEstablished?.invoke()
+    }
+
+    override fun onReconnecting(call: Call, callException: CallException) {
+        onReconnecting?.invoke()
+    }
+
+    override fun onReconnected(call: Call) {
         onEstablished?.invoke()
     }
 

@@ -1,12 +1,8 @@
 package com.aptopayments.sdk.features.card.fundingsources
 
-import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.view.Window
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,14 +63,8 @@ internal class FundingSourceDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        positionDialog(dialog!!.window!!)
+        positionDialog()
         viewModel.viewReady(mAccountId, mSelectedBalanceID)
-    }
-
-    private fun positionDialog(window: Window) {
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        window.setGravity(Gravity.BOTTOM)
-        window.attributes.y = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     }
 
     private fun handleBalanceList(balanceList: List<FundingSourceListItem>?) {

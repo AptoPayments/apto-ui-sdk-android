@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_card_visa" />
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/four_dots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,35 +37,8 @@
             app:layout_constraintStart_toEndOf="@id/payment_method_logo"
             app:visibleIf="@{element.showFourDots}">
 
-            <ImageView
-                android:id="@+id/four_dots_1"
-                android:layout_width="@dimen/card_dots_size"
-                android:layout_height="@dimen/card_dots_size"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_circle" />
-
-            <ImageView
-                android:id="@+id/four_dots_2"
-                android:layout_width="@dimen/card_dots_size"
-                android:layout_height="@dimen/card_dots_size"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_circle" />
-
-            <ImageView
-                android:id="@+id/four_dots_3"
-                android:layout_width="@dimen/card_dots_size"
-                android:layout_height="@dimen/card_dots_size"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_circle" />
-
-            <ImageView
-                android:id="@+id/four_dots_4"
-                android:layout_width="@dimen/card_dots_size"
-                android:layout_height="@dimen/card_dots_size"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_circle" />
-
-        </LinearLayout>
+            <include layout="@layout/view_four_dots" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/payment_method_title"

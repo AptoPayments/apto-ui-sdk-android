@@ -2,6 +2,7 @@ package com.aptopayments.sdk.features.managecard
 
 import androidx.annotation.VisibleForTesting
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.data.card.Disclaimer
 import com.aptopayments.mobile.data.card.KycStatus
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.content.Content
@@ -14,6 +15,9 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
+import com.aptopayments.sdk.core.usecase.AcceptAchDisclaimerUseCase
+import com.aptopayments.sdk.core.usecase.AcceptAchDisclaimerUseCase.Params
+import com.aptopayments.sdk.core.usecase.DeclineAchDisclaimerUseCase
 import com.aptopayments.sdk.features.addbalance.AddBalanceFlow
 import com.aptopayments.sdk.features.card.account.AccountSettingsFlow
 import com.aptopayments.sdk.features.card.activatephysicalcard.ActivatePhysicalCardFlow
@@ -27,6 +31,10 @@ import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.kyc.KycStatusFlow
 import com.aptopayments.sdk.features.loadfunds.AddFundsFlow
+import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsContract
+import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
+import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
+import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.MessageBanner
@@ -39,6 +47,9 @@ private const val CARD_SETTINGS_TAG = "CardSettingsFragment"
 private const val FUNDING_SOURCE_DIALOG_TAG = "FundingSourceDialogFragment"
 private const val CONTENT_PRESENTER_TAG = "ContentPresenterFragment"
 private const val WAITLIST_TAG = "WaitlistFragment"
+private const val ADD_FUNDS_SELECTOR_DIALOG_TAG = "AddFundsSelectorDialogFragment"
+private const val DIRECT_DEPOSIT_INSTRUCTIONS_TAG = "DirectDepositInstructionsFragment"
+private const val DISCLAIMER_TAG = "DisclaimerFragment"
 
 internal class ManageCardFlow(
     val cardId: String,
@@ -50,9 +61,16 @@ internal class ManageCardFlow(
     CardSettingsContract.Delegate,
     ContentPresenterContract.Delegate,
     TransactionDetailsContract.Delegate,
-    WaitlistContract.Delegate {
+    WaitlistContract.Delegate,
+    AddFundsSelectorDialogContract.Delegate,
+    DirectDepositInstructionsContract.Delegate,
+    DisclaimerContract.Delegate {
 
+    @VisibleForTesting(otherwise = Modifier.PRIVATE)
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
+
+    private val acceptAchDisclaimerUseCase: AcceptAchDisclaimerUseCase by inject()
+    private val declineAchDisclaimerUseCase: DeclineAchDisclaimerUseCase by inject()
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     val manageCardFragment: ManageCardContract.View?
@@ -117,6 +135,12 @@ internal class ManageCardFlow(
             it.delegate = this
         }
         (fragmentWithTag(CONTENT_PRESENTER_TAG) as? ContentPresenterContract.View)?.let {
+            it.delegate = this
+        }
+        (fragmentDialogWithTag(ADD_FUNDS_SELECTOR_DIALOG_TAG) as? AddFundsSelectorDialogContract.View)?.let {
+            it.delegate = this
+        }
+        (fragmentDialogWithTag(DIRECT_DEPOSIT_INSTRUCTIONS_TAG) as? DirectDepositInstructionsContract.View)?.let {
             it.delegate = this
         }
     }
@@ -332,6 +356,10 @@ internal class ManageCardFlow(
     }
 
     override fun onAddFunds() {
+        startAddFundsFlow()
+    }
+
+    private fun startAddFundsFlow() {
         val flow = AddFundsFlow(
             cardId = cardId,
             onClose = { popFlow(true) }
@@ -342,6 +370,70 @@ internal class ManageCardFlow(
     override fun onSetCardPasscode() {
         val flow = CardPasscodeFlow(cardId = cardId) { popAnimatedFlow() }
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
+    }
+
+    override fun showAddFundsSelector() {
+        val fragment = fragmentFactory.addFundsSelectorDialogFragment(ADD_FUNDS_SELECTOR_DIALOG_TAG)
+        fragment.delegate = this
+        push(fragment as BaseDialogFragment)
+    }
+
+    override fun showAddFundsDisclaimer(disclaimer: Disclaimer?) {
+        val fragment = fragmentFactory.disclaimerFragment(
+            disclaimer?.content!!,
+            DisclaimerFragment.Configuration(
+                screenTitle = "load_funds_direct_deposit_disclaimer_title",
+                screenAcceptAgreement = "load_funds_direct_deposit_disclaimer_accept_action_button",
+                screenRejectAgreement = "load_funds_direct_deposit_disclaimer_cancel_action_button",
+                alertTitle = "load_funds_direct_deposit_disclaimer_alert_title",
+                alertText = "load_funds_direct_deposit_disclaimer_alert_message"
+            ),
+            DISCLAIMER_TAG
+        )
+        fragment.delegate = this
+        push(fragment as BaseFragment)
+    }
+
+    override fun onDisclaimerAccepted() {
+        showLoading()
+        acceptAchDisclaimerUseCase.invoke(Params(cardId)) { result ->
+            result.either(
+                { handleFailure(it) },
+                {
+                    aptoPlatformProtocol.fetchCard(cardId, true) { result ->
+                        hideLoading()
+                        popFragment()
+                        result.runIfRight { showAddFundsSelector() }
+                    }
+                }
+            )
+        }
+    }
+
+    override fun onDisclaimerDeclined() {
+        showLoading()
+        declineAchDisclaimerUseCase.invoke(DeclineAchDisclaimerUseCase.Params(cardId)) {
+            hideLoading()
+            popFragment()
+            startAddFundsFlow()
+        }
+    }
+
+    override fun addFundsSelectorCardClicked() {
+        popDialogFragmentWithTag(ADD_FUNDS_SELECTOR_DIALOG_TAG)
+        startAddFundsFlow()
+    }
+
+    override fun addFundsSelectorAchClicked() {
+        popDialogFragmentWithTag(ADD_FUNDS_SELECTOR_DIALOG_TAG)
+
+        val fragment = fragmentFactory.directDepositInstructionsFragment(cardId, DIRECT_DEPOSIT_INSTRUCTIONS_TAG)
+        fragment.delegate = this
+        push(fragment as BaseFragment)
+    }
+
+    override fun onBackFromDirectDepositInstructions() {
+        popFragment()
     }
 
     private fun popAnimatedFlow() {

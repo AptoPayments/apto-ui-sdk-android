@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/_3sdp"
+    android:paddingEnd="12dp"
+    android:background="@drawable/dialog_rounded_background"
+    android:orientation="vertical">
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/load_funds_selector_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="19dp"
+        app:localize="@string/load_funds_selector_dialog_title" />
+
+    <include
+        layout="@layout/include_divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line_height" />
+
+    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+        android:id="@+id/load_funds_selector_card"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/section_option_height"
+        app:optionDescription="load_funds_selector_dialog_card_description"
+        app:optionTitle="load_funds_selector_dialog_card_title" />
+
+    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+        android:id="@+id/load_funds_selector_ach"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/section_option_height"
+        app:optionShowDivider="false"
+        app:optionDescription="load_funds_selector_dialog_direct_deposit_description"
+        app:optionTitle="load_funds_selector_dialog_direct_deposit_title" />
+
+</LinearLayout>

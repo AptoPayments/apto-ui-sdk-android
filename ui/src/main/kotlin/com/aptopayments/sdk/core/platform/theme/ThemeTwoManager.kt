@@ -27,6 +27,7 @@ import com.aptopayments.sdk.core.extension.setColor
 import com.aptopayments.sdk.core.ui.StatusBarUtil
 import com.aptopayments.sdk.utils.CustomTypefaceSpan
 import com.aptopayments.sdk.utils.FontsUtil
+import com.aptopayments.sdk.utils.FontsUtil.FontType
 import com.aptopayments.sdk.utils.FontsUtil.FontType.*
 import com.aptopayments.sdk.utils.extensions.toDp
 import com.google.android.material.appbar.AppBarLayout
@@ -108,6 +109,14 @@ internal object ThemeTwoManager : ThemeManager {
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
+        }
+    }
+
+    override fun customizeRegularTertiaryTextLabel(textView: TextView) {
+        setFontType(textView, REGULAR)
+        textView.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            setTextColor(UIConfig.textTertiaryColor)
         }
     }
 
@@ -220,8 +229,8 @@ internal object ThemeTwoManager : ThemeManager {
         }
     }
 
-    override fun customizeSectionOptionTitle(textView: TextView) {
-        setFontType(textView, MEDIUM)
+    override fun customizeSectionOptionTitle(textView: TextView, type: FontType) {
+        setFontType(textView, type)
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTextColor(UIConfig.textSecondaryColor)
@@ -404,7 +413,7 @@ internal object ThemeTwoManager : ThemeManager {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
     }
 
-    private fun setFontType(textView: TextView, fontType: FontsUtil.FontType) {
+    private fun setFontType(textView: TextView, fontType: FontType) {
         FontsUtil.getFontOfType(fontType)?.let {
             textView.typeface = it
         }

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.aptopayments.sdk.utils.extensions.StringKt" />
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_llsdk_toolbar_layout">
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/direct_deposit_instructions_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="load_funds_direct_deposit_instructions_description"
+                tools:text="@string/load_funds_direct_deposit_instructions_description" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/direct_deposit_instructions_name_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="start|center_vertical"
+                android:minHeight="56dp"
+                app:layout_constraintEnd_toStartOf="@+id/direct_deposit_instructions_name_info"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/direct_deposit_instructions_description"
+                app:localize="load_funds_direct_deposit_instructions_bank_name_title" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/direct_deposit_instructions_name_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                app:layout_constraintBottom_toBottomOf="@+id/direct_deposit_instructions_name_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/direct_deposit_instructions_name_title"
+                app:localize="load_funds_direct_deposit_instructions_bank_name_description" />
+
+            <include
+                android:id="@+id/direct_deposit_instructions_bank_name_divider"
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/direct_deposit_instructions_name_title" />
+
+            <RelativeLayout
+                android:id="@+id/direct_deposit_instructions_account_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/direct_deposit_instructions_bank_name_divider">
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/direct_deposit_instructions_account_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="56dp"
+                    app:localize="load_funds_direct_deposit_instructions_account_number_title" />
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/direct_deposit_instructions_account_number_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/direct_deposit_instructions_account_number_title"
+                    android:gravity="end"
+                    android:text="@{viewModel.uiState.accountNumber}"
+                    tools:text="1234567" />
+
+                <include
+                    android:id="@+id/direct_deposit_instructions_account_number_divider"
+                    layout="@layout/include_divider_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_line_height"
+                    android:layout_below="@id/direct_deposit_instructions_account_number_title" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/direct_deposit_instructions_routing_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/direct_deposit_instructions_account_container">
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/direct_deposit_instructions_routing_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical|start"
+                    android:minHeight="56dp"
+                    app:localize="load_funds_direct_deposit_instructions_routing_number_title" />
+
+                <com.aptopayments.sdk.ui.views.AptoTextView
+                    android:id="@+id/direct_deposit_instructions_routing_number_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/direct_deposit_instructions_routing_number_title"
+                    android:gravity="end"
+                    android:text="@{viewModel.uiState.routingNumber}"
+                    tools:text="1234567" />
+
+                <include
+                    android:id="@+id/direct_deposit_instructions_routing_number_divider"
+                    layout="@layout/include_divider_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_line_height"
+                    android:layout_below="@id/direct_deposit_instructions_routing_number_title" />
+            </RelativeLayout>
+
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/direct_deposit_instructions_lower_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="24dp"
+                android:text='@{StringKt.localizeAndSetValue("load_funds_direct_deposit_instructions_offered_by", viewModel.uiState.cardName)}'
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/direct_deposit_instructions_routing_container"
+                tools:text="@string/load_funds_direct_deposit_instructions_offered_by" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

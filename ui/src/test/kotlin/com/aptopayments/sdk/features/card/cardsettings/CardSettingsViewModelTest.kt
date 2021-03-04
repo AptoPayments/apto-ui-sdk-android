@@ -46,6 +46,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     private val cardFeatures = mock<Features>()
     private val card = mock<Card> {
         on { accountID } doReturn CARD_ID
+        on { features } doReturn cardFeatures
     }
     private val projectConfiguration = mock<ProjectConfiguration>()
     private val cardProduct = mock<CardProduct>()
@@ -129,7 +130,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when getPin is disabled then option is not shown`() {
         configureGetPin(FeatureStatus.DISABLED, null)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -139,7 +139,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when getPin is enabled then option is shown`() {
         configureGetPin(FeatureStatus.ENABLED, FeatureType.Voip())
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -149,7 +148,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when setPin is disabled then option is not shown`() {
         configureSetPin(FeatureStatus.DISABLED)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -159,7 +157,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when setPin is enabled then option is shown`() {
         configureSetPin(FeatureStatus.ENABLED)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -169,7 +166,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when ivr is disabled then option is not shown`() {
         configureIvrSupport(FeatureStatus.DISABLED, null)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -179,7 +175,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given ivr enabled & no phone number then option is not shown`() {
         configureIvrSupport(FeatureStatus.ENABLED, null)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -189,7 +184,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given ivr enabled & phone number then option is not shown`() {
         configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -199,7 +193,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when funding is disabled then option is not shown`() {
         configureFunding(false)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -209,7 +202,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when funding is enabled then option is shown`() {
         configureFunding(true)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -219,7 +211,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when passcode is disabled then option is not shown`() {
         configurePasscode(false)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -229,7 +220,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `when passcode is enabled then option is shown`() {
         configurePasscode(true)
-        configureCardFeatures()
 
         sut = createSut()
 
@@ -387,10 +377,12 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         assertTrue(action is Action.CustomerSupportEmail)
     }
 
+    private fun createSut() =
+        CardSettingsViewModel(card, cardProduct, projectConfiguration, analytics, aptoPlatform, aptoUiSdkProtocol)
+
     @Test
     fun `given correct sim when click on IVR then call action`() {
         configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
-        configureCardFeatures()
         whenever(telephonyEnabledChecker.isEnabled()).thenReturn(true)
         sut = createSut()
 
@@ -404,7 +396,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given no sim when click on IVR then Show no sim error`() {
         configureIvrSupport(FeatureStatus.ENABLED, phoneNumber)
-        configureCardFeatures()
         whenever(telephonyEnabledChecker.isEnabled()).thenReturn(false)
         sut = createSut()
 
@@ -417,7 +408,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given GetPinFeatureType-Voip when getPin is clicked then CallVoIpListenPin`() {
         configureGetPin(FeatureStatus.ENABLED, FeatureType.Voip())
-        configureCardFeatures()
         sut = createSut()
 
         sut.getPinPressed()
@@ -429,7 +419,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given GetPinFeatureType-IVR and sim correct when getPin is clicked then CallIvr`() {
         configureGetPin(FeatureStatus.ENABLED, FeatureType.Ivr(phoneNumber))
-        configureCardFeatures()
         whenever(telephonyEnabledChecker.isEnabled()).thenReturn(true)
 
         sut = createSut()
@@ -444,7 +433,6 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     @Test
     fun `given GetPinFeatureType-IVR and no sim when getPin is clicked then ShowNoSimInsertedError`() {
         configureGetPin(FeatureStatus.ENABLED, FeatureType.Ivr(phoneNumber))
-        configureCardFeatures()
         whenever(telephonyEnabledChecker.isEnabled()).thenReturn(false)
         sut = createSut()
 
@@ -454,9 +442,44 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         assertTrue(action is Action.ShowNoSimInsertedError)
     }
 
-    private fun createSut() =
-        CardSettingsViewModel(card, cardProduct, projectConfiguration, analytics, aptoPlatform, aptoUiSdkProtocol)
+    @Test
+    fun `when addFundsPressed and null AchAccount Feature then AddFunds action`() {
+        sut = createSut()
 
+        sut.onAddFundsPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.AddFunds)
+    }
+
+    @Test
+    fun `when addFundsPressed and AchAccount disabled then AddFunds action`() {
+        configureAchAccount(enabled = false, provisioned = false)
+        sut = createSut()
+
+        sut.onAddFundsPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.AddFunds)
+    }
+
+    @Test
+    fun `given ach enabled an set when addFundsPressed then ShowAddFundsSelector action`() {
+        configureAchAccount(enabled = true, provisioned = true)
+        sut = createSut()
+
+        sut.onAddFundsPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.ShowAddFundsSelector)
+    }
+
+    @Test
+    fun `given ach enabled but not set when addFundsPressed then ShowAddFundsSelector action`() {
+        configureAchAccount(enabled = true, provisioned = false)
+        sut = createSut()
+
+        sut.onAddFundsPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.ShowAddFundsAchDisclaimer)
+    }
     private fun configureGetPin(statusResult: FeatureStatus, featureType: FeatureType?) {
         val feature = mock<GetPin>() {
             on { status } doReturn statusResult
@@ -488,13 +511,17 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     }
 
     private fun configurePasscode(enabled: Boolean) {
-        val feature = mock<CardPasscodeFeature>() {
+        val feature = mock<CardPasscodeFeature> {
             on { isEnabled } doReturn enabled
         }
         whenever(cardFeatures.passcode).thenReturn(feature)
     }
 
-    private fun configureCardFeatures() {
-        whenever(card.features).thenReturn(cardFeatures)
+    private fun configureAchAccount(enabled: Boolean, provisioned: Boolean) {
+        val feature = mock<AchAccountFeature> {
+            on { isEnabled } doReturn enabled
+            on { isAccountProvisioned } doReturn provisioned
+        }
+        whenever(cardFeatures.achAccount).thenReturn(feature)
     }
 }

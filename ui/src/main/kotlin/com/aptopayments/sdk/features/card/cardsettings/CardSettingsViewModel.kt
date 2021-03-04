@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.data.card.Disclaimer
 import com.aptopayments.mobile.data.card.FeatureStatus
 import com.aptopayments.mobile.data.card.FeatureType
 import com.aptopayments.mobile.data.cardproduct.CardProduct
@@ -188,6 +189,19 @@ internal class CardSettingsViewModel(
         }
     }
 
+    fun onAddFundsPressed() {
+        val nextAction = if (card.features?.achAccount?.isEnabled == true) {
+            if (card.features?.achAccount?.isAccountProvisioned == true) {
+                Action.ShowAddFundsSelector
+            } else {
+                Action.ShowAddFundsAchDisclaimer(card.features?.achAccount?.disclaimer)
+            }
+        } else {
+            Action.AddFunds
+        }
+        action.postValue(nextAction)
+    }
+
     private fun onLockUnlockFinished(result: Either<Failure, Card>) {
         result.either(::handleFailure) { card ->
             updateCard(card)
@@ -223,6 +237,10 @@ internal class CardSettingsViewModel(
         }
     }
 
+    fun onPresented() {
+        aptoPlatform.fetchCard(card.accountID, forceRefresh = false) { result -> result.runIfRight { updateCard(it) } }
+    }
+
     internal sealed class Action {
         class ContentPresenter(val content: Content, val title: String) : Action()
         object ShowCardDetails : Action()
@@ -235,6 +253,9 @@ internal class CardSettingsViewModel(
         class CallIvr(val phoneNumber: PhoneNumber) : Action()
         object ShowNoSimInsertedError : Action()
         object CallVoIpListenPin : Action()
+        object AddFunds : Action()
+        object ShowAddFundsSelector : Action()
+        class ShowAddFundsAchDisclaimer(val disclaimer: Disclaimer?) : Action()
     }
 
     internal data class CardUiState(

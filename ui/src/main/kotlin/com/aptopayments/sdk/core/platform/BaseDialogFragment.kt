@@ -1,7 +1,10 @@
 package com.aptopayments.sdk.core.platform
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +13,7 @@ import androidx.fragment.app.DialogFragment
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.R
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import org.koin.android.ext.android.inject
@@ -27,7 +31,7 @@ internal abstract class BaseDialogFragment : DialogFragment() {
 
     abstract fun setUpViewModel()
 
-    abstract fun setUpListeners()
+    open fun setUpListeners() {}
 
     protected open fun viewLoaded() {}
 
@@ -67,6 +71,14 @@ internal abstract class BaseDialogFragment : DialogFragment() {
                 aptoPlatformProtocol.logout()
                 notify("session_expired_error".localized())
             }
+        }
+    }
+
+    protected fun positionDialog(gravity: Int = Gravity.BOTTOM) {
+        dialog?.window?.let {
+            it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.setGravity(gravity)
+            it.attributes.y = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
         }
     }
 

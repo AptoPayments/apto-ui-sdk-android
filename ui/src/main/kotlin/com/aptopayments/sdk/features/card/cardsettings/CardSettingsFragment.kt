@@ -73,6 +73,7 @@ internal class CardSettingsFragment :
 
     override fun onPresented() {
         super.onPresented()
+        viewModel.onPresented()
         customizeSecondaryNavigationStatusBar()
     }
 
@@ -94,6 +95,9 @@ internal class CardSettingsFragment :
                     is Action.CallIvr -> callIvr(it.phoneNumber)
                     is Action.ShowNoSimInsertedError -> showNoSimInsertedError()
                     is Action.CallVoIpListenPin -> delegate?.showVoip(action = LISTEN_PIN)
+                    is Action.AddFunds -> delegate?.onAddFunds()
+                    is Action.ShowAddFundsSelector -> delegate?.showAddFundsSelector()
+                    is Action.ShowAddFundsAchDisclaimer -> delegate?.showAddFundsDisclaimer(it.disclaimer)
                 }
             }
         }
@@ -126,7 +130,6 @@ internal class CardSettingsFragment :
     override fun setupListeners() {
         super.setupListeners()
         iv_close_button.setOnClickListenerSafe { onBackPressed() }
-        rl_add_funds.setOnClickListenerSafe { addFundsPressed() }
         rl_set_pin.setOnClickListenerSafe { setPinPressed() }
         rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
             lockUnlockCard(value)
@@ -177,10 +180,6 @@ internal class CardSettingsFragment :
 
     override fun onBackPressed() {
         delegate?.onBackFromCardSettings()
-    }
-
-    private fun addFundsPressed() {
-        delegate?.onAddFunds()
     }
 
     private fun setPinPressed() = delegate?.onSetPin()

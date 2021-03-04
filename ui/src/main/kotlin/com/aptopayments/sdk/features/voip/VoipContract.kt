@@ -24,6 +24,7 @@ interface VoipContract {
             destination: VoipCall,
             onRinging: () -> Unit,
             onEstablished: () -> Unit,
+            onReconnecting: () -> Unit,
             onComplete: () -> Unit,
             onError: (String?) -> Unit
         )

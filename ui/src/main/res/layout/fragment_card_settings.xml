@@ -50,6 +50,7 @@
                         app:optionShowDivider="false"
                         app:optionTitle="card_settings_settings_load_funds_title"
                         app:visibleIf="@{viewModel.cardUiState.showAddFunds}"
+                        app:onClickSafe="@{() -> viewModel.onAddFundsPressed()}"
                         tools:visibility="visible" />
 
                     <com.aptopayments.sdk.ui.views.SectionHeaderView

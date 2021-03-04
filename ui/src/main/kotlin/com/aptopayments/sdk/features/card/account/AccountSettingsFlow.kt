@@ -11,6 +11,7 @@ import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
+import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsDialogContract
 import com.aptopayments.sdk.features.passcode.CreatePasscodeFlow
 import com.aptopayments.sdk.features.passcode.PasscodeMode
 import com.aptopayments.sdk.utils.MessageBanner
@@ -24,7 +25,11 @@ internal class AccountSettingsFlow(
     private val cardId: String,
     private val contextConfiguration: ContextConfiguration,
     private var onClose: () -> Unit
-) : Flow(), AccountSettingsContract.Delegate, NotificationPreferencesContract.Delegate, KoinComponent {
+) : Flow(),
+    AccountSettingsContract.Delegate,
+    NotificationPreferencesContract.Delegate,
+    AchAccountDetailsDialogContract.Delegate,
+    KoinComponent {
 
     val aptoPlatformProtocol: AptoPlatformProtocol by inject()
     val analyticsManager: AnalyticsServiceContract by inject()

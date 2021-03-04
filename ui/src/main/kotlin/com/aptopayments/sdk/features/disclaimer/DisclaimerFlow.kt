@@ -28,7 +28,7 @@ internal class DisclaimerFlow(
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val content = actionConfiguration.content
-        val fragment = fragmentFactory.disclaimerFragment(content, DISCLAIMER_TAG)
+        val fragment = fragmentFactory.disclaimerFragment(content, DisclaimerFragment.Configuration(), DISCLAIMER_TAG)
         fragment.delegate = this
         setStartElement(element = fragment as FlowPresentable)
         onInitComplete(Either.Right(Unit))
@@ -51,7 +51,7 @@ internal class DisclaimerFlow(
         }
     }
 
-    override fun onDisclaimerRejected() {
+    override fun onDisclaimerDeclined() {
         analyticsManager.track(Event.DisclaimerReject, JSONObject().put("action_id", workflowAction.actionId))
         aptoPlatform.cancelCardApplication(cardApplicationId) { result ->
             result.either(::handleFailure) {

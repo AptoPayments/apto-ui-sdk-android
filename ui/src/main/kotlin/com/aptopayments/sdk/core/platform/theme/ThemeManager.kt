@@ -15,9 +15,10 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
+import com.aptopayments.sdk.utils.FontsUtil.FontType
 import com.google.android.material.appbar.AppBarLayout
 
-interface ThemeManager {
+internal interface ThemeManager {
     fun customizeStatusBar(window: Window)
     fun customizeSecondaryNavigationStatusBar(window: Window)
     fun customizeSecondaryNavigationToolBar(appBarLayout: AppBarLayout)
@@ -27,6 +28,7 @@ interface ThemeManager {
     fun customizeColorlessButton(textView: TextView)
     fun customizeLargeTitleLabel(textView: TextView)
     fun customizeRegularTextLabel(textView: TextView)
+    fun customizeRegularTertiaryTextLabel(textView: TextView)
     fun customizeSectionHeader(textView: TextView)
     fun customizeFormLabel(textView: TextView)
     fun customizeFooterLabel(textView: TextView)
@@ -39,7 +41,7 @@ interface ThemeManager {
     fun customizeMainItemRight(textView: TextView)
     fun customizeTimestamp(textView: TextView)
     fun customizeSectionTitle(textView: TextView)
-    fun customizeSectionOptionTitle(textView: TextView)
+    fun customizeSectionOptionTitle(textView: TextView, type: FontType = FontType.MEDIUM)
     fun customizeSectionOptionDescription(textView: TextView)
     fun customizeSectionOptionIcon(imageView: ImageView)
     fun customizeSwitch(switch: Switch)
@@ -81,6 +83,6 @@ interface ThemeManager {
     }
 }
 
-fun themeManager(): ThemeManager {
+internal fun themeManager(): ThemeManager {
     return ThemeTwoManager
 }

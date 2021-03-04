@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.core.di.fragment
 
-import android.annotation.SuppressLint
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.KycStatus
 import com.aptopayments.mobile.data.cardproduct.CardProduct
@@ -37,6 +36,7 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragment
 import com.aptopayments.sdk.features.card.waitlist.WaitlistFragment
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragment
+import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsDialogFragment
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
 import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressFragment
 import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateFragment
@@ -47,6 +47,8 @@ import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneFragment
 import com.aptopayments.sdk.features.issuecard.IssueCardFragment
 import com.aptopayments.sdk.features.kyc.KycStatusFragment
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsFragment
+import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsFragment
+import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogFragment
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardDetailsFragment
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListFragment
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingFragment
@@ -67,7 +69,6 @@ import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserFragment
 import org.threeten.bp.LocalDate
 import java.io.File
 
-@SuppressLint("VisibleForTests")
 internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun countrySelectorFragment(allowedCountries: List<Country>, tag: String) =
@@ -104,8 +105,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun maintenanceFragment(tag: String) = MaintenanceFragment.newInstance().apply { this.TAG = tag }
 
-    override fun disclaimerFragment(content: Content, tag: String) =
-        DisclaimerFragment.newInstance(content).apply { this.TAG = tag }
+    override fun disclaimerFragment(content: Content, configuration: DisclaimerFragment.Configuration, tag: String) =
+        DisclaimerFragment.newInstance(content, configuration).apply { this.TAG = tag }
 
     override fun contentPresenterFragment(content: Content, title: String, tag: String) =
         ContentPresenterFragment.newInstance(content, title).apply { this.TAG = tag }
@@ -167,7 +168,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
     override fun setPasscodeFragment(tag: String) = SetCardPasscodeFragment().apply { this.TAG = tag }
 
     override fun confirmPasscodeFragment(cardId: String, pin: String, verificationId: String?, tag: String) =
-        ConfirmCardPasscodeFragment.newInstance(cardId = cardId, pin = pin, verificationId = verificationId).apply { this.TAG = tag }
+        ConfirmCardPasscodeFragment.newInstance(cardId = cardId, pin = pin, verificationId = verificationId)
+            .apply { this.TAG = tag }
 
     override fun getVoipFragment(cardId: String, action: Action, tag: String) =
         VoipFragment.newInstance(cardId, action).apply { this.TAG = tag }
@@ -221,4 +223,13 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun cardPasscodeStartFragment(cardId: String, tag: String) =
         CardPasscodeStartFragment.newInstance(cardId, tag)
+
+    override fun addFundsSelectorDialogFragment(tag: String) =
+        AddFundsSelectorDialogFragment.newInstance(tag)
+
+    override fun directDepositInstructionsFragment(cardId: String, tag: String) =
+        DirectDepositInstructionsFragment.newInstance(cardId, tag)
+
+    override fun achAccountDetailsDialogFragment(cardId: String, tag: String) =
+        AchAccountDetailsDialogFragment.newInstance(cardId, tag)
 }

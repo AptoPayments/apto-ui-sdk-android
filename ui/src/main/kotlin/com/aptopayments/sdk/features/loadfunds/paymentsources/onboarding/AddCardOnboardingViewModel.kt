@@ -7,6 +7,7 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.utils.LiveEvent
+import com.aptopayments.sdk.utils.extensions.setValue
 
 internal class AddCardOnboardingViewModel(
     cardId: String,
@@ -57,10 +58,10 @@ internal class AddCardOnboardingViewModel(
     }
 
     private fun createFirstDescription(companyName: String) =
-        "load_funds_add_card_onboarding_explanation".localized().replace("<<VALUE>>", companyName)
+        "load_funds_add_card_onboarding_explanation".localized().setValue(companyName)
 
     private fun createSecondDescription(softDescriptor: String) =
-        "load_funds_add_card_onboarding_explanation_2".localized().replace("<<VALUE>>", softDescriptor)
+        "load_funds_add_card_onboarding_explanation_2".localized().setValue(softDescriptor)
 
     sealed class Actions {
         object Continue : Actions()

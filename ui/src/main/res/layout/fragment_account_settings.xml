@@ -1,100 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/tb_llsdk_custom_toolbar"
-        layout="@layout/include_custom_toolbar" />
+    <data>
 
-    <ScrollView
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.card.account.AccountSettingsViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tb_llsdk_custom_toolbar">
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            android:id="@+id/account_settings_custom_toolbar"
+            layout="@layout/include_custom_toolbar" />
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginEnd="@dimen/_14sdp"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/_14sdp">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/account_settings_custom_toolbar">
 
-            <!-- Security -->
-            <com.aptopayments.sdk.ui.views.SectionHeaderView
-                android:id="@+id/rl_security"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:headerTitle="account_settings_security_title" />
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/_14sdp">
 
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_passcode"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionDescription="account_settings_security_change_pin_description"
-                app:optionTitle="account_settings_security_change_pin_title" />
+                <com.aptopayments.sdk.ui.views.SectionHeaderView
+                    android:id="@+id/rl_security"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:headerTitle="account_settings_security_title"
+                    app:visibleIf="@{viewModel.uiState.securityVisibility}" />
 
-            <include
-                android:id="@+id/rl_fingerprint"
-                layout="@layout/view_section_switch_two" />
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/rl_passcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionDescription="account_settings_security_change_pin_description"
+                    app:optionTitle="account_settings_security_change_pin_title"
+                    app:visibleIf="@{viewModel.uiState.securityVisibility}" />
 
-            <!-- Notifications -->
-            <com.aptopayments.sdk.ui.views.SectionHeaderView
-                android:id="@+id/rl_settings_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:headerTitle="account_settings_app_settings_title" />
+                <include
+                    android:id="@+id/rl_fingerprint"
+                    layout="@layout/view_section_switch_two"
+                    app:visibleIf="@{viewModel.uiState.fingerprintVisibility}" />
 
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_notifications"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionShowDivider="false"
-                app:optionDescription="account_settings.notification_preferences.description"
-                app:optionTitle="account_settings.notification_preferences.title" />
+                <com.aptopayments.sdk.ui.views.SectionHeaderView
+                    android:id="@+id/rl_settings_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:headerTitle="account_settings_app_settings_title"
+                    app:visibleIf="@{viewModel.uiState.notificationVisibility}" />
 
-            <!-- Support -->
-            <com.aptopayments.sdk.ui.views.SectionHeaderView
-                android:id="@+id/rl_support_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:headerTitle="account_settings_help_title" />
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/rl_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionDescription="account_settings.notification_preferences.description"
+                    app:optionShowDivider="false"
+                    app:optionTitle="account_settings.notification_preferences.title"
+                    app:visibleIf="@{viewModel.uiState.notificationVisibility}" />
 
-            <!-- Help & Info -->
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_contact_support"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionDescription="card_settings_help_contact_support_description"
-                app:optionTitle="card_settings_help_contact_support_title" />
+                <com.aptopayments.sdk.ui.views.SectionHeaderView
+                    android:id="@+id/rl_support_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:headerTitle="account_settings_help_title" />
 
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_statements"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionDescription="card_settings.help.monthly_statements.description"
-                app:optionTitle="card_settings.help.monthly_statements.title" />
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/account_settings_contact_support"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionDescription="card_settings_help_contact_support_description"
+                    app:optionTitle="card_settings_help_contact_support_title" />
 
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_app_version"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionTitle="account_settings_app_version_title"
-                tools:optionDescription="1.0.0" />
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/account_settings_statements"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionDescription="card_settings.help.monthly_statements.description"
+                    app:optionTitle="card_settings.help.monthly_statements.title"
+                    app:visibleIf="@{viewModel.uiState.monthlyStatementVisibility}" />
 
-            <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                android:id="@+id/rl_sign_out"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/section_option_height"
-                app:optionTitle="account_settings.logout.title" />
-        </LinearLayout>
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/rl_app_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionTitle="account_settings_app_version_title"
+                    tools:optionDescription="1.0.0" />
 
-    </ScrollView>
+                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                    android:id="@+id/account_settings_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/section_option_height"
+                    app:optionTitle="account_settings.logout.title" />
+            </LinearLayout>
 
-</RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>

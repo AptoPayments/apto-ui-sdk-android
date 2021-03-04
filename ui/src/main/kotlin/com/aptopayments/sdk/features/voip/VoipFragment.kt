@@ -14,12 +14,10 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.voip.Action
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.hide
-import com.aptopayments.sdk.core.extension.observeNullable
-import com.aptopayments.sdk.core.extension.show
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.voip.VoipViewModel.CallState
 import com.aptopayments.sdk.utils.extensions.stringFromTimeInterval
 import kotlinx.android.synthetic.main.fragment_voip.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,7 +25,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val CARD_ID_KEY = "CARD_ID"
 private const val ACTION_KEY = "ACTION"
 
-internal class VoipFragment : BaseFragment(), VoipContract.View, KeyboardView.OnKeyboardActionListener {
+internal class VoipFragment :
+    BaseFragment(),
+    VoipContract.View,
+    KeyboardView.OnKeyboardActionListener {
 
     override var delegate: VoipContract.Delegate? = null
     private val viewModel: VoipViewModel by viewModel()
@@ -67,8 +68,9 @@ internal class VoipFragment : BaseFragment(), VoipContract.View, KeyboardView.On
 
     override fun setupViewModel() {
         viewModel.apply {
-            observeNullable(callState) { callStateChanged(it) }
-            observeNullable(elapsedTime) { updateElapsedTime(it) }
+            observeNotNullable(callState) { callStateChanged(it) }
+            observeNotNullable(callEstablished) { updateCallActionButtonState(it) }
+            observeNotNullable(elapsedTime) { updateElapsedTime(it) }
             observe(failure) { handleFailure(it) }
         }
     }
@@ -91,13 +93,14 @@ internal class VoipFragment : BaseFragment(), VoipContract.View, KeyboardView.On
         delegate?.onVoipCallFinished()
     }
 
-    private fun callStateChanged(newState: VoipViewModel.CallState?) {
+    private fun callStateChanged(newState: CallState?) {
         when (newState) {
-            is VoipViewModel.CallState.NotInitiated -> showNotInitiatedState()
-            is VoipViewModel.CallState.Ringing -> showRingingState()
-            is VoipViewModel.CallState.Established -> showEstablishedState(newState.elapsedTime)
-            is VoipViewModel.CallState.Finished -> delegate?.onVoipCallFinished()
-            is VoipViewModel.CallState.Error -> showErrorState(newState.error)
+            is CallState.NotInitiated -> showNotInitiatedState()
+            is CallState.Ringing -> showRingingState()
+            is CallState.Established -> showEstablishedState(newState.elapsedTime)
+            is CallState.Finished -> delegate?.onVoipCallFinished()
+            is CallState.Error -> showErrorState(newState.error)
+            is CallState.Reconnecting -> showReconnectingState()
         }
     }
 
@@ -147,25 +150,29 @@ internal class VoipFragment : BaseFragment(), VoipContract.View, KeyboardView.On
     private fun convertFromAsciiToString(ascii: Int) = ascii.toChar().toString()
 
     private fun showNotInitiatedState() {
-        tv_title.localizedText = "manage_card.get_pin_voip.title"
-        tv_description.localizedText = "manage_card.get_pin_voip.message"
-        updateCallActionButtonState(isCallEstablished = false)
+        showDefaultTexts()
     }
 
     private fun showRingingState() {
-        tv_title.localizedText = "manage_card.get_pin_voip.title"
-        tv_description.localizedText = "manage_card.get_pin_voip.message"
-        updateCallActionButtonState(isCallEstablished = false)
+        showDefaultTexts()
+    }
+
+    private fun showDefaultTexts() {
+        tv_title.localizedText = "manage_card_get_pin_voip_title"
+        tv_description.localizedText = "manage_card_get_pin_voip_message"
     }
 
     private fun showEstablishedState(elapsedTime: Int) {
         tv_description.text = elapsedTime.stringFromTimeInterval()
-        updateCallActionButtonState(isCallEstablished = true)
+    }
+
+    private fun showReconnectingState() {
+        tv_description.localizedText = "manage_card_get_pin_voip_reconnecting"
+        tv_description.localizedText = "manage_card_get_pin_voip_reconnecting"
     }
 
     private fun showErrorState(error: String?) {
         delegate?.onVoipCallError(error)
-        updateCallActionButtonState(isCallEstablished = false)
     }
 
     private fun updateCallActionButtonState(isCallEstablished: Boolean) {

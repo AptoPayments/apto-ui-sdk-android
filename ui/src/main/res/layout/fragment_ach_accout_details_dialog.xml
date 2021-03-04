@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_3sdp"
+    android:background="@drawable/dialog_rounded_background"
+    android:orientation="vertical"
+    android:paddingEnd="12dp">
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/account_details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="19dp"
+        app:localize="@string/load_funds_ach_account_details_dialog_title" />
+
+    <include
+        layout="@layout/include_divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line_height" />
+
+    <RelativeLayout
+        android:id="@+id/account_details_account_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground">
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/account_details_account_number_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/account_details_account_number_details"
+            android:ellipsize="end"
+            app:localize="load_funds_ach_account_details_dialog_account_number" />
+
+        <TextView
+            android:id="@+id/account_details_account_number_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            tools:text="123456" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/include_divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line_height" />
+
+    <RelativeLayout
+        android:id="@+id/account_details_routing_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground">
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/account_details_routing_number_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/account_details_routing_details"
+            android:ellipsize="end"
+            app:localize="load_funds_ach_account_details_dialog_routing_number" />
+
+        <TextView
+            android:id="@+id/account_details_routing_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            tools:text="123456" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/include_divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line_height" />
+
+    <com.aptopayments.sdk.ui.views.AptoTextView
+        android:id="@+id/account_details_bottom_legend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:paddingBottom="38dp"
+        tools:localize="load_funds_ach_account_details_dialog_offered_by" />
+
+</LinearLayout>

@@ -28,6 +28,7 @@ import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
+import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsViewModel
 import com.aptopayments.sdk.features.disclaimer.DisclaimerViewModel
 import com.aptopayments.sdk.features.inputdata.address.CollectUserAddressViewModel
 import com.aptopayments.sdk.features.inputdata.birthdate.CollectUserBirthdateViewModel
@@ -38,6 +39,8 @@ import com.aptopayments.sdk.features.inputdata.phone.CollectUserPhoneViewModel
 import com.aptopayments.sdk.features.issuecard.IssueCardViewModel
 import com.aptopayments.sdk.features.kyc.KycStatusViewModel
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel
+import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsViewModel
+import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogViewModel
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.AddCardPaymentSourceViewModel
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel
@@ -84,6 +87,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -120,7 +124,7 @@ val viewModelModule = module {
             get()
         )
     }
-    viewModel { VoipViewModel(get(), get()) }
+    viewModel { VoipViewModel(get(), get(), get()) }
     viewModel { StatementListViewModel(get()) }
     viewModel { CreatePasscodeViewModel(get()) }
     viewModel { ChangePasscodeViewModel(get(), get()) }
@@ -138,4 +142,7 @@ val viewModelModule = module {
     viewModel { (cardId: String, payment: Payment) -> AddFundsResultViewModel(cardId, payment, get(), get()) }
     viewModel { (cardId: String) -> AddCardOnboardingViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> CardPasscodeStartViewModel(cardId, get(), get()) }
+    viewModel { AddFundsSelectorDialogViewModel(get()) }
+    viewModel { (cardId: String) -> DirectDepositInstructionsViewModel(cardId, get(), get()) }
+    viewModel { (cardId: String) -> AchAccountDetailsViewModel(cardId, get(), get()) }
 }
