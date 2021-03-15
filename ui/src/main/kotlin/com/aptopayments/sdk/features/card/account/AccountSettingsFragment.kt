@@ -96,7 +96,6 @@ internal class AccountSettingsFragment :
     override fun setupListeners() {
         super.setupListeners()
         binding.accountSettingsCustomToolbar.iv_close_button.setOnClickListenerSafe { onBackPressed() }
-        binding.accountSettingsSignOut.setOnClickListenerSafe { viewModel.onCustomerSupport() }
         binding.accountSettingsSignOut.setOnClickListenerSafe { showConfirmLogOutDialog() }
 
         binding.rlNotifications.setOnClickListenerSafe { delegate?.showNotificationPreferences() }

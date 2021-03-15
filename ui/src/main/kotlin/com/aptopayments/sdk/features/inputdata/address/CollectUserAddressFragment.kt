@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.inputdata.address
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -89,6 +90,7 @@ internal class CollectUserAddressFragment :
             customizeLargeTitleLabel(binding.collectAddressTitle)
             customizeFormLabel(binding.collectAddressSubtitle)
             customizeEditText(binding.collectAddressSearchEdit)
+            binding.collectAddressSearchEdit.setDropDownBackgroundDrawable(ColorDrawable(UIConfig.uiBackgroundPrimaryColor))
             customizeEditText(binding.collectAddressOptionalEdit)
             customizeSubmitButton(binding.continueButton)
         }

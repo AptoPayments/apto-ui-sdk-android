@@ -81,6 +81,7 @@
                     android:id="@+id/account_settings_contact_support"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/section_option_height"
+                    android:onClick="@{() -> viewModel.onCustomerSupport()}"
                     app:optionDescription="card_settings_help_contact_support_description"
                     app:optionTitle="card_settings_help_contact_support_title" />
 
