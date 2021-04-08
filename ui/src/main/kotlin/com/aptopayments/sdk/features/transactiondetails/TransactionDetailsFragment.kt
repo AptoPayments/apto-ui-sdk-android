@@ -276,7 +276,11 @@ internal class TransactionDetailsFragment :
     }
 
     private fun getArrowDrawable() =
-        if (ll_expandable_section.isShown) R.drawable.ic_arrow_drop_up_black_24dp else R.drawable.ic_arrow_drop_down_black_24dp
+        if (ll_expandable_section.isShown) {
+            R.drawable.ic_arrow_drop_up_black_24dp
+        } else {
+            R.drawable.ic_arrow_drop_down_black_24dp
+        }
 
     fun setupTexts() {
         setAddressName()

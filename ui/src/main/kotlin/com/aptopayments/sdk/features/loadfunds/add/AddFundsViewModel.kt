@@ -111,7 +111,7 @@ internal class AddFundsViewModel(
 
     private fun getFailureErrorKey(failure: Failure?): String {
         return if (failure is Failure.ServerError && !failure.hasUndefinedKey()) {
-            failure.getErrorKey()
+            failure.errorKey
         } else {
             "load_funds_add_money_error_message"
         }
@@ -202,8 +202,8 @@ internal class AddFundsViewModel(
     }
 
     class UnableToLoadFundsError(key: String) : Failure.FeatureFailure(
-        message = key,
-        title = "load_funds_add_money_error_title"
+        errorKey = key,
+        titleKey = "load_funds_add_money_error_title"
     )
 
     sealed class Actions {

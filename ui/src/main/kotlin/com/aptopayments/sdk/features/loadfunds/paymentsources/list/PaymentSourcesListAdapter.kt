@@ -26,7 +26,7 @@ internal class PaymentSourcesListAdapter(val viewModel: PaymentSourcesListViewMo
             PaymentSourcesListItem.Type.NEW.value -> {
                 NewPaymentSourceViewHolder(ViewPaymentSourceListNewBinding.inflate(layoutInflater, parent, false))
             }
-            else -> throw RuntimeException()
+            else -> throw TypeNotRecognizedException()
         }
     }
 
@@ -72,4 +72,6 @@ internal class PaymentSourcesListAdapter(val viewModel: PaymentSourcesListViewMo
             binding.executePendingBindings()
         }
     }
+
+    private class TypeNotRecognizedException : RuntimeException()
 }

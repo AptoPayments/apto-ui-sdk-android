@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.card.cardsettings
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.widget.Switch
 import androidx.appcompat.widget.Toolbar
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.cardproduct.CardProduct
@@ -22,8 +21,6 @@ import com.aptopayments.sdk.databinding.FragmentCardSettingsBinding
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
 import com.aptopayments.sdk.ui.views.AuthenticationView
-import com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-import com.aptopayments.sdk.ui.views.SectionSwitchViewTwo
 import com.aptopayments.sdk.utils.MessageBanner.MessageType
 import com.aptopayments.sdk.utils.PhoneDialer
 import com.aptopayments.sdk.utils.SendEmailUtil
@@ -34,7 +31,6 @@ import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_card_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
-import kotlinx.android.synthetic.main.view_section_switch_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -98,6 +94,7 @@ internal class CardSettingsFragment :
                     is Action.AddFunds -> delegate?.onAddFunds()
                     is Action.ShowAddFundsSelector -> delegate?.showAddFundsSelector()
                     is Action.ShowAddFundsAchDisclaimer -> delegate?.showAddFundsDisclaimer(it.disclaimer)
+                    is Action.OrderPhysicalCard -> delegate?.showOrderPhysicalCard()
                 }
             }
         }
@@ -116,8 +113,8 @@ internal class CardSettingsFragment :
     }
 
     private fun handleCardLocked(cardUiState: CardSettingsViewModel.CardUiState) {
-        if (rl_lock_card.sw_tv_section_switch_switch.isChecked != cardUiState.cardLocked) {
-            silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard)
+        if (binding.cardSettingsLockSwitch.isChecked != cardUiState.cardLocked) {
+            binding.cardSettingsLockSwitch.silentlyToggleSwitch(::lockUnlockCard)
         }
     }
 
@@ -130,46 +127,27 @@ internal class CardSettingsFragment :
     override fun setupListeners() {
         super.setupListeners()
         iv_close_button.setOnClickListenerSafe { onBackPressed() }
-        rl_set_pin.setOnClickListenerSafe { setPinPressed() }
-        rl_lock_card.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
-            lockUnlockCard(value)
-        }
-        rl_detailed_card_activity.sw_tv_section_switch_switch.setOnCheckedChangeListener { _, value ->
+        binding.rlSetPin.setOnClickListenerSafe { setPinPressed() }
+        binding.cardSettingsLockSwitch.setOnCheckedChangeListener { _, value -> lockUnlockCard(value) }
+        binding.cardSettingsDetailedActivitySwitch.setOnCheckedChangeListener { _, value ->
             storeDetailedCardActivityPreference(value)
         }
-        rl_report_stolen_card.setOnClickListenerSafe { reportLostOrStolenCard() }
-        rl_statement.setOnClickListenerSafe { onStatementPressed() }
-        rl_google_pay.setOnClickListenerSafe { onGooglePayPressed() }
+        binding.rlReportStolenCard.setOnClickListenerSafe { reportLostOrStolenCard() }
+        binding.rlStatement.setOnClickListenerSafe { onStatementPressed() }
+        binding.rlGooglePay.setOnClickListenerSafe { onGooglePayPressed() }
     }
 
     private fun setupTheme() {
         themeManager().customizeToolbarTitle(tv_toolbar_title)
-        (rl_lock_card as SectionSwitchViewTwo).hideBottomSeparator()
+
         if (AptoUiSdk.cardOptions.showDetailedCardActivityOption()) {
             transactions_section.show()
-            rl_detailed_card_activity.sw_tv_section_switch_switch.isChecked = getDetailedCardActivityPreference()
-        }
-        if (!AptoUiSdk.cardOptions.showMonthlyStatementOption()) {
-            rl_statement.remove()
-            (rl_faq as SectionOptionWithSubtitleView).optionShowDivider = false
+            binding.cardSettingsDetailedActivitySwitch.isChecked = getDetailedCardActivityPreference()
         }
     }
 
     private fun setupTexts() {
         tv_toolbar_title.localizedText = "card_settings.settings.title"
-
-        (rl_lock_card as SectionSwitchViewTwo).set(
-            title = "card_settings.settings.lock_card.title".localized(),
-            description = "card_settings.settings.lock_card.description".localized()
-        )
-        (rl_detailed_card_activity as SectionSwitchViewTwo).set(
-            title = "card_settings.transactions.detailed_card_activity.title".localized(),
-            description = "card_settings.transactions.detailed_card_activity.description".localized()
-        )
-        (rl_contact_support as SectionOptionWithSubtitleView).apply {
-            optionTitle = viewModel.supportTexts.first
-            optionSubtitle = viewModel.supportTexts.second
-        }
     }
 
     private fun setupToolBar() {
@@ -205,7 +183,7 @@ internal class CardSettingsFragment :
                 confirm = "card_settings.settings.confirm_lock_card.ok_button".localized(),
                 cancel = "card_settings.settings.confirm_lock_card.cancel_button".localized(),
                 onConfirm = { viewModel.lockCard() },
-                onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
+                onCancel = { binding.cardSettingsLockSwitch.silentlyToggleSwitch(::lockUnlockCard) }
             )
         } else {
             confirm(
@@ -214,15 +192,9 @@ internal class CardSettingsFragment :
                 confirm = "card_settings.settings.confirm_unlock_card.ok_button".localized(),
                 cancel = "card_settings.settings.confirm_unlock_card.cancel_button".localized(),
                 onConfirm = { viewModel.unlockCard() },
-                onCancel = { silentlyToggleSwitch(rl_lock_card.sw_tv_section_switch_switch, ::lockUnlockCard) }
+                onCancel = { binding.cardSettingsLockSwitch.silentlyToggleSwitch(::lockUnlockCard) }
             )
         }
-    }
-
-    private fun silentlyToggleSwitch(switch: Switch, listener: (value: Boolean) -> Unit) {
-        switch.setOnCheckedChangeListener(null)
-        switch.toggle()
-        switch.setOnCheckedChangeListener { _, value -> listener(value) }
     }
 
     private fun showContentPresenter(content: Content, titleToLocalize: String) {

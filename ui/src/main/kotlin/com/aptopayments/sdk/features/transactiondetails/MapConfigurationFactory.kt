@@ -17,5 +17,8 @@ internal class MapConfigurationFactory {
     }
 
     private fun isTransactionCorrectToBeShown(transaction: Transaction) =
-        transaction.store != null && transaction.store?.latitude != null && transaction.store?.longitude != null && transaction.merchant?.mcc != null
+        transaction.store != null &&
+            transaction.store?.latitude != null &&
+            transaction.store?.longitude != null &&
+            transaction.merchant?.mcc != null
 }

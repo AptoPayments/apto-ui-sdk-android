@@ -143,7 +143,9 @@ internal class CardSettingsViewModel(
                 showIvrSupport = isIvrEnabled(card),
                 cardLocked = card.state != Card.CardState.ACTIVE,
                 showAddFunds = card.features?.funding?.isEnabled ?: false,
-                showPasscode = card.features?.passcode?.isEnabled ?: false
+                showPasscode = card.features?.passcode?.isEnabled ?: false,
+                showMonthlyStatement = aptoUiSdk.cardOptions.showMonthlyStatementOption(),
+                showOrderPhysical = card.orderedStatus == Card.OrderedStatus.AVAILABLE
             )
     }
 
@@ -223,6 +225,10 @@ internal class CardSettingsViewModel(
         action.postValue(nextAction)
     }
 
+    fun orderPhysicalCard() {
+        action.postValue(Action.OrderPhysicalCard)
+    }
+
     private fun getCustomerSupportAction(): Action {
         return if (projectConfiguration.isChatbotActive) {
             Action.StartChatbot(
@@ -256,6 +262,7 @@ internal class CardSettingsViewModel(
         object AddFunds : Action()
         object ShowAddFundsSelector : Action()
         class ShowAddFundsAchDisclaimer(val disclaimer: Disclaimer?) : Action()
+        object OrderPhysicalCard : Action()
     }
 
     internal data class CardUiState(
@@ -264,6 +271,8 @@ internal class CardSettingsViewModel(
         val showIvrSupport: Boolean = false,
         val cardLocked: Boolean = false,
         val showAddFunds: Boolean = false,
-        val showPasscode: Boolean = false
+        val showPasscode: Boolean = false,
+        val showMonthlyStatement: Boolean = false,
+        val showOrderPhysical: Boolean = false,
     )
 }

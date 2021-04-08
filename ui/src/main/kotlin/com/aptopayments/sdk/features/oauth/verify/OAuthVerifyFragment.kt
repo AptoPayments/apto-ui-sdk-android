@@ -8,7 +8,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.user.DataPointList
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
-import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.exception.server.ErrorOauthTokenRevoked
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
@@ -64,7 +64,7 @@ internal class OAuthVerifyFragment : BaseFragment(), OAuthVerifyContract.View {
             observe(phone) { updateRow(tv_phone_label, tv_phone, it) }
             observe(birthdate) { updateRow(tv_date_of_birth_label, tv_date_of_birth, it) }
             observe(failure) {
-                if (it is Failure.ServerError && it.isOauthTokenRevokedError()) delegate?.onRevokedTokenError(it)
+                if (it is ErrorOauthTokenRevoked) delegate?.onRevokedTokenError(it)
                 else handleFailure(it)
             }
         }

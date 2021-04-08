@@ -30,6 +30,7 @@ internal class ContentPresenterFragment : BaseFragment(), ContentPresenterContra
     }
 
     override fun setupViewModel() {
+        // do nothing
     }
 
     override fun setupUI() {
@@ -56,7 +57,9 @@ internal class ContentPresenterFragment : BaseFragment(), ContentPresenterContra
         hideLoading()
     }
 
-    override fun didScrollToBottom() {}
+    override fun didScrollToBottom() {
+        // do nothing
+    }
 
     private fun setupTheme() {
         vw_content_presenter.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)

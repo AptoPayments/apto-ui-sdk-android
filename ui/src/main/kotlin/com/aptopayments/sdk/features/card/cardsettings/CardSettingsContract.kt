@@ -19,6 +19,7 @@ interface CardSettingsContract {
         fun onSetCardPasscode()
         fun showAddFundsSelector()
         fun showAddFundsDisclaimer(disclaimer: Disclaimer?)
+        fun showOrderPhysicalCard()
     }
 
     interface View {

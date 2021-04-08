@@ -16,9 +16,13 @@ class TextInputWatcher(
         setMaxCharacters()
     }
 
-    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        // do nothing
+    }
 
-    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {}
+    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
+        // do nothing
+    }
 
     private fun isValidInput(input: String) =
         isMinLengthValid(input) &&

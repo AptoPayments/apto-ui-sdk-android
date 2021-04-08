@@ -112,7 +112,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
                 if (failure.errorMessage().isEmpty()) {
                     notify("failure_server_error".localized())
                 } else {
-                    notify(failure.getErrorTitleKey().localized(), failure.errorMessage().localized())
+                    notify(failure.titleKey.localized(), failure.errorMessage().localized())
                 }
             }
             is Failure.ServerError -> {
@@ -137,9 +137,15 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
 
     override fun startFragment() = this
     override fun lastFragment() = this
-    override fun clearChildElements() {}
-    override fun removeFromStack(animated: Boolean) {}
-    override fun onPresented() {}
+    override fun clearChildElements() {
+        // do nothing
+    }
+    override fun removeFromStack(animated: Boolean) {
+        // do nothing
+    }
+    override fun onPresented() {
+        // do nothing
+    }
 
     fun handleLoading(isLoading: Boolean) {
         if (isLoading) {

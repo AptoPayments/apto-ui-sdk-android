@@ -24,6 +24,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.ActivatePhysicalC
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsContract
 import com.aptopayments.sdk.features.card.cardstats.CardStatsFlow
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
+import com.aptopayments.sdk.features.card.orderphysical.OrderPhysicalFlow
 import com.aptopayments.sdk.features.card.passcode.CardPasscodeFlow
 import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
@@ -141,6 +142,9 @@ internal class ManageCardFlow(
             it.delegate = this
         }
         (fragmentDialogWithTag(DIRECT_DEPOSIT_INSTRUCTIONS_TAG) as? DirectDepositInstructionsContract.View)?.let {
+            it.delegate = this
+        }
+        (fragmentDialogWithTag(DISCLAIMER_TAG) as? DisclaimerContract.View)?.let {
             it.delegate = this
         }
     }
@@ -392,6 +396,11 @@ internal class ManageCardFlow(
         )
         fragment.delegate = this
         push(fragment as BaseFragment)
+    }
+
+    override fun showOrderPhysicalCard() {
+        val flow = OrderPhysicalFlow(cardId = cardId) { popAnimatedFlow() }
+        flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
     }
 
     override fun onDisclaimerAccepted() {

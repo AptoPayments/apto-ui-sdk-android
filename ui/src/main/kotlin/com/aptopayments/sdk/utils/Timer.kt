@@ -8,7 +8,7 @@ internal interface Timer {
     fun stop()
 }
 
-internal class RealTimer() : Timer {
+internal class RealTimer : Timer {
 
     private var listener: (() -> Unit)? = null
     private val handler = Handler()

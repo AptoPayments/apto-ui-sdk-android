@@ -16,7 +16,7 @@ internal data class PaymentSourceElement(
     fun isDefined() = id.isNotEmpty()
 }
 
-internal class PaymentSourceElementMapper() {
+internal class PaymentSourceElementMapper {
 
     fun map(elem: PaymentSource): PaymentSourceElement {
         return when (elem) {

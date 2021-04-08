@@ -9,6 +9,7 @@ import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationSelectBalanceStore
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.exception.server.ErrorOauthTokenRevoked
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
@@ -50,7 +51,7 @@ internal class SelectBalanceStoreFlow(
 
     private fun handleError(failure: Failure?) {
         hideLoading()
-        if (failure is Failure.ServerError && failure.isOauthTokenRevokedError()) {
+        if (failure is ErrorOauthTokenRevoked) {
             popFlow(true)
             showRevokedTokenDialog(failure)
         } else handleFailure(failure)

@@ -26,6 +26,8 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsFragment
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChart
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceDialogFragment
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesFragment
+import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardFragment
+import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCardSuccessFragment
 import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeFragment
 import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeFragment
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartFragment
@@ -105,8 +107,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun maintenanceFragment(tag: String) = MaintenanceFragment.newInstance().apply { this.TAG = tag }
 
-    override fun disclaimerFragment(content: Content, configuration: DisclaimerFragment.Configuration, tag: String) =
-        DisclaimerFragment.newInstance(content, configuration).apply { this.TAG = tag }
+    override fun disclaimerFragment(content: Content, config: DisclaimerFragment.Configuration, tag: String) =
+        DisclaimerFragment.newInstance(content, config).apply { this.TAG = tag }
 
     override fun contentPresenterFragment(content: Content, title: String, tag: String) =
         ContentPresenterFragment.newInstance(content, title).apply { this.TAG = tag }
@@ -232,4 +234,10 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun achAccountDetailsDialogFragment(cardId: String, tag: String) =
         AchAccountDetailsDialogFragment.newInstance(cardId, tag)
+
+    override fun orderPhysicalCardFragment(cardId: String, tag: String) =
+        OrderPhysicalCardFragment.newInstance(cardId, tag)
+
+    override fun orderPhysicalCardSuccessFragment(cardId: String, tag: String) =
+        OrderPhysicalCardSuccessFragment.newInstance(cardId, tag)
 }

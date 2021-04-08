@@ -20,6 +20,7 @@ internal class CollectUserIdViewModel(
     private val config: IdDataPointConfiguration,
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
+    private val ssnValidator by lazy { SSNValidator() }
 
     val countryList = config.allowedDocumentTypes.keys.toList()
     val selectedCountry = MutableLiveData<Country>()
@@ -40,7 +41,7 @@ internal class CollectUserIdViewModel(
 
     init {
         setInitialValuesIfPresent(initialValue)
-        preselectCountryIfTherIsOnlyOne()
+        preselectCountryIfThereIsOnlyOne()
     }
 
     fun viewLoaded() {
@@ -61,7 +62,6 @@ internal class CollectUserIdViewModel(
 
     fun onIdTypeSelected(position: Int) {
         typePosition.value = position
-        number.value = ""
     }
 
     private fun setInitialValuesIfPresent(initialValue: IdDocumentDataPoint?) {
@@ -71,12 +71,24 @@ internal class CollectUserIdViewModel(
         }
     }
 
-    private fun preselectCountryIfTherIsOnlyOne() {
+    private fun preselectCountryIfThereIsOnlyOne() {
         if (countryList.size == 1) {
             selectedCountry.value = countryList[0]
         }
     }
 
     private fun isAllRequiredDataSet() =
-        selectedCountry.value != null && typePosition.value != UNSELECTED_VALUE && number.value?.isNotEmpty() ?: false
+        selectedCountry.value != null &&
+            typePosition.value != UNSELECTED_VALUE &&
+            checkNumber(selectedCountry.value!!, typePosition.value, number.value)
+
+    private fun checkNumber(country: Country, type: Int?, value: String?): Boolean {
+        return when {
+            isSSNinUS(country, type) -> !value.isNullOrEmpty() && ssnValidator.validate(value)
+            else -> !value.isNullOrEmpty()
+        }
+    }
+
+    private fun isSSNinUS(country: Country, type: Int?) =
+        country.isoCode == "US" && type != null && typeList.value!![typePosition.value!!] == IdDocumentDataPoint.Type.SSN
 }

@@ -65,14 +65,14 @@ internal class AccountSettingsViewModel(
     }
 
     @Synchronized
-    fun onFingerprintSwitchTapped() {
-        val currentValue = authRepository.isBiometricsEnabledByUser()
-        authRepository.enableBiometrics(!currentValue)
-        _fingerprintEnabled.value = !currentValue
+    fun onFingerprintSwitchTapped(value: Boolean) {
+        authRepository.enableBiometrics(value)
+        _fingerprintEnabled.value = value
     }
 
     private fun isSecurityAvailable() =
-        aptoUiSdk.cardOptions.authenticateOnStartup() || aptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS
+        aptoUiSdk.cardOptions.authenticateOnStartup() ||
+            aptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS
 
     private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it })
 
@@ -139,6 +139,5 @@ internal class AccountSettingsViewModel(
         val securityVisibility: Boolean = false,
         val notificationVisibility: Boolean = false,
         val fingerprintVisibility: Boolean = false,
-        val fingerprintEnabled: Boolean = true,
     )
 }

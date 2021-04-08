@@ -32,6 +32,7 @@ internal class NoNetworkFragment : BaseFragment(), NoNetworkContract.View {
     override fun backgroundColor(): Int = UIConfig.uiNavigationSecondaryColor
 
     override fun setupViewModel() {
+        // do nothing
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

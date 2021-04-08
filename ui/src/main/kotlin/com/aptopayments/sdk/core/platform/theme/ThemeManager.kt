@@ -62,6 +62,8 @@ internal interface ThemeManager {
     fun customizeCardSubtitle(textView: TextView)
     fun customizeCardCta(textView: TextView)
     fun customizeAddMoneyEditText(textView: TextView)
+    fun customizeMainItemInverted(textView: TextView)
+    fun customizeMainItemRightInverted(textView: TextView)
 
     fun customizeRoundedBackground(view: View) {
         (view.background as? GradientDrawable)?.setColor(UIConfig.uiBackgroundSecondaryColor)

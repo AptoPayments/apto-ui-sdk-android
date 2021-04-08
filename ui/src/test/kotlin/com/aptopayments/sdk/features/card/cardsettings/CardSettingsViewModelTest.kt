@@ -254,6 +254,42 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     }
 
     @Test
+    fun `given showMonthlyStatementOption is true when sut is created then showMonthlyStatement state is true`() {
+        whenever(cardOptionsMock.showMonthlyStatementOption()).thenReturn(true)
+
+        sut = createSut()
+
+        assertTrue(sut.cardUiState.getOrAwaitValue().showMonthlyStatement)
+    }
+
+    @Test
+    fun `given showMonthlyStatementOption is false when sut is created then showMonthlyStatement state is false`() {
+        whenever(cardOptionsMock.showMonthlyStatementOption()).thenReturn(false)
+
+        sut = createSut()
+
+        assertFalse(sut.cardUiState.getOrAwaitValue().showMonthlyStatement)
+    }
+
+    @Test
+    fun `when orderedStatus is AVAILABLE then showOrderPhysical is true`() {
+        whenever(card.orderedStatus).thenReturn(Card.OrderedStatus.AVAILABLE)
+
+        sut = createSut()
+
+        assertTrue(sut.cardUiState.getOrAwaitValue().showOrderPhysical)
+    }
+
+    @Test
+    fun `when orderedStatus is ORDERED then showOrderPhysical is true`() {
+        whenever(card.orderedStatus).thenReturn(Card.OrderedStatus.ORDERED)
+
+        sut = createSut()
+
+        assertFalse(sut.cardUiState.getOrAwaitValue().showOrderPhysical)
+    }
+
+    @Test
     fun `when faqPressed then correct content presenter called`() {
         val element = mock<Content>()
         whenever(cardProduct.faq).thenReturn(element)
@@ -480,6 +516,16 @@ internal class CardSettingsViewModelTest : AndroidTest() {
 
         assertTrue(sut.action.getOrAwaitValue() is Action.ShowAddFundsAchDisclaimer)
     }
+
+    @Test
+    fun `when orderPhysicalCard then OrderPhysicalCard action`() {
+        sut = createSut()
+
+        sut.orderPhysicalCard()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.OrderPhysicalCard)
+    }
+
     private fun configureGetPin(statusResult: FeatureStatus, featureType: FeatureType?) {
         val feature = mock<GetPin>() {
             on { status } doReturn statusResult

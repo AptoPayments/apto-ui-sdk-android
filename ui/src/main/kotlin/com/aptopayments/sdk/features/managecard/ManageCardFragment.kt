@@ -110,7 +110,7 @@ internal class ManageCardFragment :
         }
         empty_state_container.visibleIf(transactions.isNullOrEmpty())
         add_to_gpay.visibleIf(showAddToGooglePay)
-        tv_no_transactions.goneIf(!showAddToGooglePay)
+        tv_no_transactions.visibleIf(!showAddToGooglePay)
     }
 
     private fun handleBalance(balance: Balance?) {

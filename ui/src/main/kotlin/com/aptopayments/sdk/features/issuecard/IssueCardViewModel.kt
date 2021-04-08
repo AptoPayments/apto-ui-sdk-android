@@ -5,6 +5,9 @@ import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.exception.server.ErrorBalanceValidationsEmailSendsDisabled
+import com.aptopayments.mobile.exception.server.ErrorBalanceValidationsInsufficientApplicationLimit
+import com.aptopayments.mobile.exception.server.ErrorInsufficientFunds
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -72,10 +75,10 @@ internal class IssueCardViewModel(
     }
 
     private fun trackError(error: Failure.ServerError) {
-        val event = when {
-            error.isErrorInsufficientFunds() -> Event.IssueCardInsufficientFunds
-            error.isErrorBalanceValidationsInsufficientApplicationLimit() -> Event.IssueCardInsufficientApplicationLimit
-            error.isErrorBalanceValidationsEmailSendsDisabled() -> Event.IssueCardEmailSendsDisabled
+        val event = when (error) {
+            is ErrorInsufficientFunds -> Event.IssueCardInsufficientFunds
+            is ErrorBalanceValidationsInsufficientApplicationLimit -> Event.IssueCardInsufficientApplicationLimit
+            is ErrorBalanceValidationsEmailSendsDisabled -> Event.IssueCardEmailSendsDisabled
             else -> Event.IssueCardUnknownError
         }
         analyticsManager.track(event, error.toJSonObject())
@@ -83,11 +86,10 @@ internal class IssueCardViewModel(
 
     private fun setErrorCopiesAndImages(error: Failure.ServerError) {
         image.value = actionConfiguration?.errorAsset
-        when {
-            error.isErrorInsufficientFunds() -> setText(ERROR_INSUFFICIENT_FUNDS)
-            error.isErrorBalanceValidationsInsufficientApplicationLimit() ->
-                setText(ERROR_INSUFFICIENT_APPLICATION_LIMITS)
-            error.isErrorBalanceValidationsEmailSendsDisabled() -> setText(ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS)
+        when (error) {
+            is ErrorInsufficientFunds -> setText(ERROR_INSUFFICIENT_FUNDS)
+            is ErrorBalanceValidationsInsufficientApplicationLimit -> setText(ERROR_INSUFFICIENT_APPLICATION_LIMITS)
+            is ErrorBalanceValidationsEmailSendsDisabled -> setText(ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS)
             else -> setText(ERROR_GENERIC)
         }
     }

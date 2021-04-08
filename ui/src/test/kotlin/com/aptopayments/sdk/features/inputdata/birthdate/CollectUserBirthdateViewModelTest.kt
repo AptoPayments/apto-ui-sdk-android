@@ -14,6 +14,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.threeten.bp.LocalDate
+import kotlin.test.assertTrue
 
 class CollectUserBirthdateViewModelTest : UnitTest() {
     @Rule
@@ -46,16 +47,39 @@ class CollectUserBirthdateViewModelTest : UnitTest() {
     fun `when date is set then continueButton is enabled`() {
         sut.setLocalDate(LocalDate.now())
 
-        kotlin.test.assertTrue { sut.continueEnabled.getOrAwaitValue() }
+        assertTrue { sut.continueEnabled.getOrAwaitValue() }
     }
 
     @Test
-    fun `when continueClicked and verified then event is fired`() {
-        val dateNow = LocalDate.now()
-        sut.setLocalDate(dateNow)
+    fun `given user older than 18 when continueClicked then continue Event is fired`() {
+        val date = LocalDate.now().minusYears(19)
+        sut.setLocalDate(date)
+
         sut.onContinueClicked()
 
         val dataPoint = sut.continueClicked.getOrAwaitValue()
-        assertEquals(dataPoint.birthdate, dateNow)
+        assertEquals(dataPoint.birthdate, date)
+    }
+
+    @Test
+    fun `given user with 18 yo when continueClicked then continue Event is fired`() {
+        val date = LocalDate.now().minusYears(18).minusDays(1)
+        sut.setLocalDate(date)
+
+        sut.onContinueClicked()
+
+        val dataPoint = sut.continueClicked.getOrAwaitValue()
+        assertEquals(dataPoint.birthdate, date)
+    }
+
+    @Test
+    fun `given user younger than 18 when continueClicked then error is raised`() {
+        val date = LocalDate.now().minusYears(17)
+        sut.setLocalDate(date)
+
+        sut.onContinueClicked()
+
+        val error = sut.failure.getOrAwaitValue()
+        assertTrue(error is CollectUserBirthdateViewModel.YoungerThanEighteenYO)
     }
 }

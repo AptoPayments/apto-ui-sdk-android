@@ -109,7 +109,9 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         }
     }
 
-    override fun onPresented() {}
+    override fun onPresented() {
+        // do nothing
+    }
 
     protected fun push(fragment: BaseFragment, animated: Boolean = true, addToChildItems: Boolean = true) {
         if (addToChildItems) addChild(fragment)

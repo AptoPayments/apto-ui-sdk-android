@@ -3,6 +3,7 @@ package com.aptopayments.sdk.features.biometric
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -11,7 +12,7 @@ class BiometricWrapper(private val context: Context) {
 
     fun canAskBiometric(): Boolean {
         val biometricManager = BiometricManager.from(context)
-        return biometricManager.canAuthenticate() == BIOMETRIC_SUCCESS
+        return biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
     }
 
     fun showBiometricPrompt(

@@ -5,10 +5,8 @@ import android.view.View
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.user.BirthdateDataPoint
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.extension.hide
-import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.ui.views.birthdate.BirthdateView
@@ -50,6 +48,7 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
 
     override fun setupViewModel() {
         viewModel.apply {
+            observe(failure) { handleFailure(it) }
             observeNotNullable(continueClicked) { delegate?.onBirthdateEnteredCorrectly(it) }
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             observeNotNullable(continueEnabled) { continue_button.isEnabled = it }

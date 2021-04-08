@@ -13,7 +13,7 @@ private const val STATE = "administrative_area_level_1"
 private const val COUNTRY = "country"
 private const val POSTAL_CODE = "postal_code"
 
-internal class AddressDataPointGenerator() {
+internal class AddressDataPointGenerator {
 
     fun generate(components: AddressComponents): AddressDataPoint? {
         val address = Address(components.asList())

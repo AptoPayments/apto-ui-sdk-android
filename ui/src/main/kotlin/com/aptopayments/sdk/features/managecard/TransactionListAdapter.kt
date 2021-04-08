@@ -107,6 +107,7 @@ internal open class TransactionListAdapter(
         }
 
         override fun bind(item: TransactionListItem, position: Int) {
+            // do nothing
         }
     }
 

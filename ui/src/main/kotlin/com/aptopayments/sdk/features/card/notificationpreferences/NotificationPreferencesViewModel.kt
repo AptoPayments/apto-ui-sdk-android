@@ -21,14 +21,18 @@ internal class NotificationPreferencesViewModel : BaseViewModel() {
     fun getNotificationPreferences() {
         AptoPlatform.fetchNotificationPreferences { result ->
             result.either(::handleFailure) {
-                val channel =
-                    if (it.preferences?.firstOrNull()?.activeChannels?.get(NotificationChannel.EMAIL) != null) NotificationChannel.EMAIL
-                    else NotificationChannel.SMS
+                val channel = calculateChannel(it)
                 secondaryChannel.postValue(channel)
                 notificationPreferencesList.postValue(generateNotificationPreferenceListItems(it.preferences, channel))
             }
         }
     }
+
+    private fun calculateChannel(it: NotificationPreferences) =
+        if (it.preferences?.firstOrNull()?.activeChannels?.get(NotificationChannel.EMAIL) != null)
+            NotificationChannel.EMAIL
+        else
+            NotificationChannel.SMS
 
     @VisibleForTesting(otherwise = Modifier.PRIVATE)
     fun generateNotificationPreferenceListItems(

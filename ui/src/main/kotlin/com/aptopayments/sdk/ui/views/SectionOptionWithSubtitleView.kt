@@ -23,11 +23,11 @@ internal class SectionOptionWithSubtitleView @JvmOverloads constructor(
             option_title.localizedText = optionTitle
         }
 
-    var optionSubtitle = ""
+    var optionDescription = ""
         set(value) {
             field = value
-            option_subtitle.localizedText = optionSubtitle
-            option_subtitle.goneIf(optionSubtitle.isEmpty())
+            option_subtitle.localizedText = optionDescription
+            option_subtitle.goneIf(optionDescription.isEmpty())
         }
     var optionShowDivider = false
         set(value) {
@@ -43,7 +43,7 @@ internal class SectionOptionWithSubtitleView @JvmOverloads constructor(
                 context.obtainStyledAttributes(it, R.styleable.SectionOptionWithSubtitleView, 0, 0)
 
             optionTitle = typedArray.getString(R.styleable.SectionOptionWithSubtitleView_optionTitle) ?: ""
-            optionSubtitle = typedArray.getString(R.styleable.SectionOptionWithSubtitleView_optionDescription) ?: ""
+            optionDescription = typedArray.getString(R.styleable.SectionOptionWithSubtitleView_optionDescription) ?: ""
             optionShowDivider = typedArray.getBoolean(R.styleable.SectionOptionWithSubtitleView_optionShowDivider, true)
             typedArray.recycle()
         }

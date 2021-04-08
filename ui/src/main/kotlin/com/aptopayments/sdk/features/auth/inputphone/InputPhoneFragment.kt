@@ -74,7 +74,10 @@ internal class InputPhoneFragment : BaseFragment(), InputPhoneContract.View {
     private fun setupToolBar() {
         tb_llsdk_toolbar.configure(
             this,
-            ToolbarConfiguration.Builder().backButtonMode(getBackButtonMode()).backgroundColor(UIConfig.uiNavigationPrimaryColor).build()
+            ToolbarConfiguration.Builder()
+                .backButtonMode(getBackButtonMode())
+                .backgroundColor(UIConfig.uiNavigationPrimaryColor)
+                .build()
         )
     }
 

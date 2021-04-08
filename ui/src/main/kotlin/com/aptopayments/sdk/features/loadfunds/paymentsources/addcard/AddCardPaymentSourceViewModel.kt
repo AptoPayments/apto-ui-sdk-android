@@ -97,7 +97,7 @@ internal class AddCardPaymentSourceViewModel(
 
     private fun getFailureMessage(failure: Failure): String {
         return if (failure is Failure.ServerError && !failure.hasUndefinedKey()) {
-            failure.getErrorKey()
+            failure.errorKey
         } else {
             "load_funds_add_card_error_message"
         }

@@ -19,6 +19,8 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsViewModel
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartViewModel
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourcesViewModel
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
+import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel
+import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCardSuccessViewModel
 import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeViewModel
 import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeViewModel
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewModel
@@ -145,4 +147,6 @@ val viewModelModule = module {
     viewModel { AddFundsSelectorDialogViewModel(get()) }
     viewModel { (cardId: String) -> DirectDepositInstructionsViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> AchAccountDetailsViewModel(cardId, get(), get()) }
+    viewModel { (cardId: String) -> OrderPhysicalCardViewModel(cardId, get(), get()) }
+    viewModel { (cardId: String) -> OrderPhysicalCardSuccessViewModel(cardId, get(), get()) }
 }

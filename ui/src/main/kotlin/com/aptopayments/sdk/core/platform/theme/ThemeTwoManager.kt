@@ -413,6 +413,22 @@ internal object ThemeTwoManager : ThemeManager {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
     }
 
+    override fun customizeMainItemInverted(textView: TextView) {
+        setFontType(textView, REGULAR)
+        textView.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            setTextColor(UIConfig.textTertiaryColor)
+        }
+    }
+
+    override fun customizeMainItemRightInverted(textView: TextView) {
+        setFontType(textView, REGULAR)
+        textView.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            setTextColor(UIConfig.textPrimaryColor)
+        }
+    }
+
     private fun setFontType(textView: TextView, fontType: FontType) {
         FontsUtil.getFontOfType(fontType)?.let {
             textView.typeface = it

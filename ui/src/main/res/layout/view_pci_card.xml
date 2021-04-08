@@ -1,87 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:elevation="@dimen/_4sdp"
-    app:cardCornerRadius="16dp"
-    android:translationZ="@dimen/_4sdp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/card_container"
+    <data>
+
+        <import type="com.aptopayments.sdk.ui.views.PCICardView.Status" />
+
+        <variable
+            name="status"
+            type="com.aptopayments.sdk.ui.views.PCICardView.Status" />
+    </data>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@color/colorPrimary">
+        android:elevation="@dimen/_4sdp"
+        android:translationZ="@dimen/_4sdp"
+        app:cardCornerRadius="16dp">
 
-        <ImageView
-            android:id="@+id/iv_background_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@null"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:background="@color/colorPrimary">
 
-        <com.aptopayments.sdk.pci.PCIView
-            android:id="@+id/pci_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clickable="false"
-            android:focusable="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.aptopayments.sdk.ui.views.AptoCardView
+                android:id="@+id/pci_card_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/network_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/llsdk_card_left_margin"
-            android:contentDescription="@null"
-            android:paddingBottom="@dimen/llsdk_card_bottom_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:src="@drawable/ic_visa_logo" />
+            <com.aptopayments.sdk.pci.PCIView
+                android:id="@+id/pci_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/card_logo"
-            android:layout_width="56dp"
-            android:layout_height="44dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/llsdk_card_bottom_margin"
-            android:layout_marginEnd="@dimen/llsdk_card_left_margin"
-            android:contentDescription="@null"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@color/colorAccent" />
+            <FrameLayout
+                android:id="@+id/card_disabled_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/card_disabled_background"
+                android:orientation="horizontal"
+                app:visibleIf="@{status == Status.CARD_DISABLED}"
+                tools:visibility="gone">
 
-        <include
-            layout="@layout/include_card_disabled_overlay"
-            android:visibility="gone" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingLeft="80dp"
+                    android:paddingTop="40dp"
+                    android:paddingRight="80dp"
+                    android:paddingBottom="56dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_lock" />
+            </FrameLayout>
 
-        <include
-            layout="@layout/include_card_error_overlay"
-            android:visibility="gone" />
+            <FrameLayout
+                android:id="@+id/card_error_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/card_disabled_background"
+                android:orientation="horizontal"
+                app:visibleIf="@{status == Status.INVALID_BALANCE}"
+                tools:visibility="gone">
 
-        <View
-            android:id="@+id/pci_click_listener"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:visibility="gone" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:paddingLeft="80dp"
+                    android:paddingTop="64dp"
+                    android:paddingRight="80dp"
+                    android:paddingBottom="72dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_error" />
+            </FrameLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/pci_start_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            <FrameLayout
+                android:id="@+id/card_invisible_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

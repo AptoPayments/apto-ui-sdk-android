@@ -5,7 +5,9 @@ import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.mobile.exception.Failure
+import com.aptopayments.mobile.exception.server.ServerErrorFactory
 import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
@@ -19,7 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -31,6 +32,7 @@ private const val ERROR_INSUFFICIENT_FUNDS = 90196
 private const val ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS_DISABLED = 200040
 private const val ERROR_BALANCE_VALIDATIONS_INSUFFICIENT_APPLICATION_LIMIT = 200041
 private const val ERROR_OTHER = 1234
+private const val METADATA = "metadata"
 
 @Suppress("UNCHECKED_CAST")
 class IssueCardViewModelTest : AndroidTest() {
@@ -41,18 +43,13 @@ class IssueCardViewModelTest : AndroidTest() {
 
     private lateinit var sut: IssueCardViewModel
 
-    @Mock
-    private lateinit var analyticsManager: AnalyticsManager
+    private val serverErrorFactory = ServerErrorFactory()
+    private val analyticsManager: AnalyticsManager = mock()
+    private val aptoPlatform: AptoPlatformProtocol = mock()
+    private val issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository = mock()
 
-    @Mock
-    private lateinit var aptoPlatform: AptoPlatformProtocol
-
-    @Mock
-    private lateinit var issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository
-
-    private val metadata = "metadata"
     private val additionalFields = mapOf("test" to "test1")
-    private val initializationDataRepository = InMemoryInitializationDataRepository(InitializationData(cardMetadata = metadata))
+    private val initializationDataRepository = InMemoryInitializationDataRepository(InitializationData(cardMetadata = METADATA))
 
     @Before
     override fun setUp() {
@@ -122,12 +119,13 @@ class IssueCardViewModelTest : AndroidTest() {
 
         createSut()
 
-        assertEquals(metadata, captor.firstValue)
+        assertEquals(METADATA, captor.firstValue)
     }
 
     @Test
     fun `when issueCard fails insufficient funds then correct errors shown`() {
-        configureIssueCardApi(Either.Left(Failure.ServerError(ERROR_INSUFFICIENT_FUNDS)))
+        val error = serverErrorFactory.create(ERROR_INSUFFICIENT_FUNDS)
+        configureIssueCardApi(error.left())
 
         createSut()
 
@@ -141,7 +139,8 @@ class IssueCardViewModelTest : AndroidTest() {
 
     @Test
     fun `when issueCard fails then IssueCardViewModel then issueCard call is made correctly`() {
-        configureIssueCardApi(Either.Left(Failure.ServerError(ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS_DISABLED)))
+        val error = serverErrorFactory.create(ERROR_BALANCE_VALIDATIONS_EMAIL_SENDS_DISABLED)
+        configureIssueCardApi(error.left())
 
         createSut()
 
@@ -155,7 +154,8 @@ class IssueCardViewModelTest : AndroidTest() {
 
     @Test
     fun `when issueCard fails for insufficient application limit then correct errors shown`() {
-        configureIssueCardApi(Either.Left(Failure.ServerError(ERROR_BALANCE_VALIDATIONS_INSUFFICIENT_APPLICATION_LIMIT)))
+        val error = serverErrorFactory.create(ERROR_BALANCE_VALIDATIONS_INSUFFICIENT_APPLICATION_LIMIT)
+        configureIssueCardApi(error.left())
 
         createSut()
 

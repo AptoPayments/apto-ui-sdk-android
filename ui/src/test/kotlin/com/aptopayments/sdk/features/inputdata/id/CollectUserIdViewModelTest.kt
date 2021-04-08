@@ -23,7 +23,8 @@ private val COUNTRY_UK = Country("UK")
 private val COUNTRY_AR = Country("AR")
 private val MULTI_DOCUMENT_TYPE_LIST = listOf(IdDocumentDataPoint.Type.SSN, IdDocumentDataPoint.Type.IDENTITY_CARD)
 private val SINGLE_DOCUMENT_TYPE_LIST = listOf(IdDocumentDataPoint.Type.SSN)
-private val DOCUMENT_NUMBER = "1234567"
+private const val DOCUMENT_NUMBER = "1234567"
+private const val VALID_SSN = "778628144"
 
 class CollectUserIdViewModelTest : UnitTest() {
 
@@ -92,7 +93,7 @@ class CollectUserIdViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when country and document type selected but no number then continue is disabled`() {
+    fun `given AR, document_type set when no number then continue is disabled`() {
         whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
 
         createSut()
@@ -104,16 +105,68 @@ class CollectUserIdViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when country, documentType selected and number entered then continue is enabled`() {
+    fun `given AR, document_type set when number entered then continue is enabled`() {
         whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
 
         createSut()
         sut.selectedCountry.value = COUNTRY_AR
         sut.typeList.getOrAwaitValue()
         sut.onIdTypeSelected(0)
-        sut.number.value = "1234"
+        sut.number.value = DOCUMENT_NUMBER
 
         assertTrue { sut.continueEnabled.getOrAwaitValue() }
+    }
+
+    @Test
+    fun `given US, SSN selected when wrong number entered then continue is disabled`() {
+        whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
+
+        createSut()
+        sut.selectedCountry.value = COUNTRY_US
+        sut.typeList.getOrAwaitValue()
+        sut.onIdTypeSelected(0)
+        sut.number.value = DOCUMENT_NUMBER
+
+        assertFalse { sut.continueEnabled.getOrAwaitValue() }
+    }
+
+    @Test
+    fun `given US, SSN selected when correct number entered then continue is enabled`() {
+        whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
+
+        createSut()
+        sut.selectedCountry.value = COUNTRY_US
+        sut.typeList.getOrAwaitValue()
+        sut.onIdTypeSelected(0)
+        sut.number.value = VALID_SSN
+
+        assertTrue { sut.continueEnabled.getOrAwaitValue() }
+    }
+
+    @Test
+    fun `given US, ID_card selected when any number entered then continue is enabled`() {
+        whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
+
+        createSut()
+        sut.selectedCountry.value = COUNTRY_US
+        sut.typeList.getOrAwaitValue()
+        sut.onIdTypeSelected(1)
+        sut.number.value = DOCUMENT_NUMBER
+
+        assertTrue { sut.continueEnabled.getOrAwaitValue() }
+    }
+
+    @Test
+    fun `given US, ID_card selected when empty number entered then continue is enabled`() {
+        whenever(config.allowedDocumentTypes).thenReturn(multiCountryMap)
+
+        createSut()
+        sut.selectedCountry.value = COUNTRY_US
+        sut.typeList.getOrAwaitValue()
+        sut.onIdTypeSelected(1)
+        sut.number.value = ""
+
+        assertFalse { sut.continueEnabled.getOrAwaitValue() }
     }
 
     @Test

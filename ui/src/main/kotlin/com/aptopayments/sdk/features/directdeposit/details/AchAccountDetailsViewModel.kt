@@ -18,9 +18,6 @@ internal class AchAccountDetailsViewModel(
     private val _achAccountDetails = MutableLiveData<AchAccountDetails>()
     val achAccountDetails = _achAccountDetails as LiveData<AchAccountDetails>
 
-    private val _cardProgramName = MutableLiveData("")
-    val cardProgramName = _cardProgramName as LiveData<String>
-
     val actions = LiveEvent<Action>()
 
     init {
@@ -37,9 +34,6 @@ internal class AchAccountDetailsViewModel(
             hideLoading()
             result.either(::handleFailure) { card ->
                 _achAccountDetails.postValue(card.features?.achAccount?.accountDetails)
-                aptoPlatform.fetchCardProduct(card.cardProductID!!, false) { resultProgram ->
-                    resultProgram.runIfRight { _cardProgramName.postValue(it.name) }
-                }
             }
         }
     }

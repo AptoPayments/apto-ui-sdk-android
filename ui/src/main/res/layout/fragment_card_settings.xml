@@ -100,9 +100,22 @@
                         app:optionDescription="card_settings.settings.card_details.description"
                         app:optionTitle="card_settings_settings_card_details_title" />
 
-                    <include
-                        android:id="@+id/rl_lock_card"
-                        layout="@layout/view_section_switch_two" />
+                    <com.aptopayments.sdk.ui.views.SectionSwitchView
+                        android:id="@+id/card_settings_lock_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings.settings.lock_card.description"
+                        app:optionShowDivider="@{viewModel.cardUiState.showOrderPhysical}"
+                        app:optionTitle="card_settings.settings.lock_card.title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/card_settings_order_physical"
+                        visibleIf="@{viewModel.cardUiState.showOrderPhysical}"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:onClickSafe="@{() -> viewModel.orderPhysicalCard()}"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_settings_order_physical_title" />
 
                 </LinearLayout>
 
@@ -119,9 +132,13 @@
                         android:layout_height="wrap_content"
                         app:headerTitle="card_settings.transactions.title" />
 
-                    <include
-                        android:id="@+id/rl_detailed_card_activity"
-                        layout="@layout/view_section_switch_two" />
+                    <com.aptopayments.sdk.ui.views.SectionSwitchView
+                        android:id="@+id/card_settings_detailed_activity_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings.transactions.detailed_card_activity.description"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings.transactions.detailed_card_activity.title" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,7 +166,9 @@
                         android:id="@+id/rl_contact_support"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/section_option_height"
-                        android:onClick="@{() ->viewModel.onCustomerSupport()}" />
+                        android:onClick="@{() ->viewModel.onCustomerSupport()}"
+                        app:optionDescription="@{viewModel.supportTexts.first}"
+                        app:optionTitle="@{viewModel.supportTexts.second}" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_report_stolen_card"
@@ -165,6 +184,7 @@
                         app:onClickSafe="@{()-> viewModel.onFaqPressed()}"
                         app:optionDescription="card_settings_legal_faq_description"
                         app:optionTitle="card_settings_legal_faq_title"
+                        app:optionShowDivider="@{viewModel.cardUiState.showMonthlyStatement}"
                         app:visibleIf="@{viewModel.showFaq}" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
@@ -173,6 +193,7 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings_help_monthly_statements_description"
                         app:optionShowDivider="false"
+                        app:visibleIf="@{viewModel.cardUiState.showMonthlyStatement}"
                         app:optionTitle="card_settings_help_monthly_statements_title" />
 
                 </LinearLayout>

@@ -39,6 +39,7 @@ internal class DisclaimerFragment :
     }
 
     override fun setupViewModel() {
+        // do nothing
     }
 
     override fun setupUI() {

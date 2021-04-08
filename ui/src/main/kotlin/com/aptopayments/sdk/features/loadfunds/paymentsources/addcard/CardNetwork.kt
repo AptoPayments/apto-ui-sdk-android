@@ -39,7 +39,7 @@ internal enum class CardNetwork(
         fun fromString(value: String) =
             try {
                 valueOf(value.toUpperCase(Locale.US))
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 UNKNOWN
             }
     }

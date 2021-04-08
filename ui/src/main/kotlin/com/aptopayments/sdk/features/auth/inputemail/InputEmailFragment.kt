@@ -61,9 +61,13 @@ internal class InputEmailFragment : BaseFragment(), InputEmailContract.View {
         super.setupListeners()
         continue_button.setOnClickListenerSafe { handleContinueButtonClick() }
         et_email.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // do nothing
+            }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // do nothing
+            }
 
             override fun afterTextChanged(s: Editable?) {
                 updateContinueButtonState(s.toString().isValidEmail())

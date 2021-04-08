@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/order_physical_card_title"
+            style="@style/ThemeTwo.TextHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
+            app:localize="order_physical_card_order_screen_title" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/order_physical_card_explanation"
+            style="@style/ThemeTwo.TextInput"
+            android:layout_centerHorizontal="true"
+            android:gravity="start"
+            android:lineSpacingExtra="3sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/order_physical_card_title"
+            app:localize="order_physical_card_order_screen_subtitle" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/order_physical_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="24dp"
+            android:elevation="@dimen/_4sdp"
+            android:translationZ="@dimen/_4sdp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/order_physical_card_explanation">
+
+            <com.aptopayments.sdk.ui.views.AptoCardView
+                android:id="@+id/order_physical_card_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/order_physical_card_card_fee_title"
+            style="@style/ThemeTwo.TextInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            app:layout_constraintEnd_toStartOf="@+id/order_physical_card_card_fee_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/order_physical_card_container"
+            app:localize="order_physical_card_order_screen_card_fee_title" />
+
+        <TextView
+            android:id="@+id/order_physical_card_card_fee_number"
+            style="@style/ThemeTwo.TextInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@{viewModel.state.fee}"
+            app:layout_constraintBottom_toBottomOf="@+id/order_physical_card_card_fee_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/order_physical_card_card_fee_title"
+            app:layout_constraintTop_toTopOf="@+id/order_physical_card_card_fee_title"
+            tools:text="$10,10" />
+
+        <include
+            android:id="@+id/order_physical_card_divider_line"
+            layout="@layout/include_divider_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_line_height"
+            android:layout_marginHorizontal="@dimen/llsdk_medium_margin"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            app:layout_constraintTop_toBottomOf="@+id/order_physical_card_card_fee_title" />
+
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="order_physical_card_card_fee_title,order_physical_card_card_fee_number,order_physical_card_divider_line"
+            app:visibleIf="@{viewModel.state.visibleFee}"
+            tools:visibility="visible" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/order_physical_action_order"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_marginTop="@dimen/_6sdp"
+            app:layout_constraintBottom_toTopOf="@+id/order_physical_action_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="order_physical_card_order_screen_order_action"
+            app:onClickSafe="@{() -> viewModel.orderCard()}" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/order_physical_action_cancel"
+            style="@style/ThemeTwo.TextLink"
+            android:layout_marginBottom="@dimen/llsdk_big_button_bottom_margin"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="order_physical_card_order_screen_cancel_action"
+            app:onClickSafe="@{() -> viewModel.navigateBack()}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

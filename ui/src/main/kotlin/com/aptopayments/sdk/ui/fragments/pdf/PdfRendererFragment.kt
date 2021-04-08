@@ -39,6 +39,7 @@ internal class PdfRendererFragment :
     }
 
     override fun setupViewModel() {
+        // do nothing
     }
 
     override fun viewLoaded() {

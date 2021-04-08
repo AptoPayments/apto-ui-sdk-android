@@ -28,18 +28,13 @@ internal class DirectDepositInstructionsViewModel(
         showLoading()
         aptoPlatform.fetchCard(cardId, false) { result ->
             result.either(::handleFailure) { card ->
-                aptoPlatform.fetchCardProduct(card.cardProductID ?: "", false) {
-                    it.either(::handleFailure) { cardProduct ->
-                        hideLoading()
-                        _uiState.postValue(
-                            UiState(
-                                cardName = cardProduct.name,
-                                accountNumber = card.features?.achAccount?.accountDetails?.accountNumber ?: "",
-                                routingNumber = card.features?.achAccount?.accountDetails?.routingNumber ?: ""
-                            )
-                        )
-                    }
-                }
+                hideLoading()
+                _uiState.postValue(
+                    UiState(
+                        accountNumber = card.features?.achAccount?.accountDetails?.accountNumber ?: "",
+                        routingNumber = card.features?.achAccount?.accountDetails?.routingNumber ?: ""
+                    )
+                )
             }
         }
     }
@@ -57,7 +52,6 @@ internal class DirectDepositInstructionsViewModel(
     }
 
     data class UiState(
-        val cardName: String = "",
         val accountNumber: String = "",
         val routingNumber: String = ""
     )

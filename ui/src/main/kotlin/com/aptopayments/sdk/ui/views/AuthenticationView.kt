@@ -157,7 +157,10 @@ internal class AuthenticationView @JvmOverloads constructor(
     }
 
     private fun getBiometricsCancelText() =
-        if (isOnlyBiometricsMethod()) "auth_verify_biometric_cancel".localized() else "auth_verify_biometric_use_passcode".localized()
+        if (isOnlyBiometricsMethod())
+            "auth_verify_biometric_cancel".localized()
+        else
+            "auth_verify_biometric_use_passcode".localized()
 
     enum class AuthType {
         FORCED, OPTIONAL

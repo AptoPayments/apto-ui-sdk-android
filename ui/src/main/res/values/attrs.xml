@@ -18,9 +18,18 @@
         <attr name="optionDescription" format="string" />
         <attr name="optionShowDivider" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="SectionSwitchViewTwo">
+        <attr name="optionShowDivider"/>
+    </declare-styleable>
 
     <declare-styleable name="SecretPinView">
         <attr name="length" format="integer" />
         <attr name="showForgot" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SectionSwitchView">
+        <attr name="optionTitle" />
+        <attr name="optionDescription" />
+        <attr name="optionShowDivider" />
     </declare-styleable>
 </resources>

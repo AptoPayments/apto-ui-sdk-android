@@ -26,6 +26,8 @@ import com.aptopayments.sdk.features.card.cardstats.CardMonthlyStatsContract
 import com.aptopayments.sdk.features.card.cardstats.chart.CardTransactionsChartContract
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
+import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardContract
+import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCardSuccessContract
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartFragment
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinContract
 import com.aptopayments.sdk.features.card.setpin.SetCardPinContract
@@ -162,4 +164,6 @@ internal interface FragmentFactory {
     fun addFundsSelectorDialogFragment(tag: String): AddFundsSelectorDialogContract.View
     fun directDepositInstructionsFragment(cardId: String, tag: String): DirectDepositInstructionsContract.View
     fun achAccountDetailsDialogFragment(cardId: String, tag: String): AchAccountDetailsDialogContract.View
+    fun orderPhysicalCardFragment(cardId: String, tag: String): OrderPhysicalCardContract.View
+    fun orderPhysicalCardSuccessFragment(cardId: String, tag: String): OrderPhysicalCardSuccessContract.View
 }

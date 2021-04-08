@@ -45,7 +45,9 @@ object DataBindingUtils {
     fun setOnOkInSoftKeyboardListener(editText: EditText, listener: (() -> Unit)?) {
         editText.imeOptions = EditorInfo.IME_ACTION_DONE
         editText.setOnEditorActionListener { _, actionId, event ->
-            if ((event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) && listener != null) {
+            if ((event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) &&
+                listener != null
+            ) {
                 listener.invoke()
                 true
             } else {

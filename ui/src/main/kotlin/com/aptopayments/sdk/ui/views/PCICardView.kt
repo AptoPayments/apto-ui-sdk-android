@@ -2,20 +2,15 @@ package com.aptopayments.sdk.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.aptopayments.mobile.data.card.Card
-import com.aptopayments.mobile.data.card.CardBackgroundStyle
 import com.aptopayments.mobile.data.card.CardStyle
 import com.aptopayments.mobile.data.config.UIConfig
-import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.*
+import com.aptopayments.sdk.databinding.ViewPciCardBinding
 import com.aptopayments.sdk.features.managecard.CardInfo
 import com.aptopayments.sdk.pci.config.*
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
-import kotlinx.android.synthetic.main.include_card_disabled_overlay.view.*
-import kotlinx.android.synthetic.main.include_card_error_overlay.view.*
-import kotlinx.android.synthetic.main.view_pci_card.view.*
 
 private const val CARD_ASPECT_RATIO = 1.586
 
@@ -31,9 +26,10 @@ class PCICardView @JvmOverloads constructor(
     private var cardState = Card.CardState.ACTIVE
     var delegate: Delegate? = null
 
+    private var binding = ViewPciCardBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
-        View.inflate(context, R.layout.view_pci_card, this)
-        pci_click_listener.setOnClickListenerSafe {
+        binding.cardInvisibleOverlay.setOnClickListenerSafe {
             delegate?.cardViewTapped()
         }
     }
@@ -55,7 +51,7 @@ class PCICardView @JvmOverloads constructor(
         )
         val configCard = PCIConfigCard(lastFour = lastFour, nameOnCard = name)
 
-        pci_view.init(PCIConfig(configAuth = configAuth, configCard = configCard))
+        binding.pciView.init(PCIConfig(configAuth = configAuth, configCard = configCard))
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -71,52 +67,21 @@ class PCICardView @JvmOverloads constructor(
         setCardState(cardInfo?.state)
     }
 
-    private fun setNetworkImage(cardNetwork: Card.CardNetwork?) {
-        val res = getLogoForNetwork(cardNetwork)
-        res?.let { network_logo.setImageResource(it) }
-        network_logo.visibleIf(res != null)
-    }
-
-    private fun getLogoForNetwork(cardNetwork: Card.CardNetwork?): Int? {
-        return when (cardNetwork) {
-            Card.CardNetwork.VISA -> R.drawable.ic_visa_logo
-            Card.CardNetwork.MASTERCARD -> R.drawable.ic_mastercard_logo
-            else -> null
-        }
-    }
-
     private fun setCardStyle(cardInfo: CardInfo?) {
-        setCardBackground(cardInfo?.cardStyle)
-        setCardNetwork(cardInfo)
-        setCardLogo(cardInfo?.cardStyle)
+        binding.pciCardCardView.setCardStyle(
+            cardInfo?.cardStyle,
+            cardInfo?.cardNetwork
+        )
         setTextStyles(cardInfo?.cardStyle)
     }
 
     private fun setTextStyles(style: CardStyle?) {
-        pci_view.setStyle(PCIConfigStyle(textColor = style?.textColor, alertButtonColor = UIConfig.uiPrimaryColor))
-    }
-
-    private fun setCardBackground(style: CardStyle?) {
-        when (val backgroundStyle = style?.background) {
-            is CardBackgroundStyle.Color -> card_container.setBackgroundColor(backgroundStyle.color)
-            is CardBackgroundStyle.Image -> iv_background_image.loadFromUrl(backgroundStyle.url.toString())
-            else -> card_container.setBackgroundColor(UIConfig.uiPrimaryColor)
-        }
-        iv_background_image.visibleIf(style?.background is CardBackgroundStyle.Image)
-    }
-
-    private fun setCardNetwork(cardInfo: CardInfo?) {
-        setNetworkImage(cardInfo?.cardNetwork)
-        updateNetworkLogoIconForCurrentCardStyle(cardInfo?.cardStyle)
-    }
-
-    private fun setCardLogo(style: CardStyle?) {
-        style?.background?.logo.let { card_logo.loadFromUrl(it.toString()) }
-        card_logo.visibleIf(style?.background?.logo != null)
-    }
-
-    private fun updateNetworkLogoIconForCurrentCardStyle(cardStyle: CardStyle?) {
-        network_logo.goneIf(cardStyle?.background is CardBackgroundStyle.Image)
+        binding.pciView.setStyle(
+            PCIConfigStyle(
+                textColor = style?.textColor,
+                alertButtonColor = UIConfig.uiPrimaryColor
+            )
+        )
     }
 
     private fun setCardState(state: Card.CardState?) {
@@ -130,42 +95,36 @@ class PCICardView @JvmOverloads constructor(
     }
 
     private fun updateCardState() {
-        if (cardState == Card.CardState.ACTIVE && hasValidFundingSource) {
-            enableCard()
-        } else {
-            if (!hasValidFundingSource) {
-                showInvalidBalance()
-            } else {
-                showCardDisabled()
-            }
+        setCardStatus(getCardStatus())
+    }
+
+    private fun getCardStatus(): Status {
+        return when {
+            cardState == Card.CardState.ACTIVE && hasValidFundingSource -> Status.CARD_ENABLED
+            !hasValidFundingSource -> Status.INVALID_BALANCE
+            else -> Status.CARD_DISABLED
         }
     }
 
-    private fun enableCard() {
-        card_disabled_overlay.remove()
-        card_error_overlay.remove()
-    }
-
-    private fun showInvalidBalance() {
-        card_disabled_overlay.remove()
-        card_error_overlay.show()
-    }
-
-    private fun showCardDisabled() {
-        card_disabled_overlay.show()
-        card_error_overlay.remove()
+    private fun setCardStatus(status: Status) {
+        binding.status = status
+        binding.executePendingBindings()
     }
 
     fun showCardDetails(value: Boolean) {
         if (value) {
-            pci_view.showPCIData()
+            binding.pciView.showPCIData()
         } else {
-            pci_view.hidePCIData()
+            binding.pciView.hidePCIData()
         }
     }
 
     interface Delegate {
         fun cardViewTapped()
+    }
+
+    enum class Status {
+        CARD_ENABLED, INVALID_BALANCE, CARD_DISABLED
     }
 }
 

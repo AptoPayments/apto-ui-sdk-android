@@ -3,6 +3,7 @@ package com.aptopayments.sdk.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebView
+import kotlin.math.floor
 
 interface AptoWebViewDelegate {
     fun didScrollToBottom()
@@ -20,7 +21,7 @@ internal class AptoWebView @JvmOverloads constructor(
     @Suppress("DEPRECATION")
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, t, oldl, oldt)
-        val height = Math.floor((contentHeight * scale).toDouble()).toInt()
+        val height = floor((contentHeight * scale).toDouble()).toInt()
         val webViewHeight = getHeight()
         val cutoff = height - webViewHeight - 10
         if (t >= cutoff) delegate?.didScrollToBottom()

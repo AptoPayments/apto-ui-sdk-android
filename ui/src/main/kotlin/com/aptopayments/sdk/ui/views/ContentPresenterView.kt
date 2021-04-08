@@ -3,7 +3,6 @@ package com.aptopayments.sdk.ui.views
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
@@ -86,9 +85,18 @@ class ContentPresenterView @JvmOverloads constructor(
         wb_content_web.show()
         tv_content_text.remove()
         md_content_markdown.remove()
-        wb_content_web.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView, progress: Int) {
-                if (progress == 100) delegate?.onContentLoaded()
+        wb_content_web.webViewClient = object : WebViewClient() {
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                delegate?.onContentLoaded()
+                checkScrolledToBottom(view)
+            }
+
+            private fun checkScrolledToBottom(view: WebView?) {
+                if ((view?.contentHeight ?: 0) < wb_content_web.height) {
+                    delegate?.didScrollToBottom()
+                }
             }
         }
         wb_content_web.settings.javaScriptEnabled = true

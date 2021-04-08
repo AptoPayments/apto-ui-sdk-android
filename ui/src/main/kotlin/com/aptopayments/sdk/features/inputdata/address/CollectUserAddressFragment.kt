@@ -139,7 +139,7 @@ internal class CollectUserAddressFragment :
         }
     }
 
-    private class NoApiKeyFailure() : Failure.FeatureFailure("error_something_went_wrong")
+    private class NoApiKeyFailure : Failure.FeatureFailure("error_something_went_wrong")
 
     companion object {
         fun newInstance(dataPoint: AddressDataPoint?, config: AllowedCountriesConfiguration, tag: String) =

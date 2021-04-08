@@ -72,9 +72,6 @@ internal class AchAccountDetailsDialogFragment :
             account_details_account_number_details.text = it.accountNumber
             account_details_routing_details.text = it.routingNumber
         }
-        observeNotNullable(viewModel.cardProgramName) {
-            account_details_bottom_legend.text = "load_funds_ach_account_details_dialog_offered_by".localized().setValue(it)
-        }
     }
 
     private fun copyValue(label: String, value: String) {

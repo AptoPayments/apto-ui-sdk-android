@@ -74,10 +74,16 @@ internal class TransactionListAdapter(
                 viewHolder.mccIcon?.setImageResource(it.iconResource)
                 viewHolder.mccIcon?.setColorFilter(UIConfig.iconSecondaryColor, PorterDuff.Mode.SRC_ATOP)
             }
-            transaction.transactionDescription?.let { viewHolder.transactionDescriptionView?.setText(it.toCapitalized()) }
+            transaction.transactionDescription?.let {
+                viewHolder.transactionDescriptionView?.setText(it.toCapitalized())
+            }
             viewHolder.transactionDateView?.text = transaction.createdAt.formatForTransactionList()
-            transaction.localAmount?.let { viewHolder.transactionAmountView?.setText(transaction.getLocalAmountRepresentation()) }
-            transaction.nativeBalance?.let { viewHolder.transactionNativeAmountView?.setText(transaction.getNativeBalanceRepresentation()) }
+            transaction.localAmount?.let {
+                viewHolder.transactionAmountView?.setText(transaction.getLocalAmountRepresentation())
+            }
+            transaction.nativeBalance?.let {
+                viewHolder.transactionNativeAmountView?.setText(transaction.getNativeBalanceRepresentation())
+            }
             viewHolder.transactionNativeAmountView?.goneIf(transaction.localAmount == transaction.nativeBalance)
             if (isLastPositionOfSection(position)) viewHolder.transactionRowSeparator?.hide()
             else viewHolder.transactionRowSeparator?.show()

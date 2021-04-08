@@ -35,7 +35,12 @@ internal class SetPasscodeFlow(
     }
 
     override fun setPinFinished(pin: String) {
-        val fragment = fragmentFactory.confirmPasscodeFragment(cardId = cardId, pin = pin, verificationId = verificationId, tag = CONFIRM_PASSCODE_TAG)
+        val fragment = fragmentFactory.confirmPasscodeFragment(
+            cardId = cardId,
+            pin = pin,
+            verificationId = verificationId,
+            tag = CONFIRM_PASSCODE_TAG
+        )
         fragment.delegate = this
         push(fragment as BaseFragment)
     }
