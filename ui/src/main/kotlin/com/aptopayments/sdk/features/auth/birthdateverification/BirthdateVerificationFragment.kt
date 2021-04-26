@@ -58,8 +58,6 @@ internal class BirthdateVerificationFragment : BaseFragment(), BirthdateVerifica
         }
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     override fun setupListeners() {
         continue_button.setOnClickListenerSafe {
             hideKeyboard()

@@ -14,6 +14,10 @@ internal class KycStatusViewModel(
 
     var kycStatus: MutableLiveData<KycStatus> = MutableLiveData()
 
+    init {
+        analyticsManager.track(Event.ManageCardKycStatus)
+    }
+
     fun getKycStatus(cardId: String) {
         showLoading()
         AptoPlatform.fetchCard(cardId = cardId, forceRefresh = true) { result ->
@@ -26,9 +30,5 @@ internal class KycStatusViewModel(
 
     private fun handleCard(card: Card) {
         kycStatus.postValue(card.kycStatus)
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardKycStatus)
     }
 }

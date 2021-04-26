@@ -1,24 +1,20 @@
 package com.aptopayments.sdk.utils
 
 import android.content.Context
-import com.aptopayments.sdk.UnitTest
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
 private const val TEST_STRING = "TEST"
 private const val TEST_STRING_RESOURCE = 1234
 
-class StringProviderImplTest : UnitTest() {
+class StringProviderImplTest {
 
-    @Mock
-    private lateinit var appContext: Context
-
-    @Mock
-    private lateinit var context: Context
+    private val appContext: Context = mock()
+    private val context: Context = mock()
 
     private lateinit var sut: StringProviderImpl
 

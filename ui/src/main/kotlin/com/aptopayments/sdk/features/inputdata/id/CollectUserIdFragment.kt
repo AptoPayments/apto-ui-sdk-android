@@ -106,8 +106,6 @@ internal class CollectUserIdFragment :
         delegate?.onBackFromCollectId()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     override fun setUpArguments() {
         config = requireArguments()[CONFIGURATION_BUNDLE] as IdDataPointConfiguration
         initialValue = requireArguments()[DATAPOINT_ID] as IdDocumentDataPoint?

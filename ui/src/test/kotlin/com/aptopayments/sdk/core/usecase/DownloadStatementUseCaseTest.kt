@@ -2,7 +2,6 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.data.statements.MonthlyStatement
 import com.aptopayments.mobile.functional.Either
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.repository.StatementRepositoryImpl
 import com.aptopayments.sdk.utils.*
@@ -11,23 +10,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
 import org.threeten.bp.ZonedDateTime
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-internal class DownloadStatementUseCaseTest : UnitTest() {
+internal class DownloadStatementUseCaseTest {
 
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
-    @Mock
-    lateinit var fileDownloader: FileDownloader
-
-    @Mock
-    lateinit var cacheFileManager: CacheFileManager
+    private val fileDownloader: FileDownloader = mock()
+    private val cacheFileManager: CacheFileManager = mock()
 
     lateinit var statement: MonthlyStatement
     lateinit var params: DownloadStatementUseCase.Params

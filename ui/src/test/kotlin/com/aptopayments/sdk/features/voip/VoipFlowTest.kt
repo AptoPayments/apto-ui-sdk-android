@@ -2,34 +2,28 @@ package com.aptopayments.sdk.features.voip
 
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.voip.Action
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 
-class VoipFlowTest : AndroidTest() {
+class VoipFlowTest : UnitTest() {
 
     private lateinit var sut: VoipFlow
 
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
-
-    @Mock
-    private lateinit var mockDelegate: VoipContract.Delegate
-
-    @Mock
-    private lateinit var mockAction: Action
+    private val mockFragmentFactory: FragmentFactory = mock()
+    private val mockDelegate: VoipContract.Delegate = mock()
+    private val mockAction: Action = mock()
     private val cardId = "TEST_CARD_ID"
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(

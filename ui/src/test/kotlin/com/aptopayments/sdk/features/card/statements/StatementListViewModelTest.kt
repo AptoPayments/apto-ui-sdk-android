@@ -1,33 +1,29 @@
 package com.aptopayments.sdk.features.card.statements
 
 import com.aptopayments.mobile.analytics.Event
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.di.useCaseModule
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
-import org.koin.test.KoinTest
 
-class StatementListViewModelTest : AndroidTest(), KoinTest {
+class StatementListViewModelTest : UnitTest() {
 
     private lateinit var sut: StatementListViewModel
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         startKoin { modules(useCaseModule) }
         sut = StatementListViewModel(analyticsManager)
     }
 
     @Test
     fun `test track is called on view loaded`() {
-        sut.viewLoaded()
-        assertTrue(analyticsManager.trackCalled)
-        assertEquals(analyticsManager.lastEvent, Event.MonthlyStatementsListStart)
+        verify(analyticsManager).track(Event.MonthlyStatementsListStart)
     }
 }

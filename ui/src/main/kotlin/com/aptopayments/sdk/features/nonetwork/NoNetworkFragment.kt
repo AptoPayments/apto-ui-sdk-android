@@ -37,7 +37,7 @@ internal class NoNetworkFragment : BaseFragment(), NoNetworkContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideLoading()
+        viewModel.hideLoading()
     }
 
     override fun onStart() {
@@ -65,8 +65,6 @@ internal class NoNetworkFragment : BaseFragment(), NoNetworkContract.View {
             tv_loading_text.typeface = it
         }
     }
-
-    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance() = NoNetworkFragment()

@@ -12,30 +12,21 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mock
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class SelectBalanceStoreFlowTest : UnitTest() {
 
     private lateinit var sut: SelectBalanceStoreFlow
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
+    private val mockFragmentFactory: FragmentFactory = mock()
     private val cardApplicationId = "TEST_CARD_APPLICATION_ID"
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
-    @Mock
-    private lateinit var mockAptoPlatform: AptoPlatform
+    private var analyticsManager: AnalyticsServiceContract = mock()
+    private val mockAptoPlatform: AptoPlatform = mock()
 
     @Before
     fun setUp() {
@@ -99,7 +90,6 @@ class SelectBalanceStoreFlowTest : UnitTest() {
         sut.selectBalanceStore(TestDataProvider.provideOAuthAttempt())
 
         // Then
-        assertTrue(analyticsManager.trackCalled)
-        assertEquals(analyticsManager.lastEvent, Event.SelectBalanceStoreOauthConfirmIdentityNotVerified)
+        verify(analyticsManager).track(Event.SelectBalanceStoreOauthConfirmIdentityNotVerified)
     }
 }

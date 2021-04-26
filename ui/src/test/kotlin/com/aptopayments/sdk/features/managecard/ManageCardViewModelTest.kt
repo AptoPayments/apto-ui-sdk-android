@@ -2,6 +2,7 @@
 
 package com.aptopayments.sdk.features.managecard
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
@@ -12,22 +13,21 @@ import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mock
 import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -35,27 +35,22 @@ import kotlin.test.assertTrue
 
 private const val CARD_ID = "CARD_ID_1"
 
-class ManageCardViewModelTest : AndroidTest() {
+class ManageCardViewModelTest : UnitTest() {
+
+    @Rule
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: ManageCardViewModel
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
-
-    @Mock
-    private lateinit var fetchTransactionsTaskQueue: FetchTransactionsTaskQueue
-
-    @Mock
-    private lateinit var transactionsObserver: Observer<List<Transaction>?>
-
-    @Mock
-    private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
-
-    @Mock
-    private lateinit var aptoPlatform: AptoPlatformProtocol
+    private var analyticsManager: AnalyticsServiceContract = mock()
+    private val fetchTransactionsTaskQueue: FetchTransactionsTaskQueue = mock()
+    private val transactionsObserver: Observer<List<Transaction>?> = mock()
+    private val aptoUiSdkProtocol: AptoUiSdkProtocol = mock()
+    private val aptoPlatform: AptoPlatformProtocol = mock()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         startKoin {
             modules(listOf(applicationModule, useCaseModule))
         }
@@ -75,13 +70,10 @@ class ManageCardViewModelTest : AndroidTest() {
     }
 
     @Test
-    fun `test track is called on view loaded`() {
+    fun `test track is called on init`() {
         createSut()
 
-        sut.viewLoaded()
-
-        assertTrue { analyticsManager.trackCalled }
-        assertEquals(analyticsManager.lastEvent, Event.ManageCard)
+        verify(analyticsManager).track(Event.ManageCard)
     }
 
     @Test

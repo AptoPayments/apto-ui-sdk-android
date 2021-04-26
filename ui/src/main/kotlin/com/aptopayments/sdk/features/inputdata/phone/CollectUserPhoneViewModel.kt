@@ -18,7 +18,7 @@ internal class CollectUserPhoneViewModel(private val analyticsManager: Analytics
     val continueEnabled = _continueEnabled as LiveData<Boolean>
     val continuePressed = LiveEvent<PhoneDataPoint>()
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.WorkflowUserPhone)
     }
 

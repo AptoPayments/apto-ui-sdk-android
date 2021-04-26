@@ -15,7 +15,7 @@ internal abstract class CardPinViewModel(
 
     val action = LiveEvent<Action>()
 
-    fun trackEvent() {
+    init {
         analyticsManager.track(event)
     }
 

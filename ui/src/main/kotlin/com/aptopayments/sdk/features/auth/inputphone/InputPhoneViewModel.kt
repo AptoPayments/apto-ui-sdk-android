@@ -26,6 +26,10 @@ internal class InputPhoneViewModel(
     val verificationData = MutableLiveData<Verification?>(null)
     val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
 
+    init {
+        analyticsManager.track(Event.AuthInputPhone)
+    }
+
     fun onContinueClicked() {
         showLoading()
         val parsedPhoneNumber = PhoneNumberUtil.getInstance().parse(phoneNumber, countryCode)
@@ -43,8 +47,6 @@ internal class InputPhoneViewModel(
             verificationData.postValue(verification)
         }
     }
-
-    fun viewLoaded() = analyticsManager.track(Event.AuthInputPhone)
 
     fun onPhoneChanged(phoneNumber: String, valid: Boolean) {
         this.phoneNumber = phoneNumber

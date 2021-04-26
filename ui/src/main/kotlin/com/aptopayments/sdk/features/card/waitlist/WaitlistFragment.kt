@@ -40,11 +40,6 @@ internal class WaitlistFragment : BaseFragment(), WaitlistContract.View {
         viewModel.getCard(cardId)
     }
 
-    override fun viewLoaded() {
-        super.viewLoaded()
-        viewModel.viewLoaded()
-    }
-
     override fun setupViewModel() {
         viewModel.apply {
             observe(card) { handleCard(it) }

@@ -145,7 +145,8 @@ class TestDataProvider {
             waitlistBackgroundImage: URL? = null,
             waitlistBackgroundColor: Int? = null,
             waitlistDarkBackgroundColor: Int? = null,
-            waitlistAsset: URL? = null
+            waitlistAsset: URL? = null,
+            exchangeRates: Content? = null,
         ) = CardProduct(
             id = id,
             cardholderAgreement = cardholderAgreement,
@@ -156,7 +157,8 @@ class TestDataProvider {
             waitlistBackgroundImage = waitlistBackgroundImage,
             waitlistBackgroundColor = waitlistBackgroundColor,
             waitlistDarkBackgroundColor = waitlistDarkBackgroundColor,
-            waitlistAsset = waitlistAsset
+            waitlistAsset = waitlistAsset,
+            exchangeRates = exchangeRates,
         )
 
         fun provideCategorySpendingList(): List<CategorySpending> {

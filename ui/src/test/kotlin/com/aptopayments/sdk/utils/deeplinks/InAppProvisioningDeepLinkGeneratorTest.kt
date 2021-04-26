@@ -1,23 +1,21 @@
 package com.aptopayments.sdk.utils.deeplinks
 
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.utils.StringProvider
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import kotlin.test.assertEquals
 
 private const val DEFAULT_SCHEME = "deeplinkscheme"
 private const val PROVISIONING_PATH = "provisioning"
 private const val PARAMETER_CARD = "cardId"
 
-class InAppProvisioningDeepLinkGeneratorTest : UnitTest() {
+class InAppProvisioningDeepLinkGeneratorTest {
 
-    @Mock
-    private lateinit var stringProvider: StringProvider
+    private val stringProvider: StringProvider = mock()
 
     private lateinit var sut: InAppProvisioningDeepLinkGenerator
 

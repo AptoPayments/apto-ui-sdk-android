@@ -1,12 +1,19 @@
 package com.aptopayments.sdk.core.platform
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.exception.Failure.NetworkConnection
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.utils.getOrAwaitValue
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import kotlin.test.assertTrue
 
-class BaseViewModelTest : AndroidTest() {
+class BaseViewModelTest {
+
+    @Rule
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
 
     @Test
     fun `should handle failure by updating live data`() {
@@ -14,7 +21,7 @@ class BaseViewModelTest : AndroidTest() {
 
         viewModel.handleError(NetworkConnection)
 
-        val error = viewModel.failure.value
+        val error = viewModel.failure.getOrAwaitValue()
 
         assertTrue(error is NetworkConnection)
     }

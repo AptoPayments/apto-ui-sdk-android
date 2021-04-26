@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.core.platform
 
+import androidx.annotation.RestrictTo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +11,8 @@ import com.aptopayments.mobile.exception.Failure
  * @see ViewModel
  * @see Failure
  */
-internal abstract class BaseViewModel : ViewModel() {
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+abstract class BaseViewModel : ViewModel() {
 
     val failure: MutableLiveData<Failure> = MutableLiveData()
 

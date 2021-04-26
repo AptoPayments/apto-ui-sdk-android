@@ -91,14 +91,6 @@
                     tools:optionTitle="card_settings_help_contact_support_title" />
 
                 <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                    android:id="@+id/account_settings_statements"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/section_option_height"
-                    app:optionDescription="card_settings.help.monthly_statements.description"
-                    app:optionTitle="card_settings.help.monthly_statements.title"
-                    app:visibleIf="@{viewModel.uiState.monthlyStatementVisibility}" />
-
-                <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                     android:id="@+id/rl_app_version"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/section_option_height"

@@ -13,6 +13,8 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
+import com.aptopayments.sdk.repository.ProvisioningState
+import com.aptopayments.sdk.repository.UnableToProvisionCard
 import com.aptopayments.sdk.ui.views.PCIConfiguration
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.extensions.distinctUntilChanged
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
+import java.lang.RuntimeException
 
 private const val ROWS_PER_PAGE = 20
 
@@ -42,8 +45,8 @@ internal class ManageCardViewModel(
     val transactions = MutableLiveData(listOf<Transaction>())
     val fundingSource = MutableLiveData<Balance?>()
     val transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData(false)
-    val showAddToGooglePay = Transformations.map(iapHelper.showAddCardButton) { showAddCardButton ->
-        aptoUiSdkProtocol.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites() && showAddCardButton
+    val showAddToGooglePay = Transformations.map(iapHelper.state) { state ->
+        iapHelper.satisfyHardwareRequisites() && state is ProvisioningState.CanBeAdded
     }
     val canBackPress: Boolean by lazy { isSdkEmbedded() }
     val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
@@ -54,6 +57,7 @@ internal class ManageCardViewModel(
     val transactionListItems = MediatorLiveData<List<TransactionListItem>>()
 
     init {
+        analyticsManager.track(Event.ManageCard)
         startIapHelper()
         fetchData(forceApiCall = false, clearCachedValue = false) {
             backgroundRefresh()
@@ -69,10 +73,6 @@ internal class ManageCardViewModel(
         output.add(TransactionListItem.HeaderView)
         output.addAll(calculator.buildList(transactionItems))
         transactionListItems.value = output
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCard)
     }
 
     fun refreshData(onComplete: (() -> Unit)) {
@@ -189,16 +189,21 @@ internal class ManageCardViewModel(
         }
     }
 
-    fun onAddToGooglePayPressed(activity: FragmentActivity, requestCode: Int) {
+    fun onAddToGooglePayPressed(activity: FragmentActivity) {
         viewModelScope.launch {
             showLoading()
-            iapHelper.startInAppProvisioningFlow(activity, requestCode)
-            hideLoading()
+            try {
+                iapHelper.startInAppProvisioningFlow(activity)
+            } catch (e: RuntimeException) {
+                handleFailure(UnableToProvisionCard())
+            } finally {
+                hideLoading()
+            }
         }
     }
 
-    fun onReturnedFromAddToGooglePay() {
-        startIapHelper()
+    fun onActivityResult(requestCode: Int, result: Boolean): Boolean {
+        return iapHelper.onActivityResult(requestCode, result, viewModelScope)
     }
 
     private fun isSdkEmbedded() = aptoUiSdkProtocol.cardOptions.openingMode == CardOptions.OpeningMode.EMBEDDED

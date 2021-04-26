@@ -5,15 +5,14 @@ import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.user.IdDataPointConfiguration
 import com.aptopayments.mobile.data.user.IdDocumentDataPoint
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -26,7 +25,7 @@ private val SINGLE_DOCUMENT_TYPE_LIST = listOf(IdDocumentDataPoint.Type.SSN)
 private const val DOCUMENT_NUMBER = "1234567"
 private const val VALID_SSN = "778628144"
 
-class CollectUserIdViewModelTest : UnitTest() {
+class CollectUserIdViewModelTest {
 
     @Rule
     @JvmField
@@ -39,18 +38,13 @@ class CollectUserIdViewModelTest : UnitTest() {
             COUNTRY_UK to MULTI_DOCUMENT_TYPE_LIST
         )
 
-    @Mock
-    private lateinit var config: IdDataPointConfiguration
-
-    @Mock
-    private lateinit var analyticsManager: AnalyticsServiceContract
+    private val config: IdDataPointConfiguration = mock()
+    private val analyticsManager: AnalyticsServiceContract = mock()
     private lateinit var sut: CollectUserIdViewModel
 
     @Test
-    fun `onViewLoaded tracks correct event`() {
+    fun `on init tracks correct event`() {
         createSut()
-
-        sut.viewLoaded()
 
         verify(analyticsManager).track(Event.WorkflowUserIdDocument)
     }

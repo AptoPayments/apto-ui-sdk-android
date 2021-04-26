@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.core.di.fragment
 
 import com.aptopayments.mobile.data.transaction.MCC
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinFragment
@@ -10,17 +9,14 @@ import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragment
 import org.junit.Before
 import org.junit.Test
-import org.koin.core.context.startKoin
 import kotlin.test.assertEquals
 
-class FragmentFactoryTest : AndroidTest() {
+class FragmentFactoryTest {
 
     private lateinit var sut: FragmentFactory
 
     @Before
-    override fun setUp() {
-        super.setUp()
-        startKoin {}
+    fun setUp() {
         sut = FragmentFactoryImpl()
     }
 

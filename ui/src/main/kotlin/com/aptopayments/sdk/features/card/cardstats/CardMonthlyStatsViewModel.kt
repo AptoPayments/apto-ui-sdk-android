@@ -44,6 +44,7 @@ internal class CardMonthlyStatsViewModel(
 
     init {
         showLoading()
+        analyticsManager.track(Event.MonthlySpending)
     }
 
     fun onMonthSelected(date: LocalDate) {
@@ -103,8 +104,6 @@ internal class CardMonthlyStatsViewModel(
             EMPTY
         }
     }
-
-    fun viewLoaded() = analyticsManager.track(Event.MonthlySpending)
 
     override fun onCleared() {
         super.onCleared()

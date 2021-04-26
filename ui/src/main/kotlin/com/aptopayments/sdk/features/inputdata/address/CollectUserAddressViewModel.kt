@@ -30,15 +30,12 @@ internal class CollectUserAddressViewModel(
     val showPoweredByGoogle = _showPoweredByGoogle as LiveData<Boolean>
 
     init {
+        analyticsManager.track(Event.WorkflowUserIdAddress)
         initialValue?.let {
             searchText.postValue("${it.streetOne}, ${it.locality}, ${it.country}")
             optionalText.postValue(it.streetTwo ?: "")
         }
         addressDataPoint.value = initialValue
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.WorkflowUserIdAddress)
     }
 
     fun continueClicked() {

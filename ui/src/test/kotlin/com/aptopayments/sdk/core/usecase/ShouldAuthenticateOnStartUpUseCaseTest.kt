@@ -1,25 +1,21 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.features.managecard.CardOptions
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.AuthStateProvider
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-internal class ShouldAuthenticateOnStartUpUseCaseTest : UnitTest() {
+internal class ShouldAuthenticateOnStartUpUseCaseTest {
 
-    @Mock
-    private lateinit var authStateProvider: AuthStateProvider
-
-    @Mock
-    private lateinit var authenticationRepo: AuthenticationRepository
+    private val authStateProvider: AuthStateProvider = mock()
+    private val authenticationRepo: AuthenticationRepository = mock()
 
     lateinit var sut: ShouldAuthenticateOnStartUpUseCase
 

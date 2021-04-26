@@ -5,7 +5,7 @@ import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.user.PhoneDataPoint
 import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.user.VerificationStatus
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -14,48 +14,32 @@ import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
 import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
 import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 
-internal class AuthFlowTest : AndroidTest() {
+internal class AuthFlowTest : UnitTest() {
 
     private lateinit var sut: AuthFlow
 
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
+    private val mockFragmentFactory: FragmentFactory = mock()
+    private val mockPhoneDelegate: InputPhoneContract.Delegate = mock()
+    private val mockEmailDelegate: InputEmailContract.Delegate = mock()
+    private val mockBirthdayVerification: BirthdateVerificationContract.Delegate = mock()
+    private val mockPhoneVerifyDelegate: PhoneVerificationContract.Delegate = mock()
+    private val mockEmailVerifyDelegate: EmailVerificationContract.Delegate = mock()
 
-    @Mock
-    private lateinit var mockPhoneDelegate: InputPhoneContract.Delegate
-
-    @Mock
-    private lateinit var mockEmailDelegate: InputEmailContract.Delegate
-
-    @Mock
-    private lateinit var mockBirthdayVerification: BirthdateVerificationContract.Delegate
-
-    @Mock
-    private lateinit var mockPhoneVerifyDelegate: PhoneVerificationContract.Delegate
-
-    @Mock
-    private lateinit var mockEmailVerifyDelegate: EmailVerificationContract.Delegate
-
-    @Mock
     private lateinit var mockDataPoint: PhoneDataPoint
-
-    @Mock
     private lateinit var countries: List<Country>
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(

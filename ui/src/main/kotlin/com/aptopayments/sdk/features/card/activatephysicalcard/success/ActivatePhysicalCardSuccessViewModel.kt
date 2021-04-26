@@ -17,6 +17,10 @@ internal class ActivatePhysicalCardSuccessViewModel(
     private var getPINStarted: Boolean = false
     private var phoneDialer: PhoneDialer? = null
 
+    init {
+        analyticsManager.track(Event.ManageCardGetPinNue)
+    }
+
     fun viewResumed() {
         if (getPINStarted) getPINFinished.postValue(true)
     }
@@ -45,10 +49,6 @@ internal class ActivatePhysicalCardSuccessViewModel(
 
     override fun onCallCancelled() {
         getPINStarted = false
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardGetPinNue)
     }
 }
 

@@ -39,11 +39,6 @@ internal abstract class CardPinFragment : BaseBindingFragment<FragmentSetPinBind
         }
     }
 
-    override fun viewLoaded() {
-        super.viewLoaded()
-        viewModel.trackEvent()
-    }
-
     abstract fun wrongPin()
 
     abstract fun correctPin(pin: String)

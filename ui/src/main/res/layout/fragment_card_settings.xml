@@ -60,14 +60,6 @@
                         app:headerTitle="card_settings_settings_settings_title" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
-                        android:id="@+id/rl_google_pay"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/section_option_height"
-                        app:optionDescription="card_settings_google_pay_provisioning_title"
-                        app:optionTitle="card_settings_google_pay_provisioning_subtitle"
-                        app:visibleIf="@{viewModel.showAddToGooglePay}" />
-
-                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_get_pin"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/section_option_height"
@@ -100,13 +92,13 @@
                         app:optionDescription="card_settings.settings.card_details.description"
                         app:optionTitle="card_settings_settings_card_details_title" />
 
-                    <com.aptopayments.sdk.ui.views.SectionSwitchView
-                        android:id="@+id/card_settings_lock_switch"
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/rl_google_pay"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/section_option_height"
-                        app:optionDescription="card_settings.settings.lock_card.description"
-                        app:optionShowDivider="@{viewModel.cardUiState.showOrderPhysical}"
-                        app:optionTitle="card_settings.settings.lock_card.title" />
+                        app:optionDescription="card_settings_google_pay_provisioning_title"
+                        app:optionTitle="card_settings_google_pay_provisioning_subtitle"
+                        app:visibleIf="@{viewModel.showAddToGooglePay}" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/card_settings_order_physical"
@@ -114,8 +106,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/section_option_height"
                         app:onClickSafe="@{() -> viewModel.orderPhysicalCard()}"
-                        app:optionShowDivider="false"
+                        app:optionShowDivider="true"
                         app:optionTitle="card_settings_settings_order_physical_title" />
+
+                    <com.aptopayments.sdk.ui.views.SectionSwitchView
+                        android:id="@+id/card_settings_lock_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:optionDescription="card_settings.settings.lock_card.description"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings.settings.lock_card.title" />
 
                 </LinearLayout>
 
@@ -235,9 +235,19 @@
                         android:layout_height="@dimen/section_option_height"
                         app:onClickSafe="@{()-> viewModel.onTermsPressed()}"
                         app:optionDescription="card_settings_legal_terms_of_service_description"
-                        app:optionShowDivider="false"
+                        app:optionShowDivider="@{viewModel.showExchangeRates}"
                         app:optionTitle="card_settings_legal_terms_of_service_title"
                         app:visibleIf="@{viewModel.showTermsAndConditions}" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/card_settings_exchange_rates"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        app:onClickSafe="@{()-> viewModel.onExchangeRatesPressed()}"
+                        app:optionDescription="card_settings_legal_exchange_rates_description"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_legal_exchange_rates_title"
+                        app:visibleIf="@{viewModel.showExchangeRates}" />
 
                 </LinearLayout>
 

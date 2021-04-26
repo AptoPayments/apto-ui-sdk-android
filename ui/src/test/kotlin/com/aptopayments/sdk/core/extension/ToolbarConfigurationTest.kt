@@ -2,13 +2,12 @@ package com.aptopayments.sdk.core.extension
 
 import android.graphics.Color
 import com.aptopayments.mobile.repository.config.remote.entities.*
-import com.aptopayments.sdk.AndroidTest
 import org.junit.Assert.*
 import org.junit.Test
 
 private const val TITLE = "Title"
 
-internal class ToolbarConfigurationTest : AndroidTest() {
+internal class ToolbarConfigurationTest {
 
     private val builder = ToolbarConfiguration.Builder()
 

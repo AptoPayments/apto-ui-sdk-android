@@ -33,7 +33,7 @@ class MessageBanner {
         duration: Int = Snackbar.LENGTH_LONG,
         title: String? = null
     ) {
-        if (activity.isFinishing) {
+        if (activity.isFinishing || (message.isEmpty() && title.isNullOrEmpty())) {
             return
         }
 

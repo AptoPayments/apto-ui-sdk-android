@@ -3,13 +3,13 @@ package com.aptopayments.sdk.features.inputdata.address
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.user.AddressDataPoint
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +17,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -32,7 +31,7 @@ private const val COUNTRY = "Spain"
 private const val POSTAL_CODE = "08010"
 
 @ExperimentalCoroutinesApi
-internal class CollectUserAddressSearchViewModelTest : UnitTest() {
+internal class CollectUserAddressSearchViewModelTest {
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
@@ -40,20 +39,11 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
-    @Mock
-    lateinit var analyticsManager: AnalyticsManager
-
-    @Mock
-    lateinit var addressGenerator: AddressDataPointGenerator
-
-    @Mock
-    lateinit var placeFetcher: PlaceFetcher
-
-    @Mock
-    lateinit var place: Place
-
-    @Mock
-    lateinit var addressComponents: AddressComponents
+    private val analyticsManager: AnalyticsManager = mock()
+    private val addressGenerator: AddressDataPointGenerator = mock()
+    private val placeFetcher: PlaceFetcher = mock()
+    private val place: Place = mock()
+    private val addressComponents: AddressComponents = mock()
 
     private val fullDatapoint = AddressDataPoint(STREET_ONE, STREET_TWO, LOCALITY, REGION, POSTAL_CODE, COUNTRY)
     private val singleDatapoint = AddressDataPoint(STREET_ONE, "", LOCALITY, REGION, POSTAL_CODE, COUNTRY)
@@ -62,9 +52,7 @@ internal class CollectUserAddressSearchViewModelTest : UnitTest() {
 
     @Test
     fun `onViewLoaded tracks correct event`() {
-        val sut = CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
-
-        sut.viewLoaded()
+        CollectUserAddressViewModel(null, analyticsManager, addressGenerator, placeFetcher)
 
         verify(analyticsManager).track(Event.WorkflowUserIdAddress)
     }

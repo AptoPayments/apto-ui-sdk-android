@@ -10,7 +10,6 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel.Action
@@ -26,7 +25,7 @@ import kotlin.test.assertTrue
 private const val CARD_ID = "id_1234"
 
 @Suppress("UNCHECKED_CAST")
-internal class OrderPhysicalCardViewModelTest : UnitTest() {
+internal class OrderPhysicalCardViewModelTest {
 
     @Rule
     @JvmField

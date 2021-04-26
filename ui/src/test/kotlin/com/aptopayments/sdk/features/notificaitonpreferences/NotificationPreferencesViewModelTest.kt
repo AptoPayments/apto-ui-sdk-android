@@ -3,29 +3,20 @@ package com.aptopayments.sdk.features.notificaitonpreferences
 import com.aptopayments.mobile.data.user.notificationpreferences.ActiveChannels
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationChannel
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationGroup
-import com.aptopayments.mobile.data.user.notificationpreferences.NotificationPreferences
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-class NotificationPreferencesViewModelTest : AndroidTest() {
+class NotificationPreferencesViewModelTest {
 
     private lateinit var sut: NotificationPreferencesViewModel
 
-    @Mock
-    private lateinit var mockNotificationPreferences: NotificationPreferences
-
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         sut = NotificationPreferencesViewModel()
         val mockPreferences = ArrayList<NotificationGroup>()
         mockPreferences.add(mock())
-        whenever(mockNotificationPreferences.preferences).thenReturn(mockPreferences)
     }
 
     @Test

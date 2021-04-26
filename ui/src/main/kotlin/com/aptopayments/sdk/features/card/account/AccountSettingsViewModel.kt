@@ -47,11 +47,11 @@ internal class AccountSettingsViewModel(
 
     init {
         configureFingerprint()
+        analyticsManager.track(Event.AccountSettings)
     }
 
     private fun createUiState(): UiState {
         return UiState(
-            monthlyStatementVisibility = isMonthlyStatementFlagActive(),
             securityVisibility = isSecurityAvailable(),
             notificationVisibility = isNotificationsAvailable(),
             fingerprintVisibility = isFingerprintAvailable(),
@@ -75,12 +75,6 @@ internal class AccountSettingsViewModel(
             aptoUiSdk.cardOptions.authenticatePCI() == CardOptions.PCIAuthType.PIN_OR_BIOMETRICS
 
     private fun isFingerprintAvailable() = showBiometricOption().either({ false }, { it })
-
-    private fun isMonthlyStatementFlagActive() = aptoUiSdk.cardOptions.showMonthlyStatementOption()
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.AccountSettings)
-    }
 
     fun onCustomerSupport() {
         if (projectConfiguration.isChatbotActive) {
@@ -135,7 +129,6 @@ internal class AccountSettingsViewModel(
     }
 
     data class UiState(
-        val monthlyStatementVisibility: Boolean = false,
         val securityVisibility: Boolean = false,
         val notificationVisibility: Boolean = false,
         val fingerprintVisibility: Boolean = false,

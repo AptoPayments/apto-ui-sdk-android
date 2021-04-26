@@ -8,48 +8,37 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.cardproductselector.countryselector.CountrySelectorFragmentDouble
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
-class CardProductSelectorFlowTest : AndroidTest() {
+class CardProductSelectorFlowTest : UnitTest() {
 
     private lateinit var sut: CardProductSelectorFlow
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock
-    private lateinit var mockDelegate: CountrySelectorContract.Delegate
-    @Mock
-    private lateinit var mockAptoPlatform: AptoPlatform
+    private val mockFragmentFactory: FragmentFactory = mock()
+    private val mockDelegate: CountrySelectorContract.Delegate = mock()
+    private val mockAptoPlatform: AptoPlatform = mock()
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
     @Suppress("UNCHECKED_CAST")
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(
                 module {
                     single { mockFragmentFactory }
-                    single<AnalyticsServiceContract> { analyticsManager }
+                    single { analyticsManager }
                     single<AptoPlatformProtocol> { mockAptoPlatform }
                 }
             )
@@ -79,8 +68,7 @@ class CardProductSelectorFlowTest : AndroidTest() {
 
         // Then
         verify(mockFragmentFactory).countrySelectorFragment(emptyList(), tag)
-        assertTrue { analyticsManager.trackCalled }
-        assertEquals(analyticsManager.lastEvent, Event.CardProductSelectorCountrySelectorShown)
+        verify(analyticsManager).track(Event.CardProductSelectorCountrySelectorShown)
     }
 
     @Test
@@ -89,8 +77,7 @@ class CardProductSelectorFlowTest : AndroidTest() {
         sut.onBackFromCountrySelector()
 
         // Then
-        assertTrue { analyticsManager.trackCalled }
-        assertEquals(analyticsManager.lastEvent, Event.CardProductSelectorCountrySelectorClosed)
+        verify(analyticsManager).track(Event.CardProductSelectorCountrySelectorClosed)
     }
 
     @Test
@@ -106,7 +93,6 @@ class CardProductSelectorFlowTest : AndroidTest() {
         sut.onCountrySelected(testCountry)
 
         // Then
-        assertTrue { analyticsManager.trackCalled }
-        assertEquals(analyticsManager.lastEvent, Event.CardProductSelectorProductSelected)
+        verify(analyticsManager).track(eq(Event.CardProductSelectorProductSelected), anyOrNull())
     }
 }

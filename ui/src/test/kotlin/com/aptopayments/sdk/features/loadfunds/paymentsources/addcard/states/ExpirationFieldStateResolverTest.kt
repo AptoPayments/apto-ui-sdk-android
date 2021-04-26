@@ -1,12 +1,11 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.states
 
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.FieldState
 import com.aptopayments.sdk.utils.DateProvider
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
 
@@ -14,10 +13,9 @@ private const val DAY = 8
 private const val MONTH = 7
 private const val YEAR = 2020
 
-internal class ExpirationFieldStateResolverTest : UnitTest() {
+internal class ExpirationFieldStateResolverTest {
 
-    @Mock
-    private lateinit var dateProvider: DateProvider
+    private val dateProvider: DateProvider = mock()
 
     lateinit var sut: ExpirationFieldStateResolver
 

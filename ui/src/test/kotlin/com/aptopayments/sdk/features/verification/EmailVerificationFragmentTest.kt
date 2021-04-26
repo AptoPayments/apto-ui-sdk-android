@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.verification
 
 import com.aptopayments.mobile.data.user.Verification
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.di.fragment.FragmentFactoryImpl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
@@ -15,19 +15,16 @@ import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 import kotlin.test.assertEquals
 
-class EmailVerificationFragmentTest : AndroidTest() {
+class EmailVerificationFragmentTest : UnitTest() {
     // Collaborators
-    @Mock
-    private lateinit var viewModel: VerificationViewModel
+    private val viewModel: VerificationViewModel = mock()
     private val verification = Verification("", "email")
     private lateinit var sut: EmailVerificationFragment
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         startKoin {
             modules(
                 module {

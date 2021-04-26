@@ -115,8 +115,6 @@ internal class CollectUserAddressFragment :
         delegate?.onBackFromAddress()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun configureSearchField() {
         with(binding.collectAddressSearchEdit) {
             setAdapter(autocompleteAdapter)

@@ -1,21 +1,19 @@
 package com.aptopayments.sdk.features.card.fundingsources
 
 import com.aptopayments.mobile.analytics.Event
-import com.aptopayments.sdk.AndroidTest
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
-class FundingSourcesViewModelTest : AndroidTest() {
+class FundingSourcesViewModelTest {
     private lateinit var sut: FundingSourcesViewModel
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         sut = FundingSourcesViewModel(analyticsManager)
     }
 
@@ -25,7 +23,6 @@ class FundingSourcesViewModelTest : AndroidTest() {
         sut.viewLoaded()
 
         // Then
-        assertTrue(analyticsManager.trackCalled)
-        assertEquals(Event.ManageCardFundingSourceSelector, analyticsManager.lastEvent)
+        verify(analyticsManager).track(Event.ManageCardFundingSourceSelector)
     }
 }

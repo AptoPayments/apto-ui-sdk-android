@@ -3,34 +3,30 @@ package com.aptopayments.sdk.features.inputdata.email
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.user.EmailDataPoint
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 private const val PRESET_EMAIL = "jhon@doe.com"
 
-internal class CollectUserEmailViewModelTest : UnitTest() {
+internal class CollectUserEmailViewModelTest {
 
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager = mock()
 
     @Test
     fun `onViewLoaded tracks correct event`() {
-        val sut = CollectUserEmailViewModel(null, analyticsManager)
-
-        sut.viewLoaded()
+        CollectUserEmailViewModel(null, analyticsManager)
 
         verify(analyticsManager).track(Event.WorkflowUserInputEmail)
     }

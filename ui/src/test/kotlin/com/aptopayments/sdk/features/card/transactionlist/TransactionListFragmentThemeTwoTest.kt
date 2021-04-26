@@ -2,26 +2,23 @@ package com.aptopayments.sdk.features.card.transactionlist
 
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 
-class TransactionListFragmentThemeTwoTest : AndroidTest() {
+class TransactionListFragmentThemeTwoTest : UnitTest() {
     // Collaborators
-    @Mock
-    private lateinit var viewModel: TransactionListViewModel
+    private val viewModel: TransactionListViewModel = mock()
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
     private lateinit var sut: TransactionListFragment
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         startKoin {
             modules(
                 module {

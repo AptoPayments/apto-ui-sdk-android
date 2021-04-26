@@ -67,7 +67,9 @@ internal class CardProductSelectorFlow(
         val possibleCardProducts = countryCardProductMap[country.isoCode]
         if (possibleCardProducts?.size == 1) {
             val cardProductId = possibleCardProducts[0]
-            val properties = JSONObject().put("cardProductId", cardProductId)
+
+            val properties = JSONObject()
+            properties.put("cardProductId", cardProductId)
             properties.put("countryCode", country.isoCode)
             analyticsManager.track(Event.CardProductSelectorProductSelected, properties)
             onFinish(cardProductId)

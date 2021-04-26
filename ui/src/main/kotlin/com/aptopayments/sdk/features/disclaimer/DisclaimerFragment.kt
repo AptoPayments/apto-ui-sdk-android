@@ -98,8 +98,6 @@ internal class DisclaimerFragment :
         tv_accept_disclaimer.isEnabled = true
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     data class Configuration(
         val screenTitle: String = "disclaimer_disclaimer_title",
         val screenAcceptAgreement: String = "disclaimer_disclaimer_call_to_action_title",

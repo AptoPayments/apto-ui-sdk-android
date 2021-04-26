@@ -2,7 +2,6 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel.Actions
 import com.aptopayments.sdk.utils.getOrAwaitValue
@@ -16,7 +15,7 @@ import kotlin.test.assertEquals
 
 private const val CARD_ID = "crd_1234"
 
-class AddCardOnboardingViewModelTest : UnitTest() {
+class AddCardOnboardingViewModelTest {
 
     @Rule
     @JvmField

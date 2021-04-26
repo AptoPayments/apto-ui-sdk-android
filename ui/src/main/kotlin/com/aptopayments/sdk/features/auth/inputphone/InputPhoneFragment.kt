@@ -59,8 +59,6 @@ internal class InputPhoneFragment : BaseFragment(), InputPhoneContract.View {
         phone_input.setAllowedCountriesIsoCode(allowedCountriesList.map { it.isoCode })
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun applyFontsAndColors() {
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

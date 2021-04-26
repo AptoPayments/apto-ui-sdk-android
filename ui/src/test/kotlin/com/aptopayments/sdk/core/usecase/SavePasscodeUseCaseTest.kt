@@ -1,19 +1,17 @@
 package com.aptopayments.sdk.core.usecase
 
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
 private const val PIN = "1234"
 
-internal class SavePasscodeUseCaseTest : UnitTest() {
+internal class SavePasscodeUseCaseTest {
 
-    @Mock
-    private lateinit var authenticationRepo: AuthenticationRepository
+    private val authenticationRepo: AuthenticationRepository = mock()
     lateinit var sut: SavePasscodeUseCase
 
     @Before

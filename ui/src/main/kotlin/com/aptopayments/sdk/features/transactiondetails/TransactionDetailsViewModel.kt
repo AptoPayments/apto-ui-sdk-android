@@ -24,7 +24,7 @@ internal class TransactionDetailsViewModel(
     val localAmountRepresentation by lazy { transaction.getLocalAmountRepresentation() }
     val nativeBalanceRepresentation by lazy { calculateNativeBalanceRepresentation() }
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.TransactionDetail)
     }
 

@@ -7,22 +7,17 @@ import com.aptopayments.mobile.data.user.VerificationStatus
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import kotlin.test.assertEquals
@@ -31,7 +26,7 @@ import kotlin.test.assertTrue
 private const val VERIFICATION_ID = "1234"
 
 @Suppress("UNCHECKED_CAST")
-class BirthdateVerificationViewModelTest : UnitTest() {
+class BirthdateVerificationViewModelTest {
 
     @Rule
     @JvmField
@@ -41,20 +36,11 @@ class BirthdateVerificationViewModelTest : UnitTest() {
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
-    @Mock
-    private lateinit var analyticsManager: AnalyticsManager
-
-    @Mock
-    private lateinit var aptoPlatformProtocol: AptoPlatformProtocol
-
-    @Mock
-    private lateinit var primaryVerification: Verification
-
-    @Mock
-    private lateinit var secondaryVerification: Verification
-
-    @Mock
-    private lateinit var responseVerification: Verification
+    private val analyticsManager: AnalyticsManager = mock()
+    private val aptoPlatformProtocol: AptoPlatformProtocol = mock()
+    private val primaryVerification: Verification = mock()
+    private val secondaryVerification: Verification = mock()
+    private val responseVerification: Verification = mock()
 
     private lateinit var sut: BirthdateVerificationViewModel
 
@@ -65,8 +51,6 @@ class BirthdateVerificationViewModelTest : UnitTest() {
 
     @Test
     fun `when viewLoaded then correct tracking is done`() {
-        sut.viewLoaded()
-
         verify(analyticsManager).track(Event.AuthVerifyBirthdate)
     }
 

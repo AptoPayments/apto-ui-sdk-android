@@ -2,7 +2,6 @@ package com.aptopayments.sdk.repository
 
 import android.content.SharedPreferences
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -11,7 +10,7 @@ import org.junit.Test
 
 private const val NEED_AUTHENTICATION = "NEED_AUTHENTICATION"
 
-class AuthenticationRepositoryImplTest : UnitTest() {
+class AuthenticationRepositoryImplTest {
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val sharedPref: SharedPreferences = mock()

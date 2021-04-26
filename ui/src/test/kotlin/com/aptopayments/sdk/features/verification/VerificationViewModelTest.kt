@@ -7,25 +7,22 @@ import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.user.VerificationStatus
 import com.aptopayments.sdk.UnitTest
+import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class VerificationViewModelTest : UnitTest() {
     private lateinit var verificationViewModel: VerificationViewModel
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
-    @Mock
-    private lateinit var verificationLiveData: MutableLiveData<Verification>
+    private val verificationLiveData: MutableLiveData<Verification> = mock()
 
     @Rule
     @JvmField
@@ -47,7 +44,6 @@ class VerificationViewModelTest : UnitTest() {
     @Test
     fun `test track is called on view loaded`() {
         verificationViewModel.viewLoaded(DataPoint.Type.EMAIL)
-        assertTrue { analyticsManager.trackCalled }
-        assertEquals(analyticsManager.lastEvent, Event.AuthVerifyEmail)
+        verify(analyticsManager).track(Event.AuthVerifyEmail)
     }
 }

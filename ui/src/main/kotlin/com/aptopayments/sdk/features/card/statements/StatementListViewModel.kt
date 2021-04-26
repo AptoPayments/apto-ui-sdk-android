@@ -31,7 +31,7 @@ internal class StatementListViewModel(
 
     private val downloadUseCase: DownloadStatementUseCase by inject()
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.MonthlyStatementsListStart)
     }
 

@@ -53,6 +53,7 @@ internal class CardSettingsViewModel(
     val showCardholderAgreement = cardProduct.cardholderAgreement != null
     val showTermsAndConditions = cardProduct.termsAndConditions != null
     val showPrivacyPolicy = cardProduct.privacyPolicy != null
+    val showExchangeRates = cardProduct.exchangeRates != null
     val supportTexts = supportTextResolver.getTexts()
 
     val showAddToGooglePay = shouldShowAddToGooglePay()
@@ -61,6 +62,7 @@ internal class CardSettingsViewModel(
 
     init {
         updateCardValues(card)
+        analyticsManager.track(Event.ManageCardCardSettings)
     }
 
     fun getPinPressed() {
@@ -96,10 +98,6 @@ internal class CardSettingsViewModel(
         }
     }
 
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardCardSettings)
-    }
-
     fun cardDetailsPressed() {
         canAskBiometricsUseCase().either(
             {},
@@ -129,6 +127,10 @@ internal class CardSettingsViewModel(
         showContentPresenter(cardProduct.termsAndConditions, "card_settings_legal_terms_of_service_title")
     }
 
+    fun onExchangeRatesPressed() {
+        showContentPresenter(cardProduct.exchangeRates, "card_settings_legal_exchange_rates_title")
+    }
+
     private fun showContentPresenter(content: Content?, title: String) {
         content?.let {
             action.value = Action.ContentPresenter(it, title)
@@ -154,7 +156,10 @@ internal class CardSettingsViewModel(
     }
 
     private fun shouldShowLegalSection(cardProduct: CardProduct) =
-        cardProduct.cardholderAgreement != null || cardProduct.termsAndConditions != null || cardProduct.privacyPolicy != null
+        cardProduct.cardholderAgreement != null ||
+            cardProduct.termsAndConditions != null ||
+            cardProduct.privacyPolicy != null ||
+            cardProduct.exchangeRates != null
 
     private fun updateCard(card: Card) {
         this.card = card
@@ -171,8 +176,7 @@ internal class CardSettingsViewModel(
         }
     }
 
-    private fun shouldShowAddToGooglePay() =
-        aptoUiSdk.cardOptions.inAppProvisioningEnabled() && iapHelper.satisfyHardwareRequisites()
+    private fun shouldShowAddToGooglePay() = iapHelper.satisfyHardwareRequisites()
 
     fun cardDetailsAuthenticationSuccessful() {
         cardDetailsRepo.showCardDetails()

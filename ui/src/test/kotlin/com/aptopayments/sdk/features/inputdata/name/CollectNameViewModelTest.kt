@@ -2,13 +2,12 @@ package com.aptopayments.sdk.features.inputdata.name
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.user.NameDataPoint
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -16,14 +15,13 @@ import kotlin.test.assertTrue
 private const val NAME = "Jhon"
 private const val SURNAME = "Doe"
 
-internal class CollectNameViewModelTest : UnitTest() {
+internal class CollectNameViewModelTest {
 
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager = mock()
 
     @Test
     fun `when nothing is set then continue button is disabled`() {

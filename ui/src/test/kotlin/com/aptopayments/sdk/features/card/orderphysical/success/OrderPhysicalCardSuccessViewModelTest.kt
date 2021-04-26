@@ -3,7 +3,6 @@ package com.aptopayments.sdk.features.card.orderphysical.success
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCardSuccessViewModel.Action
 import com.aptopayments.sdk.utils.getOrAwaitValue
@@ -16,7 +15,7 @@ import kotlin.test.assertEquals
 
 private const val CARD_ID = "id_1234"
 
-class OrderPhysicalCardSuccessViewModelTest : UnitTest() {
+class OrderPhysicalCardSuccessViewModelTest {
 
     @Rule
     @JvmField

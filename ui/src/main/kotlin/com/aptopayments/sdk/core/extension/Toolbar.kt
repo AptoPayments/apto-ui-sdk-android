@@ -2,22 +2,30 @@ package com.aptopayments.sdk.core.extension
 
 import android.graphics.PorterDuff
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 
 internal fun Toolbar.configure(fragment: BaseFragment, config: ToolbarConfiguration) {
+    this.configure(config)
+    setNavigationOnClickListener { fragment.onBackPressed() }
+}
+
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+fun Toolbar.configure(config: ToolbarConfiguration) {
     title = config.title
     when (config.backButtonMode) {
         is BackButtonMode.Back -> {
-            val closeIcon = this.context.getDrawable(R.drawable.ic_nav_back_icon)
+            val closeIcon = ContextCompat.getDrawable(this.context, R.drawable.ic_nav_back_icon)
             closeIcon?.setColorFilterCompat(config.backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
             navigationIcon = closeIcon
         }
         is BackButtonMode.Close -> {
-            val closeIcon = this.context.getDrawable(R.drawable.ic_close)
+            val closeIcon = ContextCompat.getDrawable(this.context, R.drawable.ic_close)
             closeIcon?.setColorFilterCompat(config.backButtonMode.color, PorterDuff.Mode.SRC_ATOP)
             navigationIcon = closeIcon
         }
@@ -26,7 +34,6 @@ internal fun Toolbar.configure(fragment: BaseFragment, config: ToolbarConfigurat
     }
     config.backgroundColor?.let { setBackgroundColor(it) }
     config.titleTextColor?.let { setTitleTextColor(it) }
-    setNavigationOnClickListener { fragment.onBackPressed() }
 }
 
 sealed class BackButtonMode {

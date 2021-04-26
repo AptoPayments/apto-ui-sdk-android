@@ -86,7 +86,6 @@ internal class AccountSettingsFragment :
         binding.accountSettingsCustomToolbar.iv_close_button.setOnClickListenerSafe { onBackPressed() }
         binding.accountSettingsSignOut.setOnClickListenerSafe { showConfirmLogOutDialog() }
         binding.rlNotifications.setOnClickListenerSafe { delegate?.showNotificationPreferences() }
-        binding.accountSettingsStatements.setOnClickListenerSafe { delegate?.onMonthlyStatementTapped() }
         binding.rlPasscode.setOnClickListenerSafe { onChangePasscodeTapped() }
         binding.accountSettingsFingerprintSwitch.setOnCheckedChangeListener { _, value -> viewModel.onFingerprintSwitchTapped(value) }
     }
@@ -141,8 +140,6 @@ internal class AccountSettingsFragment :
             SendEmailUtil(it, subject, body).execute(activity)
         }
     }
-
-    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance(contextConfiguration: ContextConfiguration, cardId: String) = AccountSettingsFragment().apply {

@@ -1,16 +1,14 @@
 package com.aptopayments.sdk.core.usecase
 
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-internal class BiometricsAuthCorrectUseCaseTest : UnitTest() {
+internal class BiometricsAuthCorrectUseCaseTest {
 
-    @Mock
-    private lateinit var authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository = mock()
 
     lateinit var sut: BiometricsAuthCorrectUseCase
 

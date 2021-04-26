@@ -21,7 +21,7 @@ internal class CollectUserBirthdateViewModel(
     val continueEnabled = Transformations.map(date) { it != null }
     val continueClicked = LiveEvent<BirthdateDataPoint>()
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.WorkflowUserBirthdate)
     }
 

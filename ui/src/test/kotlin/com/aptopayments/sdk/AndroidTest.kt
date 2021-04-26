@@ -2,15 +2,10 @@ package com.aptopayments.sdk
 
 import android.app.Application
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
-import com.aptopayments.mobile.platform.AptoPlatform
-import org.junit.Before
-import org.junit.Rule
+import androidx.test.core.app.ApplicationProvider
 import org.junit.runner.RunWith
 import org.koin.test.AutoCloseKoinTest
-import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 /**
@@ -23,19 +18,7 @@ import org.robolectric.annotation.Config
 @Config(application = AndroidTest.ApplicationStub::class, sdk = [28])
 abstract class AndroidTest : AutoCloseKoinTest() {
 
-    @Suppress("LeakingThis")
-    @Rule
-    @JvmField
-    val injectMocks = InjectMocksRule.create(this@AndroidTest)
-
-    fun context(): Context = RuntimeEnvironment.application
-
-    fun activity(): FragmentActivity = mock(FragmentActivity::class.java)
+    fun context(): Context = ApplicationProvider.getApplicationContext()
 
     internal class ApplicationStub : Application()
-
-    @Before
-    open fun setUp() {
-        AptoPlatform.application = Application()
-    }
 }

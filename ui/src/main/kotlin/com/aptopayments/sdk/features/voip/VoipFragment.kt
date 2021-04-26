@@ -58,8 +58,6 @@ internal class VoipFragment :
         }
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     override fun onBackPressed() = close()
 
     override fun layoutId(): Int = R.layout.fragment_voip

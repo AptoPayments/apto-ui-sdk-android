@@ -6,9 +6,11 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import com.aptopayments.mobile.data.config.UIStatusBarStyle
 import kotlin.math.sqrt
 
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 object StatusBarUtil {
 
     fun setStatusBarColor(window: Window, @ColorInt color: Int, style: UIStatusBarStyle = UIStatusBarStyle.AUTO) {

@@ -31,8 +31,6 @@ internal abstract class PasscodeViewModel(protected val analyticsManager: Analyt
         _subtitle.value = subtitle
     }
 
-    abstract fun viewLoaded()
-
     fun onPasscodeInserted(passCode: String) {
         currentState.onPasscode(passCode)
     }

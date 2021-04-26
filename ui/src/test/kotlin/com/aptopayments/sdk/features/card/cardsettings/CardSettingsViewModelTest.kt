@@ -11,7 +11,7 @@ import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatform
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
@@ -36,7 +36,7 @@ import kotlin.test.assertTrue
 private const val CARD_ID = "CARD_ID"
 
 @Suppress("UNCHECKED_CAST")
-internal class CardSettingsViewModelTest : AndroidTest() {
+internal class CardSettingsViewModelTest : UnitTest() {
 
     @Rule
     @JvmField
@@ -62,8 +62,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
     private lateinit var sut: CardSettingsViewModel
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         startKoin {
             modules(
                 listOf(
@@ -86,6 +85,7 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         assertFalse(sut.showCardholderAgreement)
         assertFalse(sut.showTermsAndConditions)
         assertFalse(sut.showPrivacyPolicy)
+        assertFalse(sut.showExchangeRates)
     }
 
     @Test
@@ -125,6 +125,16 @@ internal class CardSettingsViewModelTest : AndroidTest() {
 
         assertTrue(sut.showLegalSection)
         assertTrue(sut.showPrivacyPolicy)
+    }
+
+    @Test
+    fun `given exchange_rates content is present when sut created then legal and exchange rates section is shown`() {
+        whenever(cardProduct.exchangeRates).thenReturn(mock())
+
+        sut = createSut()
+
+        assertTrue(sut.showLegalSection)
+        assertTrue(sut.showExchangeRates)
     }
 
     @Test
@@ -524,6 +534,19 @@ internal class CardSettingsViewModelTest : AndroidTest() {
         sut.orderPhysicalCard()
 
         assertTrue(sut.action.getOrAwaitValue() is Action.OrderPhysicalCard)
+    }
+
+    @Test
+    fun `given exchange rates set when onExchangeRatesPressed then correct content presenter called`() {
+        val element = mock<Content>()
+        whenever(cardProduct.exchangeRates).thenReturn(element)
+        sut = createSut()
+
+        sut.onExchangeRatesPressed()
+        val content = sut.action.getOrAwaitValue() as Action.ContentPresenter
+
+        assertEquals(element, content.content)
+        assertEquals("card_settings_legal_exchange_rates_title", content.title)
     }
 
     private fun configureGetPin(statusResult: FeatureStatus, featureType: FeatureType?) {

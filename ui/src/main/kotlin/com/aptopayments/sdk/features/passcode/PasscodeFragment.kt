@@ -47,11 +47,6 @@ internal abstract class PasscodeFragment : BaseFragment(), PasscodeContract.View
         observeNotNullable(viewModel.showForgot) { tv_forgot_passcode.visibleIf(it) }
     }
 
-    override fun viewLoaded() {
-        super.viewLoaded()
-        viewModel.viewLoaded()
-    }
-
     private fun wrongPin() {
         pin_view.shake()
         pin_view.text?.clear()

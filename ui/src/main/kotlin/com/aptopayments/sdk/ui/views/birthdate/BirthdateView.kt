@@ -67,7 +67,8 @@ class BirthdateView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun configureViewOrder() {
-        val dateOrder = FormatOrderGenerator(context).getFormatOrder()
+        val provider = FormatOrderProvider(context)
+        val dateOrder = FormatOrderGenerator(provider).getFormatOrder()
         showCorrectStub(dateOrder)
         bindDateViews()
         setEditTextOrderList(dateOrder)

@@ -254,8 +254,6 @@ internal class CardSettingsFragment :
         delegate?.transactionsChanged()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun cardPasscodeErrorCardDisabled() {
         notify(
             message = "manage_card_set_passcode_error_card_not_enabled".localized(),

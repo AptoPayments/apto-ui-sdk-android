@@ -13,11 +13,13 @@ internal class WaitlistViewModel(
 
     var card: MutableLiveData<Card> = MutableLiveData()
 
+    init {
+        analyticsManager.track(Event.Waitlist)
+    }
+
     fun getCard(cardId: String) {
         AptoPlatform.fetchCard(cardId = cardId, forceRefresh = true) { result ->
             result.either(::handleFailure, card::postValue)
         }
     }
-
-    fun viewLoaded() = analyticsManager.track(Event.Waitlist)
 }

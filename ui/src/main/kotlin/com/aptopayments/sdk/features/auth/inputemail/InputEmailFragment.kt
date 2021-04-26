@@ -41,8 +41,6 @@ internal class InputEmailFragment : BaseFragment(), InputEmailContract.View {
         et_email.hint = "auth_input_email_hint".localized()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun applyFontsAndColors() {
         with(themeManager()) {
             customizeSecondaryNavigationToolBar(tb_llsdk_toolbar_layout as AppBarLayout)

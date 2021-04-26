@@ -47,7 +47,6 @@ internal class CollectUserPhoneFragment :
     }
 
     override fun onPresented() {
-        viewModel.viewLoaded()
         phone_input?.requestPhoneFocus()
         showKeyboard()
     }
@@ -112,8 +111,6 @@ internal class CollectUserPhoneFragment :
         hideKeyboard()
         delegate?.onBackFromCollectPhone()
     }
-
-    override fun viewLoaded() = viewModel.viewLoaded()
 
     companion object {
         fun newInstance(dataPoint: PhoneDataPoint?, config: AllowedCountriesConfiguration, tag: String) =

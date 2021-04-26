@@ -23,8 +23,10 @@ import com.aptopayments.sdk.features.voip.TwilioVoipImpl
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
+import com.aptopayments.sdk.ui.views.birthdate.FormatOrderProvider
 import com.aptopayments.sdk.utils.*
 import com.aptopayments.sdk.utils.chatbot.*
+import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.google.android.libraries.places.api.Places
 import org.koin.android.ext.koin.androidApplication
@@ -53,6 +55,7 @@ internal val applicationModule = module {
     single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get()) }
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }
+    factory { FormatOrderProvider(androidApplication()) }
     factory { FormatOrderGenerator(get()) }
     factory { CategorySpendingSorter() }
     single<IAPHelper> { IAPHelperMock() }
@@ -72,6 +75,7 @@ internal val applicationModule = module {
     factory { (chatbotEnabled: Boolean) -> SupportTextResolver(chatbotEnabled) }
     factory { ChatbotActivityLauncher(get()) }
     factory<TelephonyEnabledChecker> { TelephonyEnabledCheckerImpl(androidContext()) }
+    factory { InAppProvisioningDeepLinkGenerator(get()) }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

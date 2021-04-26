@@ -71,8 +71,6 @@ internal class OAuthVerifyFragment : BaseFragment(), OAuthVerifyContract.View {
         viewModel.setDataPoints(dataPoints)
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun updateRow(title: TextView, content: TextView, value: String?) {
         title.goneIf(value.isNullOrEmpty())
         content.goneIf(value.isNullOrEmpty())

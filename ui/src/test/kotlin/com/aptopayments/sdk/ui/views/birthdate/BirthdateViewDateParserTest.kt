@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.ui.views.birthdate
 
-import com.aptopayments.sdk.UnitTest
 import org.junit.Test
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
@@ -10,7 +9,7 @@ private const val YEAR = "2020"
 private const val MONTH = "04"
 private const val DAY = "01"
 
-internal class BirthdateViewDateParserTest : UnitTest() {
+internal class BirthdateViewDateParserTest {
 
     private val sut = BirthdateViewDateParser()
 

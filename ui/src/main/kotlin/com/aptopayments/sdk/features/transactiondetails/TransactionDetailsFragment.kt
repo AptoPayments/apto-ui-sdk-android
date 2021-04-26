@@ -329,8 +329,6 @@ internal class TransactionDetailsFragment :
         }
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(transaction: Transaction) = TransactionDetailsFragment().apply {
             arguments = Bundle().apply { putSerializable(TRANSACTION_KEY, transaction) }

@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.utils.ManualTimer
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import org.junit.Assert.assertTrue
@@ -11,7 +10,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import kotlin.test.assertFalse
 
-class InMemoryLocalCardDetailsRepositoryTest : UnitTest() {
+class InMemoryLocalCardDetailsRepositoryTest {
 
     @Rule
     @JvmField

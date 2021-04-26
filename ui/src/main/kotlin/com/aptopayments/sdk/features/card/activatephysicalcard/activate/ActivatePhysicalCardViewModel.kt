@@ -7,8 +7,12 @@ import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 
 internal class ActivatePhysicalCardViewModel(
-    private val analyticsManager: AnalyticsServiceContract
+    analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
+
+    init {
+        analyticsManager.track(Event.ManageCardActivatePhysicalCard)
+    }
 
     fun activatePhysicalCard(cardId: String, code: String, onComplete: (ActivatePhysicalCardResult?) -> Unit) {
         AptoPlatform.activatePhysicalCard(cardId, code) { result ->
@@ -17,9 +21,5 @@ internal class ActivatePhysicalCardViewModel(
                 onComplete(null)
             }) { onComplete(it) }
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.ManageCardActivatePhysicalCard)
     }
 }

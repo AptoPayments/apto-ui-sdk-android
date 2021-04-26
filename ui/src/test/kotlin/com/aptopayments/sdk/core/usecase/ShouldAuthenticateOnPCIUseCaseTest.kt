@@ -2,19 +2,17 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-internal class ShouldAuthenticateOnPCIUseCaseTest : AndroidTest() {
+internal class ShouldAuthenticateOnPCIUseCaseTest {
 
-    @Mock
-    private lateinit var authenticationRepo: AuthenticationRepository
+    private val authenticationRepo: AuthenticationRepository = mock()
     lateinit var sut: ShouldAuthenticateOnPCIUseCase
 
     @Before

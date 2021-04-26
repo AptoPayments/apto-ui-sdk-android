@@ -9,12 +9,12 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
 import kotlin.test.*
 
 private const val COUNTRY_CODE = "US"
@@ -31,22 +30,15 @@ private const val PHONE_NUMBER = "666777888"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
-class InputPhoneViewModelTest : UnitTest() {
+class InputPhoneViewModelTest {
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    @Mock
-    private lateinit var analyticsManager: AnalyticsManager
-
-    @Mock
-    private lateinit var aptoPlatform: AptoPlatformProtocol
-
-    @Mock
-    private lateinit var aptoUiSdkProtocol: AptoUiSdkProtocol
-
-    @Mock
-    private lateinit var verification: Verification
+    private val analyticsManager: AnalyticsManager = mock()
+    private val aptoPlatform: AptoPlatformProtocol = mock()
+    private val aptoUiSdkProtocol: AptoUiSdkProtocol = mock()
+    private val verification: Verification = mock()
 
     private lateinit var sut: InputPhoneViewModel
 
@@ -98,9 +90,7 @@ class InputPhoneViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `test track is called on view loaded`() {
-        sut.viewLoaded()
-
+    fun `test track is called on init`() {
         verify(analyticsManager).track(Event.AuthInputPhone)
     }
 

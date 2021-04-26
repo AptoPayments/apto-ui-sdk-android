@@ -1,23 +1,19 @@
 package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.functional.Either
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.repository.AuthenticationRepository
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-internal class CanAskBiometricsUseCaseTest : UnitTest() {
+internal class CanAskBiometricsUseCaseTest {
 
-    @Mock
-    private lateinit var repo: AuthenticationRepository
-
-    @Mock
-    private lateinit var biometricsWrapper: BiometricWrapper
+    private val repo: AuthenticationRepository = mock()
+    private val biometricsWrapper: BiometricWrapper = mock()
 
     lateinit var sut: CanAskBiometricsUseCase
 

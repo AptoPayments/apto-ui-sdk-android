@@ -2,45 +2,40 @@ package com.aptopayments.sdk.features.card.statements
 
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.config.UIConfig
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.common.analytics.AnalyticsManagerSpy
 import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 import java.io.File
-import kotlin.test.assertEquals
 
 private const val TITLE = "TITLE"
 private const val PDF_RENDERER_TAG = "PdfRendererFragment"
 
-class StatementListFlowTest : AndroidTest() {
+class StatementListFlowTest : UnitTest() {
 
     private lateinit var sut: StatementListFlow
 
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
+    private val mockFragmentFactory: FragmentFactory = mock()
 
-    private var analyticsManager: AnalyticsManagerSpy = AnalyticsManagerSpy()
+    private var analyticsManager: AnalyticsServiceContract = mock()
 
-    @Mock
-    private lateinit var file: File
+    private val file: File = mock()
 
-    @Mock
-    private lateinit var pdfRendererFragmentDelegate: PdfRendererContract.Delegate
+    private val pdfRendererFragmentDelegate: PdfRendererContract.Delegate = mock()
 
     private val statementFile: StatementFile by lazy { StatementFile(file, TITLE) }
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(
@@ -63,6 +58,6 @@ class StatementListFlowTest : AndroidTest() {
 
         sut.onStatementDownloaded(statementFile)
 
-        assertEquals(Event.MonthlyStatementsReportStart, analyticsManager.lastEvent)
+        verify(analyticsManager).track(Event.MonthlyStatementsReportStart)
     }
 }

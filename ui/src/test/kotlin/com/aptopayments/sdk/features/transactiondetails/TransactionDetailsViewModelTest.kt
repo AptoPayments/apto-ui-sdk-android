@@ -4,8 +4,8 @@ import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.transaction.*
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.AfterClass
@@ -13,7 +13,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.mockito.Mock
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import java.util.TimeZone
@@ -22,34 +21,17 @@ private const val representation = "$ 10.11"
 private const val DOLLAR = "$"
 private const val EURO = "€"
 
-internal class TransactionDetailsViewModelTest : UnitTest() {
+internal class TransactionDetailsViewModelTest {
 
-    @Mock
-    lateinit var analyticsManager: AnalyticsServiceContract
-
-    @Mock
-    lateinit var transaction: Transaction
-
-    @Mock
-    lateinit var store: Store
-
-    @Mock
-    lateinit var storeAdress: StoreAddress
-
-    @Mock
-    lateinit var country: Country
-
-    @Mock
-    lateinit var merchant: Merchant
-
-    @Mock
-    lateinit var mcc: MCC
-
-    @Mock
-    lateinit var localAmount: Money
-
-    @Mock
-    lateinit var nativeBalance: Money
+    private val analyticsManager: AnalyticsServiceContract = mock()
+    private val transaction: Transaction = mock()
+    private val store: Store = mock()
+    private val storeAdress: StoreAddress = mock()
+    private val country: Country = mock()
+    private val merchant: Merchant = mock()
+    private val mcc: MCC = mock()
+    private val localAmount: Money = mock()
+    private val nativeBalance: Money = mock()
 
     private lateinit var sut: TransactionDetailsViewModel
 
@@ -59,9 +41,7 @@ internal class TransactionDetailsViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when viewLoaded then track is called`() {
-        sut.viewLoaded()
-
+    fun `when init then track is called`() {
         verify(analyticsManager).track(Event.TransactionDetail)
     }
 

@@ -27,7 +27,7 @@ internal class BirthdateVerificationViewModel(
     val continueEnabled = Transformations.map(date) { it != null }
     val birthdateVerified = LiveEvent<DataPoint>()
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.AuthVerifyBirthdate)
     }
 

@@ -21,13 +21,10 @@ internal class CollectUserEmailViewModel(
     val continueNext = LiveEvent<EmailDataPoint>()
 
     init {
+        analyticsManager.track(Event.WorkflowUserInputEmail)
         initialValue?.let {
             email.postValue(initialValue.email)
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.WorkflowUserInputEmail)
     }
 
     fun continueClicked() {

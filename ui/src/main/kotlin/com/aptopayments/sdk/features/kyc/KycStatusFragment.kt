@@ -98,8 +98,6 @@ internal class KycStatusFragment : BaseFragment(), KycStatusContract.View {
         tv_status_text.localizedText = text
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(kycStatus: KycStatus, cardID: String) = KycStatusFragment().apply {
             arguments = Bundle().apply {

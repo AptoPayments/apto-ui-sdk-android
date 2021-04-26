@@ -2,19 +2,17 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-internal class ShouldCreatePasscodeUseCaseTest : UnitTest() {
+internal class ShouldCreatePasscodeUseCaseTest {
 
-    @Mock
-    private lateinit var authenticationRepo: AuthenticationRepository
+    private val authenticationRepo: AuthenticationRepository = mock()
     lateinit var sut: ShouldCreatePasscodeUseCase
 
     @Before

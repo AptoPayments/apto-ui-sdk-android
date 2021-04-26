@@ -77,8 +77,6 @@ internal class CollectUserEmailFragment :
         delegate?.onBackFromCollectEmail()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(dataPoint: EmailDataPoint?, tag: String) = CollectUserEmailFragment().apply {
             TAG = tag

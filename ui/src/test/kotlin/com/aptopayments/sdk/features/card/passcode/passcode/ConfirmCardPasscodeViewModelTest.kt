@@ -45,8 +45,6 @@ internal class ConfirmCardPasscodeViewModelTest {
 
     @Test
     fun `when created then correct tracking is made`() {
-        sut.trackEvent()
-
         verify(analyticsManager).track(Event.CardPasscodeConfirm)
     }
 

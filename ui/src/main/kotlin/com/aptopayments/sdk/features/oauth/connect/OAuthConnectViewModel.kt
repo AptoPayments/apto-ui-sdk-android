@@ -20,6 +20,10 @@ internal class OAuthConnectViewModel(
 
     var oauthAttempt: MutableLiveData<OAuthAttempt> = MutableLiveData()
 
+    init {
+        analyticsManager.track(Event.SelectBalanceStoreOauthLogin)
+    }
+
     fun startOAuthAuthentication(
         allowedBalanceType: AllowedBalanceType,
         callback: (oauthAttempt: OAuthAttempt) -> Unit
@@ -40,9 +44,5 @@ internal class OAuthConnectViewModel(
                 callback(oauthAttempt)
             }
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.SelectBalanceStoreOauthLogin)
     }
 }

@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.addbalance
 
 import com.aptopayments.mobile.data.config.UIConfig
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.oauth.OAuthConfig
@@ -9,24 +9,21 @@ import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentDouble
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 import kotlin.test.assertEquals
 
-class AddBalanceFlowTest : AndroidTest() {
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
-    @Mock
-    private lateinit var mockDelegate: OAuthConnectContract.Delegate
+class AddBalanceFlowTest : UnitTest() {
+    private val mockFragmentFactory: FragmentFactory = mock()
+    private val mockDelegate: OAuthConnectContract.Delegate = mock()
 
     private val allowedBalanceTypes = listOf(TestDataProvider.provideAllowedBalanceType())
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(

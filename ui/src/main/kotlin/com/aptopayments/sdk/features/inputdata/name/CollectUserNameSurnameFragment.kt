@@ -108,8 +108,6 @@ internal class CollectUserNameSurnameFragment :
         delegate?.onBackFromInputName()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(initialValue: NameDataPoint?, tag: String) = CollectUserNameSurnameFragment().apply {
             arguments = Bundle().apply { putSerializable(DATAPOINT_NAME, initialValue) }

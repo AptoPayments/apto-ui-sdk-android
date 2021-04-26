@@ -8,7 +8,7 @@ internal class DisclaimerViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.Disclaimer)
     }
 }

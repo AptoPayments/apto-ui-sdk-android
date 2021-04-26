@@ -1,5 +1,6 @@
 package com.aptopayments.sdk.features.managecard
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
@@ -33,7 +34,6 @@ import org.threeten.bp.temporal.ChronoUnit
 
 private const val FIVE_SECONDS = 5
 private const val CARD_ID_KEY = "CARD_ID"
-private const val REQUEST_CODE_PUSH_PROVISIONING = 1100
 
 internal class ManageCardFragment :
     BaseFragment(),
@@ -253,18 +253,15 @@ internal class ManageCardFragment :
 
     override fun refreshTransactions() = viewModel.refreshTransactions()
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     private fun onGooglePayPressed() {
         activity?.let {
-            viewModel.onAddToGooglePayPressed(it, REQUEST_CODE_PUSH_PROVISIONING)
+            viewModel.onAddToGooglePayPressed(it)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_CODE_PUSH_PROVISIONING -> viewModel.onReturnedFromAddToGooglePay()
-            else -> super.onActivityResult(requestCode, resultCode, data)
+        if (!viewModel.onActivityResult(requestCode, resultCode == Activity.RESULT_OK)) {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

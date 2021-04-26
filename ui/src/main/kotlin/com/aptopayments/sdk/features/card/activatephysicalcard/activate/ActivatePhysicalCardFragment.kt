@@ -99,8 +99,6 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
         notify(title = title, message = message)
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(card: Card) = ActivatePhysicalCardFragment().apply {
             arguments = Bundle().apply { putSerializable(CARD_KEY, card) }

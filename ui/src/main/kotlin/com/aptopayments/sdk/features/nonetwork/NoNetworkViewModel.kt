@@ -8,7 +8,7 @@ internal class NoNetworkViewModel(
     private val analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
-    fun viewLoaded() {
+    init {
         analyticsManager.track(Event.NoNetwork)
     }
 }

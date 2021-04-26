@@ -21,6 +21,10 @@ internal class OAuthVerifyViewModel(
     val address: MutableLiveData<String> = MutableLiveData()
     val birthdate: MutableLiveData<String> = MutableLiveData()
 
+    init {
+        analyticsManager.track(Event.SelectBalanceStoreOauthConfirm)
+    }
+
     fun setDataPoints(datapointList: DataPointList) {
         (datapointList.getUniqueDataPointOf(DataPoint.Type.NAME, null) as? NameDataPoint)?.let {
             firstName.value = it.firstName
@@ -55,9 +59,5 @@ internal class OAuthVerifyViewModel(
                 callback(it)
             }
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.SelectBalanceStoreOauthConfirm)
     }
 }

@@ -88,7 +88,6 @@ internal class CardMonthlyStatsFragment :
     }
 
     override fun viewLoaded() {
-        viewModel.viewLoaded()
         val now = LocalDate.now()
         val currentMonth = LocalDate.of(now.year, now.month, 1)
         adapter = CardMonthlyStatsAdapter(currentMonth, cardId, this)

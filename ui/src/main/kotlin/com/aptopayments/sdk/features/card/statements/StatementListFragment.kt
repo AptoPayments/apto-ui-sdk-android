@@ -45,11 +45,6 @@ internal class StatementListFragment : BaseFragment(), StatementListContract.Vie
         observe(viewModel.failure) { handleFailure(it) }
     }
 
-    override fun viewLoaded() {
-        super.viewLoaded()
-        viewModel.viewLoaded()
-    }
-
     override fun handleFailure(failure: Failure?) {
         hideLoading()
         when (failure) {

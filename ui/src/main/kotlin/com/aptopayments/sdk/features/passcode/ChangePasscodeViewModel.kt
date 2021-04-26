@@ -9,7 +9,7 @@ internal class ChangePasscodeViewModel(
     private val verifyPasscodeUseCase: VerifyPasscodeUseCase
 ) : PasscodeViewModel(analyticsManager) {
 
-    override fun viewLoaded() {
+    init {
         analyticsManager.track(Event.ChangePasscodeStart)
     }
 

@@ -10,7 +10,6 @@ import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesContract
-import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsDialogContract
 import com.aptopayments.sdk.features.passcode.CreatePasscodeFlow
 import com.aptopayments.sdk.features.passcode.PasscodeMode
@@ -83,12 +82,4 @@ internal class AccountSettingsFlow(
     }
 
     override fun onBackFromNotificationsPreferences() = popFragment()
-
-    override fun onMonthlyStatementTapped() {
-        val flow = StatementListFlow(
-            onBack = { popFlow(true) },
-            onFinish = { popFlow(true) }
-        )
-        flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
-    }
 }

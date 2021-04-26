@@ -338,6 +338,8 @@
 
     <string name="card_settings_settings_passcode_title">Set Secure Passcode</string>
     <string name="card_settings_settings_passcode_subtitle">Set passcode used in online transactions</string>
+    <string name="card_settings_legal_exchange_rates_title">Foreign exchange rates</string>
+    <string name="card_settings_legal_exchange_rates_description">Compare the crossborder fees</string>
 
     <!-- card management enable/disable dialog -->
     <string name="enable_card_message">You are activating your card. Are you sure?</string>
@@ -745,6 +747,7 @@
     <string name="load_funds_add_card_error_postal_code">Invalid ZIP Code.</string>
     <string name="load_funds_add_card_error_address">Invalid Address</string>
     <string name="load_funds_add_card_error_limit">Too many cards added</string>
+    <string name="load_funds_add_card_error_duplicate">This card has already been added previously.</string>
     <string name="load_funds_payment_methods_title">Payment Methods</string>
     <string name="load_funds_payment_methods_existing_card_element_title">Debit Card</string>
     <string name="load_funds_payment_methods_new_card_element_title">Debit Card</string>

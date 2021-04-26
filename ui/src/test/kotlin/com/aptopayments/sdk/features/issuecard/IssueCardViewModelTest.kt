@@ -3,13 +3,13 @@ package com.aptopayments.sdk.features.issuecard
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.analytics.Event
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.data.card.IssueCardDesign
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.exception.server.ServerErrorFactory
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.AndroidTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
@@ -35,7 +35,7 @@ private const val ERROR_OTHER = 1234
 private const val METADATA = "metadata"
 
 @Suppress("UNCHECKED_CAST")
-class IssueCardViewModelTest : AndroidTest() {
+class IssueCardViewModelTest {
 
     @Rule
     @JvmField
@@ -48,12 +48,13 @@ class IssueCardViewModelTest : AndroidTest() {
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository = mock()
 
+    private val design: IssueCardDesign = mock()
     private val additionalFields = mapOf("test" to "test1")
-    private val initializationDataRepository = InMemoryInitializationDataRepository(InitializationData(cardMetadata = METADATA))
+    private val initializationDataRepository =
+        InMemoryInitializationDataRepository(InitializationData(cardMetadata = METADATA, design = design))
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         whenever(issueCardAdditionalRepo.get()).thenReturn(additionalFields)
     }
 
@@ -63,18 +64,19 @@ class IssueCardViewModelTest : AndroidTest() {
         val captor = argumentCaptor<String>()
         whenever(
             aptoPlatform.issueCard(
-                captor.capture(),
+                applicationId = captor.capture(),
+                TestDataProvider.anyObject(),
                 TestDataProvider.anyObject(),
                 TestDataProvider.anyObject(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
-        verify(aptoPlatform).issueCard(any(), any(), any(), any())
+        verify(aptoPlatform).issueCard(applicationId = any(), any(), any(), any(), any())
         verify(analyticsManager).track(Event.IssueCard)
         assertEquals(CARD_APPLICATION_ID, captor.firstValue)
         assertNull(initializationDataRepository.data?.cardMetadata)
@@ -91,10 +93,11 @@ class IssueCardViewModelTest : AndroidTest() {
                 any(),
                 captor.capture(),
                 any(),
+                any<IssueCardDesign>(),
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
@@ -110,16 +113,38 @@ class IssueCardViewModelTest : AndroidTest() {
             aptoPlatform.issueCard(
                 any(),
                 any(),
-                captor.capture(),
-                TestDataProvider.anyObject()
+                metadata = captor.capture(),
+                design = any(),
+                callback = TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
         assertEquals(METADATA, captor.firstValue)
+    }
+
+    @Test
+    fun `when design set them it is sent to the core sdk`() {
+        val card = TestDataProvider.provideCard()
+        val captor = argumentCaptor<IssueCardDesign>()
+        whenever(
+            aptoPlatform.issueCard(
+                applicationId = any(),
+                additionalFields = any(),
+                metadata = any(),
+                design = captor.capture(),
+                callback = TestDataProvider.anyObject()
+            )
+        ).thenAnswer { invocation ->
+            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+        }
+
+        createSut()
+
+        assertEquals(design, captor.firstValue)
     }
 
     @Test
@@ -189,7 +214,7 @@ class IssueCardViewModelTest : AndroidTest() {
         sut.retryIssueCard()
 
         assertTrue { sut.errorVisible.getOrAwaitValue() }
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any<IssueCardDesign>(), any())
     }
 
     @Test
@@ -204,7 +229,7 @@ class IssueCardViewModelTest : AndroidTest() {
 
         assertEquals(TestDataProvider.provideCard(), sut.card.getOrAwaitValue())
         assertFalse(sut.errorVisible.getOrAwaitValue())
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any<IssueCardDesign>(), any())
     }
 
     private fun createSut() {
@@ -233,9 +258,9 @@ class IssueCardViewModelTest : AndroidTest() {
 
     private fun configureIssueCardApi(answer: Either<Failure, Card>) {
         whenever(
-            aptoPlatform.issueCard(any(), any(), any(), TestDataProvider.anyObject())
+            aptoPlatform.issueCard(any(), any(), any(), any<IssueCardDesign>(), TestDataProvider.anyObject())
         ).thenAnswer { invocation ->
-            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(answer)
+            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(answer)
         }
     }
 }

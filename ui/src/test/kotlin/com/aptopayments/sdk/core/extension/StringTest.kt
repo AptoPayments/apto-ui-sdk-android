@@ -1,10 +1,9 @@
 package com.aptopayments.sdk.core.extension
 
-import com.aptopayments.sdk.UnitTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StringTest : UnitTest() {
+class StringTest {
 
     @Test
     fun `stars_ when empty string then empty`() {

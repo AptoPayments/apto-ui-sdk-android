@@ -49,15 +49,17 @@ internal class IssueCardViewModel(
         errorVisible.value = false
         analyticsManager.track(Event.IssueCard)
         aptoPlatform.issueCard(
-            cardApplicationId,
-            issueCardAdditionalRepository.get(),
-            initializationDataRepository.data?.cardMetadata
+            applicationId = cardApplicationId,
+            additionalFields = issueCardAdditionalRepository.get(),
+            metadata = initializationDataRepository.data?.cardMetadata,
+            design = initializationDataRepository.data?.design
         ) { result ->
             hideLoading()
             result.either(
                 { handleIssueCardFailure(it) },
                 {
                     initializationDataRepository.data?.cardMetadata = null
+                    initializationDataRepository.data?.design = null
                     card.postValue(it)
                 }
             )

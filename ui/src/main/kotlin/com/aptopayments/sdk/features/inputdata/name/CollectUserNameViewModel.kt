@@ -23,6 +23,7 @@ internal class CollectUserNameViewModel(
     val continueNext = LiveEvent<NameDataPoint>()
 
     init {
+        analyticsManager.track(Event.WorkflowUserInputName)
         continueEnabled.postValue(false)
         continueEnabled.addSource(name) {
             continueEnabled.value = isValidField(name.value) && isValidField(surname.value)
@@ -34,10 +35,6 @@ internal class CollectUserNameViewModel(
             name.value = initialValue.firstName
             surname.value = initialValue.lastName
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.WorkflowUserInputName)
     }
 
     fun continueClicked() {

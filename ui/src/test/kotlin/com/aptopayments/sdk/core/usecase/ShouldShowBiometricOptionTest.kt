@@ -2,25 +2,19 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 
-internal class ShouldShowBiometricOptionTest : UnitTest() {
+internal class ShouldShowBiometricOptionTest {
 
-    @Mock
-    private lateinit var cardOptions: CardOptions
-
-    @Mock
-    private lateinit var biometricWrapper: BiometricWrapper
-
-    @Mock
-    private lateinit var uiSdkProtocol: AptoUiSdkProtocol
+    private val cardOptions: CardOptions = mock()
+    private val biometricWrapper: BiometricWrapper = mock()
+    private val uiSdkProtocol: AptoUiSdkProtocol = mock()
 
     lateinit var sut: ShouldShowBiometricOption
 

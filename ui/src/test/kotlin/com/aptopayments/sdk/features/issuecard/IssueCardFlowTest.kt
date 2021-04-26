@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.issuecard
 
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.nhaarman.mockitokotlin2.given
@@ -12,25 +12,19 @@ import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.mockito.Mock
 
 private const val CARD_ID = "12345"
 private const val ERROR_ASSET = "fake_asset.png"
 private const val FRAGMENT_TAG = "IssueCardFragment"
 
-class IssueCardFlowTest : AndroidTest() {
+class IssueCardFlowTest : UnitTest() {
 
     private val configurationIssueCard = WorkflowActionConfigurationIssueCard(ERROR_ASSET)
-
-    @Mock
-    private lateinit var mockFragmentFactory: FragmentFactory
-
-    @Mock
-    private lateinit var mockIssueCardDelegate: IssueCardContract.Delegate
+    private val mockFragmentFactory: FragmentFactory = mock()
+    private val mockIssueCardDelegate: IssueCardContract.Delegate = mock()
 
     @Before
-    override fun setUp() {
-        super.setUp()
+    fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {
             modules(

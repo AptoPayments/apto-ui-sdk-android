@@ -1,11 +1,10 @@
 package com.aptopayments.sdk.core.data.config
 
 import com.aptopayments.mobile.data.config.UIStatusBarStyle
-import com.aptopayments.sdk.UnitTest
 import org.junit.Test
 import kotlin.test.assertSame
 
-class UIStatusBarStyleTest : UnitTest() {
+class UIStatusBarStyleTest {
 
     @Test
     fun `Light style correctly parses`() {

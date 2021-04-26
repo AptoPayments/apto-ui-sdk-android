@@ -108,8 +108,6 @@ internal class ActivatePhysicalCardSuccessFragment : BaseFragment(), ActivatePhy
         else tv_footer.remove()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     companion object {
         fun newInstance(card: Card) = ActivatePhysicalCardSuccessFragment().apply {
             arguments = Bundle().apply { putSerializable(CARD_KEY, card) }

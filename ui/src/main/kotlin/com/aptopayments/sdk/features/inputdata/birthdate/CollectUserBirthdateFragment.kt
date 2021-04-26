@@ -71,8 +71,6 @@ internal class CollectUserBirthdateFragment : BaseFragment(), CollectUserBirthda
         tv_birthdate_subtitle.hide()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     override fun setupListeners() {
         continue_button.setOnClickListenerSafe {
             hideKeyboard()

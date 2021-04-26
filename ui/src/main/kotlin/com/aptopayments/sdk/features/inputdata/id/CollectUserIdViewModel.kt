@@ -40,12 +40,9 @@ internal class CollectUserIdViewModel(
     val continueNext = LiveEvent<IdDocumentDataPoint>()
 
     init {
+        analyticsManager.track(Event.WorkflowUserIdDocument)
         setInitialValuesIfPresent(initialValue)
         preselectCountryIfThereIsOnlyOne()
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.WorkflowUserIdDocument)
     }
 
     fun continueClicked() {

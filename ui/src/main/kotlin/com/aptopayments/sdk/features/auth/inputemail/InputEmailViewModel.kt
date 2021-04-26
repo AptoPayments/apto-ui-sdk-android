@@ -15,6 +15,10 @@ internal class InputEmailViewModel(
     var enableNextButton: MutableLiveData<Boolean> = MutableLiveData(false)
     var verificationData: MutableLiveData<Verification> = MutableLiveData()
 
+    init {
+        analyticsManager.track(Event.AuthInputEmail)
+    }
+
     fun startVerificationUseCase(emailInput: String) {
         showLoading()
         AptoPlatform.startEmailVerification(emailInput) {
@@ -27,9 +31,5 @@ internal class InputEmailViewModel(
         if (verification.status == VerificationStatus.PENDING) {
             verificationData.postValue(verification)
         }
-    }
-
-    fun viewLoaded() {
-        analyticsManager.track(Event.AuthInputEmail)
     }
 }

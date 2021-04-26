@@ -36,6 +36,10 @@ internal class VoipViewModel(
 
     val elapsedTime = _elapsedTime as LiveData<Long>
 
+    init {
+        analyticsManager.track(Event.ManageCardVoipCallStarted)
+    }
+
     fun startCall(context: Context, cardID: String, action: Action) {
         _callState.postValue(CallState.NotInitiated)
         aptoPlatform.fetchVoIPToken(cardID, action) { result ->
@@ -72,8 +76,6 @@ internal class VoipViewModel(
     fun toggleMute() {
         voipHandler.isMuted = !voipHandler.isMuted
     }
-
-    fun viewLoaded() = analyticsManager.track(Event.ManageCardVoipCallStarted)
 
     private fun callRinging() = _callState.postValue(CallState.Ringing)
 

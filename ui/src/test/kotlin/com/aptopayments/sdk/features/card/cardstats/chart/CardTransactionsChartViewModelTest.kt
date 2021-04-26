@@ -8,20 +8,20 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.AndroidTest
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers
-import org.mockito.Mock
 import org.threeten.bp.LocalDate
 
 private const val CARD_ID = "1"
@@ -31,21 +31,18 @@ private const val YEAR = 2020
 private val CURRENT_DATE = LocalDate.of(YEAR, MONTH, DAY)
 
 @Suppress("UNCHECKED_CAST")
-class CardTransactionsChartViewModelTest : AndroidTest() {
+class CardTransactionsChartViewModelTest : UnitTest() {
 
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    @Mock
-    private lateinit var sorter: CategorySpendingSorter
-
-    @Mock
-    private lateinit var aptoPlatform: AptoPlatformProtocol
+    private val sorter: CategorySpendingSorter = mock()
+    private val aptoPlatform: AptoPlatformProtocol = mock()
     private lateinit var sut: CardTransactionsChartViewModel
 
-    override fun setUp() {
-        super.setUp()
+    @Before
+    fun setUp() {
         startKoin { modules(module { factory { sorter } }) }
     }
 

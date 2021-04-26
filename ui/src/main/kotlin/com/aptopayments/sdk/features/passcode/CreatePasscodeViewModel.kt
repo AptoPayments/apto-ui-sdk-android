@@ -6,7 +6,9 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 internal class CreatePasscodeViewModel(analyticsManager: AnalyticsServiceContract) :
     PasscodeViewModel(analyticsManager) {
 
-    override fun viewLoaded() = analyticsManager.track(Event.CreatePasscodeStart)
+    init {
+        analyticsManager.track(Event.CreatePasscodeStart)
+    }
 
     override fun firstState() {
         configureSetState()

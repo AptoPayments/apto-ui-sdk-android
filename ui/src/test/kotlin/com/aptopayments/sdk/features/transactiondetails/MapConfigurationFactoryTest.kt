@@ -4,11 +4,10 @@ import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Merchant
 import com.aptopayments.mobile.data.transaction.Store
 import com.aptopayments.mobile.data.transaction.Transaction
-import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.extension.iconResource
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Test
-import org.mockito.Mock
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -17,19 +16,12 @@ private const val LATITUDE = 1.1
 private const val LONGITUDE = 2.2
 private val ICON = MCC.Icon.OTHER
 
-internal class MapConfigurationFactoryTest : UnitTest() {
+internal class MapConfigurationFactoryTest {
 
-    @Mock
-    lateinit var transaction: Transaction
-
-    @Mock
-    lateinit var store: Store
-
-    @Mock
-    lateinit var merchant: Merchant
-
-    @Mock
-    lateinit var mcc: MCC
+    private val transaction: Transaction = mock()
+    private val store: Store = mock()
+    private val merchant: Merchant = mock()
+    private val mcc: MCC = mock()
 
     val sut = MapConfigurationFactory()
 

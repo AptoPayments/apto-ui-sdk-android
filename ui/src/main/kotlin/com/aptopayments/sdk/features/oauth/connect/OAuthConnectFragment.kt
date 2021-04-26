@@ -82,8 +82,6 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
         setupImageView()
     }
 
-    override fun viewLoaded() = viewModel.viewLoaded()
-
     override fun setupListeners() {
         super.setupListeners()
         tv_submit_bttn.setOnClickListener { _ ->
