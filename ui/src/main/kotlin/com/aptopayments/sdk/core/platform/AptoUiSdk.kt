@@ -146,7 +146,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
-        saveInitializationDataUseCase.run(Params(initializationData = initializationData))
+        saveInitializationDataUseCase(Params(initializationData = initializationData))
         startFlow(from, cardOptions, onSuccess, onError)
     }
 
@@ -158,7 +158,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
         onSuccess: (() -> Unit)?,
         onError: ((Failure) -> Unit)?
     ) {
-        saveInitializationDataUseCase(Params(initializationData = initializationData))
+        saveInitializationDataUseCase(Params(initializationData = initializationData, manageCardId = cardId))
         startFlow(from, cardOptions, onSuccess = onSuccess, onError = onError)
     }
 
@@ -186,7 +186,7 @@ object AptoUiSdk : AptoUiSdkProtocol {
     ) {
         this.cardOptions = cardOptions
         overrideFonts(cardOptions)
-        val flow = CardFlow()
+        val flow = AptoPlatform.koin.get<CardFlow>()
         cardFlow = WeakReference(flow)
         flow.init { result ->
             result.either({
