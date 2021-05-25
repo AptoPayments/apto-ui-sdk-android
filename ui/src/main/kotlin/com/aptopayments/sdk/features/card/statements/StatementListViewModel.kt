@@ -2,69 +2,58 @@ package com.aptopayments.sdk.features.card.statements
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.aptopayments.mobile.analytics.Event
-import com.aptopayments.mobile.data.statements.MonthlyStatement
 import com.aptopayments.mobile.data.statements.MonthlyStatementPeriod
 import com.aptopayments.mobile.data.statements.StatementMonth
-import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
-import com.aptopayments.sdk.data.StatementFile
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.LiveEvent
-import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 internal class StatementListViewModel(
-    private val analyticsManager: AnalyticsServiceContract
+    analyticsManager: AnalyticsServiceContract,
+    private val aptoPlatform: AptoPlatformProtocol
 ) : BaseViewModel(), KoinComponent {
 
-    private val _statementList = MutableLiveData(listOf<StatementListItem>())
-    val statementList = _statementList as LiveData<List<StatementListItem>>
+    private val _state = MutableLiveData(State())
+    val state = _state as LiveData<State>
 
-    val statementListEmpty = LiveEvent<Boolean>()
-
-    private val _file = MutableLiveData<StatementFile>()
-    val file = _file as LiveData<StatementFile>
-
-    private val downloadUseCase: DownloadStatementUseCase by inject()
+    val action = LiveEvent<Action>()
 
     init {
         analyticsManager.track(Event.MonthlyStatementsListStart)
+        fetchStatementList()
     }
 
-    fun fetchStatementList() {
-        viewModelScope.launch {
-            showLoading()
-            AptoPlatform.fetchMonthlyStatementPeriod { result ->
-                result.either(::handleFailure, ::handleStatementListSuccess)
-            }
+    private fun fetchStatementList() {
+        showLoading()
+        aptoPlatform.fetchMonthlyStatementPeriod { result ->
+            hideLoading()
+            result.either(::handleFailure, ::handleStatementListSuccess)
         }
     }
 
     fun onMonthTapped(monthStatement: StatementMonth) {
-        AptoPlatform.fetchMonthlyStatement(monthStatement.month, monthStatement.year) {
-            it.either(::handleFailure, ::handleStatementGetSuccess)
-        }
+        action.postValue(Action.OpenMonth(monthStatement))
     }
 
     private fun handleStatementListSuccess(period: MonthlyStatementPeriod) {
         hideLoading()
         val generator = StatementListGenerator()
         if (period.isValid()) {
-            _statementList.postValue(generator.generate(period))
+            _state.postValue(State(showEmpty = false, list = generator.generate(period)))
+        } else {
+            _state.postValue(State(showEmpty = true, list = generator.generate(period)))
         }
-        statementListEmpty.postValue(!period.isValid())
     }
 
-    private fun handleStatementGetSuccess(monthlyStatement: MonthlyStatement) {
-        viewModelScope.launch {
-            downloadUseCase.run(DownloadStatementUseCase.Params(monthlyStatement))
-                .either(::handleFailure) {
-                    _file.postValue(it)
-                }
-        }
+    sealed class Action {
+        class OpenMonth(val statementMonth: StatementMonth) : Action()
     }
+
+    data class State(
+        val showEmpty: Boolean = false,
+        val list: List<StatementListItem> = emptyList()
+    )
 }

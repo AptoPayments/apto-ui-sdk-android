@@ -73,7 +73,7 @@ internal class AddFundsFlow(private val cardId: String, private var onClose: () 
         val fragment = fragmentFactory.addFundsResultFragment(
             cardId = cardId,
             payment = payment,
-            tag = PAYMENT_SOURCES_LIST_TAG
+            tag = RESULT_TAG
         )
         fragment.delegate = this
         push(fragment as BaseFragment)

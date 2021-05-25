@@ -4,8 +4,8 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
-import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyContract
-import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragmentDouble
+import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragment
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -17,7 +17,6 @@ import org.koin.dsl.module
 class OAuthVerifyFlowTest : UnitTest() {
 
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockDelegate: OAuthVerifyContract.Delegate = mock()
 
     @Before
     fun setUp() {
@@ -35,7 +34,7 @@ class OAuthVerifyFlowTest : UnitTest() {
     fun `should use the factory to instantiate OAuthVerifyFragmentInterface as first fragment`() {
         // Given
         val tag = "OAuthVerifyFragment"
-        val fragmentDouble = OAuthVerifyFragmentDouble(mockDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<OAuthVerifyFragment> { on { TAG } doReturn tag }
         val allowedBalanceType = TestDataProvider.provideAllowedBalanceType()
         val oAuthAttempt = TestDataProvider.provideOAuthAttempt()
         val sut = OAuthVerifyFlow(

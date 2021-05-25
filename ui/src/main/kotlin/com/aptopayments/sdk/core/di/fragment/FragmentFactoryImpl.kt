@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.payment.Payment
+import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.voip.Action
@@ -66,10 +67,9 @@ import com.aptopayments.sdk.features.passcode.CreatePasscodeFragment
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragment
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragment
 import com.aptopayments.sdk.features.voip.VoipFragment
-import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererFragment
+import com.aptopayments.sdk.features.card.statements.detail.StatementDetailFragment
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserFragment
 import org.threeten.bp.LocalDate
-import java.io.File
 
 internal class FragmentFactoryImpl : FragmentFactory {
 
@@ -178,8 +178,8 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun statementListFragment(tag: String) = StatementListFragment.newInstance().apply { this.TAG = tag }
 
-    override fun pdfRendererFragment(title: String, file: File, tag: String) =
-        PdfRendererFragment.newInstance(title, file).apply { this.TAG = tag }
+    override fun statementDetailsFragment(statementMonth: StatementMonth, tag: String) =
+        StatementDetailFragment.newInstance(statementMonth).apply { this.TAG = tag }
 
     override fun createPasscodeFragment(tag: String) = CreatePasscodeFragment().apply { this.TAG = tag }
 

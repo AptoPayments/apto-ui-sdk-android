@@ -12,8 +12,8 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
-import com.aptopayments.sdk.features.card.fundingsources.FundingSourceContract
-import com.aptopayments.sdk.features.card.waitlist.WaitlistContract
+import com.aptopayments.sdk.features.card.fundingsources.FundingSourceDialogFragment
+import com.aptopayments.sdk.features.card.waitlist.WaitlistFragment
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +29,6 @@ class ManageCardFlowTest : UnitTest() {
 
     private lateinit var sut: ManageCardFlow
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockManageCardDelegate: ManageCardContract.Delegate = mock()
     private val mockConfig: ContextConfiguration = mock()
     private val mockCardProduct: CardProduct = mock()
     private val mockAptoPlatform: AptoPlatform = mock()
@@ -75,7 +74,6 @@ class ManageCardFlowTest : UnitTest() {
     @Test
     fun `should use the factory to instantiate WaitListFragmentInterface as first fragment if KYC is passed and card is waitlisted`() {
         // Given
-        val mockWaitlistDelegate: WaitlistContract.Delegate = mock()
         val card = TestDataProvider.provideCard(accountID = cardId, kycStatus = KycStatus.PASSED, isWaitlisted = true)
         whenever(
             mockAptoPlatform.fetchCard(
@@ -98,7 +96,7 @@ class ManageCardFlowTest : UnitTest() {
         }
 
         val tag = "WaitlistFragment"
-        val fragmentDouble = WaitlistFragmentDouble(mockWaitlistDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<WaitlistFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.waitlistFragment(cardId, mockCardProduct, tag)
         }.willReturn(fragmentDouble)
@@ -124,7 +122,7 @@ class ManageCardFlowTest : UnitTest() {
             (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
         val tag = "ManageCardFragment"
-        val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<ManageCardFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.manageCardFragment(tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
@@ -150,7 +148,7 @@ class ManageCardFlowTest : UnitTest() {
             (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
         val tag = "ManageCardFragment"
-        val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<ManageCardFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.manageCardFragment(tag = tag, cardId = cardId)
         }.willReturn(fragmentDouble)
@@ -191,8 +189,7 @@ class ManageCardFlowTest : UnitTest() {
         // Given
         val balanceId = "TEST_BALANCE_ID"
         val tag = "FundingSourceDialogFragment"
-        val mockFundingSourcesDelegate: FundingSourceContract.Delegate = mock()
-        val fragmentDouble = FundingSourcesDialogFragmentDouble(mockFundingSourcesDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<FundingSourceDialogFragment>()
         given {
             mockFragmentFactory.fundingSourceFragment(tag = tag, cardID = cardId, selectedBalanceID = balanceId)
         }.willReturn(fragmentDouble)
@@ -208,7 +205,7 @@ class ManageCardFlowTest : UnitTest() {
     fun `flow is set as manage card fragment delegate when restoring state`() {
         // Given
         val tag = "ManageCardFragment"
-        val fragmentDouble = ManageCardFragmentDouble(mockManageCardDelegate).apply { this.TAG = tag }
+        val fragmentDouble = spy<ManageCardFragment>().apply { TAG = tag }
         sut.setStartElement(fragmentDouble)
 
         // When

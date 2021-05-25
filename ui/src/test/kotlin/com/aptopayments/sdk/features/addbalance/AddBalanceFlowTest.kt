@@ -5,9 +5,9 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.oauth.OAuthConfig
-import com.aptopayments.sdk.features.oauth.connect.OAuthConnectContract
-import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragmentDouble
+import com.aptopayments.sdk.features.oauth.connect.OAuthConnectFragment
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
@@ -18,7 +18,6 @@ import kotlin.test.assertEquals
 
 class AddBalanceFlowTest : UnitTest() {
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockDelegate: OAuthConnectContract.Delegate = mock()
 
     private val allowedBalanceTypes = listOf(TestDataProvider.provideAllowedBalanceType())
 
@@ -48,7 +47,7 @@ class AddBalanceFlowTest : UnitTest() {
             "external_auth.login.error_oauth_temporarily_unavailable.message",
             "external_auth.login.error_oauth_unknown.message"
         )
-        val fragmentDouble = OAuthConnectFragmentDouble(mockDelegate).apply { this.TAG = "OAuthConnectFragment" }
+        val fragmentDouble = mock<OAuthConnectFragment> { on { TAG } doReturn "OAuthConnectFragment" }
         val captor = argumentCaptor<OAuthConfig>()
         given {
             mockFragmentFactory.oauthConnectFragment(

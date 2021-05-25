@@ -14,10 +14,8 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.repository.InMemoryInitializationDataRepository
-import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -46,17 +44,10 @@ class IssueCardViewModelTest {
     private val serverErrorFactory = ServerErrorFactory()
     private val analyticsManager: AnalyticsManager = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
-    private val issueCardAdditionalRepo: IssueCardAdditionalFieldsRepository = mock()
 
     private val design: IssueCardDesign = mock()
-    private val additionalFields = mapOf("test" to "test1")
     private val initializationDataRepository =
         InMemoryInitializationDataRepository(InitializationData(cardMetadata = METADATA, design = design))
-
-    @Before
-    fun setUp() {
-        whenever(issueCardAdditionalRepo.get()).thenReturn(additionalFields)
-    }
 
     @Test
     fun `when IssueCardViewModel then issueCard call is made correctly`() {
@@ -68,41 +59,19 @@ class IssueCardViewModelTest {
                 TestDataProvider.anyObject(),
                 TestDataProvider.anyObject(),
                 TestDataProvider.anyObject(),
-                TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
 
-        verify(aptoPlatform).issueCard(applicationId = any(), any(), any(), any(), any())
+        verify(aptoPlatform).issueCard(applicationId = any(), any(), any(), any())
         verify(analyticsManager).track(Event.IssueCard)
         assertEquals(CARD_APPLICATION_ID, captor.firstValue)
         assertNull(initializationDataRepository.data?.cardMetadata)
         assertFalse(sut.errorVisible.getOrAwaitValue())
         assertEquals(card, sut.card.getOrAwaitValue())
-    }
-
-    @Test
-    fun `when additional Field set them it is sent to the core sdk`() {
-        val card = TestDataProvider.provideCard()
-        val captor = argumentCaptor<Map<String, String>>()
-        whenever(
-            aptoPlatform.issueCard(
-                any(),
-                captor.capture(),
-                any(),
-                any<IssueCardDesign>(),
-                TestDataProvider.anyObject()
-            )
-        ).thenAnswer { invocation ->
-            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
-        }
-
-        createSut()
-
-        assertEquals(additionalFields, captor.firstValue)
     }
 
     @Test
@@ -112,13 +81,12 @@ class IssueCardViewModelTest {
         whenever(
             aptoPlatform.issueCard(
                 any(),
-                any(),
                 metadata = captor.capture(),
                 design = any(),
                 callback = TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
@@ -133,13 +101,12 @@ class IssueCardViewModelTest {
         whenever(
             aptoPlatform.issueCard(
                 applicationId = any(),
-                additionalFields = any(),
                 metadata = any(),
                 design = captor.capture(),
                 callback = TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(Either.Right(card))
         }
 
         createSut()
@@ -214,7 +181,7 @@ class IssueCardViewModelTest {
         sut.retryIssueCard()
 
         assertTrue { sut.errorVisible.getOrAwaitValue() }
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any<IssueCardDesign>(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any<IssueCardDesign>(), any())
     }
 
     @Test
@@ -229,7 +196,7 @@ class IssueCardViewModelTest {
 
         assertEquals(TestDataProvider.provideCard(), sut.card.getOrAwaitValue())
         assertFalse(sut.errorVisible.getOrAwaitValue())
-        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any(), any<IssueCardDesign>(), any())
+        verify(aptoPlatform, times(2)).issueCard(eq(CARD_APPLICATION_ID), any(), any<IssueCardDesign>(), any())
     }
 
     private fun createSut() {
@@ -238,7 +205,6 @@ class IssueCardViewModelTest {
             WorkflowActionConfigurationIssueCard(ERROR_ASSET),
             analyticsManager,
             aptoPlatform,
-            issueCardAdditionalRepo,
             initializationDataRepository
         )
     }
@@ -258,9 +224,9 @@ class IssueCardViewModelTest {
 
     private fun configureIssueCardApi(answer: Either<Failure, Card>) {
         whenever(
-            aptoPlatform.issueCard(any(), any(), any(), any<IssueCardDesign>(), TestDataProvider.anyObject())
+            aptoPlatform.issueCard(any(), any(), any<IssueCardDesign>(), TestDataProvider.anyObject())
         ).thenAnswer { invocation ->
-            (invocation.arguments[4] as (Either<Failure, Card>) -> Unit).invoke(answer)
+            (invocation.arguments[3] as (Either<Failure, Card>) -> Unit).invoke(answer)
         }
     }
 }

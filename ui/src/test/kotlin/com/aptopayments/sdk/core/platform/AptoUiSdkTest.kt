@@ -7,13 +7,9 @@ import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase.Params
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.card.CardFlow
 import com.nhaarman.mockitokotlin2.*
-import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
-
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
@@ -40,20 +36,6 @@ class AptoUiSdkTest : AutoCloseKoinTest() {
     @Test
     fun `by default DarkTheme is set to false`() {
         assertFalse(AptoUiSdk.cardOptions.darkThemeEnabled())
-    }
-
-    @Test
-    fun `when setAdditionalFields then they are correctly stored`() {
-        val fields = mapOf<String, String>()
-
-        AptoUiSdk.setCardIssueAdditional(fields)
-
-        assertEquals(fields, IssueCardAdditionalFieldsRepositoryImpl.fields)
-    }
-
-    @After
-    fun tearDown() {
-        IssueCardAdditionalFieldsRepositoryImpl.fields = null
     }
 
     @Test

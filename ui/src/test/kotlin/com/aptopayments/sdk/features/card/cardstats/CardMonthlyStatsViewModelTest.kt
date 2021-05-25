@@ -171,11 +171,4 @@ class CardMonthlyStatsViewModelTest : UnitTest() {
             (invocation.arguments[3] as (Either<Failure, MonthlySpending>) -> Unit).invoke(Either.Right(result))
         }
     }
-
-    @Test
-    fun `when getMonthlyStatement then calls protocol`() {
-        sut.getMonthlyStatement(MONTH, YEAR) {}
-
-        verify(aptoPlatformProtocol).fetchMonthlyStatement(eq(MONTH), eq(YEAR), any())
-    }
 }

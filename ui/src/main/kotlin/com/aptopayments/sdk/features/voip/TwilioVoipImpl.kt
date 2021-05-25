@@ -80,6 +80,7 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
 
     override fun onConnectFailure(call: Call, error: CallException) {
         onError?.invoke(error.message)
+        clearCallbacks()
     }
 
     override fun onConnected(call: Call) {
@@ -100,9 +101,18 @@ internal class TwilioVoipImpl : VoipContract.Handler, Call.Listener {
         error?.let {
             onError?.invoke(error.message)
         } ?: onComplete?.invoke()
+        clearCallbacks()
     }
 
     override fun onRinging(call: Call) {
         onRinging?.invoke()
+    }
+
+    private fun clearCallbacks() {
+        onRinging = null
+        onEstablished = null
+        onReconnecting = null
+        onComplete = null
+        onError = null
     }
 }

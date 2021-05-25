@@ -5,6 +5,7 @@ import com.aptopayments.mobile.data.voip.Action
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -18,7 +19,6 @@ class VoipFlowTest : UnitTest() {
     private lateinit var sut: VoipFlow
 
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockDelegate: VoipContract.Delegate = mock()
     private val mockAction: Action = mock()
     private val cardId = "TEST_CARD_ID"
 
@@ -39,7 +39,7 @@ class VoipFlowTest : UnitTest() {
     fun `should use the factory to instantiate VoipFragmentInterface as first fragment`() {
         // Given
         val tag = "VoipFragment"
-        val fragmentDouble = VoipFragmentDouble(mockDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<VoipFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.getVoipFragment(tag = tag, action = mockAction, cardId = cardId)
         }.willReturn(fragmentDouble)

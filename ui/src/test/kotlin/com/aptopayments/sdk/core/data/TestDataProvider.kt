@@ -15,6 +15,7 @@ import com.aptopayments.mobile.data.oauth.OAuthUserDataUpdateResult
 import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.payment.PaymentStatus
 import com.aptopayments.mobile.data.paymentsources.NewCard
+import com.aptopayments.mobile.data.statements.MonthlyStatement
 import com.aptopayments.mobile.data.stats.CategorySpending
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.DataPoint
@@ -50,7 +51,6 @@ class TestDataProvider {
                 supportEmailAddress = "",
                 trackerAccessToken = "",
                 isTrackerActive = false,
-                isChatbotActive = false,
                 primaryAuthCredential = DataPoint.Type.PHONE
             )
         )
@@ -67,7 +67,6 @@ class TestDataProvider {
                 supportEmailAddress = "",
                 trackerAccessToken = "",
                 isTrackerActive = false,
-                isChatbotActive = false,
                 primaryAuthCredential = DataPoint.Type.EMAIL
             )
         )
@@ -265,5 +264,21 @@ class TestDataProvider {
             amountHeld = amountHeld,
             custodianWallet = custodianWallet
         )
+
+        fun monthlyStatement(
+            id: String = "monthly_statement_12345",
+            month: Int = 12,
+            year: Int = 2021,
+            downloadUrl: String = "https://www.aptopayments.com/statement.pdf",
+            urlExpiration: ZonedDateTime? = ZonedDateTime.now().plusMinutes(1)
+        ): MonthlyStatement {
+            return MonthlyStatement(
+                id = id,
+                month = month,
+                year = year,
+                downloadUrl = downloadUrl,
+                urlExpiration = urlExpiration
+            )
+        }
     }
 }

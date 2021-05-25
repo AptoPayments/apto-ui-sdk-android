@@ -6,15 +6,18 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
-import com.nhaarman.mockitokotlin2.given
+import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragment
+import com.nhaarman.mockitokotlin2.*
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
+private const val LIST_TAG = "TransactionListFragment"
+private const val DETAILS_TAG = "TransactionDetailsFragment"
 
 class TransactionListFlowTest : UnitTest() {
     private lateinit var sut: TransactionListFlow
@@ -23,8 +26,6 @@ class TransactionListFlowTest : UnitTest() {
     private val mockFragmentFactory: FragmentFactory = mock()
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
-    private val tag = "TransactionListFragment"
-    private val detailsTag = "TransactionDetailsFragment"
 
     @Before
     fun setUp() {
@@ -44,14 +45,14 @@ class TransactionListFlowTest : UnitTest() {
         sut = TransactionListFlow(cardId = cardId, config = config, onBack = {})
         val fragmentTestDouble = transactionListFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionListFragment(cardId, config, tag)
+            mockFragmentFactory.transactionListFragment(cardId, config, LIST_TAG)
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.init {}
 
         // Then
-        verify(mockFragmentFactory).transactionListFragment(cardId, config, tag)
+        verify(mockFragmentFactory).transactionListFragment(cardId, config, LIST_TAG)
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 
@@ -75,26 +76,22 @@ class TransactionListFlowTest : UnitTest() {
         val transaction = mock<Transaction>()
         val fragmentTestDouble = transactionDetailsFragmentTestDouble()
         given {
-            mockFragmentFactory.transactionDetailsFragment(transaction, detailsTag)
+            mockFragmentFactory.transactionDetailsFragment(transaction, DETAILS_TAG)
         }.willReturn(fragmentTestDouble)
 
         // When
         sut.onTransactionTapped(transaction)
 
         // Then
-        verify(mockFragmentFactory).transactionDetailsFragment(transaction, detailsTag)
+        verify(mockFragmentFactory).transactionDetailsFragment(transaction, DETAILS_TAG)
         assertEquals(sut, fragmentTestDouble.delegate)
     }
 
-    private fun transactionListFragmentTestDouble(): TransactionListFragmentTestDouble {
-        val fragmentTestDouble = TransactionListFragmentTestDouble()
-        fragmentTestDouble.TAG = tag
-        return fragmentTestDouble
+    private fun transactionListFragmentTestDouble(): TransactionListFragment {
+        return spy<TransactionListFragment>().apply { TAG = LIST_TAG }
     }
 
-    private fun transactionDetailsFragmentTestDouble(): TransactionDetailsFragmentTestDouble {
-        val fragmentTestDouble = TransactionDetailsFragmentTestDouble()
-        fragmentTestDouble.TAG = detailsTag
-        return fragmentTestDouble
+    private fun transactionDetailsFragmentTestDouble(): TransactionDetailsFragment {
+        return spy<TransactionDetailsFragment>().apply { TAG = DETAILS_TAG }
     }
 }

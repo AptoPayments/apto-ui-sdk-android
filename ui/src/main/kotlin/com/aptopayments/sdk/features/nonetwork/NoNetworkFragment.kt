@@ -12,7 +12,7 @@ import com.aptopayments.sdk.utils.FontsUtil
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_no_network.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 import java.net.URI
 import java.util.Timer
 import kotlin.concurrent.scheduleAtFixedRate

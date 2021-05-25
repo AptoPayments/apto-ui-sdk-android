@@ -15,6 +15,7 @@ import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledChecker
 import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledCheckerImpl
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
+import com.aptopayments.sdk.features.card.statements.detail.ExternalFileDownloader
 import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
 import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
@@ -26,7 +27,6 @@ import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderProvider
 import com.aptopayments.sdk.utils.*
-import com.aptopayments.sdk.utils.chatbot.*
 import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.google.android.libraries.places.api.Places
@@ -45,7 +45,7 @@ internal val applicationModule = module {
     single<VoipContract.Handler> { TwilioVoipImpl() }
     single<AptoPlatformProtocol> { AptoPlatform }
     single<AptoUiSdkProtocol> { AptoUiSdk }
-    factory<FileSharer> { FileSharerImpl() }
+    factory { ExternalFileDownloader(androidContext()) }
     factory<FileDownloader> { FileDownloaderImpl() }
     factory<CacheFileManager> { CacheFileManagerImpl(get()) }
     factory<StatementRepository> { StatementRepositoryImpl(get(), get(), get()) }
@@ -64,17 +64,12 @@ internal val applicationModule = module {
     factory { Places.createClient(get()) }
     factory { PlaceFetcher(get(), get()) }
     factory { AddressDataPointGenerator() }
-    factory<IssueCardAdditionalFieldsRepository> { IssueCardAdditionalFieldsRepositoryImpl }
     single { PaymentSourcesRepository(get(), get()) }
     factory { PaymentSourceElementMapper() }
     factory { PaymentResultElementMapper(get()) }
     single<InitializationDataRepository> { InMemoryInitializationDataRepository() }
     factory<ManageCardIdRepository> { ManageCardIdRepositoryImpl }
     factory<ForceIssueCardRepository> { ForceIssueCardRepositoryImpl }
-    factory<ChatbotProvider> { ChatbotProviderImpl() }
-    factory { ChatbotConfigurator(get()) }
-    factory { (chatbotEnabled: Boolean) -> SupportTextResolver(chatbotEnabled) }
-    factory { ChatbotActivityLauncher(get()) }
     factory<TelephonyEnabledChecker> { TelephonyEnabledCheckerImpl(androidContext()) }
     factory { InAppProvisioningDeepLinkGenerator(get()) }
     factory { CardFlow() }

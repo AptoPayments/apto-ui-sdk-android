@@ -16,12 +16,11 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.ViewUtils
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 
 private const val TAG_KEY = "APTO_TAG_KEY"
 
-internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponent {
+internal abstract class BaseFragment : Fragment(), FlowPresentable {
 
     abstract fun layoutId(): Int
     abstract fun backgroundColor(): Int
@@ -124,7 +123,7 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable, KoinComponen
                 notify("session_expired_error".localized())
             }
             is Failure.RateLimitFailure -> {
-                notify("failure_server_error".localized(), "error_transport_rate_limiter".localized())
+                notify("failure_server_error".localized(), "error_transport_rate_limit".localized())
             }
         }
     }

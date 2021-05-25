@@ -2,8 +2,8 @@ package com.aptopayments.sdk.core.di.viewmodel
 
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.cardproduct.CardProduct
-import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.payment.Payment
+import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
@@ -27,6 +27,7 @@ import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewMo
 import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinViewModel
 import com.aptopayments.sdk.features.card.setpin.SetCardPinViewModel
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
+import com.aptopayments.sdk.features.card.statements.detail.StatementDetailViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListViewModel
 import com.aptopayments.sdk.features.card.waitlist.WaitlistViewModel
@@ -74,29 +75,17 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get(), get()) }
     viewModel { ActivatePhysicalCardViewModel(get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
-    viewModel { (card: Card, cardProduct: CardProduct, projectConfiguration: ProjectConfiguration) ->
-        CardSettingsViewModel(card, cardProduct, projectConfiguration, get(), get(), get())
-    }
+    viewModel { (card: Card, cardProduct: CardProduct) -> CardSettingsViewModel(card, cardProduct, get(), get(), get()) }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
     viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
     viewModel { NoNetworkViewModel(get()) }
     viewModel { MaintenanceViewModel(get()) }
-    viewModel { (cardId: String, projectConfig: ProjectConfiguration) ->
-        AccountSettingsViewModel(
-            cardId,
-            projectConfig,
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
+    viewModel { AccountSettingsViewModel(get(), get(), get(), get()) }
     viewModel { NotificationPreferencesViewModel() }
     viewModel { DisclaimerViewModel(get()) }
     viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->
-        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get(), get())
+        IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get())
     }
     viewModel { (cardId: String, config: TransactionListConfig) ->
         TransactionListViewModel(
@@ -127,7 +116,7 @@ val viewModelModule = module {
         )
     }
     viewModel { VoipViewModel(get(), get(), get()) }
-    viewModel { StatementListViewModel(get()) }
+    viewModel { StatementListViewModel(get(), get()) }
     viewModel { CreatePasscodeViewModel(get()) }
     viewModel { ChangePasscodeViewModel(get(), get()) }
     viewModel { (initialValue: NameDataPoint?) -> CollectUserNameViewModel(initialValue, get()) }
@@ -149,4 +138,5 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> AchAccountDetailsViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> OrderPhysicalCardViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> OrderPhysicalCardSuccessViewModel(cardId, get(), get()) }
+    viewModel { (month: StatementMonth) -> StatementDetailViewModel(month, get(), get(), get()) }
 }

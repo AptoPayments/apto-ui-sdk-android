@@ -24,15 +24,13 @@ import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.utils.MessageBanner.MessageType
 import com.aptopayments.sdk.utils.PhoneDialer
 import com.aptopayments.sdk.utils.SendEmailUtil
-import com.aptopayments.sdk.utils.chatbot.ChatbotActivityLauncher
-import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
 import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_card_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
 private const val CARD_KEY = "CARD"
@@ -46,9 +44,8 @@ internal class CardSettingsFragment :
     private lateinit var card: Card
     private lateinit var cardProduct: CardProduct
     private lateinit var projectConfiguration: ProjectConfiguration
-    private val viewModel: CardSettingsViewModel by viewModel { parametersOf(card, cardProduct, projectConfiguration) }
+    private val viewModel: CardSettingsViewModel by viewModel { parametersOf(card, cardProduct) }
     private val intentGenerator: IntentGenerator by inject()
-    private val chatbotLauncher: ChatbotActivityLauncher by inject()
     private val iAPDeepLinkGenerator: InAppProvisioningDeepLinkGenerator by inject()
     override var delegate: CardSettingsContract.Delegate? = null
 
@@ -80,7 +77,6 @@ internal class CardSettingsFragment :
             observe(viewModel.failure) { handleFailure(it) }
             observeNullable(action) {
                 when (it) {
-                    is Action.StartChatbot -> startChatbot(it.param)
                     is Action.CustomerSupportEmail -> sendCustomerSupportEmail()
                     is Action.ContentPresenter -> showContentPresenter(it.content, it.title)
                     is Action.ShowCardDetails -> manageCardDetails()
@@ -201,12 +197,6 @@ internal class CardSettingsFragment :
         delegate?.showContentPresenter(content, titleToLocalize.localized())
     }
 
-    private fun startChatbot(params: ChatbotParameters) {
-        activity?.let {
-            chatbotLauncher.show(it, params)
-        }
-    }
-
     private fun sendCustomerSupportEmail() {
         (projectConfiguration.supportEmailAddress)?.let {
             sendEmail(it, "help_mail_subject".localized(), "help_mail_body".localized())
@@ -214,8 +204,8 @@ internal class CardSettingsFragment :
     }
 
     private fun sendEmail(recipient: String, subject: String?, body: String?) {
-        activity?.let {
-            SendEmailUtil(recipient, subject, body).execute(it)
+        activity?.let { activity ->
+            SendEmailUtil(recipient, subject, body).execute(activity).runIfLeft { handleFailure(it) }
         }
     }
 

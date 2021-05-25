@@ -1,18 +1,15 @@
 package com.aptopayments.sdk.features.card.cardstats
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
-import com.aptopayments.sdk.data.StatementFile
-import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFlow
-import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
-import org.koin.core.inject
+import com.aptopayments.sdk.features.card.statements.detail.StatementDetailContract
 import org.threeten.bp.LocalDate
 
 private const val CARD_MONTHLY_STATS_TAG = "CardMonthlyStatsFragment"
@@ -22,9 +19,7 @@ internal class CardStatsFlow(
     val cardId: String,
     val onBack: () -> Unit,
     val onFinish: () -> Unit
-) : Flow(), CardMonthlyStatsContract.Delegate, PdfRendererContract.Delegate {
-
-    val analyticsManager: AnalyticsServiceContract by inject()
+) : Flow(), CardMonthlyStatsContract.Delegate, StatementDetailContract.Delegate {
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val fragment = fragmentFactory.cardMonthlyStatsFragment(cardId, CARD_MONTHLY_STATS_TAG)
@@ -37,7 +32,7 @@ internal class CardStatsFlow(
         (fragmentWithTag(CARD_MONTHLY_STATS_TAG) as? CardMonthlyStatsContract.View)?.let {
             it.delegate = this
         }
-        (fragmentWithTag(PDF_RENDERER_TAG) as? PdfRendererContract.View)?.let {
+        (fragmentWithTag(PDF_RENDERER_TAG) as? StatementDetailContract.View)?.let {
             it.delegate = this
         }
     }
@@ -52,9 +47,8 @@ internal class CardStatsFlow(
         }
     }
 
-    override fun showMonthlyStatement(file: StatementFile) {
-        analyticsManager.track(Event.MonthlyStatementsReportStart)
-        val fragment = fragmentFactory.pdfRendererFragment(file.title, file.file, PDF_RENDERER_TAG)
+    override fun showMonthlyStatement(statement: StatementMonth) {
+        val fragment = fragmentFactory.statementDetailsFragment(statement, PDF_RENDERER_TAG)
         fragment.delegate = this
         push(fragment as BaseFragment)
     }

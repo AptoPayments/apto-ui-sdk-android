@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.*
 import com.aptopayments.mobile.data.cardproduct.CardProduct
-import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
@@ -48,7 +47,6 @@ internal class CardSettingsViewModelTest : UnitTest() {
         on { accountID } doReturn CARD_ID
         on { features } doReturn cardFeatures
     }
-    private val projectConfiguration = mock<ProjectConfiguration>()
     private val cardProduct = mock<CardProduct>()
     private val analytics = mock<AnalyticsServiceContract>()
     private val aptoPlatform = mock<AptoPlatform>()
@@ -400,21 +398,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     @Test
-    fun `when onCustomerSupport and isChatbotActive then action is chatbot`() {
-        whenever(projectConfiguration.isChatbotActive).thenReturn(true)
-        whenever(card.accountID).thenReturn("1")
-        whenever(card.cardHolder).thenReturn("Jhon Snow")
-        sut = createSut()
-
-        sut.onCustomerSupport()
-        val action = sut.action.getOrAwaitValue()
-
-        assertTrue(action is Action.StartChatbot)
-    }
-
-    @Test
-    fun `when onCustomerSupport and !isChatbotActive then action is CustomerSupportEmail`() {
-        whenever(projectConfiguration.isChatbotActive).thenReturn(false)
+    fun `when onCustomerSupport then action is CustomerSupportEmail`() {
         sut = createSut()
 
         sut.onCustomerSupport()
@@ -424,7 +408,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun createSut() =
-        CardSettingsViewModel(card, cardProduct, projectConfiguration, analytics, aptoPlatform, aptoUiSdkProtocol)
+        CardSettingsViewModel(card, cardProduct, analytics, aptoPlatform, aptoUiSdkProtocol)
 
     @Test
     fun `given correct sim when click on IVR then call action`() {

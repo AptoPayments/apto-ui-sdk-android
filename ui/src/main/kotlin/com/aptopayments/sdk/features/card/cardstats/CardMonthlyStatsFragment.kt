@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import com.aptopayments.mobile.data.config.UIConfig
+import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
@@ -112,11 +113,7 @@ internal class CardMonthlyStatsFragment :
     }
 
     override fun onStatementTapped(month: Int, year: Int) {
-        showLoading()
-        viewModel.getMonthlyStatement(month, year) {
-            hideLoading()
-            delegate?.showMonthlyStatement(it)
-        }
+        delegate?.showMonthlyStatement(StatementMonth(month, year))
     }
 
     companion object {

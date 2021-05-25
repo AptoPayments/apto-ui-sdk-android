@@ -70,7 +70,7 @@ internal class WebBrowserFragment : BaseFragment(), WebBrowserContract.View {
     private fun setupToolbar(title: String? = null) {
         tb_llsdk_toolbar?.configure(
             this,
-            ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Close()).title(title).build()
+            ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Close()).setPrimaryColors().title(title).build()
         )
     }
 

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.core.ui.StatusBarUtil
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_maintenance.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 
 internal class MaintenanceFragment : BaseFragment(), MaintenanceContract.View {
 

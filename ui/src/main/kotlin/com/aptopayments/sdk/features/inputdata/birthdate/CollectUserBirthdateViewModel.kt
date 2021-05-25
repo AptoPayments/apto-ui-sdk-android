@@ -12,9 +12,11 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.ChronoUnit
 
 private const val MIN_YEARS_OLD = 18
+private const val MAX_YEARS_OLD = 120
+private const val FOUR_DIGITS_YEAR = 1000
 
 internal class CollectUserBirthdateViewModel(
-    private val analyticsManager: AnalyticsServiceContract
+    analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel() {
 
     private val date = MutableLiveData<LocalDate?>(null)
@@ -26,20 +28,34 @@ internal class CollectUserBirthdateViewModel(
     }
 
     fun setLocalDate(date: LocalDate?) {
-        this.date.value = date
+        if (date != null && date.year > FOUR_DIGITS_YEAR) {
+            when {
+                isUserMoreThanMaxAge(date) -> setFailure(OlderThanMaxAgeFailure())
+                isUserLessThanMinAge(date) -> setFailure(YoungerThanMinAgeFailure())
+                else -> this.date.value = date
+            }
+        } else {
+            this.date.value = null
+        }
+    }
+
+    private fun setFailure(failure: Failure) {
+        handleFailure(failure)
+        this.date.value = null
     }
 
     fun onContinueClicked() {
         date.value?.let {
-            if (isUserEighteenOrMore(it)) {
-                continueClicked.postValue(BirthdateDataPoint(birthdate = it))
-            } else {
-                handleFailure(YoungerThanEighteenYO())
-            }
+            continueClicked.postValue(BirthdateDataPoint(birthdate = it))
         }
     }
 
-    private fun isUserEighteenOrMore(dob: LocalDate) = ChronoUnit.YEARS.between(dob, LocalDate.now()) >= MIN_YEARS_OLD
+    private fun isUserLessThanMinAge(date: LocalDate) =
+        ChronoUnit.YEARS.between(date, LocalDate.now()) < MIN_YEARS_OLD
 
-    class YoungerThanEighteenYO : Failure.FeatureFailure("birthday_collector_error_too_young")
+    private fun isUserMoreThanMaxAge(date: LocalDate) =
+        ChronoUnit.YEARS.between(date, LocalDate.now()) > MAX_YEARS_OLD
+
+    class YoungerThanMinAgeFailure : Failure.FeatureFailure("birthday_collector_error_too_young")
+    class OlderThanMaxAgeFailure : Failure.FeatureFailure("birthday_collector_error_too_old")
 }

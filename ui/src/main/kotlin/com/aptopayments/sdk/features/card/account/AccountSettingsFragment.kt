@@ -14,12 +14,9 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAccountSettingsBinding
 import com.aptopayments.sdk.utils.SendEmailUtil
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
-import com.aptopayments.sdk.utils.chatbot.ChatbotActivityLauncher
-import com.aptopayments.sdk.utils.chatbot.ChatbotParameters
 import kotlinx.android.synthetic.main.include_custom_toolbar.view.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.inject
-import org.koin.core.parameter.parametersOf
 
 private const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
 private const val CARD_ID = "CARD_ID"
@@ -32,14 +29,8 @@ internal class AccountSettingsFragment :
     private lateinit var contextConfiguration: ContextConfiguration
     private lateinit var cardId: String
 
-    private val viewModel: AccountSettingsViewModel by viewModel {
-        parametersOf(
-            cardId,
-            contextConfiguration.projectConfiguration
-        )
-    }
+    private val viewModel: AccountSettingsViewModel by viewModel()
     private val uiSdkProtocol: AptoUiSdkProtocol by inject()
-    private val chatbotLauncher: ChatbotActivityLauncher by inject()
 
     override fun layoutId(): Int = R.layout.fragment_account_settings
 
@@ -59,14 +50,7 @@ internal class AccountSettingsFragment :
         observeNotNullable(viewModel.action) { action ->
             when (action) {
                 is AccountSettingsViewModel.Action.CustomerSupportEmail -> sendCustomerSupportEmail()
-                is AccountSettingsViewModel.Action.LaunchChatbot -> launchChatbot(action.param)
             }
-        }
-    }
-
-    private fun launchChatbot(params: ChatbotParameters) {
-        activity?.let {
-            chatbotLauncher.show(it, params)
         }
     }
 
@@ -137,7 +121,7 @@ internal class AccountSettingsFragment :
         activity?.let { activity ->
             val subject = "help_mail_subject".localized()
             val body = "help_mail_body".localized()
-            SendEmailUtil(it, subject, body).execute(activity)
+            SendEmailUtil(it, subject, body).execute(activity).runIfLeft { handleFailure(it) }
         }
     }
 

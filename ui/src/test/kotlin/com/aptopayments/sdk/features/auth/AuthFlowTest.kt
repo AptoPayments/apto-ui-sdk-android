@@ -9,11 +9,12 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationContract
-import com.aptopayments.sdk.features.auth.inputemail.InputEmailContract
-import com.aptopayments.sdk.features.auth.inputphone.InputPhoneContract
-import com.aptopayments.sdk.features.auth.verification.EmailVerificationContract
-import com.aptopayments.sdk.features.auth.verification.PhoneVerificationContract
+import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationFragment
+import com.aptopayments.sdk.features.auth.inputemail.InputEmailFragment
+import com.aptopayments.sdk.features.auth.inputphone.InputPhoneFragment
+import com.aptopayments.sdk.features.auth.verification.EmailVerificationFragment
+import com.aptopayments.sdk.features.auth.verification.PhoneVerificationFragment
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -27,11 +28,6 @@ internal class AuthFlowTest : UnitTest() {
     private lateinit var sut: AuthFlow
 
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockPhoneDelegate: InputPhoneContract.Delegate = mock()
-    private val mockEmailDelegate: InputEmailContract.Delegate = mock()
-    private val mockBirthdayVerification: BirthdateVerificationContract.Delegate = mock()
-    private val mockPhoneVerifyDelegate: PhoneVerificationContract.Delegate = mock()
-    private val mockEmailVerifyDelegate: EmailVerificationContract.Delegate = mock()
 
     private lateinit var mockDataPoint: PhoneDataPoint
     private lateinit var countries: List<Country>
@@ -56,7 +52,7 @@ internal class AuthFlowTest : UnitTest() {
         // Given
         sut = AuthFlow(TestDataProvider.provideContextConfiguration(), onBack = {}, onFinish = {})
         val tag = "InputPhoneFragment"
-        val fragmentPhoneInputDouble = AuthInputPhoneFragmentDouble(mockPhoneDelegate).apply { this.TAG = tag }
+        val fragmentPhoneInputDouble = mock<InputPhoneFragment> { on { TAG } doReturn tag }
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
         given {
             mockFragmentFactory.inputPhoneFragment(
@@ -81,8 +77,7 @@ internal class AuthFlowTest : UnitTest() {
         // Given
         val tag = "PhoneVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfiguration(), onBack = {}, onFinish = {})
-        val fragmentPhoneVerificationDouble =
-            AuthPhoneVerificationFragmentDouble(mockPhoneVerifyDelegate).apply { this.TAG = tag }
+        val fragmentPhoneVerificationDouble = mock<PhoneVerificationFragment> { on { TAG } doReturn tag }
         val verification = Verification("", "phone")
         given {
             mockFragmentFactory.phoneVerificationFragment(verification = verification, tag = tag)
@@ -101,7 +96,7 @@ internal class AuthFlowTest : UnitTest() {
         // Given
         val tag = "EmailVerificationFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
-        val fragmentEmailVerifyDouble = AuthVerifyEmailFragmentDouble(mockEmailVerifyDelegate).apply { this.TAG = tag }
+        val fragmentEmailVerifyDouble = mock<EmailVerificationFragment> { on { TAG } doReturn tag }
         val verification = Verification("", "phone")
         given {
             mockFragmentFactory.emailVerificationFragment(verification = verification, tag = tag)
@@ -121,7 +116,7 @@ internal class AuthFlowTest : UnitTest() {
         val tag = "InputPhoneFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        val fragmentPhoneInputDouble = AuthInputPhoneFragmentDouble(mockPhoneDelegate).apply { this.TAG = tag }
+        val fragmentPhoneInputDouble = mock<InputPhoneFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.inputPhoneFragment(countries, tag)
         }.willReturn(fragmentPhoneInputDouble)
@@ -146,7 +141,7 @@ internal class AuthFlowTest : UnitTest() {
         val tag = "InputEmailFragment"
         sut = AuthFlow(TestDataProvider.provideContextConfigurationEmail(), onBack = {}, onFinish = {})
         countries = TestDataProvider.provideContextConfiguration().projectConfiguration.allowedCountries
-        val fragmentEmailDouble = AuthInputEmailFragmentDouble(mockEmailDelegate).apply { this.TAG = tag }
+        val fragmentEmailDouble = mock<InputEmailFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.inputEmailFragment(tag)
         }.willReturn(fragmentEmailDouble)
@@ -176,7 +171,7 @@ internal class AuthFlowTest : UnitTest() {
             VerificationStatus.FAILED, "", Verification("", "birthdate")
         )
         mockDataPoint = PhoneDataPoint(verification = verification)
-        val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
+        val fragmentBirthdayDouble = mock<BirthdateVerificationFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.birthdateVerificationFragment(verification, tag)
         }.willReturn(fragmentBirthdayDouble)
@@ -200,7 +195,7 @@ internal class AuthFlowTest : UnitTest() {
             VerificationStatus.FAILED, "", Verification("", "birthdate")
         )
         mockDataPoint = PhoneDataPoint(verification = verification)
-        val fragmentBirthdayDouble = AuthVerifyBirthdayFragmentDouble(mockBirthdayVerification).apply { this.TAG = tag }
+        val fragmentBirthdayDouble = mock<BirthdateVerificationFragment> { on { TAG } doReturn tag }
         given {
             mockFragmentFactory.birthdateVerificationFragment(verification, tag)
         }.willReturn(fragmentBirthdayDouble)

@@ -12,9 +12,8 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.features.cardproductselector.countryselector.CountrySelectorFragmentDouble
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
-import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
+import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragment
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -25,7 +24,6 @@ class CardProductSelectorFlowTest : UnitTest() {
 
     private lateinit var sut: CardProductSelectorFlow
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockDelegate: CountrySelectorContract.Delegate = mock()
     private val mockAptoPlatform: AptoPlatform = mock()
 
     private var analyticsManager: AnalyticsServiceContract = mock()
@@ -57,7 +55,7 @@ class CardProductSelectorFlowTest : UnitTest() {
     fun `should use the factory to instantiate CountrySelectorFragment as first fragment`() {
         // Given
         val tag = "CountrySelectorFragment"
-        val fragmentDouble = CountrySelectorFragmentDouble(mockDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<CountrySelectorFragment> { on { TAG } doReturn tag }
 
         given {
             mockFragmentFactory.countrySelectorFragment(emptyList(), tag)

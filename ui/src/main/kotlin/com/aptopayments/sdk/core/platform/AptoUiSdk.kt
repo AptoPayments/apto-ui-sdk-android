@@ -20,10 +20,8 @@ import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase.Params
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
-import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepositoryImpl
 import com.aptopayments.sdk.utils.FontsUtil
 import org.koin.core.module.Module
-import zendesk.chat.Chat
 import java.lang.ref.WeakReference
 
 interface AptoUiSdkProtocol {
@@ -96,9 +94,6 @@ interface AptoUiSdkProtocol {
         onError: ((Failure) -> Unit)?
     )
 
-    @Deprecated(message = "Use the cardMetadata parameter when launching the SDK.")
-    fun setCardIssueAdditional(fields: Map<String, Any>?)
-
     fun userTokenPresent(): Boolean
     fun getAppVersion(activity: FragmentActivity?): String
     fun registerFirebaseToken(firebaseToken: String)
@@ -128,7 +123,6 @@ object AptoUiSdk : AptoUiSdkProtocol {
         AptoPlatform.setUiModules(list)
         AptoPlatform.initialize(application)
         ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
-        Chat.INSTANCE.init(application, application.getString(R.string.apto_chat_key))
     }
 
     override fun setApiKey(apiKey: String, environment: AptoSdkEnvironment) {
@@ -208,10 +202,6 @@ object AptoUiSdk : AptoUiSdkProtocol {
                 boldFont = boldFont
             )
         }
-    }
-
-    override fun setCardIssueAdditional(fields: Map<String, Any>?) {
-        IssueCardAdditionalFieldsRepositoryImpl.fields = fields
     }
 
     override fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()

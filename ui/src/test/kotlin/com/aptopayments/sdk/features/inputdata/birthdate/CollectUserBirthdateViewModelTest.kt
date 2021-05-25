@@ -40,15 +40,17 @@ class CollectUserBirthdateViewModelTest {
     }
 
     @Test
-    fun `when date is set then continueButton is enabled`() {
-        sut.setLocalDate(LocalDate.now())
+    fun `when set a DOB older than 18 years then continue is enabled`() {
+        val date = LocalDate.now().minusYears(20)
+
+        sut.setLocalDate(date)
 
         assertTrue { sut.continueEnabled.getOrAwaitValue() }
     }
 
     @Test
-    fun `given user older than 18 when continueClicked then continue Event is fired`() {
-        val date = LocalDate.now().minusYears(19)
+    fun `given a DOB older than 18 years when onContinueClicked then event is fired`() {
+        val date = LocalDate.now().minusYears(20)
         sut.setLocalDate(date)
 
         sut.onContinueClicked()
@@ -58,24 +60,40 @@ class CollectUserBirthdateViewModelTest {
     }
 
     @Test
-    fun `given user with 18 yo when continueClicked then continue Event is fired`() {
-        val date = LocalDate.now().minusYears(18).minusDays(1)
+    fun `when set a DOB younger than 18 years then continue is not enabled`() {
+        val date = LocalDate.now().minusYears(18).plusDays(1)
+
         sut.setLocalDate(date)
 
-        sut.onContinueClicked()
-
-        val dataPoint = sut.continueClicked.getOrAwaitValue()
-        assertEquals(dataPoint.birthdate, date)
+        assertFalse(sut.continueEnabled.getOrAwaitValue())
     }
 
     @Test
-    fun `given user younger than 18 when continueClicked then error is raised`() {
-        val date = LocalDate.now().minusYears(17)
+    fun `when set a DOB younger than 18 years then error is fired`() {
+        val date = LocalDate.now().minusYears(18).plusDays(1)
+
         sut.setLocalDate(date)
 
-        sut.onContinueClicked()
+        val failure = sut.failure.getOrAwaitValue()
+        assertTrue(failure is CollectUserBirthdateViewModel.YoungerThanMinAgeFailure)
+    }
 
-        val error = sut.failure.getOrAwaitValue()
-        assertTrue(error is CollectUserBirthdateViewModel.YoungerThanEighteenYO)
+    @Test
+    fun `when set a DOB older than 120 years then continue is not enabled`() {
+        val date = LocalDate.now().minusYears(121)
+
+        sut.setLocalDate(date)
+
+        assertFalse(sut.continueEnabled.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when set a DOB older than 120 years then error is fired`() {
+        val date = LocalDate.now().minusYears(121)
+
+        sut.setLocalDate(date)
+
+        val failure = sut.failure.getOrAwaitValue()
+        assertTrue(failure is CollectUserBirthdateViewModel.OlderThanMaxAgeFailure)
     }
 }

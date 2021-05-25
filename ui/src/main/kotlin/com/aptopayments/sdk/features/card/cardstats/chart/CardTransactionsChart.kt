@@ -13,14 +13,12 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.stats.CategorySpending
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.MCC.Icon
-import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.iconResource
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.core.usecase.DownloadStatementUseCase
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.github.mikephil.charting.data.Entry
@@ -88,15 +86,6 @@ internal class CardTransactionsChart :
 
     private fun setClickListeners() {
         monthly_statement_link.setOnClickListenerSafe { delegate?.onStatementTapped(date.monthValue, date.year) }
-    }
-
-    override fun handleFailure(failure: Failure?) {
-        hideLoading()
-        when (failure) {
-            is DownloadStatementUseCase.StatementExpiredFailure -> notify(failure.errorMessage())
-            is DownloadStatementUseCase.StatementDownloadFailure -> notify(failure.errorMessage())
-            else -> super.handleFailure(failure)
-        }
     }
 
     private fun showViews() {

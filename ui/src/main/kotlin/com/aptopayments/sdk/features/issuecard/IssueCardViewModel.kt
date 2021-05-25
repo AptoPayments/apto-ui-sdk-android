@@ -12,7 +12,6 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.InitializationDataRepository
-import com.aptopayments.sdk.repository.IssueCardAdditionalFieldsRepository
 
 private const val ERROR_GENERIC = "GENERIC"
 private const val ERROR_INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS"
@@ -24,7 +23,6 @@ internal class IssueCardViewModel(
     private val actionConfiguration: WorkflowActionConfigurationIssueCard?,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
-    private val issueCardAdditionalRepository: IssueCardAdditionalFieldsRepository,
     private val initializationDataRepository: InitializationDataRepository
 ) : BaseViewModel() {
 
@@ -50,7 +48,6 @@ internal class IssueCardViewModel(
         analyticsManager.track(Event.IssueCard)
         aptoPlatform.issueCard(
             applicationId = cardApplicationId,
-            additionalFields = issueCardAdditionalRepository.get(),
             metadata = initializationDataRepository.data?.cardMetadata,
             design = initializationDataRepository.data?.design
         ) { result ->

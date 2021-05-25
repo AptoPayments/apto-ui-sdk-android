@@ -5,6 +5,7 @@ import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIs
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -21,7 +22,6 @@ class IssueCardFlowTest : UnitTest() {
 
     private val configurationIssueCard = WorkflowActionConfigurationIssueCard(ERROR_ASSET)
     private val mockFragmentFactory: FragmentFactory = mock()
-    private val mockIssueCardDelegate: IssueCardContract.Delegate = mock()
 
     @Before
     fun setUp() {
@@ -78,7 +78,7 @@ class IssueCardFlowTest : UnitTest() {
     }
 
     private fun configureFragmentFactory(cardApplicationId: String) {
-        val fragmentDouble = IssueCardFragmentDouble(mockIssueCardDelegate).apply { this.TAG = FRAGMENT_TAG }
+        val fragmentDouble = mock<IssueCardFragment> { on { TAG } doReturn FRAGMENT_TAG }
         given {
             mockFragmentFactory.issueCardFragment(
                 cardApplicationId = cardApplicationId,

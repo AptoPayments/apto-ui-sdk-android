@@ -7,11 +7,19 @@ internal sealed class StatementListItem {
         override fun equals(other: Any?): Boolean {
             return other is YearRow && other.year == year
         }
+
+        override fun hashCode(): Int {
+            return year
+        }
     }
 
     class MonthRow(val month: StatementMonth) : StatementListItem() {
         override fun equals(other: Any?): Boolean {
             return other is MonthRow && other.month == month
+        }
+
+        override fun hashCode(): Int {
+            return month.hashCode()
         }
     }
 

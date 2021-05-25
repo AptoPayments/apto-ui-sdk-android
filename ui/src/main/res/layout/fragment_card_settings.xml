@@ -167,8 +167,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/section_option_height"
                         android:onClick="@{() ->viewModel.onCustomerSupport()}"
-                        app:optionDescription="@{viewModel.supportTexts.first}"
-                        app:optionTitle="@{viewModel.supportTexts.second}" />
+                        app:optionDescription="card_settings_help_contact_support_title"
+                        app:optionTitle="card_settings_help_contact_support_description" />
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:id="@+id/rl_report_stolen_card"

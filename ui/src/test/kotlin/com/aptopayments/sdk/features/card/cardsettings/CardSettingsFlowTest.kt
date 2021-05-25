@@ -11,13 +11,8 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
-import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
-import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragmentDouble
-import com.aptopayments.sdk.features.managecard.CardSettingsFragmentDouble
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragment
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -64,7 +59,9 @@ class CardSettingsFlowTest : UnitTest() {
         configureFetchCardProduct()
 
         val tag = "CardSettingsFragment"
-        val fragmentDouble = CardSettingsFragmentDouble(mockCardSettingsDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<CardSettingsFragment> {
+            on { TAG } doReturn tag
+        }
         given {
             mockFragmentFactory.cardSettingsFragment(
                 tag = tag,
@@ -92,11 +89,12 @@ class CardSettingsFlowTest : UnitTest() {
     fun `should use the factory to instantiate ContentPresenterInterface when showContentPresenter is called`() {
 
         // Given
-        val mockContentPresenterDelegate: ContentPresenterContract.Delegate = mock()
         val tag = "ContentPresenterFragment"
         val title = "TEST_TITLE"
         val mockContent: Content = mock()
-        val fragmentDouble = ContentPresenterFragmentDouble(mockContentPresenterDelegate).apply { this.TAG = tag }
+        val fragmentDouble = mock<ContentPresenterFragment> {
+            on { TAG } doReturn tag
+        }
         given {
             mockFragmentFactory.contentPresenterFragment(tag = tag, content = mockContent, title = title)
         }.willReturn(fragmentDouble)

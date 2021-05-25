@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.config.ProjectConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.payment.Payment
+import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.voip.Action
@@ -64,10 +65,9 @@ import com.aptopayments.sdk.features.passcode.PasscodeContract
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorContract
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsContract
 import com.aptopayments.sdk.features.voip.VoipContract
-import com.aptopayments.sdk.ui.fragments.pdf.PdfRendererContract
+import com.aptopayments.sdk.features.card.statements.detail.StatementDetailContract
 import com.aptopayments.sdk.ui.fragments.webbrowser.WebBrowserContract
 import org.threeten.bp.LocalDate
-import java.io.File
 
 internal interface FragmentFactory {
 
@@ -131,7 +131,7 @@ internal interface FragmentFactory {
     fun confirmPasscodeFragment(cardId: String, pin: String, verificationId: String?, tag: String): ConfirmCardPinContract.View
     fun getVoipFragment(cardId: String, action: Action, tag: String): VoipContract.View
     fun statementListFragment(tag: String): StatementListContract.View
-    fun pdfRendererFragment(title: String, file: File, tag: String): PdfRendererContract.View
+    fun statementDetailsFragment(statementMonth: StatementMonth, tag: String): StatementDetailContract.View
     fun createPasscodeFragment(tag: String): PasscodeContract.View
     fun changePasscodeFragment(tag: String): PasscodeContract.View
     fun collectNameFragment(initialValue: NameDataPoint?, tag: String): CollectUserNameSurnameContract.View
