@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.loadfunds.result
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.Features
 import com.aptopayments.mobile.data.card.FundingFeature
@@ -9,6 +8,7 @@ import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultViewModel.Action
 import com.aptopayments.sdk.utils.getOrAwaitValue
@@ -16,9 +16,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -28,11 +27,8 @@ private const val CARD_PRODUCT_ID = "12345678"
 private const val SOFT_DESCRIPTOR = "My company"
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 class AddFundsResultViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val fundingFeature: FundingFeature = mock {
         on { softDescriptor } doReturn SOFT_DESCRIPTOR

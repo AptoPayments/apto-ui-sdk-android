@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatSpinner
@@ -127,5 +128,15 @@ object DataBindingUtils {
     @BindingAdapter("app:onClickSafe")
     fun setDebouncedListener(view: View, onClickListener: View.OnClickListener) {
         view.setOnClickListenerSafe { onClickListener.onClick(view) }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:onCheckedChangePressed")
+    fun setCheckedChangePressed(view: CompoundButton, listener: CompoundButton.OnCheckedChangeListener) {
+        view.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView?.isPressed == true) {
+                listener.onCheckedChanged(buttonView, isChecked)
+            }
+        }
     }
 }

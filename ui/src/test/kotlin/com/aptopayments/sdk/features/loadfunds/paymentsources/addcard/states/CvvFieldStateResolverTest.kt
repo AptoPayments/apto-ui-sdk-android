@@ -2,8 +2,8 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.states
 
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.FieldState
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 private const val NUMBER = "123456"
 

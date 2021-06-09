@@ -14,6 +14,16 @@ internal data class PaymentSourceElement(
     @IntegerRes val logo: Int
 ) {
     fun isDefined() = id.isNotEmpty()
+
+    companion object {
+        fun unsetElement(): PaymentSourceElement {
+            return PaymentSourceElement(
+                title = "load_funds_add_money_no_payment_method".localized(),
+                showFourDots = false,
+                logo = CardNetwork.UNKNOWN.icon
+            )
+        }
+    }
 }
 
 internal class PaymentSourceElementMapper {
@@ -23,14 +33,6 @@ internal class PaymentSourceElementMapper {
             is Card -> mapCard(elem)
             else -> throw RuntimeException()
         }
-    }
-
-    fun getUnsetElement(): PaymentSourceElement {
-        return PaymentSourceElement(
-            title = "load_funds_add_money_no_payment_method".localized(),
-            showFourDots = false,
-            logo = CardNetwork.UNKNOWN.icon
-        )
     }
 
     private fun mapCard(elem: Card): PaymentSourceElement {

@@ -62,7 +62,8 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
         }
     }
 
-    private fun setupToolBar() = tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
+    private fun setupToolBar() =
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setSecondaryColors().build())
 
     override fun setupListeners() {
         super.setupListeners()

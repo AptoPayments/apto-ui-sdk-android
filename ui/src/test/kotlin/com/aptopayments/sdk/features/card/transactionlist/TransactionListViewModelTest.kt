@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.transactionlist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.exception.Failure
@@ -9,15 +8,15 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.mobile.repository.transaction.TransactionListFilters
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.managecard.TransactionListItem
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
 import kotlin.test.assertEquals
@@ -28,11 +27,8 @@ private val transaction1 = TestDataProvider.provideTransaction(TRANSACTION_ID_1)
 private val transaction2 = TestDataProvider.provideTransaction("tr2")
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 class TransactionListViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private var analyticsManager: AnalyticsServiceContract = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()

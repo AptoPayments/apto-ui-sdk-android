@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.directdeposit.instructions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract

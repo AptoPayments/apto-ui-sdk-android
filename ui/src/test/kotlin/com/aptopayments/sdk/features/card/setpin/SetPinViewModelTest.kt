@@ -1,11 +1,11 @@
 package com.aptopayments.sdk.features.card.setpin
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class SetPinViewModelTest {
 
@@ -13,7 +13,7 @@ class SetPinViewModelTest {
 
     private var analyticsManager: AnalyticsServiceContract = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = SetCardPinViewModel(analyticsManager)
     }

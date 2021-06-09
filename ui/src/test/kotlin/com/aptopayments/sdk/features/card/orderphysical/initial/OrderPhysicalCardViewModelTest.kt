@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.card.orderphysical.initial
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.card.OrderPhysicalCardConfig
@@ -10,14 +9,14 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel.Action
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -25,11 +24,8 @@ import kotlin.test.assertTrue
 private const val CARD_ID = "id_1234"
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 internal class OrderPhysicalCardViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val analyticsManager: AnalyticsServiceContract = mock()

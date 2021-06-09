@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.statements
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.statements.MonthlyStatementPeriod
 import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.platform.AptoPlatformProtocol

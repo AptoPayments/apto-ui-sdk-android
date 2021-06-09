@@ -11,14 +11,12 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.usecase.InitNewOrExistingFlowUseCase.Action
 import com.aptopayments.sdk.repository.ForceIssueCardRepository
 import com.aptopayments.sdk.repository.ManageCardIdRepository
-import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndInstanceOf
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 private const val CARD_ID = "id_12345"
@@ -26,9 +24,6 @@ private const val CARD_ID = "id_12345"
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 internal class InitNewOrExistingFlowUseCaseTest {
-
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val manageCardIdRepository: ManageCardIdRepository = mock()

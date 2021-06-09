@@ -1,18 +1,17 @@
 package com.aptopayments.sdk.features.inputdata.id
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.user.IdDataPointConfiguration
 import com.aptopayments.mobile.data.user.IdDocumentDataPoint
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -25,11 +24,8 @@ private val SINGLE_DOCUMENT_TYPE_LIST = listOf(IdDocumentDataPoint.Type.SSN)
 private const val DOCUMENT_NUMBER = "1234567"
 private const val VALID_SSN = "778628144"
 
+@ExtendWith(InstantExecutorExtension::class)
 class CollectUserIdViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val multiCountryMap =
         mapOf(

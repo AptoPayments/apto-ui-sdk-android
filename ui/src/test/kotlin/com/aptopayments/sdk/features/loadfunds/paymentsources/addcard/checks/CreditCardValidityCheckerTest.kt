@@ -2,9 +2,9 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.checks
 
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 class CreditCardValidityCheckerTest {
 

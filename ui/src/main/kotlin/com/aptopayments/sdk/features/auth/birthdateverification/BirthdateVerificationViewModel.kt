@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.auth.birthdateverification
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.BirthdateDataPoint
 import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.Verification

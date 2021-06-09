@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.selectbalancestore
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.SelectBalanceStoreResult
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationSelectBalanceStore
@@ -13,8 +13,8 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyString
@@ -28,7 +28,7 @@ class SelectBalanceStoreFlowTest : UnitTest() {
     private var analyticsManager: AnalyticsServiceContract = mock()
     private val mockAptoPlatform: AptoPlatform = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {

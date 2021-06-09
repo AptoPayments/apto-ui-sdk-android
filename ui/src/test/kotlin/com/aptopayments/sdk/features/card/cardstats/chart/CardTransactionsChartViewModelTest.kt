@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.cardstats.chart
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.statements.MonthlyStatementPeriod
 import com.aptopayments.mobile.data.stats.CategorySpending
 import com.aptopayments.mobile.data.stats.MonthlySpending
@@ -8,17 +7,17 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers
@@ -31,17 +30,14 @@ private const val YEAR = 2020
 private val CURRENT_DATE = LocalDate.of(YEAR, MONTH, DAY)
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 class CardTransactionsChartViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val sorter: CategorySpendingSorter = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private lateinit var sut: CardTransactionsChartViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin { modules(module { factory { sorter } }) }
     }

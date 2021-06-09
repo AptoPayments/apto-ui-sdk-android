@@ -1,27 +1,23 @@
 package com.aptopayments.sdk.features.passcode
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.InstantExecutorExtension
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(InstantExecutorExtension::class)
 class CreatePasscodeViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: CreatePasscodeViewModel
 
     private val analyticsManager: AnalyticsManager = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = CreatePasscodeViewModel(analyticsManager)
     }

@@ -14,16 +14,14 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.usecase.DeclineAchDisclaimerUseCase.Params
-import com.aptopayments.sdk.utils.MainCoroutineRule
-import com.aptopayments.sdk.utils.runBlockingTest
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
 
 private const val CARD_ID = "crd_12345"
@@ -33,16 +31,13 @@ private const val AGREEMENT_KEY = "key_1"
 @ExperimentalCoroutinesApi
 internal class DeclineAchDisclaimerUseCaseTest : UnitTest() {
 
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
-
     private val disclaimer = Disclaimer(keys = listOf(AGREEMENT_KEY), content = Content.PlainText(""))
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val sut = DeclineAchDisclaimerUseCase(aptoPlatform)
 
     @Test
-    fun `given card and agreement succeeds when invoked then Unit returned`() = coroutineRule.runBlockingTest {
+    fun `given card and agreement succeeds when invoked then Unit returned`() = runBlockingTest {
         configureCard(disclaimer)
         configureDeclineAgreements(Unit.right())
 
@@ -52,7 +47,7 @@ internal class DeclineAchDisclaimerUseCaseTest : UnitTest() {
     }
 
     @Test
-    fun `given agreement fails when invoked then Failure returned`() = coroutineRule.runBlockingTest {
+    fun `given agreement fails when invoked then Failure returned`() = runBlockingTest {
         configureCard(disclaimer)
         configureDeclineAgreements(Failure.ServerError(1, "").left())
 

@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.analytics
 
 import android.app.Application
-import com.aptopayments.mobile.analytics.Event
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import org.json.JSONObject
 

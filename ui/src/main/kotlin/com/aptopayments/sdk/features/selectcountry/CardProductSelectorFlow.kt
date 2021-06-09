@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.selectcountry
 
 import androidx.annotation.VisibleForTesting
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either

@@ -2,7 +2,7 @@ package com.aptopayments.sdk.ui.views.birthdate
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class FormatOrderGeneratorTest {

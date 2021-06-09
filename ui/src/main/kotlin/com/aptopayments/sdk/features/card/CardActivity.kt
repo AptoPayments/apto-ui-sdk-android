@@ -3,7 +3,7 @@ package com.aptopayments.sdk.features.card
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
 import com.aptopayments.mobile.platform.AptoPlatform

@@ -1,25 +1,21 @@
 package com.aptopayments.sdk.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.utils.ManualTimer
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertFalse
 
+@ExtendWith(InstantExecutorExtension::class)
 class InMemoryLocalCardDetailsRepositoryTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: InMemoryLocalCardDetailsRepository
     private val timer = ManualTimer()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = InMemoryLocalCardDetailsRepository(timer)
     }

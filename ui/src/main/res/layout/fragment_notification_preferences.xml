@@ -1,396 +1,420 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/tb_llsdk_toolbar_layout"
-        layout="@layout/include_toolbar_two"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <View
-        android:id="@+id/ll_notifications_header"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
-        tools:background="@color/colorPrimary" />
+        <import type="com.aptopayments.mobile.data.user.notificationpreferences.NotificationGroup.Group" />
+        <import type="com.aptopayments.mobile.data.user.notificationpreferences.NotificationChannel" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_notifications_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
-        app:layout_constraintEnd_toEndOf="@+id/gl_primary_notification"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ll_notifications_header"
-        tools:text="SENT VIA PUSH OR EMAIL" />
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferencesViewModel" />
 
-    <ImageView
-        android:id="@+id/iv_primary_notification_channel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
-        app:layout_constraintStart_toEndOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/ll_notifications_header"
-        tools:src="@drawable/ic_notifications_push" />
+        <variable
+            name="resources"
+            type="com.aptopayments.sdk.features.card.notificationpreferences.NotificationChannelResources" />
+    </data>
 
-    <ImageView
-        android:id="@+id/iv_secondary_notification_channel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
-        app:layout_constraintStart_toEndOf="@id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/ll_notifications_header"
-        tools:src="@drawable/ic_notifications_mail" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
-    <View
-        android:id="@+id/top_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/divider_line_color"
-        app:layout_constraintEnd_toStartOf="@id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/ll_notifications_header" />
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_card_activity_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/top_separator"
-        app:localize="notification_preferences_card_activity_title" />
+        <View
+            android:id="@+id/ll_notifications_header"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout"
+            tools:background="@color/colorPrimary" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_card_activity_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_card_activity_title"
-        app:localize="notification_preferences_card_activity_description" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_notifications_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
+            app:layout_constraintEnd_toEndOf="@+id/gl_primary_notification"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_notifications_header"
+            app:localizeBinding="@{resources.getTitleText(viewModel.state.secondaryChannel)}"
+            tools:localize="notification_preferences_send_push_email_title" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_payment_successful"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_card_activity_description"
-        app:localize="notification_preferences_card_activity_payment_successful_title" />
+        <ImageView
+            android:id="@+id/iv_primary_notification_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_notifications_push"
+            app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
+            app:layout_constraintStart_toEndOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/ll_notifications_header" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_payment_successful_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_payment_successful"
-        app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_payment_successful" />
+        <ImageView
+            android:id="@+id/iv_secondary_notification_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ll_notifications_header"
+            app:layout_constraintStart_toEndOf="@id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/ll_notifications_header"
+            tools:src="@drawable/ic_notifications_mail" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_payment_successful_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_payment_successful"
-        app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_payment_successful" />
+        <View
+            android:id="@+id/top_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/divider_line_color"
+            app:layout_constraintEnd_toStartOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/ll_notifications_header" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/payment_successful_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="tv_payment_successful, cb_payment_successful_primary_notification, cb_payment_successful_secondary_notification"
-        tools:visibility="visible" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_card_activity_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/top_separator"
+            app:localize="notification_preferences_card_activity_title" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/card_activity_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_card_activity_description,tv_payment_successful" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_card_activity_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/gl_right"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_activity_title"
+            app:localize="notification_preferences_card_activity_description" />
 
-    <View
-        android:id="@+id/card_activity_barrier_separator"
-        android:layout_width="1dp"
-        android:layout_height="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/card_activity_barrier"/>
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_payment_successful"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_activity_description"
+            app:localize="notification_preferences_card_activity_payment_successful_title" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_payment_declined"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/card_activity_barrier_separator"
-        app:localize="notification_preferences.card_activity.payment_declined.title" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_payment_successful_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_payment_successful"
+            app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_payment_successful"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.PAYMENT_SUCCESSFUL, NotificationChannel.PUSH, checked)}" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_payment_declined_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_payment_declined"
-        app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_payment_declined" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_payment_successful_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_payment_successful"
+            app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_payment_successful"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.PAYMENT_SUCCESSFUL, viewModel.state.secondaryChannel, checked)}"/>
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_payment_declined_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_payment_declined"
-        app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_payment_declined" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/payment_successful_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_payment_successful, cb_payment_successful_primary_notification, cb_payment_successful_secondary_notification"
+            tools:visibility="visible" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/payment_declined_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="tv_payment_declined, cb_payment_declined_primary_notification, cb_payment_declined_secondary_notification"
-        tools:visibility="visible" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/card_activity_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_card_activity_description,tv_payment_successful" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/payment_declined_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_card_activity_description, tv_payment_successful, tv_payment_declined" />
+        <View
+            android:id="@+id/card_activity_barrier_separator"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/card_activity_barrier" />
 
-    <View
-        android:id="@+id/payment_declined_barrier_separator"
-        android:layout_width="1dp"
-        android:layout_height="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/payment_declined_barrier"/>
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_payment_declined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/card_activity_barrier_separator"
+            app:localize="notification_preferences.card_activity.payment_declined.title" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_atm_withdrawal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/payment_declined_barrier_separator"
-        app:localize="notification_preferences_card_activity_atm_withdrawal_title" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_payment_declined_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_payment_declined"
+            app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_payment_declined"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.PAYMENT_DECLINED, NotificationChannel.PUSH, checked)}"/>
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_atm_withdrawal_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_atm_withdrawal"
-        app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_atm_withdrawal" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_payment_declined_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_payment_declined"
+            app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_payment_declined"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.PAYMENT_DECLINED, viewModel.state.secondaryChannel, checked)}"/>
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_atm_withdrawal_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_atm_withdrawal"
-        app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_atm_withdrawal" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/payment_declined_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_payment_declined, cb_payment_declined_primary_notification, cb_payment_declined_secondary_notification"
+            tools:visibility="visible" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/atm_withdrawal_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="tv_atm_withdrawal, cb_atm_withdrawal_primary_notification, cb_atm_withdrawal_secondary_notification"
-        tools:visibility="visible"/>
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/payment_declined_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_card_activity_description, tv_payment_successful, tv_payment_declined" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/atm_withdrawal_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_card_activity_description, tv_payment_successful, tv_payment_declined, tv_atm_withdrawal" />
+        <View
+            android:id="@+id/payment_declined_barrier_separator"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/payment_declined_barrier" />
 
-    <View
-        android:id="@+id/atm_withdrawal_barrier_separator"
-        android:layout_width="1dp"
-        android:layout_height="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/atm_withdrawal_barrier"/>
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_atm_withdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/payment_declined_barrier_separator"
+            app:localize="notification_preferences_card_activity_atm_withdrawal_title" />
 
-    <View
-        android:id="@+id/card_status_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/divider_line_color"
-        app:layout_constraintEnd_toStartOf="@id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/atm_withdrawal_barrier_separator" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_atm_withdrawal_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_atm_withdrawal"
+            app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_atm_withdrawal"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.ATM_WITHDRAWAL, NotificationChannel.PUSH, checked)}"/>
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_card_status_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/card_status_separator"
-        app:localize="notification_preferences_card_status_title" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_atm_withdrawal_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_atm_withdrawal"
+            app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_atm_withdrawal"
+            app:onCheckedChangePressed="@{(switch, checked) -> viewModel.updateNotificationPreferences(Group.ATM_WITHDRAWAL, viewModel.state.secondaryChannel, checked)}"/>
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_card_status_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_card_status_title"
-        app:localize="notification_preferences_card_status_description" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/atm_withdrawal_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_atm_withdrawal, cb_atm_withdrawal_primary_notification, cb_atm_withdrawal_secondary_notification"
+            tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_card_status_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:enabled="false"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_card_status_description"
-        app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_card_status_title" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/atm_withdrawal_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_card_activity_description, tv_payment_successful, tv_payment_declined, tv_atm_withdrawal" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_card_status_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:enabled="false"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_card_status_description"
-        app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_card_status_title" />
+        <View
+            android:id="@+id/atm_withdrawal_barrier_separator"
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/atm_withdrawal_barrier" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/card_status_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="card_status_separator, tv_card_status_title, tv_card_status_description, cb_card_status_primary_notification, cb_card_status_secondary_notification"
-        tools:visibility="visible" />
+        <View
+            android:id="@+id/card_status_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/divider_line_color"
+            app:layout_constraintEnd_toStartOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/atm_withdrawal_barrier_separator" />
 
-    <View
-        android:id="@+id/legal_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/divider_line_color"
-        app:layout_constraintEnd_toStartOf="@id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_card_status_description" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_card_status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/card_status_separator"
+            app:localize="notification_preferences_card_status_title" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_legal_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/legal_separator"
-        app:localize="notification_preferences_legal_title" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_card_status_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_status_title"
+            app:localize="notification_preferences_card_status_description" />
 
-    <com.aptopayments.sdk.ui.views.AptoTextView
-        android:id="@+id/tv_legal_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_legal_title"
-        app:localize="notification_preferences_legal_description"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_card_status_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:enabled="false"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_card_status_description"
+            app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_card_status_title" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_legal_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:enabled="false"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_legal_description"
-        app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_legal_title" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_card_status_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:enabled="false"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_card_status_description"
+            app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_card_status_title" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/cb_legal_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:enabled="false"
-        android:src="@drawable/checkbox_theme_2"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_legal_description"
-        app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
-        app:layout_constraintTop_toTopOf="@+id/tv_legal_title" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/card_status_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="card_status_separator, tv_card_status_title, tv_card_status_description, cb_card_status_primary_notification, cb_card_status_secondary_notification"
+            tools:visibility="visible" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/legal_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="legal_separator, tv_legal_title, tv_legal_description, cb_legal_primary_notification, cb_legal_secondary_notification"
-        tools:visibility="visible" />
+        <View
+            android:id="@+id/legal_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/divider_line_color"
+            app:layout_constraintEnd_toStartOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_card_status_description" />
 
-    <View
-        android:id="@+id/bottom_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/divider_line_color"
-        app:layout_constraintEnd_toStartOf="@id/gl_right"
-        app:layout_constraintStart_toStartOf="@+id/gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_legal_description" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_legal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/legal_separator"
+            app:localize="notification_preferences_legal_title" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_secondary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.88" />
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/tv_legal_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_legal_title"
+            app:localize="notification_preferences_legal_description" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_primary_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.76" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_legal_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:enabled="false"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_legal_description"
+            app:layout_constraintStart_toStartOf="@+id/gl_primary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_legal_title" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="18dp" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_legal_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:enabled="false"
+            android:src="@drawable/checkbox_theme_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_legal_description"
+            app:layout_constraintStart_toStartOf="@+id/gl_secondary_notification"
+            app:layout_constraintTop_toTopOf="@+id/tv_legal_title" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="18dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/legal_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="legal_separator, tv_legal_title, tv_legal_description, cb_legal_primary_notification, cb_legal_secondary_notification"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/bottom_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/divider_line_color"
+            app:layout_constraintEnd_toStartOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@+id/gl_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_legal_description" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_secondary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.88" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_primary_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.76" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="18dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="18dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

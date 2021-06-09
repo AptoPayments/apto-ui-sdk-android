@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.transactiondetails
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.utils.extensions.formatForTransactionDetails
 import com.aptopayments.sdk.core.platform.BaseViewModel

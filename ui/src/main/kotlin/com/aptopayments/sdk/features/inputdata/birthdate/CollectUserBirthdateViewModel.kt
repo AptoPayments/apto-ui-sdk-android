@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.inputdata.birthdate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.BirthdateDataPoint
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.sdk.core.platform.BaseViewModel

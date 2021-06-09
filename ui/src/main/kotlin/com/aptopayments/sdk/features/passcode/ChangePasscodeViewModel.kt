@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.passcode
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.core.usecase.VerifyPasscodeUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 

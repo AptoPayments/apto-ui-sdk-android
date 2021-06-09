@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.cardstats
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.stats.MonthlySpending
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either

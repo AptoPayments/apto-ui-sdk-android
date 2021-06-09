@@ -1,30 +1,27 @@
 package com.aptopayments.sdk.features.inputdata.birthdate
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.InstantExecutorExtension
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.threeten.bp.LocalDate
 import kotlin.test.assertTrue
 
+@ExtendWith(InstantExecutorExtension::class)
 class CollectUserBirthdateViewModelTest {
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val analyticsManager: AnalyticsManager = mock()
 
     private lateinit var sut: CollectUserBirthdateViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = CollectUserBirthdateViewModel(analyticsManager)
     }

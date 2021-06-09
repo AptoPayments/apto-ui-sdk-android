@@ -1,43 +1,45 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.list
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
 import com.aptopayments.mobile.functional.right
+import com.aptopayments.sdk.CoroutineDispatcherTest
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel.Actions
-import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.TestDispatchers
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.aptopayments.sdk.utils.runBlockingTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class PaymentSourcesListViewModelTest {
+@ExtendWith(InstantExecutorExtension::class)
+class PaymentSourcesListViewModelTest : CoroutineDispatcherTest {
 
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
+    override lateinit var dispatcher: TestCoroutineDispatcher
 
     private val repo: PaymentSourcesRepository = mock()
     private val elementMapper = PaymentSourceElementMapper()
-    private val selectedPaymentSource: LiveData<PaymentSource?> = mock()
+    private val selectedPaymentSource: StateFlow<PaymentSource?> = mock()
 
-    private val sut = PaymentSourcesListViewModel(repo, elementMapper, TestDispatchers(coroutineRule.testDispatcher))
+    private lateinit var sut: PaymentSourcesListViewModel
+
+    @BeforeEach
+    internal fun setUp() {
+        sut = PaymentSourcesListViewModel(repo, elementMapper, TestDispatchers(dispatcher))
+    }
 
     @Test
     fun `when newPaymentSource called then correct action is fired`() {
@@ -63,7 +65,7 @@ class PaymentSourcesListViewModelTest {
     }
 
     @Test
-    fun `when card is provided then added the trailing element correctly`() = coroutineRule.runBlockingTest {
+    fun `when card is provided then added the trailing element correctly`() = dispatcher.runBlockingTest {
         val card = TestDataProvider.providePaymentSourcesCard()
         whenever(repo.getPaymentSourceList()).thenReturn(listOf(card).right())
         whenever(repo.selectedPaymentSource).thenReturn(selectedPaymentSource)

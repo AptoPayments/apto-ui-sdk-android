@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.ui.views.birthdate
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

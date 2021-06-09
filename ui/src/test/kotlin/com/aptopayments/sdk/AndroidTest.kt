@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.junit.runner.RunWith
-import org.koin.test.AutoCloseKoinTest
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -16,7 +15,7 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(application = AndroidTest.ApplicationStub::class, sdk = [28])
-abstract class AndroidTest : AutoCloseKoinTest() {
+abstract class AndroidTest : UnitTest() {
 
     fun context(): Context = ApplicationProvider.getApplicationContext()
 

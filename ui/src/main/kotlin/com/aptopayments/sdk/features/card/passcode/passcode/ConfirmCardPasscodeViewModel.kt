@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.card.passcode.passcode
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.setpin.CardPinViewModel

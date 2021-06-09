@@ -1,101 +1,65 @@
 package com.aptopayments.sdk.features.card.notificationpreferences
 
-import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.data.user.notificationpreferences.ActiveChannels
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationChannel
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationGroup
+import com.aptopayments.mobile.data.user.notificationpreferences.NotificationGroup.Group
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationPreferences
-import com.aptopayments.mobile.exception.Failure
-import com.aptopayments.mobile.functional.Either
-import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
-import java.lang.reflect.Modifier
 
-internal class NotificationPreferencesViewModel : BaseViewModel() {
+internal class NotificationPreferencesViewModel(
+    private val aptoPlatform: AptoPlatformProtocol,
+    private val listItemsCreator: NotificationPreferenceListItemsCreator,
+) : BaseViewModel() {
 
-    var secondaryChannel: MutableLiveData<NotificationChannel> = MutableLiveData()
-    var notificationPreferencesList: MutableLiveData<List<NotificationPreferenceLineItem>> = MutableLiveData()
-    var notificationGroupPreferencesMap: HashMap<NotificationGroup.Group, ActiveChannels?> = HashMap()
+    private val notificationGroupPreferencesMap: HashMap<Group, ActiveChannels> = HashMap()
 
-    fun getNotificationPreferences() {
-        AptoPlatform.fetchNotificationPreferences { result ->
-            result.either(::handleFailure) {
-                val channel = calculateChannel(it)
-                secondaryChannel.postValue(channel)
-                notificationPreferencesList.postValue(generateNotificationPreferenceListItems(it.preferences, channel))
+    private val _state = MutableLiveData(State())
+    val state = _state as LiveData<State>
+
+    fun refreshNotificationPreferences() {
+        showLoading()
+        aptoPlatform.fetchNotificationPreferences { result ->
+            hideLoading()
+            result.either(::handleFailure) { preferences ->
+                generateNotificationGroupMap(preferences)
+                val channel = preferences.calculateSecondaryChannel()
+                val items = listItemsCreator.create(preferences)
+                _state.postValue(State(secondaryChannel = channel, items = items))
             }
         }
     }
 
-    private fun calculateChannel(it: NotificationPreferences) =
-        if (it.preferences?.firstOrNull()?.activeChannels?.get(NotificationChannel.EMAIL) != null)
-            NotificationChannel.EMAIL
-        else
-            NotificationChannel.SMS
-
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
-    fun generateNotificationPreferenceListItems(
-        preferences: List<NotificationGroup>?,
-        secondaryChannel: NotificationChannel
-    ): ArrayList<NotificationPreferenceLineItem> {
-        val notificationList = ArrayList<NotificationPreferenceLineItem>()
-        preferences?.forEach { notificationGroup ->
+    private fun generateNotificationGroupMap(preferences: NotificationPreferences) {
+        preferences.preferences.forEach { notificationGroup ->
             notificationGroup.groupId?.let { groupId ->
-                if (groupId != NotificationGroup.Group.LEGAL && groupId != NotificationGroup.Group.CARD_STATUS) {
+                if (groupId != Group.LEGAL && groupId != Group.CARD_STATUS) {
                     notificationGroupPreferencesMap[groupId] = notificationGroup.activeChannels
                 }
             }
-            val secondaryChannelActive =
-                if (secondaryChannel == NotificationChannel.EMAIL) notificationGroup.activeChannels?.isChannelActive(
-                    NotificationChannel.EMAIL
-                )
-                else notificationGroup.activeChannels?.isChannelActive(NotificationChannel.SMS)
-            if (listOfNotNull(
-                    notificationGroup.groupId,
-                    notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH),
-                    secondaryChannelActive
-                ).size == 3
-            ) {
-                notificationList.add(
-                    NotificationPreferenceLineItem(
-                        notificationGroup.groupId!!,
-                        notificationGroup.activeChannels?.isChannelActive(NotificationChannel.PUSH)!!,
-                        secondaryChannelActive!!
-                    )
-                )
-            }
-        }
-        return notificationList
-    }
-
-    fun updateNotificationPreferences(
-        groupId: NotificationGroup.Group,
-        isPrimary: Boolean,
-        active: Boolean,
-        onComplete: (Either<Failure, Unit>) -> Unit
-    ) {
-        if (isPrimary) notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.PUSH, active)
-        else {
-            when (secondaryChannel.value) {
-                NotificationChannel.EMAIL ->
-                    notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.EMAIL, active)
-                NotificationChannel.SMS ->
-                    notificationGroupPreferencesMap[groupId]?.set(NotificationChannel.SMS, active)
-                else -> {
-                }
-            }
-        }
-        AptoPlatform.updateNotificationPreferences(getUpdateNotificationPreferencesRequest()) {
-            onComplete(Either.Right(Unit))
         }
     }
 
-    private fun getUpdateNotificationPreferencesRequest(): NotificationPreferences {
-        val request = ArrayList<NotificationGroup>()
-        notificationGroupPreferencesMap.forEach {
-            request.add(NotificationGroup(groupId = it.key, activeChannels = it.value))
+    fun updateNotificationPreferences(groupId: Group, channel: NotificationChannel, active: Boolean) {
+        showLoading()
+        notificationGroupPreferencesMap[groupId]?.set(channel, active)
+        aptoPlatform.updateNotificationPreferences(getNotificationPreferencesRequest()) { result ->
+            hideLoading()
+            result.runIfLeft { handleFailure(it) }
         }
+    }
+
+    private fun getNotificationPreferencesRequest(): NotificationPreferences {
+        val request =
+            notificationGroupPreferencesMap.map { NotificationGroup(groupId = it.key, activeChannels = it.value) }
         return NotificationPreferences(request)
     }
+
+    data class State(
+        val secondaryChannel: NotificationChannel = NotificationChannel.EMAIL,
+        val items: List<NotificationPreferenceLineItem> = emptyList()
+    )
 }

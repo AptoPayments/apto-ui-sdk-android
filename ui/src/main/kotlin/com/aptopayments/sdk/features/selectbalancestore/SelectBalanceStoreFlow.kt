@@ -165,7 +165,7 @@ internal class SelectBalanceStoreFlow(
                 when (selectBalanceStoreResult.result) {
                     SelectBalanceStoreResult.Type.VALID -> onFinish(oauthAttempt)
                     else -> {
-                        analyticsManager.track(selectBalanceStoreResult.errorEvent())
+                        analyticsManager.track(selectBalanceStoreResult.getErrorEvent())
                         notify(
                             "select_balance_store.login.error.title".localized(),
                             selectBalanceStoreResult.errorMessage()

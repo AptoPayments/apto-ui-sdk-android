@@ -1,22 +1,18 @@
 package com.aptopayments.sdk.features.loadfunds.dialog
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.InstantExecutorExtension
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
 import org.hamcrest.CoreMatchers.instanceOf
-import org.junit.Assert.assertThat
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 class AddFundsSelectorDialogViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val analyticsManager: AnalyticsServiceContract = mock()
 

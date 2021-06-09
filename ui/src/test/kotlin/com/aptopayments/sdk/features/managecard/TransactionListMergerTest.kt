@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.managecard
 
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.core.data.TestDataProvider
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.threeten.bp.ZonedDateTime
 
 internal class TransactionListMergerTest {

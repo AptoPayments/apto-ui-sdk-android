@@ -4,8 +4,8 @@ import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.UnitTest
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -17,7 +17,7 @@ class TransactionListFragmentThemeTwoTest : UnitTest() {
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
     private lateinit var sut: TransactionListFragment
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(

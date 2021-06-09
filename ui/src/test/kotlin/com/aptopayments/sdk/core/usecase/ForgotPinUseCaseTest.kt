@@ -3,8 +3,8 @@ package com.aptopayments.sdk.core.usecase
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class ForgotPinUseCaseTest {
 
@@ -12,7 +12,7 @@ internal class ForgotPinUseCaseTest {
 
     lateinit var sut: ForgotPinUseCase
 
-    @Before
+    @BeforeEach
     fun configure() {
         sut = ForgotPinUseCase(uiSdk)
     }

@@ -9,8 +9,8 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class ShouldAuthenticateOnStartUpUseCaseTest {
 
@@ -19,7 +19,7 @@ internal class ShouldAuthenticateOnStartUpUseCaseTest {
 
     lateinit var sut: ShouldAuthenticateOnStartUpUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = ShouldAuthenticateOnStartUpUseCase(authStateProvider, authenticationRepo)
     }

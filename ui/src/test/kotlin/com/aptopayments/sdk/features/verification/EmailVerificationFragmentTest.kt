@@ -10,8 +10,8 @@ import com.aptopayments.sdk.features.auth.verification.VerificationViewModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -23,7 +23,7 @@ class EmailVerificationFragmentTest : UnitTest() {
     private val verification = Verification("", "email")
     private lateinit var sut: EmailVerificationFragment
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(

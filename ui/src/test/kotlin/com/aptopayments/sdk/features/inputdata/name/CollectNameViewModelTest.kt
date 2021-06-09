@@ -1,13 +1,12 @@
 package com.aptopayments.sdk.features.inputdata.name
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.user.NameDataPoint
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -15,11 +14,8 @@ import kotlin.test.assertTrue
 private const val NAME = "Jhon"
 private const val SURNAME = "Doe"
 
+@ExtendWith(InstantExecutorExtension::class)
 internal class CollectNameViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val analyticsManager: AnalyticsManager = mock()
 

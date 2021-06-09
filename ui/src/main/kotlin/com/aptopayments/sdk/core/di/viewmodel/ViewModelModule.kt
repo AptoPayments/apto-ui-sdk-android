@@ -82,7 +82,7 @@ val viewModelModule = module {
     viewModel { NoNetworkViewModel(get()) }
     viewModel { MaintenanceViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get(), get()) }
-    viewModel { NotificationPreferencesViewModel() }
+    viewModel { NotificationPreferencesViewModel(get(), get()) }
     viewModel { DisclaimerViewModel(get()) }
     viewModel { (cardApplicationId: String, actionConfiguration: WorkflowActionConfigurationIssueCard?) ->
         IssueCardViewModel(cardApplicationId, actionConfiguration, get(), get(), get())

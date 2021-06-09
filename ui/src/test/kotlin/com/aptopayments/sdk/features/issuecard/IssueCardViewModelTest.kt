@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.issuecard
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.IssueCardDesign
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
@@ -10,15 +9,15 @@ import com.aptopayments.mobile.exception.server.ServerErrorFactory
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.repository.InMemoryInitializationDataRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -33,11 +32,8 @@ private const val ERROR_OTHER = 1234
 private const val METADATA = "metadata"
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 class IssueCardViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: IssueCardViewModel
 

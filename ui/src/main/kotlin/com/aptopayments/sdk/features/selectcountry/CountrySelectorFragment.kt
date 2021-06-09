@@ -89,7 +89,7 @@ internal class CountrySelectorFragment :
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().build())
+        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
     }
 
     private fun setupRecyclerView() {

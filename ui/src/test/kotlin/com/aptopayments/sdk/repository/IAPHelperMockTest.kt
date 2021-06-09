@@ -1,23 +1,19 @@
 package com.aptopayments.sdk.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@ExtendWith(InstantExecutorExtension::class)
 internal class IAPHelperMockTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     lateinit var sut: IAPHelperMock
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = IAPHelperMock()
     }

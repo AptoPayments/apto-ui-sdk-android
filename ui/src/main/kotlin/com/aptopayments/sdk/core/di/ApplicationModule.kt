@@ -15,6 +15,8 @@ import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledChecker
 import com.aptopayments.sdk.features.card.cardsettings.TelephonyEnabledCheckerImpl
 import com.aptopayments.sdk.features.card.cardstats.chart.CategorySpendingSorter
+import com.aptopayments.sdk.features.card.notificationpreferences.NotificationChannelResources
+import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPreferenceListItemsCreator
 import com.aptopayments.sdk.features.card.statements.detail.ExternalFileDownloader
 import com.aptopayments.sdk.features.inputdata.address.AddressDataPointGenerator
 import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
@@ -73,6 +75,8 @@ internal val applicationModule = module {
     factory<TelephonyEnabledChecker> { TelephonyEnabledCheckerImpl(androidContext()) }
     factory { InAppProvisioningDeepLinkGenerator(get()) }
     factory { CardFlow() }
+    factory { NotificationChannelResources() }
+    factory { NotificationPreferenceListItemsCreator() }
 }
 
 private fun provideSharedPreferences(app: Application): SharedPreferences =

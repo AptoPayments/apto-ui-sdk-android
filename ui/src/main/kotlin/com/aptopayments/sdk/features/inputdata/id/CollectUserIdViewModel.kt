@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.user.IdDataPointConfiguration
 import com.aptopayments.mobile.data.user.IdDocumentDataPoint

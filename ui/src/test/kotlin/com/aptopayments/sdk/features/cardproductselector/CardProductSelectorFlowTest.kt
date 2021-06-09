@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.cardproductselector
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.cardproduct.CardProductSummary
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.geo.Country
@@ -15,8 +15,8 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragment
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -29,7 +29,7 @@ class CardProductSelectorFlowTest : UnitTest() {
     private var analyticsManager: AnalyticsServiceContract = mock()
 
     @Suppress("UNCHECKED_CAST")
-    @Before
+    @BeforeEach
     fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {

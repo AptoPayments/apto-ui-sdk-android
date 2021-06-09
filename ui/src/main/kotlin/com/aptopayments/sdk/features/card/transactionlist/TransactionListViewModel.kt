@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.transactionlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.platform.AptoPlatformProtocol

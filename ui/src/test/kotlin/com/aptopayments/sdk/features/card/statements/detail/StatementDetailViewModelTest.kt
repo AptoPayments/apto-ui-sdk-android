@@ -1,12 +1,12 @@
 package com.aptopayments.sdk.features.card.statements.detail
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.functional.right
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.usecase.DownloadStatementExternalUseCase
 import com.aptopayments.sdk.core.usecase.DownloadStatementLocalUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
@@ -16,11 +16,10 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.aptopayments.sdk.features.card.statements.detail.StatementDetailViewModel.Action
+import org.junit.jupiter.api.extension.ExtendWith
 import java.io.File
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -29,11 +28,8 @@ private const val MONTH = 5
 private const val YEAR = 2021
 
 @ExperimentalCoroutinesApi
+@ExtendWith(InstantExecutorExtension::class)
 internal class StatementDetailViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val statementMonth = StatementMonth(MONTH, YEAR)
     private val downloadLocalUseCase: DownloadStatementLocalUseCase = mock()

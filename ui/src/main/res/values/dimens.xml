@@ -15,7 +15,6 @@
 
     <dimen name="llsdk_card_left_margin">20dp</dimen>
     <dimen name="llsdk_card_bottom_margin">16dp</dimen>
-    <dimen name="llsdk_card_top_margin">30dp</dimen>
 
     <dimen name="llsdk_marginTop_resend_label">26dp</dimen>
 
@@ -44,8 +43,12 @@
     <dimen name="llsdk_form_text_link_theme_2">12sp</dimen>
     <dimen name="llsdk_instructions">12sp</dimen>
 
+    <dimen name="llsdk_theme_2_birthdate_field_margin">45dp</dimen>
+    <dimen name="llsdk_theme_2_birthdate_year_field_margin">52dp</dimen>
+    <dimen name="llsdk_theme_2_header_margin_top">55dp</dimen>
     <dimen name="llsdk_title_bottom_margin">12dp</dimen>
     <dimen name="llsdk_phone_input_wrapper_height">60dp</dimen>
+    <dimen name="llsdk_phone_input_margin_top">24dp</dimen>
     <dimen name="llsdk_small_margin">12dp</dimen>
     <dimen name="llsdk_medium_margin">19dp</dimen>
     <dimen name="llsdk_big_medium_margin">30dp</dimen>
@@ -57,6 +60,11 @@
     <dimen name="llsdk_theme_2_transaction_details_margin">@dimen/_14sdp</dimen>
     <dimen name="llsdk_theme_2_transactions_margin">18dp</dimen>
     <dimen name="llsdk_theme_2_transactions_margin_padding">65dp</dimen>
+    <dimen name="llsdk_thene_2_card_elevation">7dp</dimen>
+    <dimen name="llsdk_theme_2_card_settings_toolbar_height">120dp</dimen>
+    <dimen name="llsdk_theme_2_card_settings_icon_margin">19dp</dimen>
+    <dimen name="llsdk_theme_2_sources_dialog_height">@dimen/_300sdp</dimen>
+    <dimen name="llsdk_theme_2_sources_dialog_bottom_margin">@dimen/_20sdp</dimen>
 
     <dimen name="text_size_xtiny_hi_res">@dimen/_8sdp</dimen>
     <dimen name="text_size_xtiny">9sp</dimen>

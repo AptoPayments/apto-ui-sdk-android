@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.data.paymentsources.NewPaymentSource
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,11 +18,11 @@ internal class PaymentSourcesRepository(
     private val sharedPreferences: SharedPreferences
 ) {
 
-    private val _selectedPaymentSource: MutableLiveData<PaymentSource?> = MutableLiveData(null)
-    val selectedPaymentSource = _selectedPaymentSource as LiveData<PaymentSource?>
+    private val _selectedPaymentSource = MutableStateFlow<PaymentSource?>(null)
+    val selectedPaymentSource = _selectedPaymentSource as StateFlow<PaymentSource?>
 
     fun selectPaymentSourceLocally(source: PaymentSource) {
-        _selectedPaymentSource.postValue(source)
+        _selectedPaymentSource.value = source
     }
 
     fun hasAcceptedOnboarding() = sharedPreferences.getBoolean(ACCEPTED_ONBOARDING, false)
@@ -37,7 +37,9 @@ internal class PaymentSourcesRepository(
 
     suspend fun refreshSelectedPaymentSource(): Either<Failure, PaymentSource?> {
         val source = getAPISelectedPaymentSource()
-        source.runIfRight { _selectedPaymentSource.value = it }
+        source.runIfRight {
+            _selectedPaymentSource.value = it
+        }
         return source
     }
 

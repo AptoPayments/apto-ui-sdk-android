@@ -6,8 +6,8 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class OnEnterBackgroundUseCaseTest {
 
@@ -16,7 +16,7 @@ internal class OnEnterBackgroundUseCaseTest {
 
     lateinit var sut: OnEnterBackgroundUseCase
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = OnEnterBackgroundUseCase(authState, authenticationRepo)
     }

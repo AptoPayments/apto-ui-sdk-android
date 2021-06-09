@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.inputdata.id
 
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 private const val TEST_SSN_NUMBER = "778628144"
 private const val TEST_SSN_NUMBER_WITH_SPACES = "778 62 8144"

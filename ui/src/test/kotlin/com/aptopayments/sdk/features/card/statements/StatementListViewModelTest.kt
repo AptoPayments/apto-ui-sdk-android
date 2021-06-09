@@ -1,29 +1,25 @@
 package com.aptopayments.sdk.features.card.statements
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(InstantExecutorExtension::class)
 class StatementListViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: StatementListViewModel
 
     private var analyticsManager: AnalyticsServiceContract = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = StatementListViewModel(analyticsManager, aptoPlatform)
     }

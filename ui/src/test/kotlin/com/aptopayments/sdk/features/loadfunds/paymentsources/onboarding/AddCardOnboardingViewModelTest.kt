@@ -1,32 +1,28 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel.Actions
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 
 private const val CARD_ID = "crd_1234"
 
+@ExtendWith(InstantExecutorExtension::class)
 class AddCardOnboardingViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val repository: PaymentSourcesRepository = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
 
     private lateinit var sut: AddCardOnboardingViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = AddCardOnboardingViewModel(CARD_ID, repository, aptoPlatform)
     }

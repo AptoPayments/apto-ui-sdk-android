@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.oauth.verify
 
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.oauth.OAuthUserDataUpdate
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType

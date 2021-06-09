@@ -7,8 +7,8 @@ import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class ShouldShowBiometricOptionTest {
 
@@ -18,7 +18,7 @@ internal class ShouldShowBiometricOptionTest {
 
     lateinit var sut: ShouldShowBiometricOption
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = ShouldShowBiometricOption(biometricWrapper, uiSdkProtocol)
     }

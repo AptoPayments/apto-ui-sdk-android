@@ -4,9 +4,9 @@ import android.content.Context
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 private const val TEST_STRING = "TEST"
 private const val TEST_STRING_RESOURCE = 1234
@@ -18,7 +18,7 @@ class StringProviderImplTest {
 
     private lateinit var sut: StringProviderImpl
 
-    @Before
+    @BeforeEach
     fun setUp() {
         whenever(context.applicationContext).thenReturn(appContext)
         sut = StringProviderImpl(context)

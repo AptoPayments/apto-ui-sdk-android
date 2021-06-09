@@ -7,15 +7,15 @@ import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinFragment
 import com.aptopayments.sdk.features.card.setpin.SetCardPinFragment
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragment
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class FragmentFactoryTest {
 
     private lateinit var sut: FragmentFactory
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = FragmentFactoryImpl()
     }

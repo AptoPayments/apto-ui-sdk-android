@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard
 
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork.UNKNOWN
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class CardNetworkTest {

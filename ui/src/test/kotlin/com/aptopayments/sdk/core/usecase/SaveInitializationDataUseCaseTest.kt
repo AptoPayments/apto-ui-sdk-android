@@ -7,7 +7,7 @@ import com.aptopayments.sdk.repository.ManageCardIdRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 private const val CARD_METADATA = "card"

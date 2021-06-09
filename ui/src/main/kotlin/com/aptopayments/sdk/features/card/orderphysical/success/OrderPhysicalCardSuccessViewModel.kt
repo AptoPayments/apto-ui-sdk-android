@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.orderphysical.success
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.CardStyle
 import com.aptopayments.mobile.platform.AptoPlatformProtocol

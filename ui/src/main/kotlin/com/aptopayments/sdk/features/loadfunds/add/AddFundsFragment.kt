@@ -11,13 +11,14 @@ import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddFundsBinding
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel.Actions
-import com.redmadrobot.inputmask.MaskedTextChangedListener
+import com.aptopayments.sdk.ui.views.DigitsInputFilter
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 private const val CARD_ID_KEY = "CARD_ID_KEY"
-private const val CURRENCY = "$"
+private const val MAX_INTEGER_DIGITS = 5
+private const val MAX_DECIMAL_DIGITS = 2
 
 internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>(), AddFundsContract.View {
 
@@ -72,11 +73,7 @@ internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>()
     override fun setupUI() {
         setupToolBar()
         setUpViews()
-        val listener = MaskedTextChangedListener("{$CURRENCY}[00000]", binding.moneyInput)
-        listener.autocomplete = true
-        listener.autoskip = true
-        binding.moneyInput.addTextChangedListener(listener)
-        binding.moneyInput.onFocusChangeListener = listener
+        binding.moneyInput.filters = arrayOf(DigitsInputFilter(MAX_INTEGER_DIGITS, MAX_DECIMAL_DIGITS))
     }
 
     private fun setUpViews() {

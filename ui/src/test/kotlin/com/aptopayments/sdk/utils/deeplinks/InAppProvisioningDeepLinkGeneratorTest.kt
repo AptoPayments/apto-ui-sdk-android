@@ -5,8 +5,8 @@ import com.aptopayments.sdk.utils.StringProvider
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 private const val DEFAULT_SCHEME = "deeplinkscheme"
@@ -19,7 +19,7 @@ class InAppProvisioningDeepLinkGeneratorTest {
 
     private lateinit var sut: InAppProvisioningDeepLinkGenerator
 
-    @Before
+    @BeforeEach
     fun setUp() {
         whenever(stringProvider.provide(any())).thenReturn(DEFAULT_SCHEME)
     }

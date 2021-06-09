@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.features.managecard
 
 import com.aptopayments.sdk.core.data.TestDataProvider
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 

@@ -4,8 +4,8 @@ import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.FieldState
 import com.aptopayments.sdk.utils.DateProvider
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.threeten.bp.LocalDate
 import kotlin.test.assertEquals
 
@@ -19,7 +19,7 @@ internal class ExpirationFieldStateResolverTest {
 
     lateinit var sut: ExpirationFieldStateResolver
 
-    @Before
+    @BeforeEach
     fun setUp() {
         whenever(dateProvider.localDate()).thenReturn(LocalDate.of(YEAR, MONTH, DAY))
         sut = ExpirationFieldStateResolver(dateProvider)

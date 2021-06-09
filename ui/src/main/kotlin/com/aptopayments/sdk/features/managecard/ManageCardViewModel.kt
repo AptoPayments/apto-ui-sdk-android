@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.managecard
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction

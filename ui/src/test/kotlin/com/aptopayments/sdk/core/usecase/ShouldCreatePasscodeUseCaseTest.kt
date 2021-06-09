@@ -7,15 +7,15 @@ import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class ShouldCreatePasscodeUseCaseTest {
 
     private val authenticationRepo: AuthenticationRepository = mock()
     lateinit var sut: ShouldCreatePasscodeUseCase
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = ShouldCreatePasscodeUseCase(authenticationRepo)
     }

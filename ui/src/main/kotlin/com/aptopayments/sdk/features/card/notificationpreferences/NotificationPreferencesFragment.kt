@@ -2,7 +2,10 @@ package com.aptopayments.sdk.features.card.notificationpreferences
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.View.VISIBLE
+import android.view.View
+import android.widget.CheckBox
+import android.widget.ImageView
+import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.user.notificationpreferences.NotificationChannel
@@ -10,18 +13,23 @@ import com.aptopayments.mobile.data.user.notificationpreferences.NotificationGro
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.BaseFragment
+import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.databinding.FragmentNotificationPreferencesBinding
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_notification_preferences.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val CARD_ID_PARAMETER_KEY = "card_id"
 
-internal class NotificationPreferencesFragment : BaseFragment(), NotificationPreferencesContract.View {
+internal class NotificationPreferencesFragment :
+    BaseBindingFragment<FragmentNotificationPreferencesBinding>(),
+    NotificationPreferencesContract.View {
 
     private val viewModel: NotificationPreferencesViewModel by viewModel()
+    private val notificationChannelResources: NotificationChannelResources by inject()
     private lateinit var cardId: String
 
     override var delegate: NotificationPreferencesContract.Delegate? = null
@@ -34,32 +42,61 @@ internal class NotificationPreferencesFragment : BaseFragment(), NotificationPre
         cardId = requireArguments()[CARD_ID_PARAMETER_KEY] as String
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
+        binding.resources = notificationChannelResources
+    }
+
     override fun setupViewModel() {
         viewModel.apply {
-            observe(notificationPreferencesList, ::handleNotificationPreferencesList)
-            observe(secondaryChannel, ::setHeader)
-            observe(failure) {
-                hideLoading()
-                handleFailure(it)
+            observeNotNullable(state) {
+                setHeader(it.secondaryChannel)
+                setNotificationPreferenceList(it.items)
             }
+            observeNotNullable(viewModel.loading) { handleLoading(it) }
+            observeNotNullable(viewModel.failure) { handleFailure(it) }
         }
     }
 
     override fun onPresented() {
-        showLoading()
-        viewModel.getNotificationPreferences()
+        viewModel.refreshNotificationPreferences()
     }
 
-    private fun handleNotificationPreferencesList(notificationPreferences: List<NotificationPreferenceLineItem>?) {
-        hideLoading()
+    private fun setNotificationPreferenceList(notificationPreferences: List<NotificationPreferenceLineItem>?) {
         notificationPreferences?.let { notificationPreferencesList ->
             notificationPreferencesList.forEach {
                 when (it.group) {
-                    NotificationGroup.Group.PAYMENT_SUCCESSFUL -> handlePaymentSuccessfulNotificationPreference(it)
-                    NotificationGroup.Group.PAYMENT_DECLINED -> handlePaymentDeclinedNotificationPreference(it)
-                    NotificationGroup.Group.ATM_WITHDRAWAL -> handleAtmWithdrawalNotificationPreference(it)
-                    NotificationGroup.Group.CARD_STATUS -> handleCardStatusNotificationPreference(it)
-                    NotificationGroup.Group.LEGAL -> handleLegalNotificationPreference(it)
+                    NotificationGroup.Group.PAYMENT_SUCCESSFUL -> configureLine(
+                        payment_successful_group,
+                        cb_payment_successful_primary_notification,
+                        cb_payment_successful_secondary_notification,
+                        it
+                    )
+                    NotificationGroup.Group.PAYMENT_DECLINED -> configureLine(
+                        payment_declined_group,
+                        cb_payment_declined_primary_notification,
+                        cb_payment_declined_secondary_notification,
+                        it
+                    )
+                    NotificationGroup.Group.ATM_WITHDRAWAL -> configureLine(
+                        atm_withdrawal_group,
+                        cb_atm_withdrawal_primary_notification,
+                        cb_atm_withdrawal_secondary_notification,
+                        it
+                    )
+                    NotificationGroup.Group.CARD_STATUS -> configureLine(
+                        card_status_group,
+                        cb_card_status_primary_notification,
+                        cb_card_status_secondary_notification,
+                        it
+                    )
+                    NotificationGroup.Group.LEGAL -> configureLine(
+                        legal_group,
+                        cb_legal_primary_notification,
+                        cb_legal_secondary_notification,
+                        it
+                    )
                     NotificationGroup.Group.INCOMING_TRANSFER -> {
                     }
                 }
@@ -67,39 +104,15 @@ internal class NotificationPreferencesFragment : BaseFragment(), NotificationPre
         }
     }
 
-    private fun handlePaymentSuccessfulNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
-        payment_successful_group.visibility = VISIBLE
-        cb_payment_successful_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_payment_successful_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
-    }
-
-    private fun handlePaymentDeclinedNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
-        payment_declined_group.visibility = VISIBLE
-        cb_payment_declined_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_payment_declined_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
-    }
-
-    private fun handleAtmWithdrawalNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
-        atm_withdrawal_group.visibility = VISIBLE
-        cb_atm_withdrawal_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_atm_withdrawal_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
-    }
-
-    private fun handleCardStatusNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
-        card_status_group.visibility = VISIBLE
-        cb_card_status_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_card_status_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
-    }
-
-    private fun handleLegalNotificationPreference(notificationPreferenceLineItem: NotificationPreferenceLineItem) {
-        legal_group.visibility = VISIBLE
-        cb_legal_primary_notification.isChecked = notificationPreferenceLineItem.isPrimaryChannelActive
-        cb_legal_secondary_notification.isChecked = notificationPreferenceLineItem.isSecondaryChannelActive
-    }
-
-    private fun setHeader(notificationChannel: NotificationChannel?) {
-        if (notificationChannel == NotificationChannel.EMAIL) setPushOrEmailHeader()
-        else setPushOrSmsHeader()
+    private fun configureLine(
+        group: Group,
+        firstCheckBox: CheckBox,
+        secondCheckBox: CheckBox,
+        item: NotificationPreferenceLineItem
+    ) {
+        group.show()
+        firstCheckBox.isChecked = item.isPrimaryChannelActive
+        secondCheckBox.isChecked = item.isSecondaryChannelActive
     }
 
     override fun setupUI() {
@@ -109,6 +122,7 @@ internal class NotificationPreferencesFragment : BaseFragment(), NotificationPre
 
     private fun setupTheme() {
         ll_notifications_header.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
+        setNotificationChannelDrawable(iv_primary_notification_channel, R.drawable.ic_notifications_push)
         with(themeManager()) {
             customizeStarredSectionTitle(tv_notifications_header)
             customizeSectionTitle(tv_card_activity_title)
@@ -133,92 +147,14 @@ internal class NotificationPreferencesFragment : BaseFragment(), NotificationPre
         }
     }
 
-    override fun setupListeners() {
-        super.setupListeners()
-        cb_payment_successful_primary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.PAYMENT_SUCCESSFUL,
-                    isPrimary = true,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
-        cb_payment_successful_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.PAYMENT_SUCCESSFUL,
-                    isPrimary = false,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
-        cb_payment_declined_primary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.PAYMENT_DECLINED,
-                    isPrimary = true,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
-        cb_payment_declined_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.PAYMENT_DECLINED,
-                    isPrimary = false,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
-        cb_atm_withdrawal_primary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.ATM_WITHDRAWAL,
-                    isPrimary = true,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
-        cb_atm_withdrawal_secondary_notification.setOnCheckedChangeListener { button, isChecked ->
-            if (button.isPressed) {
-                showLoading()
-                viewModel.updateNotificationPreferences(
-                    NotificationGroup.Group.ATM_WITHDRAWAL,
-                    isPrimary = false,
-                    active = isChecked
-                ) { hideLoading() }
-            }
-        }
+    private fun setHeader(secondaryChannel: NotificationChannel) {
+        setNotificationChannelDrawable(iv_secondary_notification_channel, notificationChannelResources.getIconImage(secondaryChannel))
     }
 
-    private fun setPushOrEmailHeader() {
-        tv_notifications_header.localizedText = "notification_preferences.send_push_email.title"
-        setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
-        setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_mail)
-    }
-
-    private fun setPushOrSmsHeader() {
-        tv_notifications_header.localizedText = "notification_preferences.send_push_sms.title"
-        setPrimaryNotificationChannelDrawable(R.drawable.ic_notifications_push)
-        setSecondaryNotificationChannelDrawable(R.drawable.ic_notifications_sms)
-    }
-
-    private fun setPrimaryNotificationChannelDrawable(drawableResource: Int) = context?.let {
+    private fun setNotificationChannelDrawable(view: ImageView, drawableResource: Int) = context?.let {
         val icon = ContextCompat.getDrawable(it, drawableResource)
         icon?.setColorFilterCompat(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
-        iv_primary_notification_channel.setImageDrawable(icon)
-    }
-
-    private fun setSecondaryNotificationChannelDrawable(drawableResource: Int) = context?.let {
-        val icon = ContextCompat.getDrawable(it, drawableResource)
-        icon?.setColorFilterCompat(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
-        iv_secondary_notification_channel.setImageDrawable(icon)
+        view.setImageDrawable(icon)
     }
 
     private fun setupToolBar() {

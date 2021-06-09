@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.auth.inputphone
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.user.VerificationStatus
@@ -9,6 +8,7 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
@@ -18,10 +18,9 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.*
 
 private const val COUNTRY_CODE = "US"
@@ -30,10 +29,8 @@ private const val PHONE_NUMBER = "666777888"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
+@ExtendWith(InstantExecutorExtension::class)
 class InputPhoneViewModelTest {
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val analyticsManager: AnalyticsManager = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
@@ -42,7 +39,7 @@ class InputPhoneViewModelTest {
 
     private lateinit var sut: InputPhoneViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = InputPhoneViewModel(analyticsManager, aptoPlatform, aptoUiSdkProtocol)
     }

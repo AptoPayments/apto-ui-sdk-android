@@ -6,9 +6,9 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert.assertFalse
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
 private const val CORRECT_PIN = "1234"
@@ -20,7 +20,7 @@ internal class VerifyPasscodeUseCaseTest {
 
     lateinit var sut: VerifyPasscodeUseCase
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = VerifyPasscodeUseCase(authenticationRepo)
     }

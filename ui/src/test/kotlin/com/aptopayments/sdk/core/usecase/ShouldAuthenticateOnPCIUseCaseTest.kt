@@ -7,15 +7,15 @@ import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class ShouldAuthenticateOnPCIUseCaseTest {
 
     private val authenticationRepo: AuthenticationRepository = mock()
     lateinit var sut: ShouldAuthenticateOnPCIUseCase
 
-    @Before
+    @BeforeEach
     fun configureKoin() {
         sut = ShouldAuthenticateOnPCIUseCase(authenticationRepo)
     }

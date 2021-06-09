@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.transactiondetails
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.transaction.*
@@ -8,11 +8,11 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.AfterClass
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import java.util.TimeZone
@@ -35,7 +35,7 @@ internal class TransactionDetailsViewModelTest {
 
     private lateinit var sut: TransactionDetailsViewModel
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = TransactionDetailsViewModel(transaction, analyticsManager)
     }
@@ -223,14 +223,14 @@ internal class TransactionDetailsViewModelTest {
     companion object {
         private lateinit var timezone: TimeZone
 
-        @BeforeClass
+        @BeforeAll
         @JvmStatic
         fun beforeClass() {
             timezone = TimeZone.getDefault()
             TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"))
         }
 
-        @AfterClass
+        @AfterAll
         @JvmStatic
         fun afterClass() {
             TimeZone.setDefault(timezone)

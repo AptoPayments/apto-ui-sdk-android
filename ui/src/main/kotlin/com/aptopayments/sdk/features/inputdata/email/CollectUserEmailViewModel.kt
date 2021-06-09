@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.inputdata.email
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.EmailDataPoint
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract

@@ -3,8 +3,8 @@ package com.aptopayments.sdk.core.usecase
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class BiometricsAuthCorrectUseCaseTest {
 
@@ -12,7 +12,7 @@ internal class BiometricsAuthCorrectUseCaseTest {
 
     lateinit var sut: BiometricsAuthCorrectUseCase
 
-    @Before
+    @BeforeEach
     fun configure() {
         sut = BiometricsAuthCorrectUseCase(authenticationRepository)
     }

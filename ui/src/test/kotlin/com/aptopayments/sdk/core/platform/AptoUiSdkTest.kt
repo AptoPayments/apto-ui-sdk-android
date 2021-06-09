@@ -2,24 +2,24 @@ package com.aptopayments.sdk.core.platform
 
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase
 import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase.Params
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.card.CardFlow
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.assertFalse
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.koin.test.AutoCloseKoinTest
 
-class AptoUiSdkTest : AutoCloseKoinTest() {
+class AptoUiSdkTest : UnitTest() {
 
     private val cardFlow: CardFlow = mock()
     private val initializationData: InitializationData = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         AptoPlatform.koin = startKoin {
             modules(

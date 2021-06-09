@@ -9,8 +9,8 @@ import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragment
 import com.nhaarman.mockitokotlin2.*
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ class TransactionListFlowTest : UnitTest() {
     private val cardId = "cardId"
     private val config = TransactionListConfig(startDate = null, endDate = null, mcc = MCC(name = null, icon = null))
 
-    @Before
+    @BeforeEach
     fun setUp() {
         UIConfig.updateUIConfigFrom(TestDataProvider.provideProjectBranding())
         startKoin {

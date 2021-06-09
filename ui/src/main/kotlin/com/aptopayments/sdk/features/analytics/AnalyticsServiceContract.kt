@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.analytics
 
-import com.aptopayments.mobile.analytics.Event
 import org.json.JSONObject
 
 internal interface AnalyticsServiceContract {

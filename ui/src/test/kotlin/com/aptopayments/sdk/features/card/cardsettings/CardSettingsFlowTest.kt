@@ -13,8 +13,8 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragment
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers
@@ -31,7 +31,7 @@ class CardSettingsFlowTest : UnitTest() {
 
     private lateinit var sut: CardSettingsFlow
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(

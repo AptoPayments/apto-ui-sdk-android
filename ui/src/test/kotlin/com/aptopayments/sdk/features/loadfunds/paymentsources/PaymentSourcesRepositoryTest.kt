@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.loadfunds.paymentsources
 
 import android.content.SharedPreferences
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.paymentsources.Card
 import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
@@ -9,15 +8,16 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.CoroutineDispatcherTest
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
-import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -25,11 +25,10 @@ private const val ACCEPTED_ONBOARDING = "ADD_CARD_ACCEPTED_ONBOARDING"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
-class PaymentSourcesRepositoryTest {
+@ExtendWith(InstantExecutorExtension::class)
+class PaymentSourcesRepositoryTest : CoroutineDispatcherTest {
 
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
+    override lateinit var dispatcher: TestCoroutineDispatcher
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val editor: SharedPreferences.Editor = mock()
@@ -57,21 +56,21 @@ class PaymentSourcesRepositoryTest {
     }
 
     @Test
-    fun `when repo without interaction then selectedPaymentSource is null`() {
-        assertNull(sut.selectedPaymentSource.getOrAwaitValue())
+    fun `when repo without interaction then selectedPaymentSource is null`() = dispatcher.runBlockingTest {
+        assertNull(sut.selectedPaymentSource.value)
     }
 
     @Test
-    fun `when selectPaymentSourceLocally then value is updated`() = runBlockingTest {
+    fun `when selectPaymentSourceLocally then value is updated`() = dispatcher.runBlockingTest {
         val card = TestDataProvider.providePaymentSourcesCard()
 
         sut.selectPaymentSourceLocally(card)
 
-        assertEquals(card, sut.selectedPaymentSource.getOrAwaitValue())
+        assertEquals(card, sut.selectedPaymentSource.value)
     }
 
     @Test
-    fun `when selectPaymentSourceLocally then no api-call is made`() = runBlockingTest {
+    fun `when selectPaymentSourceLocally then no api-call is made`() = dispatcher.runBlockingTest {
         val card = TestDataProvider.providePaymentSourcesCard()
 
         sut.selectPaymentSourceLocally(card)
@@ -80,18 +79,18 @@ class PaymentSourcesRepositoryTest {
     }
 
     @Test
-    fun `when refreshSelectedPaymentSource then correct payment source returned in liveData`() = runBlockingTest {
+    fun `when refreshSelectedPaymentSource then correct payment source returned in liveData`() = dispatcher.runBlockingTest {
         val card = TestDataProvider.providePaymentSourcesCard()
         configureGetPaymentSources(card)
 
         val result = sut.refreshSelectedPaymentSource()
 
         result.shouldBeRightAndEqualTo(card)
-        assertEquals(card, sut.selectedPaymentSource.getOrAwaitValue())
+        assertEquals(card, sut.selectedPaymentSource.value)
     }
 
     @Test
-    fun `when getPaymentSourceList then correct returned`() = runBlockingTest {
+    fun `when getPaymentSourceList then correct returned`() = dispatcher.runBlockingTest {
         val card = TestDataProvider.providePaymentSourcesCard()
         configureGetPaymentSources(card)
 
@@ -101,7 +100,7 @@ class PaymentSourcesRepositoryTest {
     }
 
     @Test
-    fun `when addPaymentSource then selected payment source returned`() = runBlockingTest {
+    fun `when addPaymentSource then selected payment source returned`() = dispatcher.runBlockingTest {
         val newCard = TestDataProvider.provideNewCard()
         val card = TestDataProvider.providePaymentSourcesCard()
         configureAddPaymentSource(newCard, card)
@@ -112,7 +111,7 @@ class PaymentSourcesRepositoryTest {
         result.shouldBeRightAndEqualTo(card)
         verify(aptoPlatform).addPaymentSource(eq(newCard), any())
         verify(aptoPlatform).getPaymentSources(any(), anyOrNull(), anyOrNull(), anyOrNull())
-        assertEquals(card, sut.selectedPaymentSource.getOrAwaitValue())
+        assertEquals(card, sut.selectedPaymentSource.value)
     }
 
     private fun configureAddPaymentSource(

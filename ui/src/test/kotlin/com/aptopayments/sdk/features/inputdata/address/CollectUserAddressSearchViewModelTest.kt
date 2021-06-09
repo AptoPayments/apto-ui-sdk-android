@@ -1,10 +1,9 @@
 package com.aptopayments.sdk.features.inputdata.address
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.AddressDataPoint
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
-import com.aptopayments.sdk.utils.MainCoroutineRule
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
@@ -14,9 +13,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -31,13 +29,8 @@ private const val COUNTRY = "Spain"
 private const val POSTAL_CODE = "08010"
 
 @ExperimentalCoroutinesApi
+@ExtendWith(InstantExecutorExtension::class)
 internal class CollectUserAddressSearchViewModelTest {
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
 
     private val analyticsManager: AnalyticsManager = mock()
     private val addressGenerator: AddressDataPointGenerator = mock()
@@ -192,7 +185,7 @@ internal class CollectUserAddressSearchViewModelTest {
 
         assertTrue { sut.continueEnabled.getOrAwaitValue() }
         assertEquals(STREET_TWO, sut.optionalText.getOrAwaitValue())
-        assertEquals("$STREET_ONE, $LOCALITY, $COUNTRY", sut.searchText.getOrAwaitValue())
+        assertEquals("$STREET_ONE, $LOCALITY, $REGION $POSTAL_CODE, $COUNTRY", sut.searchText.getOrAwaitValue())
     }
 
     @Test

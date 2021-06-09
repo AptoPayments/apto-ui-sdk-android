@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.features.card.cardsettings
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.card.*
 import com.aptopayments.mobile.data.cardproduct.CardProduct
@@ -10,6 +9,7 @@ import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
@@ -22,10 +22,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import kotlin.test.assertEquals
@@ -35,11 +34,8 @@ import kotlin.test.assertTrue
 private const val CARD_ID = "CARD_ID"
 
 @Suppress("UNCHECKED_CAST")
+@ExtendWith(InstantExecutorExtension::class)
 internal class CardSettingsViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val cardDetailsRepo = mock<LocalCardDetailsRepository>()
     private val cardFeatures = mock<Features>()
@@ -59,7 +55,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
     private lateinit var sut: CardSettingsViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(

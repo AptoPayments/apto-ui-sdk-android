@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.oauth
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
 import com.aptopayments.mobile.data.user.DataPointList
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType

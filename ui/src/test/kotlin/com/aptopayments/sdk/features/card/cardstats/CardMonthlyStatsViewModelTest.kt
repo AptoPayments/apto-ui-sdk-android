@@ -1,11 +1,11 @@
 package com.aptopayments.sdk.features.card.cardstats
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.stats.MonthlySpending
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.useCaseModule
@@ -13,10 +13,9 @@ import com.aptopayments.sdk.core.extension.monthLocalized
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.DateProvider
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.startKoin
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
@@ -30,11 +29,8 @@ private const val YEAR = 2020
 private val CURRENT_DATE = LocalDate.of(YEAR, MONTH, DAY)
 private const val EMPTY = ""
 
+@ExtendWith(InstantExecutorExtension::class)
 class CardMonthlyStatsViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val analyticsManager: AnalyticsServiceContract = mock()
     private val aptoPlatformProtocol: AptoPlatformProtocol = mock()
@@ -42,7 +38,7 @@ class CardMonthlyStatsViewModelTest : UnitTest() {
 
     private lateinit var sut: CardMonthlyStatsViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin { modules(useCaseModule) }
         whenever(dateProvider.localDate()).thenReturn(LocalDate.of(YEAR, MONTH, DAY))

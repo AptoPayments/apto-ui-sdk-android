@@ -5,8 +5,8 @@ import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -17,7 +17,7 @@ internal class CanAskBiometricsUseCaseTest {
 
     lateinit var sut: CanAskBiometricsUseCase
 
-    @Before
+    @BeforeEach
     fun configure() {
         sut = CanAskBiometricsUseCase(repo, biometricsWrapper)
     }

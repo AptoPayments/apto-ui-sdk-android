@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.features.voip
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @Suppress("UNCHECKED_CAST")
 class VoipViewModelTest {
@@ -18,7 +18,7 @@ class VoipViewModelTest {
     private val mockVoipHandler: VoipContract.Handler = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = VoipViewModel(aptoPlatform, analyticsManager, mockVoipHandler)
     }

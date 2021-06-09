@@ -8,8 +8,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -20,7 +20,7 @@ class AddFundsFlowTest : UnitTest() {
 
     private lateinit var sut: AddFundsFlow
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(

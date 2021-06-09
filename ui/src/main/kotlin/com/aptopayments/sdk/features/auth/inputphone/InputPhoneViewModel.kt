@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.auth.inputphone
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.user.VerificationStatus

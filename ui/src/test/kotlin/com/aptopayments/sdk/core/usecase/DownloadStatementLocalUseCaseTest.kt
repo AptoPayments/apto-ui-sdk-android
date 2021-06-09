@@ -6,15 +6,17 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.CoroutineDispatcherTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.repository.StatementRepositoryImpl
 import com.aptopayments.sdk.utils.*
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertTrue
 
@@ -24,10 +26,9 @@ private const val URL = "url"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
-internal class DownloadStatementLocalUseCaseTest {
+internal class DownloadStatementLocalUseCaseTest : CoroutineDispatcherTest {
 
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
+    override lateinit var dispatcher: TestCoroutineDispatcher
 
     private val fileDownloader: FileDownloader = mock()
     private val cacheFileManager: CacheFileManager = mock()
@@ -40,20 +41,20 @@ internal class DownloadStatementLocalUseCaseTest {
     lateinit var sut: DownloadStatementLocalUseCase
     private val aptoPlatform: AptoPlatformProtocol = mock()
 
-    @Before
+    @BeforeEach
     fun setup() {
         repo = spy(
             StatementRepositoryImpl(
                 fileDownloader,
                 cacheFileManager,
-                TestDispatchers(coroutineRule.testDispatcher)
+                TestDispatchers(dispatcher)
             )
         )
         sut = DownloadStatementLocalUseCase(repo, aptoPlatform)
     }
 
     @Test
-    fun `when exception thrown downloading then left is returned`() = coroutineRule.runBlockingTest {
+    fun `when exception thrown downloading then left is returned`() = dispatcher.runBlockingTest {
         val file = mock<File>()
         whenever(cacheFileManager.createTempFile(any(), any(), any())).thenReturn(file)
         configurePlatform(monthlyStatement.right())
@@ -66,7 +67,7 @@ internal class DownloadStatementLocalUseCaseTest {
     }
 
     @Test
-    fun `when preconditions are Ok then file is correctly downloaded`() = coroutineRule.runBlockingTest {
+    fun `when preconditions are Ok then file is correctly downloaded`() = dispatcher.runBlockingTest {
         val file = mock<File>()
         whenever(cacheFileManager.createTempFile(any(), any(), any())).thenReturn(file)
         configurePlatform(monthlyStatement.right())

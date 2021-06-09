@@ -13,18 +13,17 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.UnitTest
+import com.aptopayments.sdk.*
 import com.aptopayments.sdk.core.data.TestDataProvider
-import com.aptopayments.sdk.utils.MainCoroutineRule
-import com.aptopayments.sdk.utils.runBlockingTest
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyList
 
@@ -34,10 +33,8 @@ private const val BALANCE_ID = "bid_12345"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
+@ExtendWith(InstantExecutorExtension::class)
 internal class AcceptAchDisclaimerUseCaseTest : UnitTest() {
-
-    @get:Rule
-    val coroutineRule = MainCoroutineRule()
 
     private val disclaimer = Disclaimer(keys = listOf(AGREEMENT_KEY), content = Content.PlainText(""))
 
@@ -46,7 +43,7 @@ internal class AcceptAchDisclaimerUseCaseTest : UnitTest() {
     private val achAccountDetails: AchAccountDetails = mock()
 
     @Test
-    fun `whenever everything works then AccountDetails`() = coroutineRule.runBlockingTest {
+    fun `whenever everything works then AccountDetails`() = runBlockingTest {
         configureCard(disclaimer)
         configureReviewAgreements(Unit.right())
         configureGetCardFundingSource()
@@ -58,7 +55,7 @@ internal class AcceptAchDisclaimerUseCaseTest : UnitTest() {
     }
 
     @Test
-    fun `whenever account can not be created then Failure`() = coroutineRule.runBlockingTest {
+    fun `whenever account can not be created then Failure`() = runBlockingTest {
         configureCard(disclaimer)
         configureReviewAgreements(Unit.right())
         configureGetCardFundingSource()
@@ -70,7 +67,7 @@ internal class AcceptAchDisclaimerUseCaseTest : UnitTest() {
     }
 
     @Test
-    fun `whenever agreements can't be accepted then  Failure`() = coroutineRule.runBlockingTest {
+    fun `whenever agreements can't be accepted then  Failure`() = runBlockingTest {
         configureCard(disclaimer)
         configureReviewAgreements(Failure.ServerError(1, "").left())
 

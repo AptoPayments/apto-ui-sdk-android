@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.utils.extensions
 
 import com.google.i18n.phonenumbers.NumberParseException
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.*
 import kotlin.test.assertFalse
 

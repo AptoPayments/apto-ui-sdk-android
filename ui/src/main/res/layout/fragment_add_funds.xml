@@ -34,33 +34,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/money_input"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:digits="1234567890$"
-                android:gravity="center"
-                android:inputType="numberDecimal"
-                android:maxLength="6"
-                android:maxLines="1"
-                android:text="@={viewModel.amount}"
-                android:textCursorDrawable="@null"
-                tools:text="$0" />
+                android:layout_height="wrap_content">
+
+                <com.aptopayments.sdk.ui.views.PrefixEditText
+                    android:id="@+id/money_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:hint="0"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:text="@={viewModel.amount}"
+                    app:prefixEdit="@{viewModel.state.currencySymbol}"
+                    tools:text="0" />
+            </FrameLayout>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/input_payment_amount_error"
-            visibleIf="@{!viewModel.error.empty}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/llsdk_small_margin"
             android:gravity="center"
-            android:text="@{viewModel.error}"
+            android:text="@{viewModel.state.amountError}"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_input_amount_container"
+            app:visibleIf="@{!viewModel.state.amountError.empty}"
             tools:text="@string/load_funds_add_money_daily_max_title" />
 
         <androidx.cardview.widget.CardView
@@ -83,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="@dimen/llsdk_medium_margin"
-                app:element="@{viewModel.paymentSource}" />
+                app:element="@{viewModel.state.paymentSource}" />
 
             <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/add_funds_change_source"
@@ -91,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
                 android:layout_marginEnd="@dimen/llsdk_medium_margin"
-                android:text="@{viewModel.paymentSourceCTA}"
+                app:localizeBinding="@{viewModel.state.paymentSourceCTAKey}"
                 tools:text="Change" />
 
         </androidx.cardview.widget.CardView>
@@ -99,12 +105,12 @@
         <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/add_funds_button"
             style="@style/ThemeTwo.ContinueButton"
-            visibleIf="@{viewModel.continueButtonEnabled}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:localize="load_funds_add_money_primary_cta"
-            app:onClickSafe="@{() -> viewModel.onContinueClicked()}" />
+            app:onClickSafe="@{() -> viewModel.onContinueClicked()}"
+            app:visibleIf="@{viewModel.state.continueEnabled}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

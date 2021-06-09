@@ -3,7 +3,7 @@ package com.aptopayments.sdk.features.inputdata.address
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.AddressDataPoint
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.sdk.core.platform.BaseViewModel
@@ -14,8 +14,8 @@ import com.google.android.libraries.places.api.model.AddressComponents
 import kotlinx.coroutines.launch
 
 internal class CollectUserAddressViewModel(
-    private val initialValue: AddressDataPoint?,
-    private val analyticsManager: AnalyticsServiceContract,
+    initialValue: AddressDataPoint?,
+    analyticsManager: AnalyticsServiceContract,
     private val addressGenerator: AddressDataPointGenerator,
     private val placesFetcher: PlaceFetcher
 ) : BaseViewModel() {
@@ -32,10 +32,14 @@ internal class CollectUserAddressViewModel(
     init {
         analyticsManager.track(Event.WorkflowUserIdAddress)
         initialValue?.let {
-            searchText.postValue("${it.streetOne}, ${it.locality}, ${it.country}")
+            setSearchText(it)
             optionalText.postValue(it.streetTwo ?: "")
         }
         addressDataPoint.value = initialValue
+    }
+
+    private fun setSearchText(it: AddressDataPoint) {
+        searchText.postValue("${it.streetOne}, ${it.locality}, ${it.region} ${it.postalCode}, ${it.country}")
     }
 
     fun continueClicked() {
@@ -76,13 +80,7 @@ internal class CollectUserAddressViewModel(
 
     private fun setAddressComponents(addressComponents: AddressComponents?) {
         addressDataPoint.value = addressComponents?.let { addressGenerator.generate(it) }
-        checkIncorrectAddress()
-    }
-
-    private fun checkIncorrectAddress() {
-        if (addressDataPoint.value == null) {
-            handleFailure(IncorrectAddressFailure())
-        }
+        addressDataPoint.value?.let { setSearchText(it) } ?: kotlin.run { handleFailure(IncorrectAddressFailure()) }
     }
 
     private fun invalidateAddressComponents() {

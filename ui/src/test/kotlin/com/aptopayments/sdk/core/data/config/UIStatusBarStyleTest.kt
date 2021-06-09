@@ -1,7 +1,7 @@
 package com.aptopayments.sdk.core.data.config
 
 import com.aptopayments.mobile.data.config.UIStatusBarStyle
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertSame
 
 class UIStatusBarStyleTest {

@@ -1,20 +1,20 @@
 package com.aptopayments.sdk.features.auth.email
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.user.Verification
 import com.aptopayments.mobile.data.user.VerificationStatus
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(InstantExecutorExtension::class)
 class InputEmailViewModelTest {
 
     private lateinit var sut: InputEmailViewModel
@@ -22,11 +22,7 @@ class InputEmailViewModelTest {
     private var analyticsManager: AnalyticsServiceContract = mock()
     private val verificationLiveData: MutableLiveData<Verification> = mock()
 
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
-
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = InputEmailViewModel(analyticsManager)
     }

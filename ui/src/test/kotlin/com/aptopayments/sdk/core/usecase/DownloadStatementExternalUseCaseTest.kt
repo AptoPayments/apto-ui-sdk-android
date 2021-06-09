@@ -1,6 +1,5 @@
 package com.aptopayments.sdk.core.usecase
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.data.statements.MonthlyStatement
 import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.exception.Failure
@@ -8,6 +7,7 @@ import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.left
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.card.statements.detail.ExternalFileDownloader
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
@@ -15,9 +15,8 @@ import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 private const val MONTH = 5
 private const val YEAR = 2021
@@ -25,11 +24,8 @@ private const val URL = "https://www.aptopayments.com/download.pdf"
 
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
+@ExtendWith(InstantExecutorExtension::class)
 class DownloadStatementExternalUseCaseTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private val aptoPlatform: AptoPlatformProtocol = mock()
     private val downloader: ExternalFileDownloader = mock()

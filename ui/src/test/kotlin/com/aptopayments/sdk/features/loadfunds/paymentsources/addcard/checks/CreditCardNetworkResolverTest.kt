@@ -6,8 +6,8 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 private const val LOAD_FUNDS_TEST_CARD = "9400212999999996"
@@ -20,7 +20,7 @@ class CreditCardNetworkResolverTest {
         on { isCurrentEnvironmentPrd() } doReturn true
     }
 
-    @Before
+    @BeforeEach
     fun setUp() {
         sut = createSut(apiKeyProvider)
     }

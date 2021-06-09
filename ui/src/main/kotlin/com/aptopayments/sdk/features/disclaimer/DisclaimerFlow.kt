@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.features.disclaimer
 
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.workflowaction.WorkflowAction
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationShowDisclaimer
 import com.aptopayments.mobile.exception.Failure

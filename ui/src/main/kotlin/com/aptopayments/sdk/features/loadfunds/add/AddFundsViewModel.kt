@@ -1,9 +1,6 @@
 package com.aptopayments.sdk.features.loadfunds.add
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.aptopayments.mobile.data.card.FundingLimits
 import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.payment.Payment
@@ -13,16 +10,16 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.aptopayments.sdk.core.extension.toOnlyDigits
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElement
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.utils.LiveEvent
-import com.aptopayments.sdk.utils.extensions.map
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 private const val CURRENCY = "USD"
+private const val CURRENCT_SYMBOL = "$"
 
 internal class AddFundsViewModel(
     private val cardId: String,
@@ -34,21 +31,43 @@ internal class AddFundsViewModel(
     private var balanceId = ""
     private var fundingLimits: FundingLimits? = null
 
-    private val selectedPaymentSource = repo.selectedPaymentSource
-    val amount = MutableLiveData("$")
-    val paymentSource = selectedPaymentSource.map { getPaymentSourceElement(it) }
-    val error = MutableLiveData("")
+    val amount = MutableLiveData("")
 
-    val paymentSourceCTA = selectedPaymentSource.map { getPaymentSourceCTA(it) }
-
-    private val _continueEnabled = MediatorLiveData<Boolean>()
-    val continueButtonEnabled = _continueEnabled as LiveData<Boolean>
+    private val _state = MediatorLiveData<State>()
+    val state = _state as LiveData<State>
 
     val action = LiveEvent<Actions>()
 
     init {
+        _state.value = State()
         fetchPreRequisites()
         observeContinueSources()
+        viewModelScope.launch {
+            repo.selectedPaymentSource.collect { paymentSource ->
+                updateState(
+                    paymentSource = paymentSource,
+                    nullPaymentSource = paymentSource == null,
+                )
+            }
+        }
+    }
+
+    @Synchronized
+    private fun updateState(
+        paymentSource: PaymentSource? = null,
+        nullPaymentSource: Boolean? = null,
+        amountChanged: Boolean? = null,
+    ) {
+        _state.value = _state.value?.let { state ->
+            state.copy(
+                paymentSourceCTAKey = if (paymentSource != null || nullPaymentSource == true) getPaymentSourceCTA(
+                    paymentSource
+                ) else state.paymentSourceCTAKey,
+                paymentSource = paymentSource?.let { getPaymentSourceElement(paymentSource) } ?: state.paymentSource,
+                amountError = amountChanged?.let { getAmountError() } ?: state.amountError,
+                continueEnabled = canContinueBeEnabled()
+            )
+        } ?: State()
     }
 
     private fun fetchSelected() {
@@ -65,7 +84,7 @@ internal class AddFundsViewModel(
     }
 
     fun onPaymentSourceClicked() {
-        if (selectedPaymentSource.value != null) {
+        if (repo.selectedPaymentSource.value != null) {
             action.value = Actions.PaymentSourcesList
         } else {
             action.value = Actions.AddPaymentSource
@@ -74,7 +93,7 @@ internal class AddFundsViewModel(
 
     fun onContinueClicked() {
         showLoading()
-        val source = paymentSource.value!!
+        val source = repo.selectedPaymentSource.value!!
         aptoPlatform.pushFunds(
             balanceId,
             source.id,
@@ -117,10 +136,10 @@ internal class AddFundsViewModel(
         }
     }
 
-    private fun getAmount() = amount.value?.toOnlyDigits()
+    private fun getAmount() = amount.value?.toFloatOrNull()
 
     private fun getPaymentSourceElement(source: PaymentSource?): PaymentSourceElement {
-        return source?.let { elementMapper.map(it) } ?: elementMapper.getUnsetElement()
+        return source?.let { elementMapper.map(it) } ?: PaymentSourceElement.unsetElement()
     }
 
     private fun fetchPreRequisites() {
@@ -152,54 +171,42 @@ internal class AddFundsViewModel(
     }
 
     private fun observeContinueSources() {
-        _continueEnabled.addSource(paymentSource) { onContinueFieldChanged() }
-        _continueEnabled.addSource(amount) { onContinueFieldChanged() }
+        _state.addSource(amount) { updateState(amountChanged = true) }
     }
 
-    private fun onContinueFieldChanged() {
-        _continueEnabled.postValue(checkAllFieldCorrectness())
-    }
+    private fun canContinueBeEnabled() = checkAmountInsideLimits() && isPaymentSourceCorrect()
 
-    private fun checkAllFieldCorrectness(): Boolean {
-        return checkAmountInsideLimits() && isPaymentSourceCorrect()
-    }
+    private fun checkAmountInsideLimits() = isAmountCorrect() && getAmount()!!.toFloat() < getDailyLimit()
 
-    private fun checkAmountInsideLimits(): Boolean {
-        return if (isAmountCorrect()) {
-            val requested = getAmount()!!.toFloat()
-            when {
-                requested > getDailyLimit() -> {
-                    postError("load_funds_add_money_daily_max_title".localized(), getDailyLimit())
-                    false
-                }
-                else -> {
-                    postError("")
-                    true
-                }
-            }
+    private fun getAmountError(): String {
+        return if (isAmountCorrect() && getAmount()!!.toFloat() > getDailyLimit()) {
+            "load_funds_add_money_daily_max_title".localized().replace("<<MAX>>", getDailyLimit().toString())
         } else {
-            postError("")
-            false
+            ""
         }
-    }
-
-    private fun postError(legend: String, limit: Double = 0.0) {
-        error.value = legend.replace("<<MAX>>", limit.toInt().toString())
     }
 
     private fun getDailyLimit() = fundingLimits?.daily?.max?.amount ?: 0.0
 
-    private fun isPaymentSourceCorrect() = paymentSource.value?.isDefined() ?: false
+    private fun isPaymentSourceCorrect() = _state.value?.paymentSource != null
 
-    private fun isAmountCorrect() = !getAmount().isNullOrEmpty() && (getAmount()!!.toDouble() > 0)
+    private fun isAmountCorrect() = getAmount()?.let { it > 0 } ?: false
 
     private fun getPaymentSourceCTA(paymentSource: PaymentSource?): String {
         return if (paymentSource == null) {
             "load_funds_add_money_add_card"
         } else {
             "load_funds_add_money_change_card"
-        }.localized()
+        }
     }
+
+    data class State(
+        val paymentSourceCTAKey: String = "",
+        val paymentSource: PaymentSourceElement? = PaymentSourceElement.unsetElement(),
+        val amountError: String = "",
+        val continueEnabled: Boolean = false,
+        val currencySymbol: String = CURRENCT_SYMBOL
+    )
 
     class UnableToLoadFundsError(key: String) : Failure.FeatureFailure(
         errorKey = key,

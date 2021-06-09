@@ -197,17 +197,17 @@ class TestDataProvider {
             zipCode = "12345"
         )
 
-        fun providePaymentSourcesCard() = com.aptopayments.mobile.data.paymentsources.Card(
-            id = "entity_12345",
+        fun providePaymentSourcesCard(id: String = "entity_12345") = com.aptopayments.mobile.data.paymentsources.Card(
+            id = id,
             description = "desc",
             isPreferred = true,
             network = Card.CardNetwork.VISA,
             lastFour = "4242"
         )
 
-        fun providePaymentSourcesPayment() = Payment(
-            id = "12345",
-            status = PaymentStatus.PROCESSED,
+        fun providePaymentSourcesPayment(id: String = "entity_12345", status: PaymentStatus = PaymentStatus.PROCESSED) = Payment(
+            id = id,
+            status = status,
             amount = Money("USD", 100.0),
             source = providePaymentSourcesCard(),
             approvalCode = "123456",

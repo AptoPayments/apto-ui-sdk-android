@@ -1,19 +1,15 @@
 package com.aptopayments.sdk.core.platform
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.exception.Failure.NetworkConnection
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertTrue
 
+@ExtendWith(InstantExecutorExtension::class)
 class BaseViewModelTest {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     @Test
     fun `should handle failure by updating live data`() {

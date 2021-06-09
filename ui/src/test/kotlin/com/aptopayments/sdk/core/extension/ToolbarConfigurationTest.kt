@@ -2,8 +2,8 @@ package com.aptopayments.sdk.core.extension
 
 import android.graphics.Color
 import com.aptopayments.mobile.repository.config.remote.entities.*
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 private const val TITLE = "Title"
 

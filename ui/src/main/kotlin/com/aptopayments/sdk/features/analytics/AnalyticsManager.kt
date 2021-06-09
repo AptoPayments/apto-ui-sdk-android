@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.features.analytics
 
 import android.app.Application
-import com.aptopayments.mobile.analytics.Event
 import org.json.JSONObject
 
 internal class AnalyticsManager(context: Application) : AnalyticsServiceContract {

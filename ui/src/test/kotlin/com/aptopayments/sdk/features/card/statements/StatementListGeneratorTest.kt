@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.statements
 
 import com.aptopayments.mobile.data.statements.MonthlyStatementPeriod
 import com.aptopayments.mobile.data.statements.StatementMonth
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 private val MONTH_8_2019 = StatementMonth(8, 2019)

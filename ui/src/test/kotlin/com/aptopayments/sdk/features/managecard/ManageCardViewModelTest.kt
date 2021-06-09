@@ -2,9 +2,8 @@
 
 package com.aptopayments.sdk.features.managecard
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.aptopayments.mobile.analytics.Event
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
@@ -13,6 +12,7 @@ import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
+import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.applicationModule
@@ -21,10 +21,9 @@ import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestRule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.startKoin
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
@@ -35,11 +34,8 @@ import kotlin.test.assertTrue
 
 private const val CARD_ID = "CARD_ID_1"
 
+@ExtendWith(InstantExecutorExtension::class)
 class ManageCardViewModelTest : UnitTest() {
-
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var sut: ManageCardViewModel
 
@@ -49,7 +45,7 @@ class ManageCardViewModelTest : UnitTest() {
     private val aptoUiSdkProtocol: AptoUiSdkProtocol = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         startKoin {
             modules(listOf(applicationModule, useCaseModule))

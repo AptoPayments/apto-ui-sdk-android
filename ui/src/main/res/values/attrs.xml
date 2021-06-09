@@ -32,4 +32,8 @@
         <attr name="optionDescription" />
         <attr name="optionShowDivider" />
     </declare-styleable>
+
+    <declare-styleable name="PrefixEditText">
+        <attr name="prefixEdit" format="string" />
+    </declare-styleable>
 </resources>
