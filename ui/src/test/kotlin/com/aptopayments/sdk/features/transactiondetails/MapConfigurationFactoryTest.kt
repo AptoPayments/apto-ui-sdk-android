@@ -5,8 +5,8 @@ import com.aptopayments.mobile.data.transaction.Merchant
 import com.aptopayments.mobile.data.transaction.Store
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.core.extension.iconResource
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

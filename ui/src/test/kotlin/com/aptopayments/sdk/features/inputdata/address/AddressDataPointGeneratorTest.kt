@@ -2,9 +2,9 @@ package com.aptopayments.sdk.features.inputdata.address
 
 import com.google.android.libraries.places.api.model.AddressComponent
 import com.google.android.libraries.places.api.model.AddressComponents
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

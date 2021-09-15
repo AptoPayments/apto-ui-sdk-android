@@ -5,7 +5,7 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.features.card.setpin.*
 import com.aptopayments.sdk.features.card.setpin.CardPinFragment
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -48,7 +48,7 @@ internal class ConfirmCardPasscodeFragment : CardPinFragment(), ConfirmCardPinCo
         notify(
             "manage_card_confirm_passcode_success_title".localized(),
             "manage_card_confirm_passcode_success_message".localized(),
-            MessageBanner.MessageType.SUCCESS
+            SnackbarMessageType.SUCCESS
         )
     }
 

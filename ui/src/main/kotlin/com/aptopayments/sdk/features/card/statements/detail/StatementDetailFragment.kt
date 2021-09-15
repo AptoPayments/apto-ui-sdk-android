@@ -12,7 +12,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import kotlinx.android.synthetic.main.fragment_statement_details.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,7 +49,7 @@ internal class StatementDetailFragment :
                 is StatementDetailViewModel.Action.ShowDownloadingSign ->
                     notify(
                         "monthly_statements_report_downloading".localized(),
-                        MessageBanner.MessageType.HEADS_UP
+                        SnackbarMessageType.HEADS_UP
                     )
             }
         }
@@ -93,7 +93,7 @@ internal class StatementDetailFragment :
                 if (granted) {
                     viewModel.downloadToPhone()
                 } else {
-                    notify("monthly_statements_report_permission_error".localized(), MessageBanner.MessageType.ERROR)
+                    notify("monthly_statements_report_permission_error".localized(), SnackbarMessageType.ERROR)
                 }
             }
         } else {

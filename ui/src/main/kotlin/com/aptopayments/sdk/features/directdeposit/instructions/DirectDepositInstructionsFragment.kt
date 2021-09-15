@@ -13,7 +13,7 @@ import com.aptopayments.sdk.core.platform.BaseBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentDirectDepositInstructionsBinding
 import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsViewModel.Actions
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.copyToClipboard
 import kotlinx.android.synthetic.main.include_toolbar_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,7 +54,7 @@ internal class DirectDepositInstructionsFragment :
         requireContext().copyToClipboard(label = label, value = value)
         notify(
             "load_funds_direct_deposit_instructions_copied_to_clipboard".localized(),
-            MessageBanner.MessageType.HEADS_UP
+            SnackbarMessageType.HEADS_UP
         )
     }
 

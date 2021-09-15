@@ -16,9 +16,9 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.usecase.DeclineAchDisclaimerUseCase.Params
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test

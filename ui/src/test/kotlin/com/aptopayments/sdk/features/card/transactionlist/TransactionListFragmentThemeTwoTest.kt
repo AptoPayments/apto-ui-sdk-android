@@ -3,7 +3,7 @@ package com.aptopayments.sdk.features.card.transactionlist
 import com.aptopayments.mobile.data.transaction.MCC
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.UnitTest
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.androidx.viewmodel.dsl.viewModel

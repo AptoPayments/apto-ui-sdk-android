@@ -38,17 +38,17 @@
 
         <ImageView
             android:id="@+id/card_view_card_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@color/colorAccent"
             android:layout_width="56dp"
             android:layout_height="44dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/llsdk_card_bottom_margin"
+            android:layout_marginTop="@dimen/llsdk_card_top_margin"
             android:layout_marginEnd="@dimen/llsdk_card_left_margin"
             android:contentDescription="@null"
-            android:scaleType="fitXY" />
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@color/quantum_black_100" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

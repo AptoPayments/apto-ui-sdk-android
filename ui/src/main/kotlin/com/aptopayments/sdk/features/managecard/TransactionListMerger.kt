@@ -33,12 +33,15 @@ internal class TransactionListMerger {
     ): MutableList<Transaction> {
         var newTransactionIndex = 0
         val topCachedTransactionDate = currentTransactions.first().createdAt
+        val newListToAddAtTheBeginning = mutableListOf<Transaction>()
         while (newTransactionIndex < newList.size &&
             newList[newTransactionIndex].createdAt.isAfter(topCachedTransactionDate)
         ) {
-            currentTransactions.add(0, newList[newTransactionIndex])
+            newListToAddAtTheBeginning.add(newList[newTransactionIndex])
             newTransactionIndex++
         }
+        currentTransactions.addAll(0, newListToAddAtTheBeginning)
+
         return currentTransactions
     }
 

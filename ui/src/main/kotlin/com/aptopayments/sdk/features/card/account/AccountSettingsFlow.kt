@@ -13,7 +13,7 @@ import com.aptopayments.sdk.features.card.notificationpreferences.NotificationPr
 import com.aptopayments.sdk.features.directdeposit.details.AchAccountDetailsDialogContract
 import com.aptopayments.sdk.features.passcode.CreatePasscodeFlow
 import com.aptopayments.sdk.features.passcode.PasscodeMode
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -65,7 +65,7 @@ internal class AccountSettingsFlow(
                 notify(
                     "biometric_change_pin_success_title".localized(),
                     "biometric_change_pin_success_message".localized(),
-                    MessageBanner.MessageType.SUCCESS
+                    SnackbarMessageType.SUCCESS
                 )
             }
         )

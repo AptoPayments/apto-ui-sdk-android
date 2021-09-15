@@ -12,7 +12,7 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterFragment
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -53,7 +53,6 @@ class CardSettingsFlowTest : UnitTest() {
     @Test
     fun `should use the factory to instantiate CardSettingsFragmentInterface when onCardSettingsTapped is called`() {
         // Given
-        val mockCardSettingsDelegate: CardSettingsContract.Delegate = mock()
         val card = TestDataProvider.provideCard(accountID = cardId)
         configureCard(card)
         configureFetchCardProduct()

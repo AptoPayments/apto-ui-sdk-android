@@ -1,7 +1,6 @@
 package com.aptopayments.sdk.repository
 
 import com.aptopayments.sdk.InstantExecutorExtension
-import com.aptopayments.sdk.utils.getOrAwaitValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -9,13 +8,13 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExtendWith(InstantExecutorExtension::class)
-internal class IAPHelperMockTest {
+internal class IAPHelperFakeTest {
 
-    lateinit var sut: IAPHelperMock
+    lateinit var sut: IAPHelperFake
 
     @BeforeEach
     fun setUp() {
-        sut = IAPHelperMock()
+        sut = IAPHelperFake()
     }
 
     @Test
@@ -25,7 +24,7 @@ internal class IAPHelperMockTest {
 
     @Test
     fun `showAddCardButton is false by default`() {
-        val state = sut.state.getOrAwaitValue()
+        val state = sut.state.value
         assertTrue(state is ProvisioningState.CanNotBeAdded)
     }
 }

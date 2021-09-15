@@ -1,13 +1,13 @@
 package com.aptopayments.sdk.repository
 
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.aptopayments.mobile.exception.Failure
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface IAPHelper {
-    val state: LiveData<ProvisioningState>
+    val state: StateFlow<ProvisioningState>
     fun satisfyHardwareRequisites(): Boolean
     suspend fun initProcess()
     fun registerDataChanged()
@@ -16,13 +16,21 @@ interface IAPHelper {
     fun onActivityResult(requestCode: Int, result: Boolean, scope: CoroutineScope): Boolean
 }
 
-internal class IAPHelperMock : IAPHelper {
-    override val state = MutableLiveData<ProvisioningState>(ProvisioningState.CanNotBeAdded())
+internal class IAPHelperFake : IAPHelper {
+    override val state = MutableStateFlow<ProvisioningState>(ProvisioningState.CanNotBeAdded())
     override fun satisfyHardwareRequisites() = false
-    override suspend fun initProcess() {}
-    override fun registerDataChanged() {}
-    override fun unregisterDataChanged() {}
-    override suspend fun startInAppProvisioningFlow(activity: FragmentActivity) {}
+    override suspend fun initProcess() {
+        // Do Nothing
+    }
+    override fun registerDataChanged() {
+        // Do Nothing
+    }
+    override fun unregisterDataChanged() {
+        // Do Nothing
+    }
+    override suspend fun startInAppProvisioningFlow(activity: FragmentActivity) {
+        // Do Nothing
+    }
     override fun onActivityResult(requestCode: Int, result: Boolean, scope: CoroutineScope) = false
 }
 

@@ -2,8 +2,8 @@ package com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.states
 
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.FieldState
 import com.aptopayments.sdk.utils.DateProvider
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.threeten.bp.LocalDate

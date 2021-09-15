@@ -13,7 +13,6 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.ui.views.PCICardView
 import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.toCapitalized
@@ -27,7 +26,6 @@ internal open class TransactionListAdapter(
 ) : RecyclerView.Adapter<TransactionListAdapter.BaseViewHolder>() {
 
     interface Delegate {
-        fun onCardTapped()
         fun onCardSettingsTapped()
         fun onTransactionTapped(transaction: Transaction)
     }
@@ -94,16 +92,12 @@ internal open class TransactionListAdapter(
                     observeNullable(viewModel.card) { card -> card?.let { cardView.setCardInfo(CardInfo.fromCard(it)) } }
                     observeNotNullable(viewModel.showCardDetails) { cardView.showCardDetails(it) }
                 }
-                cardView.delegate = object : PCICardView.Delegate {
-                    override fun cardViewTapped() {
-                        delegate?.onCardTapped()
-                    }
-                }
             }
             view.card_settings_button?.let { cardSettingsButton ->
                 cardSettingsButton.backgroundTintList = ColorStateList.valueOf(UIConfig.uiPrimaryColor)
                 cardSettingsButton.setOnClickListenerSafe { delegate?.onCardSettingsTapped() }
             }
+            view.card_settings_button_container?.setOnClickListenerSafe { view.card_settings_button?.performClick() }
         }
 
         override fun bind(item: TransactionListItem, position: Int) {

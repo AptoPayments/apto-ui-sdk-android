@@ -5,7 +5,7 @@ import android.text.Spanned
 
 private const val NAME_REGEX = "[\\p{L}\\s]+"
 
-open class RegexInputFilter(private val regex: Regex, private val onFail: (() -> Unit)?) : InputFilter {
+internal open class RegexInputFilter(private val regex: Regex, private val onFail: (() -> Unit)?) : InputFilter {
     override fun filter(
         source: CharSequence?,
         start: Int,
@@ -23,6 +23,6 @@ open class RegexInputFilter(private val regex: Regex, private val onFail: (() ->
     }
 }
 
-class NameInputFilter(onFail: (() -> Unit)?) : RegexInputFilter(
+internal class NameInputFilter(onFail: (() -> Unit)?) : RegexInputFilter(
     NAME_REGEX.toRegex(), onFail
 )

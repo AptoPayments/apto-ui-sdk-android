@@ -5,10 +5,10 @@ import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.AuthStateProvider
 import com.aptopayments.sdk.repository.AuthenticationRepository
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import org.mockito.kotlin.given
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

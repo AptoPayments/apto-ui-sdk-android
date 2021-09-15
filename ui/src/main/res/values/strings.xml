@@ -465,7 +465,23 @@
     <string name="card_settings_show_card_data_biometrics_title">Fingerprint Authentication</string>
     <string name="card_settings_show_card_data_biometrics_description">Please verify your fingerprint to proceed.</string>
     <string name="card_settings_google_pay_provisioning_title">Google Pay</string>
-    <string name="card_settings_google_pay_provisioning_subtitle">Add card to your Google wallet</string>
+    <string name="card_settings_google_pay_provisioning_subtitle">Add card to your Google Pay wallet</string>
+
+    <string name="card_settings_shipping_first_title">Your card was ordered</string>
+    <string name="card_settings_shipping_first_description"> It should arrive between &lt;&lt;VALUE&gt;&gt; and &lt;&lt;VALUE&gt;&gt;</string>
+
+    <string name="card_settings_shipping_second_title">Cards typically ship out now</string>
+    <string name="card_settings_shipping_second_description">Yours should arrive between &lt;&lt;VALUE&gt;&gt; and &lt;&lt;VALUE&gt;&gt;</string>
+
+    <string name="card_settings_shipping_third_title">Cards are typically in transit now</string>
+    <string name="card_settings_shipping_third_description">Yours should arrive between &lt;&lt;VALUE&gt;&gt; and &lt;&lt;VALUE&gt;&gt;</string>
+
+    <string name="card_settings_shipping_fourth_title">Your card should be arriving soon</string>
+    <string name="card_settings_shipping_fourth_description">Estimated delivery is between &lt;&lt;VALUE&gt;&gt; and &lt;&lt;VALUE&gt;&gt;</string>
+
+    <string name="card_settings_shipping_fifth_title">Your card should have arrived by now</string>
+    <string name="card_settings_shipping_fifth_description">Please contact support if you haven\'t received it.</string>
+
 
     <!--Monthly stats-->
     <string name="stats_monthly_spending_title">Stats for &lt;&lt;YEAR&gt;&gt;</string>

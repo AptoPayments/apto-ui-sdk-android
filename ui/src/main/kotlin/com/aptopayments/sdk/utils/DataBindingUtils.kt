@@ -11,11 +11,12 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.sdk.core.extension.goneIf
-import com.aptopayments.sdk.core.extension.invisibleIf
 import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.ui.views.AptoTextView
+import com.aptopayments.sdk.ui.views.CardShippingStatusView
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 
 object DataBindingUtils {
@@ -23,10 +24,6 @@ object DataBindingUtils {
     @JvmStatic
     @BindingAdapter("visibleIf")
     fun visibleIf(view: View, bool: Boolean) = view.visibleIf(bool)
-
-    @JvmStatic
-    @BindingAdapter("invisibleIf")
-    fun invisibleIf(view: View, bool: Boolean) = view.invisibleIf(bool)
 
     @JvmStatic
     @BindingAdapter("goneIf")
@@ -138,5 +135,11 @@ object DataBindingUtils {
                 listener.onCheckedChanged(buttonView, isChecked)
             }
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:card")
+    internal fun setCard(view: CardShippingStatusView, card: Card) {
+        view.card = card
     }
 }

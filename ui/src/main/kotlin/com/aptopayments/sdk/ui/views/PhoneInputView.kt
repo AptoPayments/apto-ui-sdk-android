@@ -14,7 +14,7 @@ import com.aptopayments.sdk.utils.ValidInputListener
 import com.aptopayments.sdk.utils.extensions.disable
 import kotlinx.android.synthetic.main.view_phone_input.view.*
 
-class PhoneInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+internal class PhoneInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
 
     private lateinit var aptoPhoneNumberWatcher: AptoPhoneNumberWatcher

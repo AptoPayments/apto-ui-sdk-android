@@ -16,7 +16,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.view_balance_view.view.*
 import java.net.URL
 
-class BalanceView
+internal class BalanceView
 @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
     RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {

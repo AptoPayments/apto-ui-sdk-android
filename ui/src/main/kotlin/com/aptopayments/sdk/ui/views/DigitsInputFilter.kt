@@ -5,7 +5,7 @@ import android.text.Spanned
 
 private const val DOT = "."
 
-class DigitsInputFilter(
+internal class DigitsInputFilter(
     private val mMaxIntegerDigitsLength: Int,
     private val mMaxDigitsAfterLength: Int,
     private val mMax: Double = Double.MAX_VALUE

@@ -61,7 +61,7 @@ internal val applicationModule = module {
     factory { FormatOrderProvider(androidApplication()) }
     factory { FormatOrderGenerator(get()) }
     factory { CategorySpendingSorter() }
-    single<IAPHelper> { IAPHelperMock() }
+    single<IAPHelper> { IAPHelperFake() }
     factory { IntentGenerator() }
     factory { Places.createClient(get()) }
     factory { PlaceFetcher(get(), get()) }

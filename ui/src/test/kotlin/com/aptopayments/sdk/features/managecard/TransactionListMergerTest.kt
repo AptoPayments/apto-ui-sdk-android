@@ -113,4 +113,28 @@ internal class TransactionListMergerTest {
         assert(result.size == 1)
         assert(result.first() == newTransaction)
     }
+
+    @Test
+    fun `given a list of transactions coming from background when merge then they are added in the correct order`() {
+        // Given
+        val now = ZonedDateTime.now()
+
+        val transaction1 = TestDataProvider.provideTransaction(createdAt = now)
+        val transaction2 = TestDataProvider.provideTransaction(createdAt = now.plusMinutes(2))
+        val transaction3 = TestDataProvider.provideTransaction(createdAt = now.plusMinutes(3))
+        val transaction4 = TestDataProvider.provideTransaction(createdAt = now.plusMinutes(4))
+
+        val currentTransactions: MutableList<Transaction> = mutableListOf(transaction2, transaction1)
+        val newTransactions: MutableList<Transaction> = mutableListOf(transaction4, transaction3, transaction2, transaction1)
+
+        // When
+        val result = sut.merge(newList = newTransactions, currentList = currentTransactions, append = false)
+
+        // Then
+        assert(result.size == 4)
+        assert(result[0] == transaction4)
+        assert(result[1] == transaction3)
+        assert(result[2] == transaction2)
+        assert(result[3] == transaction1)
+    }
 }

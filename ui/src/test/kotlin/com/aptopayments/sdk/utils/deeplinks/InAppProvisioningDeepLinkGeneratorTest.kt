@@ -2,9 +2,9 @@ package com.aptopayments.sdk.utils.deeplinks
 
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.utils.StringProvider
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

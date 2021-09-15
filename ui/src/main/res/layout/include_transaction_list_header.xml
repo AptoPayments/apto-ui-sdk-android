@@ -41,16 +41,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/card_settings_button"
+    <FrameLayout
+        android:id="@+id/card_settings_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:elevation="0dp"
-        app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:pressedTranslationZ="0dp"
-        app:srcCompat="@drawable/ic_settings_white_24dp" />
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp">
+        <ImageButton
+            android:id="@+id/card_settings_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:foreground="?selectableItemBackground"
+            android:background="@drawable/round_shape"
+            android:src="@drawable/ic_settings_white_24dp" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

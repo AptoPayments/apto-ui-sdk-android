@@ -9,7 +9,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 const val DELAY = 0L
 const val PERIOD = 1000L
 
-class CountDown {
+internal class CountDown {
 
     private var timer: Timer? = null
 

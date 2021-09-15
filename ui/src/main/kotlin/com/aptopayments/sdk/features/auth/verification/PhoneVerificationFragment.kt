@@ -13,9 +13,9 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.parsePhoneNumber
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.stringFromTimeInterval
@@ -104,7 +104,7 @@ internal class PhoneVerificationFragment : BaseFragment(), PhoneVerificationCont
         hideKeyboard()
         viewModel.restartVerification {
             hideLoading()
-            notify("auth.verify_phone.resent.message".localized(), MessageBanner.MessageType.HEADS_UP)
+            notify("auth.verify_phone.resent.message".localized(), SnackbarMessageType.HEADS_UP)
             showKeyboard()
         }
     }

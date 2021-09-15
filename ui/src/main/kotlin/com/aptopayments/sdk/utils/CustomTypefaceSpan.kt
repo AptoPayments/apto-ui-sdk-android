@@ -10,7 +10,7 @@ import android.text.style.MetricAffectingSpan
  *
  * Taken from here: https://stackoverflow.com/a/17961854/1411844
  */
-class CustomTypefaceSpan(private val typeface: Typeface) : MetricAffectingSpan() {
+internal class CustomTypefaceSpan(private val typeface: Typeface) : MetricAffectingSpan() {
     override fun updateDrawState(drawState: TextPaint) {
         apply(drawState)
     }

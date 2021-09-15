@@ -12,10 +12,10 @@ import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultViewModel.Action
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyBoolean

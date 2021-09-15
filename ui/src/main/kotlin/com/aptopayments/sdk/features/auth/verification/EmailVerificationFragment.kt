@@ -11,9 +11,9 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.material.appbar.AppBarLayout
@@ -103,7 +103,7 @@ internal class EmailVerificationFragment : BaseFragment(), EmailVerificationCont
         hideKeyboard()
         viewModel.restartVerification {
             hideLoading()
-            notify("auth_verify_email_resent_message".localized(), MessageBanner.MessageType.HEADS_UP)
+            notify("auth_verify_email_resent_message".localized(), SnackbarMessageType.HEADS_UP)
         }
     }
 

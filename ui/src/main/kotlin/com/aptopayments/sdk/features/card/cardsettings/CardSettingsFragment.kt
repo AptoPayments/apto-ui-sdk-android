@@ -21,11 +21,11 @@ import com.aptopayments.sdk.databinding.FragmentCardSettingsBinding
 import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
 import com.aptopayments.sdk.ui.views.AuthenticationView
-import com.aptopayments.sdk.utils.MessageBanner.MessageType
 import com.aptopayments.sdk.utils.PhoneDialer
 import com.aptopayments.sdk.utils.SendEmailUtil
 import com.aptopayments.sdk.utils.deeplinks.InAppProvisioningDeepLinkGenerator
 import com.aptopayments.sdk.utils.deeplinks.IntentGenerator
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_card_settings.*
 import kotlinx.android.synthetic.main.include_custom_toolbar.*
@@ -72,7 +72,7 @@ internal class CardSettingsFragment :
 
     override fun setupViewModel() {
         viewModel.apply {
-            observeNotNullable(cardUiState, ::handleCardLocked)
+            observeNotNullable(state, ::handleCardLocked)
             observeNotNullable(viewModel.loading) { handleLoading(it) }
             observe(viewModel.failure) { handleFailure(it) }
             observeNullable(action) {
@@ -108,8 +108,8 @@ internal class CardSettingsFragment :
         onBackPressed()
     }
 
-    private fun handleCardLocked(cardUiState: CardSettingsViewModel.CardUiState) {
-        if (binding.cardSettingsLockSwitch.isChecked != cardUiState.cardLocked) {
+    private fun handleCardLocked(state: CardSettingsViewModel.State) {
+        if (binding.cardSettingsLockSwitch.isChecked != state.cardLocked) {
             binding.cardSettingsLockSwitch.silentlyToggleSwitch(::lockUnlockCard)
         }
     }
@@ -164,7 +164,7 @@ internal class CardSettingsFragment :
     }
 
     private fun showNoSimInsertedError() {
-        notify("card_settings_help_ivr_support_no_sim".localized(), MessageType.ERROR)
+        notify("card_settings_help_ivr_support_no_sim".localized(), SnackbarMessageType.ERROR)
     }
 
     private fun onStatementPressed() {
@@ -247,7 +247,7 @@ internal class CardSettingsFragment :
     private fun cardPasscodeErrorCardDisabled() {
         notify(
             message = "manage_card_set_passcode_error_card_not_enabled".localized(),
-            type = MessageType.ERROR
+            type = SnackbarMessageType.ERROR
         )
     }
 

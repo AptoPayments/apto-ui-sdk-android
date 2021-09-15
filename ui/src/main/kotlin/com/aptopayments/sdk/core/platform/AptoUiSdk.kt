@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.pm.PackageInfo
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.aptopayments.mobile.di.ExtraModule
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.platform.AptoPlatform
@@ -22,6 +23,7 @@ import com.aptopayments.sdk.features.card.CardActivity
 import com.aptopayments.sdk.features.card.CardFlow
 import com.aptopayments.sdk.utils.FontsUtil
 import org.koin.core.module.Module
+import org.koin.dsl.module
 import java.lang.ref.WeakReference
 
 interface AptoUiSdkProtocol {
@@ -31,10 +33,10 @@ interface AptoUiSdkProtocol {
         application: Application,
         apiKey: String,
         environment: AptoSdkEnvironment = AptoSdkEnvironment.PRD,
-        extraModules: List<((MutableList<Any>) -> Any)> = listOf()
+        extraModules: List<ExtraModule> = listOf()
     )
 
-    fun initialize(application: Application, extraModules: List<((MutableList<Any>) -> Any)> = listOf())
+    fun initialize(application: Application, extraModules: List<ExtraModule> = listOf())
 
     fun setApiKey(apiKey: String, environment: AptoSdkEnvironment)
 
@@ -112,13 +114,13 @@ object AptoUiSdk : AptoUiSdkProtocol {
         application: Application,
         apiKey: String,
         environment: AptoSdkEnvironment,
-        extraModules: List<((MutableList<Any>) -> Any)>
+        extraModules: List<ExtraModule>
     ) {
         initialize(application, extraModules)
         setApiKey(apiKey, environment)
     }
 
-    override fun initialize(application: Application, extraModules: List<(MutableList<Any>) -> Any>) {
+    override fun initialize(application: Application, extraModules: List<ExtraModule>) {
         val list = getModuleList(extraModules)
         AptoPlatform.setUiModules(list)
         AptoPlatform.initialize(application)
@@ -221,11 +223,10 @@ object AptoUiSdk : AptoUiSdkProtocol {
         AptoPlatform.logout()
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun getModuleList(extraModules: List<(MutableList<Any>) -> Any>): MutableList<Module> {
+    private fun getModuleList(extraModules: List<ExtraModule>): MutableList<Module> {
         val list = mutableListOf(applicationModule, useCaseModule, viewModelModule)
-        extraModules.forEach { it.invoke(list as MutableList<Any>) }
-
+        val extra = extraModules.filter { it.module is Module }.map { it.module as Module }
+        list.addAll(extra)
         return list
     }
 }

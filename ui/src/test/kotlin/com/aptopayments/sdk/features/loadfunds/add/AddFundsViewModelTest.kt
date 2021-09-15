@@ -21,7 +21,7 @@ import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel.Actions
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElement
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
@@ -34,7 +34,6 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.test.inject
 import org.mockito.ArgumentMatchers
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -160,12 +159,12 @@ internal class AddFundsViewModelTest : UnitTest(), CoroutineDispatcherTest {
         }
 
         @Test
-        fun `when set amount equal to the limit continue is Disabled`() {
-            sut.amount.value = "100"
+        fun `when set amount equal to the limit continue is Enabled`() {
+            sut.amount.value = AMOUNT_LIMIT.toString()
 
             val state = sut.state.getOrAwaitValue()
 
-            assertFalse(state.continueEnabled)
+            assertTrue(state.continueEnabled)
         }
 
         @Test

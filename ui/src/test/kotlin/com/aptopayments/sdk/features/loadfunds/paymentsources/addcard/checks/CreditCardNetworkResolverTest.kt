@@ -4,8 +4,8 @@ import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.network.ApiKeyProvider
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

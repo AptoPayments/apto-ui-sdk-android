@@ -13,7 +13,7 @@ import com.aptopayments.sdk.core.extension.remove
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 
-class CustomSnackbar private constructor(parent: ViewGroup, content: View, contentViewCallback: ContentViewCallback) :
+internal class CustomSnackbar private constructor(parent: ViewGroup, content: View, contentViewCallback: ContentViewCallback) :
     BaseTransientBottomBar<CustomSnackbar>(parent, content, contentViewCallback) {
 
     private lateinit var titleTextView: TextView

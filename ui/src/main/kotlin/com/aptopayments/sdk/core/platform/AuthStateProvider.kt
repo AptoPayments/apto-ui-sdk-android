@@ -2,10 +2,10 @@ package com.aptopayments.sdk.core.platform
 
 import com.aptopayments.mobile.platform.AptoPlatform
 
-interface AuthStateProvider {
+internal interface AuthStateProvider {
     fun userTokenPresent(): Boolean
 }
 
-class AuthStateProviderImpl : AuthStateProvider {
+internal class AuthStateProviderImpl : AuthStateProvider {
     override fun userTokenPresent(): Boolean = AptoPlatform.userTokenPresent()
 }

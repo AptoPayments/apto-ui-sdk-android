@@ -33,7 +33,7 @@ internal class AchAccountDetailsViewModel(
         aptoPlatform.fetchCard(cardId, false) { result ->
             hideLoading()
             result.either(::handleFailure) { card ->
-                _achAccountDetails.postValue(card.features?.achAccount?.accountDetails)
+                card.features?.achAccount?.accountDetails?.let { _achAccountDetails.postValue(it) }
             }
         }
     }

@@ -3,9 +3,9 @@ package com.aptopayments.sdk.features.voip
 import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.given
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

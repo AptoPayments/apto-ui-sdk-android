@@ -11,7 +11,7 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.repository.StatementRepository
 import com.aptopayments.sdk.repository.StatementRepositoryImpl
 import com.aptopayments.sdk.utils.*
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest

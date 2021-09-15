@@ -13,11 +13,11 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.AppBarStateChangeListener
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.repository.IAPHelper
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import kotlinx.android.synthetic.main.fragment_manage_card.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
@@ -28,7 +28,9 @@ import kotlinx.android.synthetic.main.layout_menu_activate_physical_card.*
 import kotlinx.android.synthetic.main.layout_menu_stats_chart.*
 import kotlinx.android.synthetic.main.layout_menu_stats_chart.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.KoinComponent
 import org.koin.core.parameter.parametersOf
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.temporal.ChronoUnit
 
@@ -39,7 +41,10 @@ internal class ManageCardFragment :
     BaseFragment(),
     ManageCardContract.View,
     TransactionListAdapter.Delegate,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener,
+    KoinComponent {
+
+    val iapHelper: IAPHelper by inject()
     override var delegate: ManageCardContract.Delegate? = null
     private lateinit var cardId: String
     private val viewModel: ManageCardViewModel by viewModel { parametersOf(cardId) }
@@ -58,15 +63,13 @@ internal class ManageCardFragment :
     override fun onPresented() {
         super.onPresented()
         customizeSecondaryNavigationStatusBar()
-        configureMenuVisibility()
     }
 
-    private fun configureMenuVisibility() {
+    private fun configureMenuVisibility(menuState: ManageCardViewModel.MenuState) {
         tb_llsdk_toolbar?.apply {
-            (menu.findItem(R.id.menu_activate_physical_card))?.isVisible =
-                (viewModel.showPhysicalCardActivationMessage.value ?: false)
-            (menu.findItem(R.id.menu_card_stats))?.isVisible = AptoUiSdk.cardOptions.showStatsButton()
-            (menu.findItem(R.id.menu_account_settings))?.isVisible = AptoUiSdk.cardOptions.showAccountSettingsButton()
+            (menu.findItem(R.id.menu_activate_physical_card))?.isVisible = menuState.showPhysicalCardActivationMessage
+            (menu.findItem(R.id.menu_card_stats))?.isVisible = menuState.showStats
+            (menu.findItem(R.id.menu_account_settings))?.isVisible = menuState.showAccountSettings
         }
     }
 
@@ -79,14 +82,8 @@ internal class ManageCardFragment :
 
     override fun setupViewModel() {
         viewModel.apply {
-            observe(showPhysicalCardActivationMessage) { configureMenuVisibility() }
-            observeThree(
-                transactions,
-                transactionsInfoRetrieved,
-                showAddToGooglePay
-            ) { transactions, transactionInfoRetrieved, showAddToGooglePay ->
-                handleEmptyCase(transactions, transactionInfoRetrieved, showAddToGooglePay ?: false)
-            }
+            observeNotNullable(menuState) { configureMenuVisibility(it) }
+            observeNotNullable(emptyState) { handleEmptyState(it) }
             observeNullable(fundingSource, ::handleBalance)
             observeNullable(card) {
                 it?.cardStyle?.balanceSelectorAsset?.let { url ->
@@ -100,17 +97,12 @@ internal class ManageCardFragment :
         }
     }
 
-    private fun handleEmptyCase(
-        transactions: List<Transaction>?,
-        transactionInfoRetrieved: Boolean?,
-        showAddToGooglePay: Boolean
-    ) {
-        if (transactionInfoRetrieved != true) {
-            return
+    private fun handleEmptyState(state: ManageCardViewModel.EmptyState) {
+        with(state) {
+            empty_state_container.visibleIf(showContainer)
+            add_to_gpay.visibleIf(showAddToGPay)
+            tv_no_transactions.visibleIf(showNoTransactions)
         }
-        empty_state_container.visibleIf(transactions.isNullOrEmpty())
-        add_to_gpay.visibleIf(showAddToGooglePay)
-        tv_no_transactions.visibleIf(!showAddToGooglePay)
     }
 
     private fun handleBalance(balance: Balance?) {
@@ -119,19 +111,11 @@ internal class ManageCardFragment :
                 return
             } else {
                 previousMessageShownAt = LocalDateTime.now()
-                notify("invalid_funding_source_message".localized(), MessageBanner.MessageType.ERROR)
+                notify("invalid_funding_source_message".localized(), SnackbarMessageType.ERROR)
             }
         } else {
             bv_balance_view.set(balance)
             bv_balance_view.setOnClickListenerSafe { viewModel.onFundingSourceTapped() }
-        }
-    }
-
-    override fun onCardTapped() {
-        if (viewModel.fundingSource.value?.state != Balance.BalanceState.VALID) {
-            delegate?.onFundingSourceTapped(viewModel.fundingSource.value?.id)
-        } else {
-            showCardSettings()
         }
     }
 
@@ -238,7 +222,13 @@ internal class ManageCardFragment :
 
     override fun onResume() {
         super.onResume()
+        iapHelper.registerDataChanged()
         scrollListener?.resetState()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        iapHelper.unregisterDataChanged()
     }
 
     override fun onBackPressed() {

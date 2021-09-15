@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 
-class CustomArrayAdapter<T>(
+internal class CustomArrayAdapter<T>(
     context: Context,
     list: List<T>
 ) : ArrayAdapter<T>(context, R.layout.dropdown_menu_popup_item, list) {

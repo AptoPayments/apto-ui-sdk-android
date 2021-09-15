@@ -4,7 +4,7 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-class TransactionListCalculatorWithHeader {
+internal class TransactionListCalculatorWithHeader {
 
     private val dateFormatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
 

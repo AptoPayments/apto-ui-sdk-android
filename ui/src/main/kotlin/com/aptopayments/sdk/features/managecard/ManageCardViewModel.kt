@@ -39,15 +39,15 @@ internal class ManageCardViewModel(
     private val _card: MutableLiveData<Card> = MutableLiveData()
     val card = _card.distinctUntilChanged()
     val cardConfiguration: PCIConfiguration by lazy { PCIConfigurationBuilder().build(cardId) }
-    val showPhysicalCardActivationMessage = MutableLiveData(false)
+
+    private val _menuState = MutableLiveData(menuInitialState())
+    val menuState = _menuState as LiveData<MenuState>
+
     val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
     val showFundingSourceDialog = LiveEvent<String>()
     val transactions = MutableLiveData(listOf<Transaction>())
     val fundingSource = MutableLiveData<Balance?>()
-    val transactionsInfoRetrieved: MutableLiveData<Boolean> = MutableLiveData(false)
-    val showAddToGooglePay = Transformations.map(iapHelper.state) { state ->
-        iapHelper.satisfyHardwareRequisites() && state is ProvisioningState.CanBeAdded
-    }
+    var transactionsInfoRetrieved: Boolean = false
     val canBackPress: Boolean by lazy { isSdkEmbedded() }
     val showXOnToolbar: Boolean by lazy { isSdkEmbedded() }
 
@@ -55,6 +55,10 @@ internal class ManageCardViewModel(
     var balanceLoaded = false
 
     val transactionListItems = MediatorLiveData<List<TransactionListItem>>()
+
+    private val iapState = iapHelper.state.asLiveData()
+    private val _emptyState = MediatorLiveData<EmptyState>()
+    val emptyState = _emptyState as LiveData<EmptyState>
 
     init {
         analyticsManager.track(Event.ManageCard)
@@ -64,6 +68,34 @@ internal class ManageCardViewModel(
         }
         transactionListItems.addSource(transactions) {
             generateTransactionList(it)
+        }
+        _emptyState.addSource(transactions) { calculateEmptyState() }
+        _emptyState.addSource(iapState) { calculateEmptyState() }
+    }
+
+    private fun calculateEmptyState() {
+        val showAddToGPay = calcIapEnabled(iapHelper, _card.value)
+        val emptyTransactions = transactions.value.isNullOrEmpty() && transactionsInfoRetrieved
+        _emptyState.postValue(
+            EmptyState(
+                showContainer = emptyTransactions,
+                showAddToGPay = showAddToGPay,
+                showNoTransactions = emptyTransactions && !showAddToGPay
+            )
+        )
+    }
+
+    private fun calcIapEnabled(iapHelper: IAPHelper, card: Card?) =
+        iapHelper.satisfyHardwareRequisites() &&
+            iapHelper.state.value is ProvisioningState.CanBeAdded &&
+            card?.features?.inAppProvisioning?.isEnabled == true
+
+    private fun menuInitialState(): MenuState {
+        return with(aptoUiSdkProtocol.cardOptions) {
+            MenuState(
+                showStats = showStatsButton(),
+                showAccountSettings = showAccountSettingsButton()
+            )
         }
     }
 
@@ -87,7 +119,7 @@ internal class ManageCardViewModel(
     }
 
     private fun fetchData(forceApiCall: Boolean, clearCachedValue: Boolean, onComplete: () -> Unit) {
-        transactionsInfoRetrieved.postValue(false)
+        transactionsInfoRetrieved = false
         getCard(refresh = forceApiCall) { card ->
             card.cardProductID?.let {
                 getCardBalance(refresh = forceApiCall) {
@@ -118,7 +150,9 @@ internal class ManageCardViewModel(
 
     private fun updateViewModelWithCard(card: Card) {
         _card.postValue(card)
-        showPhysicalCardActivationMessage.postValue(card.orderedStatus == Card.OrderedStatus.ORDERED)
+        _menuState.postValue(
+            _menuState.value!!.copy(showPhysicalCardActivationMessage = card.orderedStatus == Card.OrderedStatus.ORDERED)
+        )
     }
 
     fun refreshBalance() {
@@ -141,13 +175,13 @@ internal class ManageCardViewModel(
     ) {
         getTransactionsQueue.loadTransactions(cardId, ROWS_PER_PAGE, forceApiCall, clearCachedValue) { result ->
             result.either(::handleFailure) { transactionList ->
+                transactionsInfoRetrieved = true
                 updateTransactions(
                     transactionList,
                     currentList = transactions.value,
                     append = false,
                     clearCachedValue = true
                 )
-                transactionsInfoRetrieved.postValue(true)
                 onComplete()
             }
         }
@@ -164,8 +198,8 @@ internal class ManageCardViewModel(
     private fun getBackgroundTransactions() {
         getTransactionsQueue.backgroundRefresh(cardId, ROWS_PER_PAGE) { result ->
             result.either(::handleFailure) { transactionList ->
+                transactionsInfoRetrieved = true
                 updateTransactions(transactionList, currentList = transactions.value, append = false)
-                transactionsInfoRetrieved.postValue(true)
             }
         }
     }
@@ -213,4 +247,16 @@ internal class ManageCardViewModel(
             showFundingSourceDialog.postValue(fundingSource.value?.id)
         }
     }
+
+    data class EmptyState(
+        val showContainer: Boolean = false,
+        val showNoTransactions: Boolean = false,
+        val showAddToGPay: Boolean = false,
+    )
+
+    data class MenuState(
+        val showPhysicalCardActivationMessage: Boolean = false,
+        val showStats: Boolean = false,
+        val showAccountSettings: Boolean = false,
+    )
 }

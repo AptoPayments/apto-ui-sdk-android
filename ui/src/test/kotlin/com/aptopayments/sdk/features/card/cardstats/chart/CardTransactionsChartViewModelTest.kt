@@ -12,7 +12,7 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdk
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach

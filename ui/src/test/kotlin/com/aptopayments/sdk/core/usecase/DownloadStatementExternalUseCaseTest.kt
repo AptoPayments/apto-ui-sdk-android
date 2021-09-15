@@ -12,7 +12,7 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.card.statements.detail.ExternalFileDownloader
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test

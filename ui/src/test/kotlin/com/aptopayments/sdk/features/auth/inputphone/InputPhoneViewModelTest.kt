@@ -13,10 +13,10 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

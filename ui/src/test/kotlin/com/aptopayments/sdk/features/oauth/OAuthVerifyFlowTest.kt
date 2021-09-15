@@ -5,10 +5,10 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyFragment
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.given
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin

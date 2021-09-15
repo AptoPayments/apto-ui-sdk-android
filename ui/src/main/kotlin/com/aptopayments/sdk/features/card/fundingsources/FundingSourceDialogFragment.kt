@@ -14,7 +14,7 @@ import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.core.ui.State
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_funding_sources_dialog.*
@@ -143,7 +143,7 @@ internal class FundingSourceDialogFragment :
                 if (it) {
                     notify(
                         message = "manage_card.funding_source_selector.success.message".localized(),
-                        messageType = MessageBanner.MessageType.HEADS_UP,
+                        messageType = SnackbarMessageType.HEADS_UP,
                         title = "manage_card.funding_source_selector.success.title".localized()
                     )
                 }

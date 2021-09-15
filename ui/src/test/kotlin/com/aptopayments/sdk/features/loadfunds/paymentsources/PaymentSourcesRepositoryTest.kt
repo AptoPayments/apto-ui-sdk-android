@@ -12,7 +12,7 @@ import com.aptopayments.sdk.CoroutineDispatcherTest
 import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.features.analytics.AnalyticsManager
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

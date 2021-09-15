@@ -73,7 +73,7 @@ val viewModelModule = module {
     viewModel { KycStatusViewModel(get()) }
     single { FetchTransactionsTaskQueue(get()) }
     viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get(), get()) }
-    viewModel { ActivatePhysicalCardViewModel(get()) }
+    viewModel { (cardId: String) -> ActivatePhysicalCardViewModel(cardId, get(), get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
     viewModel { (card: Card, cardProduct: CardProduct) -> CardSettingsViewModel(card, cardProduct, get(), get(), get()) }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }

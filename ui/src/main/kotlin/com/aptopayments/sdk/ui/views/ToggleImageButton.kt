@@ -11,7 +11,7 @@ import com.aptopayments.sdk.R
  * Taken from here:
  * https://stackoverflow.com/a/15247353/1411844
  */
-class ToggleImageButton : AppCompatImageButton, Checkable {
+internal class ToggleImageButton : AppCompatImageButton, Checkable {
     var onCheckedChangeListener: OnCheckedChangeListener? = null
 
     constructor(context: Context) : super(context)

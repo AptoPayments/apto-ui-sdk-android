@@ -7,7 +7,7 @@ import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase
 import com.aptopayments.sdk.core.usecase.SaveFlowConfigurationDataUseCase.Params
 import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.features.card.CardFlow
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -64,7 +64,6 @@ class AptoUiSdkTest : UnitTest() {
 
     @Test
     fun `given initializationData whenever startCardApplicationFlow then saveInitializationData is called with correct parameters`() {
-        val cardId = "card_id"
         whenever(saveInitializationDataUseCase.invoke(any())).thenReturn(mock())
 
         AptoUiSdk.startCardApplicationFlow(mock(), CardOptions(), initializationData, null, null)

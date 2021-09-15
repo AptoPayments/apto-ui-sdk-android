@@ -5,8 +5,8 @@ import com.aptopayments.mobile.features.managecard.CardOptions.PCIAuthType
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.biometric.BiometricWrapper
 import com.aptopayments.sdk.utils.shouldBeRightAndEqualTo
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

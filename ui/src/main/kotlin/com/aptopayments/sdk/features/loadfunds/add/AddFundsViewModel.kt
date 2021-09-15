@@ -176,7 +176,7 @@ internal class AddFundsViewModel(
 
     private fun canContinueBeEnabled() = checkAmountInsideLimits() && isPaymentSourceCorrect()
 
-    private fun checkAmountInsideLimits() = isAmountCorrect() && getAmount()!!.toFloat() < getDailyLimit()
+    private fun checkAmountInsideLimits() = isAmountCorrect() && getAmount()!!.toFloat() <= getDailyLimit()
 
     private fun getAmountError(): String {
         return if (isAmountCorrect() && getAmount()!!.toFloat() > getDailyLimit()) {

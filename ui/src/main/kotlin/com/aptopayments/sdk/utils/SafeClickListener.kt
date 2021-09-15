@@ -3,7 +3,7 @@ package com.aptopayments.sdk.utils
 import android.os.SystemClock
 import android.view.View
 
-class SafeClickListener(
+internal class SafeClickListener(
     private var defaultInterval: Int = 800,
     private val onSafeClick: (View) -> Unit
 ) : View.OnClickListener {

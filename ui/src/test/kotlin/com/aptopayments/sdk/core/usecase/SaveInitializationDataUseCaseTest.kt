@@ -4,9 +4,9 @@ import com.aptopayments.sdk.data.InitializationData
 import com.aptopayments.sdk.repository.ForceIssueCardRepository
 import com.aptopayments.sdk.repository.InMemoryInitializationDataRepository
 import com.aptopayments.sdk.repository.ManageCardIdRepository
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

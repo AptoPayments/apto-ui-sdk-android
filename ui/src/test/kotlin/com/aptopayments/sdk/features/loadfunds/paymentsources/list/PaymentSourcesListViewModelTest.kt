@@ -10,9 +10,9 @@ import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepo
 import com.aptopayments.sdk.features.loadfunds.paymentsources.list.PaymentSourcesListViewModel.Actions
 import com.aptopayments.sdk.utils.TestDispatchers
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestCoroutineDispatcher

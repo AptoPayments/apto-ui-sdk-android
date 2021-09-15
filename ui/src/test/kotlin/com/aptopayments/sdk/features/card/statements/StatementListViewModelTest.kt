@@ -5,8 +5,8 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

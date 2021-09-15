@@ -2,13 +2,13 @@ package com.aptopayments.sdk.repository
 
 import com.aptopayments.sdk.data.InitializationData
 
-interface InitializationDataRepository {
+internal interface InitializationDataRepository {
     var data: InitializationData?
 
     fun clearData()
 }
 
-class InMemoryInitializationDataRepository(
+internal class InMemoryInitializationDataRepository(
     override var data: InitializationData? = null
 ) : InitializationDataRepository {
 

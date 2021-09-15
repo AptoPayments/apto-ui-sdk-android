@@ -1,8 +1,6 @@
 package com.aptopayments.sdk.features.card.activatephysicalcard.activate
 
 import android.os.Bundle
-import com.aptopayments.mobile.data.card.ActivatePhysicalCardResult
-import com.aptopayments.mobile.data.card.ActivatePhysicalCardResultType
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.exception.Failure
@@ -11,23 +9,27 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observe
+import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.features.card.activatephysicalcard.activate.ActivatePhysicalCardViewModel.Action
 import com.aptopayments.sdk.utils.TextInputWatcher
 import com.aptopayments.sdk.utils.ValidInputListener
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_activate_physical_card.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 private const val PIN_CHARACTERS = 6
 private const val CARD_KEY = "CARD"
 
 internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCardContract.View {
 
-    private val viewModel: ActivatePhysicalCardViewModel by viewModel()
+    private val viewModel: ActivatePhysicalCardViewModel by viewModel { parametersOf(card.accountID) }
     private lateinit var card: Card
     override var delegate: ActivatePhysicalCardContract.Delegate? = null
+    private lateinit var watcher: TextInputWatcher
 
     override fun layoutId(): Int = R.layout.fragment_activate_physical_card
 
@@ -40,6 +42,16 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
     override fun setupViewModel() {
         viewModel.apply {
             observe(failure) { handleFailure(it) }
+            observeNotNullable(loading) { handleLoading(it) }
+            observeNotNullable(action) {
+                when (it) {
+                    is Action.Activated -> {
+                        hideKeyboard()
+                        delegate?.onPhysicalCardActivated()
+                    }
+                    is Action.Error -> showError(it.failure)
+                }
+            }
         }
     }
 
@@ -67,6 +79,16 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
 
     override fun setupListeners() {
         super.setupListeners()
+        watcher = createWatcher()
+        apto_pin_view.addTextChangedListener(watcher)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        apto_pin_view.removeTextChangedListener(watcher)
+    }
+
+    private fun createWatcher(): TextInputWatcher {
         val validator = object : ValidInputListener {
             override fun onValidInput(isValid: Boolean) {
                 if (isValid) {
@@ -74,7 +96,7 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
                 }
             }
         }
-        apto_pin_view.addTextChangedListener(TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view))
+        return TextInputWatcher(validator, PIN_CHARACTERS, apto_pin_view)
     }
 
     override fun onBackPressed() {
@@ -83,21 +105,20 @@ internal class ActivatePhysicalCardFragment : BaseFragment(), ActivatePhysicalCa
     }
 
     private fun activateCard() {
-        hideKeyboard()
-        showLoading()
-        viewModel.activatePhysicalCard(card.accountID, apto_pin_view.text.toString()) { result ->
-            hideLoading()
-            when (result?.result) {
-                ActivatePhysicalCardResultType.ACTIVATED -> delegate?.onPhysicalCardActivated()
-                ActivatePhysicalCardResultType.ERROR -> showError(result)
-            }
-        }
+        viewModel.activatePhysicalCard(apto_pin_view.text.toString())
     }
 
-    private fun showError(result: ActivatePhysicalCardResult) = result.errorCode?.toInt().let { errorCode ->
+    private fun showError(failure: Failure) {
         val title = "banner_error_title".localized()
-        val message = Failure.ServerError(errorCode).errorMessage()
-        notify(title = title, message = message)
+        cleartext()
+        notify(title = title, message = failure.errorMessage())
+    }
+
+    private fun cleartext() {
+        apto_pin_view.removeTextChangedListener(watcher)
+        apto_pin_view.text?.clear()
+        apto_pin_view.addTextChangedListener(watcher)
+        apto_pin_view.requestFocus()
     }
 
     companion object {

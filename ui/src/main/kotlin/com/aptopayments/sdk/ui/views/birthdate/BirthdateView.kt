@@ -17,7 +17,7 @@ import org.threeten.bp.LocalDate
 
 private const val FORMAT_TWO = "%02d"
 
-class BirthdateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+internal class BirthdateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private val dateParser = BirthdateViewDateParser()
     private lateinit var editTextList: MutableList<EditText>

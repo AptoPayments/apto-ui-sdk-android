@@ -26,7 +26,7 @@ import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
 import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogContract
 import com.aptopayments.sdk.features.voip.VoipFlow
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import org.koin.core.inject
 
 private const val CARD_SETTINGS_TAG = "CardSettingsFragment"
@@ -126,7 +126,7 @@ internal class CardSettingsFlow(
                     notify(
                         title = "manage_card.confirm_pin.pin_updated.title".localized(),
                         message = "manage_card.confirm_pin.pin_updated.message".localized(),
-                        messageType = MessageBanner.MessageType.HEADS_UP
+                        messageType = SnackbarMessageType.HEADS_UP
                     )
                 }
             }

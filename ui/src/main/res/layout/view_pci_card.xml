@@ -81,11 +81,6 @@
                     android:src="@drawable/ic_error" />
             </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/card_invisible_overlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

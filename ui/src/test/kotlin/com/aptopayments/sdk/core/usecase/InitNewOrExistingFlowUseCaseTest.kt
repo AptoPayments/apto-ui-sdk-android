@@ -13,7 +13,7 @@ import com.aptopayments.sdk.repository.ForceIssueCardRepository
 import com.aptopayments.sdk.repository.ManageCardIdRepository
 import com.aptopayments.sdk.utils.shouldBeLeftAndInstanceOf
 import com.aptopayments.sdk.utils.shouldBeRightAndInstanceOf
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test

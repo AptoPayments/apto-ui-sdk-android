@@ -13,9 +13,9 @@ import com.aptopayments.sdk.BuildConfig
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.utils.MessageBanner
-import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
 import com.aptopayments.sdk.utils.ViewUtils
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
+import com.aptopayments.sdk.utils.extensions.showCustomSnackbar
 import org.koin.android.ext.android.inject
 
 private const val TAG_KEY = "APTO_TAG_KEY"
@@ -82,11 +82,11 @@ internal abstract class BaseFragment : Fragment(), FlowPresentable {
 
     internal fun firstTimeCreated(savedInstanceState: Bundle?) = savedInstanceState == null
 
-    internal fun notify(message: String, type: MessageBanner.MessageType = ERROR) =
+    internal fun notify(message: String, type: SnackbarMessageType = SnackbarMessageType.ERROR) =
         notify(title = null, message = message, type = type)
 
-    internal fun notify(title: String?, message: String, type: MessageBanner.MessageType = ERROR) =
-        activity?.let { MessageBanner().showBanner(it, title = title, message = message, messageType = type) }
+    internal fun notify(title: String?, message: String, type: SnackbarMessageType = SnackbarMessageType.ERROR) =
+        activity?.showCustomSnackbar(title = title, message = message, messageType = type)
 
     protected fun confirm(
         title: String,

@@ -16,12 +16,13 @@ import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
+import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -52,6 +53,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
     private val telephonyEnabledChecker: TelephonyEnabledChecker = mock()
     private val phoneNumber = PhoneNumber("1", "111111111")
+    private val iapHelper: IAPHelper = mock()
 
     private lateinit var sut: CardSettingsViewModel
 
@@ -64,6 +66,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
                     module {
                         factory(override = true) { cardDetailsRepo }
                         factory(override = true) { telephonyEnabledChecker }
+                        factory(override = true) { iapHelper }
                     }
                 )
             )
@@ -74,12 +77,15 @@ internal class CardSettingsViewModelTest : UnitTest() {
     fun `when cardProduct empty sections are hidden`() {
         sut = createSut()
 
-        assertFalse(sut.showLegalSection)
-        assertFalse(sut.showFaq)
-        assertFalse(sut.showCardholderAgreement)
-        assertFalse(sut.showTermsAndConditions)
-        assertFalse(sut.showPrivacyPolicy)
-        assertFalse(sut.showExchangeRates)
+        val state = sut.state.getOrAwaitValue()
+
+        assertFalse(state.showLegalSection)
+        assertFalse(state.showFaq)
+        assertFalse(state.showCardholderAgreement)
+        assertFalse(state.showTermsAndConditions)
+        assertFalse(state.showPrivacyPolicy)
+        assertFalse(state.showExchangeRates)
+        assertFalse(state.showAddToGooglePay)
     }
 
     @Test
@@ -87,8 +93,9 @@ internal class CardSettingsViewModelTest : UnitTest() {
         whenever(cardProduct.faq).thenReturn(mock())
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertTrue(sut.showFaq)
+        assertTrue(state.showFaq)
     }
 
     @Test
@@ -96,9 +103,10 @@ internal class CardSettingsViewModelTest : UnitTest() {
         whenever(cardProduct.cardholderAgreement).thenReturn(mock())
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertTrue(sut.showLegalSection)
-        assertTrue(sut.showCardholderAgreement)
+        assertTrue(state.showLegalSection)
+        assertTrue(state.showCardholderAgreement)
     }
 
     @Test
@@ -106,9 +114,10 @@ internal class CardSettingsViewModelTest : UnitTest() {
         whenever(cardProduct.termsAndConditions).thenReturn(mock())
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertTrue(sut.showLegalSection)
-        assertTrue(sut.showTermsAndConditions)
+        assertTrue(state.showLegalSection)
+        assertTrue(state.showTermsAndConditions)
     }
 
     @Test
@@ -116,9 +125,10 @@ internal class CardSettingsViewModelTest : UnitTest() {
         whenever(cardProduct.privacyPolicy).thenReturn(mock())
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertTrue(sut.showLegalSection)
-        assertTrue(sut.showPrivacyPolicy)
+        assertTrue(state.showLegalSection)
+        assertTrue(state.showPrivacyPolicy)
     }
 
     @Test
@@ -126,9 +136,10 @@ internal class CardSettingsViewModelTest : UnitTest() {
         whenever(cardProduct.exchangeRates).thenReturn(mock())
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertTrue(sut.showLegalSection)
-        assertTrue(sut.showExchangeRates)
+        assertTrue(state.showLegalSection)
+        assertTrue(state.showExchangeRates)
     }
 
     @Test
@@ -136,8 +147,9 @@ internal class CardSettingsViewModelTest : UnitTest() {
         configureGetPin(FeatureStatus.DISABLED, null)
 
         sut = createSut()
+        val state = sut.state.getOrAwaitValue()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showGetPin)
+        assertFalse(state.showGetPin)
     }
 
     @Test
@@ -146,7 +158,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showGetPin)
+        assertTrue(sut.state.getOrAwaitValue().showGetPin)
     }
 
     @Test
@@ -155,7 +167,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showSetPin)
+        assertFalse(sut.state.getOrAwaitValue().showSetPin)
     }
 
     @Test
@@ -164,7 +176,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showSetPin)
+        assertTrue(sut.state.getOrAwaitValue().showSetPin)
     }
 
     @Test
@@ -173,7 +185,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showSetPin)
+        assertFalse(sut.state.getOrAwaitValue().showSetPin)
     }
 
     @Test
@@ -182,7 +194,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showIvrSupport)
+        assertFalse(sut.state.getOrAwaitValue().showIvrSupport)
     }
 
     @Test
@@ -191,7 +203,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showIvrSupport)
+        assertTrue(sut.state.getOrAwaitValue().showIvrSupport)
     }
 
     @Test
@@ -200,7 +212,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showAddFunds)
+        assertFalse(sut.state.getOrAwaitValue().showAddFunds)
     }
 
     @Test
@@ -209,7 +221,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showAddFunds)
+        assertTrue(sut.state.getOrAwaitValue().showAddFunds)
     }
 
     @Test
@@ -218,7 +230,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showPasscode)
+        assertFalse(sut.state.getOrAwaitValue().showPasscode)
     }
 
     @Test
@@ -227,7 +239,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showPasscode)
+        assertTrue(sut.state.getOrAwaitValue().showPasscode)
     }
 
     @Test
@@ -236,7 +248,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().cardLocked)
+        assertFalse(sut.state.getOrAwaitValue().cardLocked)
     }
 
     @Test
@@ -245,7 +257,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().cardLocked)
+        assertTrue(sut.state.getOrAwaitValue().cardLocked)
     }
 
     @Test
@@ -254,7 +266,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().cardLocked)
+        assertTrue(sut.state.getOrAwaitValue().cardLocked)
     }
 
     @Test
@@ -263,7 +275,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showMonthlyStatement)
+        assertTrue(sut.state.getOrAwaitValue().showMonthlyStatement)
     }
 
     @Test
@@ -272,7 +284,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showMonthlyStatement)
+        assertFalse(sut.state.getOrAwaitValue().showMonthlyStatement)
     }
 
     @Test
@@ -281,7 +293,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertTrue(sut.cardUiState.getOrAwaitValue().showOrderPhysical)
+        assertTrue(sut.state.getOrAwaitValue().showOrderPhysical)
     }
 
     @Test
@@ -290,7 +302,37 @@ internal class CardSettingsViewModelTest : UnitTest() {
 
         sut = createSut()
 
-        assertFalse(sut.cardUiState.getOrAwaitValue().showOrderPhysical)
+        assertFalse(sut.state.getOrAwaitValue().showOrderPhysical)
+    }
+
+    @Test
+    fun `given feature on and satisfyHardware when create viewModel then showAddToGooglePay is true`() {
+        givenInAppProvisioningFeature(true)
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
+
+        sut = createSut()
+
+        assertTrue(sut.state.getOrAwaitValue().showAddToGooglePay)
+    }
+
+    @Test
+    fun `given feature off and satisfyHardware when create viewModel then showAddToGooglePay is true`() {
+        givenInAppProvisioningFeature(true)
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(false)
+
+        sut = createSut()
+
+        assertFalse(sut.state.getOrAwaitValue().showAddToGooglePay)
+    }
+
+    @Test
+    fun `given feature on and satisfyHardware off when create viewModel then showAddToGooglePay is true`() {
+        givenInAppProvisioningFeature(false)
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
+
+        sut = createSut()
+
+        assertFalse(sut.state.getOrAwaitValue().showAddToGooglePay)
     }
 
     @Test
@@ -572,5 +614,12 @@ internal class CardSettingsViewModelTest : UnitTest() {
             on { isAccountProvisioned } doReturn provisioned
         }
         whenever(cardFeatures.achAccount).thenReturn(feature)
+    }
+
+    private fun givenInAppProvisioningFeature(enabled: Boolean) {
+        val feature = mock<InAppProvisioningFeature> {
+            on { isEnabled } doReturn enabled
+        }
+        whenever(cardFeatures.inAppProvisioning).thenReturn(feature)
     }
 }

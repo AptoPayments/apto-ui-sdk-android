@@ -2,10 +2,10 @@ package com.aptopayments.sdk.repository
 
 import android.content.SharedPreferences
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.Test
 
 private const val NEED_AUTHENTICATION = "NEED_AUTHENTICATION"

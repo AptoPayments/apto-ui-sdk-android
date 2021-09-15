@@ -12,7 +12,7 @@ import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.extension.monthLocalized
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.DateProvider
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

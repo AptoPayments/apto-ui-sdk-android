@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.managecard
 
 import com.aptopayments.mobile.data.transaction.Transaction
 
-sealed class TransactionListItem {
+internal sealed class TransactionListItem {
     object HeaderView : TransactionListItem()
     class SectionHeader(val title: String) : TransactionListItem()
     class TransactionRow(val transaction: Transaction) : TransactionListItem()

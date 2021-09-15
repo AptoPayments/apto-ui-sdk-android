@@ -14,7 +14,7 @@ import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.selectcountry.CardProductSelectorFlow
 import com.aptopayments.sdk.features.selectcountry.CountrySelectorFragment
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin

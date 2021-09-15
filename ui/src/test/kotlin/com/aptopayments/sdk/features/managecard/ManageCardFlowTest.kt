@@ -14,7 +14,7 @@ import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.card.fundingsources.FundingSourceDialogFragment
 import com.aptopayments.sdk.features.card.waitlist.WaitlistFragment
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin

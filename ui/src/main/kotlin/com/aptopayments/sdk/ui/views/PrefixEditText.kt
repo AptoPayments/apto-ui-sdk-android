@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import com.aptopayments.sdk.R
 import com.google.android.material.textfield.TextInputEditText
 
-class PrefixEditText(context: Context, attributes: AttributeSet?) :
+internal class PrefixEditText(context: Context, attributes: AttributeSet?) :
     TextInputEditText(context, attributes) {
 
     private var mOriginalLeftPadding: Float = -1f

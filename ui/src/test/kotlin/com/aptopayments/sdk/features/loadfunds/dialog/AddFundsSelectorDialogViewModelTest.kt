@@ -4,7 +4,7 @@ import com.aptopayments.sdk.InstantExecutorExtension
 import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

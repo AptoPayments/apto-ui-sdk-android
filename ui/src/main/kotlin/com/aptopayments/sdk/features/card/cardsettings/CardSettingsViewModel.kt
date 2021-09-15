@@ -21,12 +21,14 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.LocalCardDetailsRepository
 import com.aptopayments.sdk.utils.LiveEvent
+import com.aptopayments.sdk.utils.extensions.shouldShowFakeShippingStatus
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
+import org.threeten.bp.LocalDate
 
 internal class CardSettingsViewModel(
-    private var card: Card,
+    var card: Card,
     private val cardProduct: CardProduct,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
@@ -40,17 +42,8 @@ internal class CardSettingsViewModel(
 
     private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
-    private val _cardUiState = MutableLiveData<CardUiState>()
-    val cardUiState = _cardUiState as LiveData<CardUiState>
-
-    val showLegalSection = shouldShowLegalSection(cardProduct)
-    val showFaq = cardProduct.faq != null
-    val showCardholderAgreement = cardProduct.cardholderAgreement != null
-    val showTermsAndConditions = cardProduct.termsAndConditions != null
-    val showPrivacyPolicy = cardProduct.privacyPolicy != null
-    val showExchangeRates = cardProduct.exchangeRates != null
-
-    val showAddToGooglePay = shouldShowAddToGooglePay()
+    private val _state = MutableLiveData<State>()
+    val state = _state as LiveData<State>
 
     val action = LiveEvent<Action>()
 
@@ -93,16 +86,13 @@ internal class CardSettingsViewModel(
     }
 
     fun cardDetailsPressed() {
-        canAskBiometricsUseCase().either(
-            {},
-            { canAsk ->
-                if (canAsk) {
-                    checkIfAuthNeeded()
-                } else {
-                    cardDetailsAuthenticationSuccessful()
-                }
+        canAskBiometricsUseCase().runIfRight { canAsk ->
+            if (canAsk) {
+                checkIfAuthNeeded()
+            } else {
+                cardDetailsAuthenticationSuccessful()
             }
-        )
+        }
     }
 
     fun onFaqPressed() {
@@ -132,8 +122,8 @@ internal class CardSettingsViewModel(
     }
 
     private fun updateCardValues(card: Card) {
-        _cardUiState.value =
-            CardUiState(
+        _state.value =
+            State(
                 showGetPin = card.features?.getPin?.status == FeatureStatus.ENABLED,
                 showSetPin = card.features?.setPin?.status == FeatureStatus.ENABLED,
                 showIvrSupport = isIvrEnabled(card),
@@ -141,7 +131,15 @@ internal class CardSettingsViewModel(
                 showAddFunds = card.features?.funding?.isEnabled ?: false,
                 showPasscode = card.features?.passcode?.isEnabled ?: false,
                 showMonthlyStatement = aptoUiSdk.cardOptions.showMonthlyStatementOption(),
-                showOrderPhysical = card.orderedStatus == Card.OrderedStatus.AVAILABLE
+                showOrderPhysical = card.orderedStatus == Card.OrderedStatus.AVAILABLE,
+                showLegalSection = shouldShowLegalSection(cardProduct),
+                showFaq = cardProduct.faq != null,
+                showCardholderAgreement = cardProduct.cardholderAgreement != null,
+                showTermsAndConditions = cardProduct.termsAndConditions != null,
+                showPrivacyPolicy = cardProduct.privacyPolicy != null,
+                showExchangeRates = cardProduct.exchangeRates != null,
+                showAddToGooglePay = shouldShowAddToGooglePay(),
+                showCardShippingStatus = card.shouldShowFakeShippingStatus(LocalDate.now())
             )
     }
 
@@ -170,7 +168,8 @@ internal class CardSettingsViewModel(
         }
     }
 
-    private fun shouldShowAddToGooglePay() = iapHelper.satisfyHardwareRequisites()
+    private fun shouldShowAddToGooglePay() = iapHelper.satisfyHardwareRequisites() &&
+        card.features?.inAppProvisioning?.isEnabled == true
 
     fun cardDetailsAuthenticationSuccessful() {
         cardDetailsRepo.showCardDetails()
@@ -248,7 +247,7 @@ internal class CardSettingsViewModel(
         object OrderPhysicalCard : Action()
     }
 
-    internal data class CardUiState(
+    internal data class State(
         val showGetPin: Boolean = false,
         val showSetPin: Boolean = false,
         val showIvrSupport: Boolean = false,
@@ -257,5 +256,13 @@ internal class CardSettingsViewModel(
         val showPasscode: Boolean = false,
         val showMonthlyStatement: Boolean = false,
         val showOrderPhysical: Boolean = false,
+        val showLegalSection: Boolean = false,
+        val showFaq: Boolean = false,
+        val showCardholderAgreement: Boolean = false,
+        val showTermsAndConditions: Boolean = false,
+        val showPrivacyPolicy: Boolean = false,
+        val showExchangeRates: Boolean = false,
+        val showAddToGooglePay: Boolean = false,
+        val showCardShippingStatus: Boolean = false,
     )
 }

@@ -5,6 +5,8 @@ package com.aptopayments.sdk.features.managecard
 import androidx.lifecycle.Observer
 import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
+import com.aptopayments.mobile.data.card.Features
+import com.aptopayments.mobile.data.card.InAppProvisioningFeature
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.exception.Failure
@@ -19,12 +21,16 @@ import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.repository.IAPHelper
+import com.aptopayments.sdk.repository.ProvisioningState
 import com.aptopayments.sdk.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.threeten.bp.ZonedDateTime
@@ -44,18 +50,33 @@ class ManageCardViewModelTest : UnitTest() {
     private val transactionsObserver: Observer<List<Transaction>?> = mock()
     private val aptoUiSdkProtocol: AptoUiSdkProtocol = mock()
     private val aptoPlatform: AptoPlatformProtocol = mock()
+    private val iapHelper: IAPHelper = mock()
 
     @BeforeEach
     fun setUp() {
         startKoin {
-            modules(listOf(applicationModule, useCaseModule))
+            modules(
+                listOf(
+                    applicationModule, useCaseModule,
+                    module {
+                        factory(override = true) { iapHelper }
+                    }
+                )
+            )
         }
     }
 
-    private fun createSut(transactions: List<Transaction> = emptyList()) {
-        mockFetchCard()
+    private fun createSut(
+        transactions: List<Transaction> = emptyList(),
+        card: Card = TestDataProvider.provideCard(accountID = CARD_ID),
+        cardOptions: CardOptions = CardOptions(),
+        iapState: ProvisioningState = ProvisioningState.CanNotBeAdded()
+    ) {
+        mockFetchCard(card)
         mockFetchFundingSource()
         mockLoadTransactions(transactions)
+        givenCardOptions(cardOptions)
+        givenIapState(iapState)
         sut = ManageCardViewModel(
             CARD_ID,
             fetchTransactionsTaskQueue,
@@ -210,8 +231,7 @@ class ManageCardViewModelTest : UnitTest() {
 
     @Test
     fun `whenever embedded then X is shown and Back is allowed`() {
-        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(CardOptions(openingMode = CardOptions.OpeningMode.EMBEDDED))
-        createSut()
+        createSut(cardOptions = CardOptions(openingMode = CardOptions.OpeningMode.EMBEDDED))
 
         assertTrue { sut.canBackPress }
         assertTrue { sut.showXOnToolbar }
@@ -226,7 +246,103 @@ class ManageCardViewModelTest : UnitTest() {
         assertFalse(sut.showXOnToolbar)
     }
 
-    private fun mockFetchCard() {
+    @Test
+    fun `given no api call is made when load then menu options are in default`() {
+        createSut()
+
+        val menu = sut.menuState.getOrAwaitValue()
+
+        assertFalse(menu.showPhysicalCardActivationMessage)
+        assertTrue(menu.showAccountSettings)
+        assertFalse(menu.showStats)
+    }
+
+    @Test
+    fun `given no api call is made and showStatButtons when load then ShowStats is true`() {
+        createSut(cardOptions = CardOptions(showStatsButton = true, showAccountSettingsButton = false))
+
+        val menu = sut.menuState.getOrAwaitValue()
+
+        assertFalse(menu.showPhysicalCardActivationMessage)
+        assertFalse(menu.showAccountSettings)
+        assertTrue(menu.showStats)
+    }
+
+    @Test
+    fun `given no api call is made and showAccountSettings when load then showAccountSettings is true`() {
+        createSut(cardOptions = CardOptions(showAccountSettingsButton = true, showStatsButton = false))
+
+        val menu = sut.menuState.getOrAwaitValue()
+
+        assertFalse(menu.showPhysicalCardActivationMessage)
+        assertTrue(menu.showAccountSettings)
+        assertFalse(menu.showStats)
+    }
+
+    @Test
+    fun `given api call is configured when load then showAccountSettings is true`() {
+        val card = TestDataProvider.provideCard(accountID = CARD_ID, orderedStatus = Card.OrderedStatus.ORDERED)
+        createSut(card = card)
+
+        val menu = sut.menuState.getOrAwaitValue()
+
+        assertTrue(menu.showPhysicalCardActivationMessage)
+    }
+
+    @Test
+    internal fun `given No transactions and iap not working then empty state is shown`() {
+        createSut(transactions = emptyList(), iapState = ProvisioningState.CanNotBeAdded())
+
+        val emptyState = sut.emptyState.getOrAwaitValue()
+
+        assertTrue(emptyState.showContainer)
+        assertTrue(emptyState.showNoTransactions)
+        assertFalse(emptyState.showAddToGPay)
+    }
+
+    @Test
+    internal fun `given No transactions and iap CanBeAdded but feature is off then empty state is shown`() {
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
+        val cardFeatures = Features(inAppProvisioning = InAppProvisioningFeature(isEnabled = false))
+        val card = TestDataProvider.provideCard(features = cardFeatures)
+        createSut(transactions = emptyList(), card = card, iapState = ProvisioningState.CanBeAdded())
+
+        val emptyState = sut.emptyState.getOrAwaitValue()
+
+        assertTrue(emptyState.showContainer)
+        assertTrue(emptyState.showNoTransactions)
+        assertFalse(emptyState.showAddToGPay)
+    }
+
+    @Test
+    internal fun `given No transactions and iap CanBeAdded then addToGpay is shown`() {
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
+        val cardFeatures = Features(inAppProvisioning = InAppProvisioningFeature(isEnabled = true))
+        val card = TestDataProvider.provideCard(features = cardFeatures)
+        createSut(transactions = emptyList(), card = card, iapState = ProvisioningState.CanBeAdded())
+
+        val emptyState = sut.emptyState.getOrAwaitValue()
+
+        assertTrue(emptyState.showContainer)
+        assertFalse(emptyState.showNoTransactions)
+        assertTrue(emptyState.showAddToGPay)
+    }
+
+    @Test
+    internal fun `given transactions and iap CanBeAdded then empty state is not shown`() {
+        whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
+        createSut(
+            transactions = listOf(TestDataProvider.provideTransaction("id1")),
+            iapState = ProvisioningState.CanBeAdded()
+        )
+
+        val emptyState = sut.emptyState.getOrAwaitValue()
+
+        assertFalse(emptyState.showContainer)
+        assertFalse(emptyState.showNoTransactions)
+    }
+
+    private fun mockFetchCard(card: Card) {
         whenever(
             aptoPlatform.fetchCard(
                 eq(CARD_ID),
@@ -235,7 +351,7 @@ class ManageCardViewModelTest : UnitTest() {
             )
         ).thenAnswer { invocation ->
             (invocation.arguments[2] as (Either<Failure, Card>) -> Unit).invoke(
-                TestDataProvider.provideCard(accountID = CARD_ID).right()
+                card.right()
             )
         }
     }
@@ -293,5 +409,13 @@ class ManageCardViewModelTest : UnitTest() {
         ).thenAnswer { invocation ->
             (invocation.arguments[2] as (Either<Failure, List<Transaction>>) -> Unit).invoke(transactions.right())
         }
+    }
+
+    private fun givenCardOptions(cardOptions: CardOptions) {
+        whenever(aptoUiSdkProtocol.cardOptions).thenReturn(cardOptions)
+    }
+
+    private fun givenIapState(iapState: ProvisioningState) {
+        whenever(iapHelper.state).thenReturn(MutableStateFlow(iapState))
     }
 }

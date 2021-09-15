@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.CardStyle
-import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.databinding.ViewPciCardBinding
 import com.aptopayments.sdk.features.managecard.CardInfo
 import com.aptopayments.sdk.pci.config.*
-import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 
 private const val CARD_ASPECT_RATIO = 1.586
 
@@ -24,15 +22,8 @@ class PCICardView @JvmOverloads constructor(
     private lateinit var config: PCIConfiguration
     private var hasValidFundingSource = true
     private var cardState = Card.CardState.ACTIVE
-    var delegate: Delegate? = null
 
     private var binding = ViewPciCardBinding.inflate(LayoutInflater.from(context), this, true)
-
-    init {
-        binding.cardInvisibleOverlay.setOnClickListenerSafe {
-            delegate?.cardViewTapped()
-        }
-    }
 
     fun setConfiguration(configuration: PCIConfiguration) {
         this.config = configuration
@@ -79,8 +70,8 @@ class PCICardView @JvmOverloads constructor(
         binding.pciView.setStyle(
             PCIConfigStyle(
                 textColor = style?.textColor,
-                alertButtonColor = UIConfig.uiPrimaryColor
-            )
+            ),
+            theme = null
         )
     }
 
@@ -117,10 +108,6 @@ class PCICardView @JvmOverloads constructor(
         } else {
             binding.pciView.hidePCIData()
         }
-    }
-
-    interface Delegate {
-        fun cardViewTapped()
     }
 
     enum class Status {

@@ -12,7 +12,7 @@ import com.aptopayments.sdk.features.card.activatephysicalcard.activate.Activate
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessContract
 import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 
 private const val ACTIVATE_PHYSICAL_CARD_TAG = "ActivatePhysicalCardFragment"
 private const val ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG = "ActivatePhysicalCardSuccessFragment"
@@ -69,7 +69,7 @@ internal class ActivatePhysicalCardFlow(
                     notify(
                         title = "manage_card.confirm_pin.pin_created.title".localized(),
                         message = "manage_card.confirm_pin.pin_created.message".localized(),
-                        messageType = MessageBanner.MessageType.HEADS_UP
+                        messageType = SnackbarMessageType.HEADS_UP
                     )
                 }
                 onFinish.invoke()

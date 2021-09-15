@@ -18,7 +18,8 @@ import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnStartUpUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.ui.views.AuthenticationView
 import com.aptopayments.sdk.ui.views.AuthenticationView.AuthType.FORCED
-import com.aptopayments.sdk.utils.MessageBanner
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
+import com.aptopayments.sdk.utils.extensions.showCustomSnackbar
 import kotlinx.android.synthetic.main.activity_layout.*
 import org.koin.android.ext.android.inject
 import java.lang.ref.WeakReference
@@ -100,10 +101,9 @@ class CardActivity : BaseActivity(), AuthenticationView.Delegate {
     }
 
     override fun onAuthPinFailed() {
-        MessageBanner().showBanner(
-            this,
+        showCustomSnackbar(
             "biometric_show_pin_error_wrong_pin".localized(),
-            MessageBanner.MessageType.ERROR
+            SnackbarMessageType.ERROR
         )
     }
 

@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.view_native_content.view.*
 
-class NativeContentView @JvmOverloads constructor(
+internal class NativeContentView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

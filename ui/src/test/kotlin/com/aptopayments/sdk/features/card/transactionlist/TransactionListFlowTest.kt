@@ -7,8 +7,8 @@ import com.aptopayments.sdk.UnitTest
 import com.aptopayments.sdk.core.data.TestDataProvider
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsFragment
-import com.nhaarman.mockitokotlin2.*
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.*
+import org.mockito.kotlin.mock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin

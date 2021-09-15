@@ -14,8 +14,8 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.utils.MessageBanner
-import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
+import com.aptopayments.sdk.utils.extensions.showCustomSnackbar
 import org.koin.android.ext.android.inject
 
 private const val TAG_KEY = "APTO_TAG_KEY"
@@ -82,6 +82,6 @@ internal abstract class BaseDialogFragment : DialogFragment() {
         }
     }
 
-    internal fun notify(message: String, messageType: MessageBanner.MessageType = ERROR, title: String? = null) =
-        activity?.let { MessageBanner().showBanner(it, message = message, messageType = messageType, title = title) }
+    internal fun notify(message: String, messageType: SnackbarMessageType = SnackbarMessageType.ERROR, title: String? = null) =
+        activity?.showCustomSnackbar(message = message, messageType = messageType, title = title)
 }

@@ -113,7 +113,8 @@ class TestDataProvider {
             nativeSpendableAmount: Money? = null,
             cardHolder: String = "",
             features: Features? = null,
-            metadata: String? = null
+            metadata: String? = null,
+            issuedAt: ZonedDateTime? = null,
         ) = Card(
             accountID = accountID,
             cardProductID = cardProductID,
@@ -131,7 +132,8 @@ class TestDataProvider {
             nativeSpendableAmount = nativeSpendableAmount,
             cardHolder = cardHolder,
             features = features,
-            metadata = metadata
+            metadata = metadata,
+            issuedAt = issuedAt
         )
 
         fun provideCardProduct(

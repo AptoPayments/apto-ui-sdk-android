@@ -17,7 +17,7 @@ import com.aptopayments.sdk.utils.ViewUtils.isSmallScreen
 import kotlinx.android.synthetic.main.view_content_presenter.view.*
 import kotlinx.android.synthetic.main.view_native_content.view.*
 
-class ContentPresenterView @JvmOverloads constructor(
+internal class ContentPresenterView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

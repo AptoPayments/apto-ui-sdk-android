@@ -10,7 +10,7 @@ import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager.*
 import java.lang.ref.WeakReference
 
-class PhoneDialer(
+internal class PhoneDialer(
     val context: Context
 ) : PhoneStateListener() {
 

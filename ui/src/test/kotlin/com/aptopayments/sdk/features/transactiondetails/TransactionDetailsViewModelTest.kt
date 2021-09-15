@@ -5,9 +5,9 @@ import com.aptopayments.mobile.data.card.Money
 import com.aptopayments.mobile.data.geo.Country
 import com.aptopayments.mobile.data.transaction.*
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll

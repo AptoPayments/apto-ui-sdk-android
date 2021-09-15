@@ -2,10 +2,10 @@ package com.aptopayments.sdk.core.usecase
 
 import com.aptopayments.sdk.core.platform.AuthStateProvider
 import com.aptopayments.sdk.repository.AuthenticationRepository
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

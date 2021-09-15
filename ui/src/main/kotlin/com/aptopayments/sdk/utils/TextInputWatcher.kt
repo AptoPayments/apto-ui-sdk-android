@@ -5,7 +5,7 @@ import android.text.InputFilter
 import android.text.TextWatcher
 import android.widget.EditText
 
-class TextInputWatcher(
+internal class TextInputWatcher(
     private var callback: ValidInputListener,
     private var minNumberCharacters: Int,
     private var inputText: EditText,

@@ -30,21 +30,21 @@ internal class AddCardPaymentSourceViewModel(
     private val cvvFieldStateResolver = CvvFieldStateResolver()
     private val zipFieldStateResolver = ZipFieldStateResolver()
 
-    val creditCardNumber = MutableLiveData<String>("")
+    val creditCardNumber = MutableLiveData("")
     val creditCardNetwork = Transformations.map(creditCardNumber) { processCreditCardNetwork(it.toOnlyDigits()) }
 
     private val creditCardState = MutableLiveData(FieldState.TYPING)
     val cardNumberError = Transformations.map(creditCardState) { it == FieldState.ERROR }
     val showAllFields = Transformations.map(creditCardState) { it == FieldState.CORRECT }
 
-    val expiration = MutableLiveData<String>("")
+    val expiration = MutableLiveData("")
     private val expirationState = Transformations.map(expiration) { expirationFieldStateResolver(it.toOnlyDigits()) }
     val expirationError = Transformations.map(expirationState) { it == FieldState.ERROR }
 
-    val cvv = MutableLiveData<String>("")
+    val cvv = MutableLiveData("")
     private val cvvState = Transformations.map(cvv) { cvvFieldStateResolver(it, creditCardNetwork.value) }
 
-    val zipCode = MutableLiveData<String>("")
+    val zipCode = MutableLiveData("")
     private val zipCodeState = Transformations.map(zipCode) { zipFieldStateResolver(zipCode.value) }
 
     private val fieldStateList = listOf(creditCardState, expirationState, cvvState, zipCodeState)
@@ -106,7 +106,7 @@ internal class AddCardPaymentSourceViewModel(
     private fun observeAllFieldStateChanges() {
         fieldStateList.forEach {
             _continueButtonEnabled.addSource(it) {
-                _continueButtonEnabled.postValue(checkAllFieldsCorrectness())
+                _continueButtonEnabled.value = checkAllFieldsCorrectness()
             }
         }
     }

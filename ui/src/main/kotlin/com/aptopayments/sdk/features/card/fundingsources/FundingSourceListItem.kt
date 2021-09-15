@@ -2,7 +2,7 @@ package com.aptopayments.sdk.features.card.fundingsources
 
 import com.aptopayments.mobile.data.fundingsources.Balance
 
-sealed class FundingSourceListItem {
+internal sealed class FundingSourceListItem {
     class FundingSourceRow(val balance: Balance, var selected: Boolean) : FundingSourceListItem()
     object AddFundingSourceButton : FundingSourceListItem()
 

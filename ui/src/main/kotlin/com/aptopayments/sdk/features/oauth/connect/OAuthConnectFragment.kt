@@ -16,7 +16,7 @@ import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.oauth.OAuthConfig
-import com.aptopayments.sdk.utils.MessageBanner.MessageType.ERROR
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.parseHtmlLinks
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_connect.*
@@ -156,7 +156,7 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
             return
         }
         oauthAttempt.errorMessageKeys = errorMessageKeys
-        notify(message = oauthAttempt.localizedErrorMessage(), type = ERROR)
+        notify(message = oauthAttempt.localizedErrorMessage(), type = SnackbarMessageType.ERROR)
     }
 
     companion object {

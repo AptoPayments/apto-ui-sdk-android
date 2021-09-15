@@ -11,7 +11,7 @@ import com.aptopayments.sdk.core.extension.visibleIf
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import kotlinx.android.synthetic.main.view_section_option_subtitle.view.*
 
-internal class SectionOptionWithSubtitleView @JvmOverloads constructor(
+internal open class SectionOptionWithSubtitleView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

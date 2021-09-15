@@ -14,8 +14,9 @@ import com.aptopayments.sdk.core.platform.BaseActivity
 import com.aptopayments.sdk.core.platform.BaseDialogFragment
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
-import com.aptopayments.sdk.utils.MessageBanner
 import com.aptopayments.sdk.utils.ViewUtils
+import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
+import com.aptopayments.sdk.utils.extensions.showCustomSnackbar
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.lang.ref.WeakReference
@@ -209,17 +210,16 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
     protected fun notify(
         title: String,
         message: String,
-        messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR
+        messageType: SnackbarMessageType = SnackbarMessageType.ERROR
     ) {
-        rootActivity()?.let { activity ->
-            MessageBanner().showBanner(activity, title = title, message = message, messageType = messageType)
-        }
+        rootActivity()?.showCustomSnackbar(title = title, message = message, messageType = messageType)
     }
 
-    protected fun notify(message: String, messageType: MessageBanner.MessageType = MessageBanner.MessageType.ERROR) {
-        rootActivity()?.let { activity ->
-            MessageBanner().showBanner(activity, message, messageType)
-        }
+    protected fun notify(
+        message: String,
+        messageType: SnackbarMessageType = SnackbarMessageType.ERROR
+    ) {
+        rootActivity()?.showCustomSnackbar(message = message, messageType = messageType)
     }
 
     protected fun rootActivity(): AppCompatActivity? {
