@@ -42,7 +42,7 @@
             android:layout_height="44dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/llsdk_card_top_margin"
+            android:layout_marginTop="@dimen/llsdk_card_left_margin"
             android:layout_marginEnd="@dimen/llsdk_card_left_margin"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
