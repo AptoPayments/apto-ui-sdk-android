@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+# 2021-10-13 Version 3.15.0 Ui 3.15.0
+- feat(mobile): Added format field to Card object (ACQ-2142)
+- feat(ui): Remove payment source
+- feat(ui): Change old PDF library for a new one (ACQ-1952)
+
 # 2021-09-29 Version Ui 3.14.1
 - fix(ui): Fix Card logo placement
 

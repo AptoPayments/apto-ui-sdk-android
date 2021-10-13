@@ -57,13 +57,7 @@ internal class StatementDetailFragment :
 
     private fun loadAndConfigurePdf(file: File?) {
         file?.let {
-            pdfView.fromFile(it)
-                .enableSwipe(true)
-                .swipeHorizontal(false)
-                .enableDoubletap(true)
-                .defaultPage(0)
-                .enableAntialiasing(true)
-                .load()
+            pdfView.fromFile(file).show()
         }
     }
 

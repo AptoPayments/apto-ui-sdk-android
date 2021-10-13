@@ -96,6 +96,7 @@ class TestDataProvider {
 
         fun <T> anyObject(): T = Mockito.any<T>()
 
+        @Suppress("LongParameterList")
         fun provideCard(
             accountID: String = "",
             cardProductID: String = "",
@@ -109,6 +110,7 @@ class TestDataProvider {
             kycStatus: KycStatus? = KycStatus.UNKNOWN,
             kycReason: List<String>? = null,
             orderedStatus: Card.OrderedStatus = Card.OrderedStatus.UNKNOWN,
+            format: Card.Format = Card.Format.UNKNOWN,
             spendableAmount: Money? = null,
             nativeSpendableAmount: Money? = null,
             cardHolder: String = "",
@@ -128,6 +130,7 @@ class TestDataProvider {
             kycStatus = kycStatus,
             kycReason = kycReason,
             orderedStatus = orderedStatus,
+            format = format,
             spendableAmount = spendableAmount,
             nativeSpendableAmount = nativeSpendableAmount,
             cardHolder = cardHolder,

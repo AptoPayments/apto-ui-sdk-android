@@ -8,7 +8,7 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.ViewPaymentSourceListItemBinding
 import com.aptopayments.sdk.databinding.ViewPaymentSourceListNewBinding
 
-internal class PaymentSourcesListAdapter(val viewModel: PaymentSourcesListViewModel) :
+internal class PaymentSourcesListAdapter(private val viewModel: PaymentSourcesListViewModel) :
     RecyclerView.Adapter<PaymentSourcesListAdapter.BaseViewHolder>() {
 
     private val items = mutableListOf<PaymentSourcesListItem>()
@@ -50,7 +50,11 @@ internal class PaymentSourcesListAdapter(val viewModel: PaymentSourcesListViewMo
     inner class ExistingPaymentSourceViewHolder(private val binding: ViewPaymentSourceListItemBinding) :
         BaseViewHolder(binding.root) {
 
+        var item: PaymentSourcesListItem? = null
+            private set
+
         override fun bind(item: PaymentSourcesListItem) {
+            this.item = item
             binding.element = item
             binding.viewModel = viewModel
             binding.executePendingBindings()

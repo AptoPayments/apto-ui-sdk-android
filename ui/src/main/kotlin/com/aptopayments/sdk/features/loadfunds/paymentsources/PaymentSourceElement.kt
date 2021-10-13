@@ -11,9 +11,9 @@ internal data class PaymentSourceElement(
     val title: String = "",
     val subtitle: String = "",
     val showFourDots: Boolean = false,
-    @IntegerRes val logo: Int
+    @IntegerRes val logo: Int,
+    val isPreferred: Boolean = false
 ) {
-    fun isDefined() = id.isNotEmpty()
 
     companion object {
         fun unsetElement(): PaymentSourceElement {
@@ -44,7 +44,8 @@ internal class PaymentSourceElementMapper {
             title = elem.lastFour,
             subtitle = subtitle,
             showFourDots = true,
-            logo = networkLogo
+            logo = networkLogo,
+            isPreferred = elem.isPreferred
         )
     }
 }

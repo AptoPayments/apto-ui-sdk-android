@@ -634,6 +634,12 @@
     <string name="load_funds_payment_methods_new_card_element_title">Debit Card</string>
     <string name="load_funds_payment_methods_new_card_element_subtitle">Instant Deposit</string>
     <string name="load_funds_payment_methods_existing_card_element_subtitle">&lt;&lt;NAME&gt;&gt; Debit</string>
+    <string name="load_funds_payment_methods_delete_dialog_title">Delete Payment Method?</string>
+    <string name="load_funds_payment_methods_delete_dialog_message">Are you sure you would like to delete this payment method?</string>
+    <string name="load_funds_payment_methods_delete_dialog_cta">Delete</string>
+    <string name="load_funds_payment_methods_delete_dialog_cancel">Not Now</string>
+    <string name="load_funds_payment_methods_delete_row_cta">Delete</string>
+
     <string name="load_funds_add_money_title">Add Money</string>
     <string name="load_funds_add_money_daily_max_title">The maximum daily deposit is &lt;&lt;MAX&gt;&gt;</string>
     <string name="load_funds_add_money_primary_cta">Add</string>

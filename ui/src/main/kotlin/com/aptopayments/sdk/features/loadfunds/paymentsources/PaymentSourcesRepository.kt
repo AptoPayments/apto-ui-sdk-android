@@ -36,15 +36,20 @@ internal class PaymentSourcesRepository(
     }
 
     suspend fun refreshSelectedPaymentSource(): Either<Failure, PaymentSource?> {
-        val source = getAPISelectedPaymentSource()
-        source.runIfRight {
-            _selectedPaymentSource.value = it
-        }
-        return source
+        return getPaymentSourceListFromBackend().run { updateSelectedPaymentSource(this) }
     }
 
-    suspend fun getPaymentSourceList() =
-        suspendCoroutine<Either<Failure, List<PaymentSource>>> { cont ->
+    suspend fun getPaymentSourceList(updateSelected: Boolean = false): Either<Failure, List<PaymentSource>> {
+        return getPaymentSourceListFromBackend()
+            .apply {
+                if (updateSelected) {
+                    updateSelectedPaymentSource(this)
+                }
+            }
+    }
+
+    private suspend fun getPaymentSourceListFromBackend(): Either<Failure, List<PaymentSource>> =
+        suspendCoroutine { cont ->
             aptoPlatform.getPaymentSources({ result ->
                 cont.resume(result)
             })
@@ -57,7 +62,18 @@ internal class PaymentSourcesRepository(
             }
         }
 
-    private suspend fun getAPISelectedPaymentSource(): Either<Failure, PaymentSource?> {
-        return getPaymentSourceList().map { list -> list.firstOrNull { it.isPreferred } ?: list.firstOrNull() }
+    suspend fun deletePaymentSource(id: String) = // TODO do something else
+        suspendCoroutine<Either<Failure, Unit>> { cont ->
+            aptoPlatform.deletePaymentSource(id) { result ->
+                cont.resume(result)
+            }
+        }
+
+    private fun updateSelectedPaymentSource(listResponse: Either<Failure, List<PaymentSource>>): Either<Failure, PaymentSource?> {
+        val source = listResponse.map { list -> list.firstOrNull { it.isPreferred } ?: list.firstOrNull() }
+        source.runIfRight {
+            _selectedPaymentSource.value = it
+        }
+        return source
     }
 }

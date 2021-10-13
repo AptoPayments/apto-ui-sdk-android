@@ -91,8 +91,32 @@ internal class PaymentSourcesListViewModel(
             false, PaymentSourcesListItem.Type.NEW
         )
 
+    fun onPaymentSourceDelete(paymentSourceId: String, position: Int) {
+        actions.postValue(Actions.ShowConfirmDeleteDialog(paymentSourceId, position))
+    }
+
+    fun onPaymentSourceDeleteConfirmed(paymentSourceId: String) {
+        showLoading()
+        viewModelScope.launch((dispatchers.io)) {
+            repo.deletePaymentSource(paymentSourceId)
+                .runIfLeft { handleFailure(it) }
+                .runIfRightSuspending {
+                    repo.getPaymentSourceList(updateSelected = true).either(
+                        { handleFailure(it) },
+                        {
+                            viewModelScope.launch(dispatchers.main) {
+                                hideLoading()
+                                _sourceList.postValue(mapPaymentSources(it, repo.selectedPaymentSource.value))
+                            }
+                        }
+                    )
+                }
+        }
+    }
+
     sealed class Actions {
         object SourceSelected : Actions()
         object NewPaymentSource : Actions()
+        class ShowConfirmDeleteDialog(val sourceId: String, val position: Int) : Actions()
     }
 }
