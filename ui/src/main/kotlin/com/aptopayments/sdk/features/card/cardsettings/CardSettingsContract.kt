@@ -20,6 +20,7 @@ interface CardSettingsContract {
         fun showAddFundsSelector()
         fun showAddFundsDisclaimer(disclaimer: Disclaimer?)
         fun showOrderPhysicalCard()
+        fun transferMoney()
     }
 
     interface View {

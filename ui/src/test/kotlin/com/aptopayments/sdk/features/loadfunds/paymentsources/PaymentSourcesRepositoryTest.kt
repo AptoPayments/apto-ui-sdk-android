@@ -75,7 +75,7 @@ class PaymentSourcesRepositoryTest : CoroutineDispatcherTest {
 
         sut.selectPaymentSourceLocally(card)
 
-        verifyZeroInteractions(aptoPlatform)
+        verifyNoInteractions(aptoPlatform)
     }
 
     @Test

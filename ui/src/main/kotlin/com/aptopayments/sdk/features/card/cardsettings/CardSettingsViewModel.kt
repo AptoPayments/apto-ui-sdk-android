@@ -139,7 +139,8 @@ internal class CardSettingsViewModel(
                 showPrivacyPolicy = cardProduct.privacyPolicy != null,
                 showExchangeRates = cardProduct.exchangeRates != null,
                 showAddToGooglePay = shouldShowAddToGooglePay(),
-                showCardShippingStatus = card.shouldShowFakeShippingStatus(LocalDate.now())
+                showCardShippingStatus = card.shouldShowFakeShippingStatus(LocalDate.now()),
+                showTransferMoney = card.features?.transferMoneyP2p?.isEnabled ?: false,
             )
     }
 
@@ -201,6 +202,10 @@ internal class CardSettingsViewModel(
         action.postValue(nextAction)
     }
 
+    fun onTransferMoneyPressed() {
+        action.postValue(Action.TransferMoneyAction)
+    }
+
     private fun onLockUnlockFinished(result: Either<Failure, Card>) {
         result.either(::handleFailure) { card ->
             updateCard(card)
@@ -245,6 +250,7 @@ internal class CardSettingsViewModel(
         object ShowAddFundsSelector : Action()
         class ShowAddFundsAchDisclaimer(val disclaimer: Disclaimer?) : Action()
         object OrderPhysicalCard : Action()
+        object TransferMoneyAction : Action()
     }
 
     internal data class State(
@@ -264,5 +270,6 @@ internal class CardSettingsViewModel(
         val showExchangeRates: Boolean = false,
         val showAddToGooglePay: Boolean = false,
         val showCardShippingStatus: Boolean = false,
+        val showTransferMoney: Boolean = false
     )
 }

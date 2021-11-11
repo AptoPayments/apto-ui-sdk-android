@@ -55,6 +55,10 @@ internal class InputPhoneFragment : BaseFragment(), InputPhoneContract.View {
             override fun onCountryChanged(countryCode: String) {
                 viewModel.onCountryChanged(countryCode)
             }
+
+            override fun onCountryNumberChanged(countryNumber: String) {
+                // Nothing
+            }
         }
         phone_input.setAllowedCountriesIsoCode(allowedCountriesList.map { it.isoCode })
     }

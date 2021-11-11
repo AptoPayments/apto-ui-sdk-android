@@ -32,11 +32,18 @@ internal class PhoneInputView @JvmOverloads constructor(context: Context, attrs:
             delegate?.onCountryChanged(value)
         }
 
+    var countryNumber: Int = 0
+        private set(value) {
+            field = value
+            delegate?.onCountryNumberChanged(value.toString())
+        }
+
     var isValid = false
 
     interface Delegate {
         fun onPhoneInputChanged(phoneNumber: String, valid: Boolean)
         fun onCountryChanged(countryCode: String)
+        fun onCountryNumberChanged(countryNumber: String)
     }
 
     init {
@@ -58,7 +65,7 @@ internal class PhoneInputView @JvmOverloads constructor(context: Context, attrs:
         val validInputListener = object : ValidInputListener {
             override fun onValidInput(isValid: Boolean) {
                 this@PhoneInputView.isValid = isValid
-                phoneNumber = et_phone.text.toString()
+                phoneNumber = et_phone.text.toString().filter { it.isDigit() }
             }
         }
         aptoPhoneNumberWatcher = AptoPhoneNumberWatcher(allowedCountries.first(), validInputListener)
@@ -67,6 +74,7 @@ internal class PhoneInputView @JvmOverloads constructor(context: Context, attrs:
             country_code_picker?.let {
                 aptoPhoneNumberWatcher.countryCode = country_code_picker.selectedCountryNameCode
                 countryCode = country_code_picker.selectedCountryNameCode
+                countryNumber = country_code_picker.selectedCountryCodeAsInt
             }
         }
 

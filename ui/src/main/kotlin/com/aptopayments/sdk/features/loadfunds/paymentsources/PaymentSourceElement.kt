@@ -5,6 +5,7 @@ import com.aptopayments.mobile.data.paymentsources.Card
 import com.aptopayments.mobile.data.paymentsources.PaymentSource
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.features.loadfunds.paymentsources.addcard.CardNetwork
+import com.aptopayments.sdk.utils.extensions.toCapitalized
 
 internal data class PaymentSourceElement(
     val id: String = "",
@@ -23,6 +24,14 @@ internal data class PaymentSourceElement(
                 logo = CardNetwork.UNKNOWN.icon
             )
         }
+
+        fun genericElement(title: String): PaymentSourceElement {
+            return PaymentSourceElement(
+                title = title,
+                showFourDots = false,
+                logo = CardNetwork.UNKNOWN.icon
+            )
+        }
     }
 }
 
@@ -37,7 +46,7 @@ internal class PaymentSourceElementMapper {
 
     private fun mapCard(elem: Card): PaymentSourceElement {
         val subtitle = "load_funds.payment_methods.existing_card_element.subtitle".localized()
-            .replace("<<NAME>>", elem.network.toString().toLowerCase().capitalize())
+            .replace("<<NAME>>", elem.network.toString().toCapitalized())
         val networkLogo = CardNetwork.fromString(elem.network.name).icon
         return PaymentSourceElement(
             id = elem.id,

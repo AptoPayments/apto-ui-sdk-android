@@ -25,6 +25,7 @@ import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositIns
 import com.aptopayments.sdk.features.disclaimer.DisclaimerContract
 import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
 import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogContract
+import com.aptopayments.sdk.features.p2p.P2pFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
 import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import org.koin.core.inject
@@ -196,6 +197,15 @@ internal class CardSettingsFlow(
     override fun showOrderPhysicalCard() {
         val flow = OrderPhysicalFlow(cardId = cardId) { popAnimatedFlow() }
         flow.init { initResult -> initResult.either(::handleFailure) { push(flow) } }
+    }
+
+    override fun transferMoney() {
+        val flow = P2pFlow(
+            cardId = cardId
+        ) { popFlow(animated = true) }
+        flow.init { initResult ->
+            initResult.either(::handleFailure) { push(flow = flow) }
+        }
     }
 
     override fun onDisclaimerAccepted() {

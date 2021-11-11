@@ -38,7 +38,7 @@ class PCICardView @JvmOverloads constructor(
             apiKey = config.apiKey,
             userToken = config.token,
             cardId = config.cardId,
-            environment = PCIEnvironment.valueOf(config.environment.toUpperCase())
+            environment = PCIEnvironment.valueOf(config.environment.uppercase())
         )
         val configCard = PCIConfigCard(lastFour = lastFour, nameOnCard = name)
 

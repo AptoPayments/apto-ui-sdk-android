@@ -15,6 +15,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.loadFromUrl
+import com.aptopayments.sdk.utils.FontsUtil
 import com.aptopayments.sdk.utils.FontsUtil.FontType
 import com.google.android.material.appbar.AppBarLayout
 
@@ -27,6 +28,7 @@ internal interface ThemeManager {
     fun customizeSubmitButton(textView: TextView)
     fun customizeColorlessButton(textView: TextView)
     fun customizeLargeTitleLabel(textView: TextView)
+    fun customizeLargeSubtitleLabel(textView: TextView)
     fun customizeRegularTextLabel(textView: TextView)
     fun customizeRegularTertiaryTextLabel(textView: TextView)
     fun customizeSectionHeader(textView: TextView)
@@ -81,6 +83,12 @@ internal interface ThemeManager {
     fun customizeMenuLayoutImage(layoutContainer: ViewGroup) {
         layoutContainer.findViewById<ImageView>(R.id.menu_image)?.let {
             DrawableCompat.setTint(it.drawable, UIConfig.iconTertiaryColor)
+        }
+    }
+
+    fun setFontType(textView: TextView, fontType: FontType) {
+        FontsUtil.getFontOfType(fontType)?.let {
+            textView.typeface = it
         }
     }
 }

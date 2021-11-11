@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.p2p.funds.SendFundsViewModel" />
+
+        <import type="com.aptopayments.sdk.utils.extensions.StringKt" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true">
+
+        <include
+            android:id="@+id/tb_llsdk_toolbar_layout"
+            layout="@layout/include_toolbar_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_amount_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_llsdk_toolbar_layout">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.aptopayments.sdk.ui.views.PrefixEditText
+                    android:id="@+id/money_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:hint="0"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:text="@={viewModel.amount}"
+                    app:prefixEdit="@{viewModel.state.currencySymbol}"
+                    tools:text="0" />
+            </FrameLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/input_payment_amount_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/llsdk_small_margin"
+            android:gravity="center"
+            android:text='@{StringKt.localizeAndSetValue("p2p_transfer_send_funds_max_amount", viewModel.state.maxSpendable)}'
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_amount_container"
+            app:visibleIf="@{viewModel.state.amountError}"
+            tools:text="@string/p2p_transfer_send_funds_max_amount" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/p2p_send_selected_recipient"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginEnd="@dimen/llsdk_medium_margin"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/p2p_send_cta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.aptopayments.sdk.ui.views.PaymentSourceFullView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center"
+                android:layout_marginStart="@dimen/llsdk_medium_margin"
+                app:element="@{viewModel.state.recipient}" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/p2p_send_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                app:localize="p2p_transfer_send_funds_change_recipient"
+                app:onClickSafe="@{() -> viewModel.onChangeRecipient()}" />
+
+        </androidx.cardview.widget.CardView>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/p2p_send_cta"
+            style="@style/ThemeTwo.ContinueButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="p2p_transfer_send_funds_cta"
+            app:onClickSafe="@{() -> viewModel.onCtaClicked()}"
+            app:visibleIf="@{viewModel.state.ctaEnabled}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

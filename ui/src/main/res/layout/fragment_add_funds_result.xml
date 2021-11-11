@@ -64,7 +64,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:localize="@string/load_funds_transaction_status_title" />
+                app:localize="load_funds_transaction_status_title" />
 
             <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/load_funds_result_status_value"
@@ -105,7 +105,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:localize="@string/load_funds_transaction_time" />
+                app:localize="load_funds_transaction_time" />
 
             <TextView
                 android:id="@+id/load_funds_result_time_value"

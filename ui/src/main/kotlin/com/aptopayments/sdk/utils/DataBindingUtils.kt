@@ -122,13 +122,13 @@ object DataBindingUtils {
     }
 
     @JvmStatic
-    @BindingAdapter("app:onClickSafe")
+    @BindingAdapter("onClickSafe")
     fun setDebouncedListener(view: View, onClickListener: View.OnClickListener) {
         view.setOnClickListenerSafe { onClickListener.onClick(view) }
     }
 
     @JvmStatic
-    @BindingAdapter("app:onCheckedChangePressed")
+    @BindingAdapter("onCheckedChangePressed")
     fun setCheckedChangePressed(view: CompoundButton, listener: CompoundButton.OnCheckedChangeListener) {
         view.setOnCheckedChangeListener { buttonView, isChecked ->
             if (buttonView?.isPressed == true) {
@@ -138,7 +138,7 @@ object DataBindingUtils {
     }
 
     @JvmStatic
-    @BindingAdapter("app:card")
+    @BindingAdapter("card")
     internal fun setCard(view: CardShippingStatusView, card: Card) {
         view.card = card
     }

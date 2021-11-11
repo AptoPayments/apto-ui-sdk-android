@@ -74,11 +74,15 @@ internal class ManageCardViewModel(
     }
 
     private fun calculateEmptyState() {
-        val showAddToGPay = calcIapEnabled(iapHelper, _card.value)
+        var showAddToGPay = false
         val emptyTransactions = transactions.value.isNullOrEmpty() && transactionsInfoRetrieved
+
+        if (emptyTransactions) {
+            showAddToGPay = calcIapEnabled(iapHelper, _card.value)
+        }
         _emptyState.postValue(
             EmptyState(
-                showContainer = emptyTransactions,
+                showContainer = emptyTransactions || showAddToGPay,
                 showAddToGPay = showAddToGPay,
                 showNoTransactions = emptyTransactions && !showAddToGPay
             )

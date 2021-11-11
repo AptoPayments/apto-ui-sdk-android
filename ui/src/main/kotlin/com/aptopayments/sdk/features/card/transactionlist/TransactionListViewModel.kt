@@ -58,7 +58,7 @@ internal class TransactionListViewModel(
         val transactionId = if (isAppending) this.lastTransaction?.transactionId else null
         return TransactionListFilters(
             rows = ROWS_TO_RETRIEVE, lastTransactionId = transactionId,
-            startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.toLowerCase(Locale.US)
+            startDate = startDate, endDate = endDate, mccCode = mcc?.icon?.toString()?.lowercase(Locale.US)
         )
     }
 

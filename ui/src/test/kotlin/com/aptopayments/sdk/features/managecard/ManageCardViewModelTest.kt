@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.Features
-import com.aptopayments.mobile.data.card.InAppProvisioningFeature
+import com.aptopayments.mobile.data.card.GenericFeature
 import com.aptopayments.mobile.data.fundingsources.Balance
 import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.exception.Failure
@@ -303,7 +303,7 @@ class ManageCardViewModelTest : UnitTest() {
     @Test
     internal fun `given No transactions and iap CanBeAdded but feature is off then empty state is shown`() {
         whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
-        val cardFeatures = Features(inAppProvisioning = InAppProvisioningFeature(isEnabled = false))
+        val cardFeatures = Features(inAppProvisioning = GenericFeature(isEnabled = false))
         val card = TestDataProvider.provideCard(features = cardFeatures)
         createSut(transactions = emptyList(), card = card, iapState = ProvisioningState.CanBeAdded())
 
@@ -317,7 +317,7 @@ class ManageCardViewModelTest : UnitTest() {
     @Test
     internal fun `given No transactions and iap CanBeAdded then addToGpay is shown`() {
         whenever(iapHelper.satisfyHardwareRequisites()).thenReturn(true)
-        val cardFeatures = Features(inAppProvisioning = InAppProvisioningFeature(isEnabled = true))
+        val cardFeatures = Features(inAppProvisioning = GenericFeature(isEnabled = true))
         val card = TestDataProvider.provideCard(features = cardFeatures)
         createSut(transactions = emptyList(), card = card, iapState = ProvisioningState.CanBeAdded())
 

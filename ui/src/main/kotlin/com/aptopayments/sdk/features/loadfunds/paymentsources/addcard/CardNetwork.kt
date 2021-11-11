@@ -38,7 +38,7 @@ internal enum class CardNetwork(
     companion object {
         fun fromString(value: String) =
             try {
-                valueOf(value.toUpperCase(Locale.US))
+                valueOf(value.uppercase(Locale.US))
             } catch (e: IllegalArgumentException) {
                 UNKNOWN
             }

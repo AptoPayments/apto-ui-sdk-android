@@ -5,6 +5,8 @@ import com.aptopayments.mobile.data.cardproduct.CardProduct
 import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.mobile.data.statements.StatementMonth
 import com.aptopayments.mobile.data.transaction.Transaction
+import com.aptopayments.mobile.data.transfermoney.CardHolderData
+import com.aptopayments.mobile.data.transfermoney.P2pTransferResponse
 import com.aptopayments.mobile.data.user.*
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
@@ -54,6 +56,9 @@ import com.aptopayments.sdk.features.managecard.ManageCardViewModel
 import com.aptopayments.sdk.features.nonetwork.NoNetworkViewModel
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
+import com.aptopayments.sdk.features.p2p.funds.SendFundsViewModel
+import com.aptopayments.sdk.features.p2p.recipient.P2pRecipientViewModel
+import com.aptopayments.sdk.features.p2p.result.P2pResultViewModel
 import com.aptopayments.sdk.features.passcode.ChangePasscodeViewModel
 import com.aptopayments.sdk.features.passcode.CreatePasscodeViewModel
 import com.aptopayments.sdk.features.transactiondetails.TransactionDetailsViewModel
@@ -139,4 +144,7 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> OrderPhysicalCardViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> OrderPhysicalCardSuccessViewModel(cardId, get(), get()) }
     viewModel { (month: StatementMonth) -> StatementDetailViewModel(month, get(), get(), get()) }
+    viewModel { P2pRecipientViewModel(get()) }
+    viewModel { (cardId: String, recipient: CardHolderData) -> SendFundsViewModel(cardId, recipient, get()) }
+    viewModel { (result: P2pTransferResponse) -> P2pResultViewModel(result) }
 }

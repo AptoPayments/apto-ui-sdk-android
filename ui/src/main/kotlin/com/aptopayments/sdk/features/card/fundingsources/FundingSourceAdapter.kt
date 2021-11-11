@@ -81,7 +81,7 @@ internal class FundingSourceAdapter(
     }
 
     fun capitalizeString(stringToCapitalize: String): String {
-        return stringToCapitalize.toUpperCase(Locale.getDefault())[0] +
+        return stringToCapitalize.uppercase(Locale.getDefault())[0] +
             stringToCapitalize.substring(1, stringToCapitalize.length)
     }
 

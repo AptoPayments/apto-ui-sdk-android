@@ -48,9 +48,21 @@
                         android:visibility="gone"
                         app:onClickSafe="@{() -> viewModel.onAddFundsPressed()}"
                         app:optionDescription="card_settings_settings_load_funds_subtitle"
-                        app:optionShowDivider="false"
+                        app:optionShowDivider="@{viewModel.state.showTransferMoney}"
                         app:optionTitle="card_settings_settings_load_funds_title"
                         app:visibleIf="@{viewModel.state.showAddFunds}"
+                        tools:visibility="visible" />
+
+                    <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
+                        android:id="@+id/card_settings_transfer_money"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/section_option_height"
+                        android:visibility="gone"
+                        app:optionDescription="card_settings_settings_p2p_transfer_subtitle"
+                        app:optionShowDivider="false"
+                        app:optionTitle="card_settings_settings_p2p_transfer_title"
+                        app:visibleIf="@{viewModel.state.showTransferMoney}"
+                        app:onClickSafe="@{() -> viewModel.onTransferMoneyPressed()}"
                         tools:visibility="visible" />
 
                     <com.aptopayments.sdk.ui.views.SectionHeaderView

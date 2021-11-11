@@ -270,6 +270,24 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     @Test
+    fun `given transferMoney is disabled then option is not shown`() {
+        configureTransferMoney(enabled = false)
+
+        sut = createSut()
+
+        assertFalse(sut.state.getOrAwaitValue().showTransferMoney)
+    }
+
+    @Test
+    fun `given transferMoney is enabled option is not shown`() {
+        configureTransferMoney(enabled = true)
+
+        sut = createSut()
+
+        assertTrue(sut.state.getOrAwaitValue().showTransferMoney)
+    }
+
+    @Test
     fun `given showMonthlyStatementOption is true when sut is created then showMonthlyStatement state is true`() {
         whenever(cardOptionsMock.showMonthlyStatementOption()).thenReturn(true)
 
@@ -559,6 +577,15 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     @Test
+    fun `when transferMoneyPressed then TransferMoneyAction action`() {
+        sut = createSut()
+
+        sut.onTransferMoneyPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.TransferMoneyAction)
+    }
+
+    @Test
     fun `given exchange rates set when onExchangeRatesPressed then correct content presenter called`() {
         val element = mock<Content>()
         whenever(cardProduct.exchangeRates).thenReturn(element)
@@ -572,7 +599,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun configureGetPin(statusResult: FeatureStatus, featureType: FeatureType?) {
-        val feature = mock<GetPin>() {
+        val feature = mock<GetPin> {
             on { status } doReturn statusResult
             featureType?.let { on { type } doReturn featureType }
         }
@@ -580,14 +607,14 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun configureSetPin(statusResult: FeatureStatus) {
-        val feature = mock<SetPin>() {
+        val feature = mock<SetPin> {
             on { status } doReturn statusResult
         }
         whenever(cardFeatures.setPin).thenReturn(feature)
     }
 
     private fun configureIvrSupport(statusResult: FeatureStatus, phone: PhoneNumber?) {
-        val feature = mock<Ivr>() {
+        val feature = mock<Ivr> {
             on { status } doReturn statusResult
             on { ivrPhone } doReturn phone
         }
@@ -595,7 +622,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun configureFunding(statusResult: Boolean) {
-        val feature = mock<FundingFeature>() {
+        val feature = mock<FundingFeature> {
             on { isEnabled } doReturn statusResult
         }
         whenever(cardFeatures.funding).thenReturn(feature)
@@ -617,9 +644,16 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun givenInAppProvisioningFeature(enabled: Boolean) {
-        val feature = mock<InAppProvisioningFeature> {
+        val feature = mock<GenericFeature> {
             on { isEnabled } doReturn enabled
         }
         whenever(cardFeatures.inAppProvisioning).thenReturn(feature)
+    }
+
+    private fun configureTransferMoney(enabled: Boolean) {
+        val feature = mock<GenericFeature> {
+            on { isEnabled } doReturn enabled
+        }
+        whenever(cardFeatures.transferMoneyP2p).thenReturn(feature)
     }
 }

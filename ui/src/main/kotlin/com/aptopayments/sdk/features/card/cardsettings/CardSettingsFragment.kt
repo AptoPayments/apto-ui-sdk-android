@@ -91,6 +91,7 @@ internal class CardSettingsFragment :
                     is Action.ShowAddFundsSelector -> delegate?.showAddFundsSelector()
                     is Action.ShowAddFundsAchDisclaimer -> delegate?.showAddFundsDisclaimer(it.disclaimer)
                     is Action.OrderPhysicalCard -> delegate?.showOrderPhysicalCard()
+                    is Action.TransferMoneyAction -> delegate?.transferMoney()
                 }
             }
         }

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.utils.PhoneDialer
 
 internal class ActivatePhysicalCardSuccessViewModel(
-    private val analyticsManager: AnalyticsServiceContract
+    analyticsManager: AnalyticsServiceContract
 ) : BaseViewModel(), PhoneDialer.Delegate {
 
     var getPINFinished: MutableLiveData<Boolean> = MutableLiveData()
@@ -40,15 +40,6 @@ internal class ActivatePhysicalCardSuccessViewModel(
 
     override fun onCallStarted() {
         getPINStarted = true
-    }
-
-    override fun onCallEnded() {
-        getPINStarted = false
-        getPINFinished.postValue(true)
-    }
-
-    override fun onCallCancelled() {
-        getPINStarted = false
     }
 }
 

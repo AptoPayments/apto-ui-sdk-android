@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission
+            android:name="android.permission.ACCESS_FINE_LOCATION"
+            tools:node="remove"
+            tools:ignore="CoarseFineLocation" />
+    <!-- https://issuetracker.google.com/u/1/issues/203956063 -->
 
     <!--Features-->
     <uses-feature
@@ -38,7 +43,8 @@
             android:name="com.aptopayments.sdk.features.card.CardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateUnchanged|adjustResize" />
+            android:windowSoftInputMode="stateUnchanged|adjustResize"
+            android:exported="false"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -285,7 +285,7 @@ internal class CardTransactionsChart :
     }
 
     override fun onCategoryTapped(categorySpending: CategorySpending) {
-        val mcc = MCC(name = null, icon = Icon.valueOf(categorySpending.categoryId.toUpperCase(Locale.US)))
+        val mcc = MCC(name = null, icon = Icon.valueOf(categorySpending.categoryId.uppercase(Locale.US)))
         delegate?.onCategorySelected(mcc, startOfMonth, endOfMonth)
     }
 

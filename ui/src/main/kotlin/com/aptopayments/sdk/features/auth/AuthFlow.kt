@@ -106,7 +106,7 @@ internal class AuthFlow(
     }
 
     private fun launchSecondFactorAuthentication(type: String) {
-        val fragment = when (type.toUpperCase()) {
+        val fragment = when (type.uppercase()) {
             DataPoint.Type.EMAIL.toString() -> createInputEmailFragment() as BaseFragment
             DataPoint.Type.BIRTHDATE.toString() -> createBirthdateVerificationFragment(primaryVerification!!) as BaseFragment
             DataPoint.Type.PHONE.toString() -> createPhoneInputFragment() as BaseFragment

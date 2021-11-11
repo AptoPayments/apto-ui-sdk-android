@@ -12,5 +12,5 @@ internal class FormatOrderGenerator(private val provider: FormatOrderProvider) {
         }
     }
 
-    private fun getDateOrderFromSystem() = provider.provide().joinToString("").toUpperCase(Locale.ROOT)
+    private fun getDateOrderFromSystem() = provider.provide().joinToString("").uppercase(Locale.ROOT)
 }

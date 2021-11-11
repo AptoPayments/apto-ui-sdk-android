@@ -7,7 +7,7 @@ import com.aptopayments.sdk.ui.views.PCIConfiguration
 class PCIConfigurationBuilder {
     fun build(cardId: String) = PCIConfiguration(
         apiKey = ApiKeyProvider.apiKey,
-        environment = ApiKeyProvider.environment.name.toLowerCase(),
+        environment = ApiKeyProvider.environment.name.lowercase(),
         token = AptoPlatform.currentToken()?.token ?: "",
         cardId = cardId
     )

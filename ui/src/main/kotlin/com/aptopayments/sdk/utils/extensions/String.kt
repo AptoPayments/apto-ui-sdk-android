@@ -11,7 +11,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import java.util.Locale
 import java.util.regex.Pattern
 
-private const val VALUE = "<<VALUE>>"
+private const val VALUE = "VALUE"
 private val EMAIL_ADDRESS_PATTERN = Pattern.compile(
     "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
         "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
@@ -20,7 +20,7 @@ private val EMAIL_ADDRESS_PATTERN = Pattern.compile(
 
 @SuppressLint("DefaultLocale")
 internal fun String.toCapitalized(): String =
-    this.toLowerCase(Locale.getDefault()).split(' ').joinToString(" ") { it.capitalize() }
+    this.lowercase(Locale.getDefault()).split(' ').joinToString(" ") { it.capitalize() }
 
 internal fun String.isValidEmail(): Boolean = isNotEmpty() && EMAIL_ADDRESS_PATTERN.matcher(this).matches()
 
@@ -41,7 +41,10 @@ internal fun String.parsePhoneNumber(): PhoneNumber {
 }
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-fun String.setValue(value: String): String = this.replaceFirst(VALUE, value)
+fun String.setValue(value: String, key: String = VALUE): String = this.replaceFirst("<<$key>>", value)
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 fun String.localizeAndSetValue(value: String): String = this.localized().setValue(value)
+
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+fun String.localizeAndSetValue(value: String, key: String): String = this.localized().setValue(value, key)

@@ -18,6 +18,8 @@ import com.aptopayments.mobile.data.paymentsources.NewCard
 import com.aptopayments.mobile.data.statements.MonthlyStatement
 import com.aptopayments.mobile.data.stats.CategorySpending
 import com.aptopayments.mobile.data.transaction.Transaction
+import com.aptopayments.mobile.data.transfermoney.CardHolderName
+import com.aptopayments.mobile.data.transfermoney.P2pTransferResponse
 import com.aptopayments.mobile.data.user.DataPoint
 import com.aptopayments.mobile.data.user.DataPointList
 import com.aptopayments.mobile.data.user.Verification
@@ -210,14 +212,15 @@ class TestDataProvider {
             lastFour = "4242"
         )
 
-        fun providePaymentSourcesPayment(id: String = "entity_12345", status: PaymentStatus = PaymentStatus.PROCESSED) = Payment(
-            id = id,
-            status = status,
-            amount = Money("USD", 100.0),
-            source = providePaymentSourcesCard(),
-            approvalCode = "123456",
-            createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC)
-        )
+        fun providePaymentSourcesPayment(id: String = "entity_12345", status: PaymentStatus = PaymentStatus.PROCESSED) =
+            Payment(
+                id = id,
+                status = status,
+                amount = Money("USD", 100.0),
+                source = providePaymentSourcesCard(),
+                approvalCode = "123456",
+                createdAt = ZonedDateTime.of(2020, 10, 2, 15, 53, 0, 0, ZoneOffset.UTC)
+            )
 
         fun provideMoney(amount: Double = 10.0, currency: String = "USD") = Money(currency, amount)
 
@@ -285,5 +288,21 @@ class TestDataProvider {
                 urlExpiration = urlExpiration
             )
         }
+
+        fun provideP2pTransferResponse(
+            transferId: String = "id_11234",
+            status: PaymentStatus = PaymentStatus.PROCESSED,
+            sourceId: String = "id_source_1",
+            amount: Money = provideMoney(),
+            recipientName: CardHolderName = CardHolderName("name", "surname"),
+            createdAt: ZonedDateTime = ZonedDateTime.now(),
+        ) = P2pTransferResponse(
+            transferId = transferId,
+            status = status,
+            sourceId = sourceId,
+            amount = amount,
+            recipientName = recipientName,
+            createdAt = createdAt
+        )
     }
 }

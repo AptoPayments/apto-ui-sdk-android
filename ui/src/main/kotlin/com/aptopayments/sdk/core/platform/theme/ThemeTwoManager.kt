@@ -104,6 +104,14 @@ internal object ThemeTwoManager : ThemeManager {
         }
     }
 
+    override fun customizeLargeSubtitleLabel(textView: TextView) {
+        setFontType(textView, REGULAR)
+        textView.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            setTextColor(UIConfig.textPrimaryColor)
+        }
+    }
+
     override fun customizeRegularTextLabel(textView: TextView) {
         setFontType(textView, REGULAR)
         textView.apply {
@@ -426,12 +434,6 @@ internal object ThemeTwoManager : ThemeManager {
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTextColor(UIConfig.textPrimaryColor)
-        }
-    }
-
-    private fun setFontType(textView: TextView, fontType: FontType) {
-        FontsUtil.getFontOfType(fontType)?.let {
-            textView.typeface = it
         }
     }
 

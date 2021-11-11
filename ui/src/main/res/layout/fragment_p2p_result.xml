@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aptopayments.sdk.features.p2p.result.P2pResultViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/p2p_result_status_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="@dimen/llsdk_xlarge_margin"
+            android:src="@drawable/ic_tick_rounded_on"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/p2p_result_main_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/llsdk_medium_margin"
+            android:gravity="center_horizontal"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/p2p_result_status_icon"
+            tools:localize="p2p_transfer_result_correct_processed_title" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/p2p_result_status_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/p2p_result_time_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/p2p_result_status_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="load_funds_transaction_status_title" />
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/p2p_result_status_value"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localizeBinding="@{viewModel.state.status.legend}"
+                tools:text="Completed" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/p2p_result_time_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/transaction_result_row_height"
+            android:layout_marginStart="@dimen/llsdk_medium_margin"
+            android:layout_marginBottom="@dimen/llsdk_medium_margin"
+            app:layout_constraintBottom_toTopOf="@+id/p2p_result_cta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.aptopayments.sdk.ui.views.AptoTextView
+                android:id="@+id/p2p_result_time_title"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:localize="load_funds_transaction_time" />
+
+            <TextView
+                android:id="@+id/p2p_result_time_value"
+                style="@style/AddFundsResultRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/llsdk_medium_margin"
+                android:text="@{viewModel.state.time}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="July 23, 2020 11:12 am" />
+
+            <include
+                layout="@layout/include_divider_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider_line_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/p2p_result_cta"
+            style="@style/ThemeTwo.ContinueButton"
+            android:layout_marginBottom="@dimen/llsdk_big_medium_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:localize="p2p_transfer_result_cta"
+            app:onClickSafe="@{() -> viewModel.onCtaClicked()}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

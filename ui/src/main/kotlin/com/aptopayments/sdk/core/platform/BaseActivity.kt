@@ -94,6 +94,9 @@ abstract class BaseActivity : AppCompatActivity() {
                 }
                 onRequestPermissionsResult = null
             }
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
         }
     }
 

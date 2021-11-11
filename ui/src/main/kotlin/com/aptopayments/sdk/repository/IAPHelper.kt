@@ -1,6 +1,6 @@
 package com.aptopayments.sdk.repository
 
-import androidx.fragment.app.FragmentActivity
+import android.app.Activity
 import com.aptopayments.mobile.exception.Failure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ interface IAPHelper {
     suspend fun initProcess()
     fun registerDataChanged()
     fun unregisterDataChanged()
-    suspend fun startInAppProvisioningFlow(activity: FragmentActivity)
+    suspend fun startInAppProvisioningFlow(activity: Activity)
     fun onActivityResult(requestCode: Int, result: Boolean, scope: CoroutineScope): Boolean
 }
 
@@ -28,7 +28,7 @@ internal class IAPHelperFake : IAPHelper {
     override fun unregisterDataChanged() {
         // Do Nothing
     }
-    override suspend fun startInAppProvisioningFlow(activity: FragmentActivity) {
+    override suspend fun startInAppProvisioningFlow(activity: Activity) {
         // Do Nothing
     }
     override fun onActivityResult(requestCode: Int, result: Boolean, scope: CoroutineScope) = false

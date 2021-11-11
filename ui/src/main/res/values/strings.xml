@@ -281,6 +281,9 @@
     <string name="card_settings_legal_exchange_rates_title">Foreign exchange rates</string>
     <string name="card_settings_legal_exchange_rates_description">Compare the crossborder fees</string>
 
+    <string name="card_settings_settings_p2p_transfer_title">Transfer money</string>
+    <string name="card_settings_settings_p2p_transfer_subtitle">Send funds to another user</string>
+
     <!-- card management enable/disable dialog -->
     <string name="enable_card_message">You are activating your card. Are you sure?</string>
     <string name="disable_card_message">You are suspending your card. Are you sure?</string>
@@ -706,4 +709,22 @@
     <string name="order_physical_card_success_title">You‘re all set!</string>
     <string name="order_physical_card_success_description">Your card should arrive within 2 weeks.</string>
     <string name="order_physical_card_success_done">Done</string>
+
+    <string name="p2p_transfer_main_screen_title">Transfer money to another person\'s card</string>
+    <string name="p2p_transfer_main_screen_intro_phone_number_description">Search for available recipients by their phone number and then select the recipient to continue.</string>
+    <string name="p2p_transfer_main_screen_intro_email_description">Search for available recipients by their email and then select the recipient to continue.</string>
+    <string name="p2p_transfer_main_screen_primary_cta">Continue</string>
+    <string name="p2p_transfer_recipient_result_view_recipient_not_found_description">No results found. Please try a different search.</string>
+    <string name="p2p_transfer_main_view_field_email_placeholder">Enter the recipient\'s email</string>
+    <string name="p2p_transfer_main_view_field_phone_number_placeholder">Enter the recipient\'s phone number</string>
+
+    <string name="p2p_transfer_send_funds_change_recipient">Change</string>
+    <string name="p2p_transfer_send_funds_screen_title">Transfer Money</string>
+    <string name="p2p_transfer_send_funds_cta">Confirm Transfer</string>
+    <string name="p2p_transfer_send_funds_max_amount">Maximum amount &lt;&lt;VALUE&gt;&gt;</string>
+    <string name="p2p_transfer_send_funds_transfer_error">We experienced an error while processing your transaction. Please try again or contact support for further assistance.</string>
+
+    <string name="p2p_transfer_result_correct_processed_title">You transferred &lt;&lt;VALUE&gt;&gt; to &lt;&lt;NAME&gt;&gt;</string>
+    <string name="p2p_transfer_result_pending_title">Transfer initiated to &lt;&lt;VALUE&gt;&gt;</string>
+    <string name="p2p_transfer_result_cta">Done</string>
 </resources>
