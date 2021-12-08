@@ -125,8 +125,6 @@ internal interface FragmentFactory {
     ): TransactionListContract.View
 
     fun waitlistFragment(cardId: String, cardProduct: CardProduct, tag: String): WaitlistContract.View
-    fun setPinFragment(tag: String): SetCardPinContract.View
-    fun confirmPinFragment(cardId: String, pin: String, tag: String): ConfirmCardPinContract.View
     fun setPasscodeFragment(tag: String): SetCardPinContract.View
     fun confirmPasscodeFragment(cardId: String, pin: String, verificationId: String?, tag: String): ConfirmCardPinContract.View
     fun getVoipFragment(cardId: String, action: Action, tag: String): VoipContract.View

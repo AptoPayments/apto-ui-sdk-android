@@ -9,20 +9,19 @@ import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentDirectDepositInstructionsBinding
 import com.aptopayments.sdk.features.directdeposit.instructions.DirectDepositInstructionsViewModel.Actions
 import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.copyToClipboard
-import kotlinx.android.synthetic.main.include_toolbar_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 private const val CARD_ID = "CARD_ID"
 
 internal class DirectDepositInstructionsFragment :
-    BaseBindingFragment<FragmentDirectDepositInstructionsBinding>(),
+    BaseDataBindingFragment<FragmentDirectDepositInstructionsBinding>(),
     DirectDepositInstructionsContract.View {
 
     private val viewModel: DirectDepositInstructionsViewModel by viewModel { parametersOf(cardId) }
@@ -87,7 +86,7 @@ internal class DirectDepositInstructionsFragment :
     }
 
     private fun setUpToolbar() {
-        binding.tbLlsdkToolbarLayout.tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))

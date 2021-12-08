@@ -6,7 +6,7 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.payment.Payment
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddFundsResultBinding
 import com.aptopayments.sdk.features.loadfunds.result.AddFundsResultViewModel.Action
@@ -17,7 +17,7 @@ private const val CARD_ID = "CARD_ID"
 private const val PAYMENT_KEY = "PAYMENT_KEY"
 
 internal class AddFundsResultFragment :
-    BaseBindingFragment<FragmentAddFundsResultBinding>(),
+    BaseDataBindingFragment<FragmentAddFundsResultBinding>(),
     AddFundsResultContract.View {
 
     override var delegate: AddFundsResultContract.Delegate? = null

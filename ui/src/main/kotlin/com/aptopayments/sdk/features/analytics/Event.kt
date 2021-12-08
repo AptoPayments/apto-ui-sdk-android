@@ -45,8 +45,6 @@ enum class Event(val event: String) {
     ManageCardActivatePhysicalCard("manage_card.activate_physical_card.start"),
     ManageCardActivatePhysicalCardOverlay("manage_card.activate_physical_card_overlay.start"),
     ManageCardGetPinNue("manage_card.get_pin_nue.start"),
-    ManageCardSetPin("manage_card.set_pin.start"),
-    ManageCardConfirmPin("manage_card.set_pin.confirm"),
     ManageCardFundingSourceSelector("manage_card.funding_source_selector.start"),
     ManageCardCardSettings("manage_card.card_settings.start"),
     ManageCardVoipCallStarted("manage_card.get_pin_voip.call_started"),

@@ -6,7 +6,7 @@
     <data>
 
         <import type="com.aptopayments.sdk.features.p2p.recipient.P2pRecipientViewModel.Credential" />
-
+        <import type="com.aptopayments.sdk.features.p2p.recipient.RecipientError" />
         <import type="com.aptopayments.sdk.utils.extensions.StringKt" />
 
         <variable
@@ -119,7 +119,6 @@
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="@+id/divider_line"
             app:layout_constraintTop_toBottomOf="@+id/divider_line"
-            app:visibleIf="@{viewModel.cardholder!=null}"
             tools:text="Jhon doe" />
 
         <TextView
@@ -131,7 +130,6 @@
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="@+id/p2p_recipient_name"
             app:layout_constraintTop_toBottomOf="@+id/p2p_recipient_name"
-            app:visibleIf="@{viewModel.cardholder!=null}"
             tools:text="email@email.com" />
 
         <ProgressBar
@@ -149,13 +147,30 @@
             style="@style/ThemeTwo.TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/llsdk_big_medium_margin"
+            android:gravity="start"
             android:text='@{StringKt.localizeAndSetValue("p2p_transfer_recipient_result_view_recipient_not_found_description", viewModel.configuration.companyName)}'
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_line"
-            app:visibleIf="@{viewModel.state.showErrorNotFound}"
+            app:layout_constraintTop_toBottomOf="@+id/p2p_recipient_card_wrapper"
+            app:visibleIf="@{viewModel.state.error == RecipientError.NOT_FOUND}"
+            tools:text="@string/p2p_transfer_recipient_result_view_recipient_not_found_description"
+            tools:visibility="gone" />
+
+        <com.aptopayments.sdk.ui.views.AptoTextView
+            android:id="@+id/p2p_send_self"
+            style="@style/ThemeTwo.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/llsdk_big_medium_margin"
+            android:gravity="start"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/p2p_recipient_card_wrapper"
+            app:localize="p2p_transfer_error_self_transfer"
+            app:visibleIf="@{viewModel.state.error == RecipientError.SELF_RECIPIENT}"
             tools:text="@string/p2p_transfer_recipient_result_view_recipient_not_found_description"
             tools:visibility="gone" />
 
@@ -167,8 +182,7 @@
             android:src="@drawable/ic_tick_rounded_on"
             app:layout_constraintBottom_toBottomOf="@+id/p2p_recipient_id"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/p2p_recipient_name"
-            app:visibleIf="@{viewModel.cardholder!=null}" />
+            app:layout_constraintTop_toTopOf="@+id/p2p_recipient_name" />
 
         <com.aptopayments.sdk.ui.views.AptoTextView
             android:id="@+id/p2p_recipient_continue"
@@ -179,6 +193,14 @@
             app:localize="p2p_transfer_main_screen_primary_cta"
             app:onClickSafe="@{() -> viewModel.onContinueClicked()}"
             app:visibleIf="@{viewModel.state.showContinueButton}" />
+
+        <androidx.constraintlayout.widget.Group
+            visibleIf="@{viewModel.cardholder!=null}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="payment_method_on, p2p_recipient_name, p2p_recipient_id, divider_line"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

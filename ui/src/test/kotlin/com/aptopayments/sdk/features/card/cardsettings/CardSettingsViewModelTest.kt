@@ -17,7 +17,7 @@ import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.features.card.cardsettings.CardSettingsViewModel.Action
 import com.aptopayments.sdk.repository.IAPHelper
-import com.aptopayments.sdk.repository.LocalCardDetailsRepository
+import com.aptopayments.sdk.repository.CardActionRepository
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -38,7 +38,7 @@ private const val CARD_ID = "CARD_ID"
 @ExtendWith(InstantExecutorExtension::class)
 internal class CardSettingsViewModelTest : UnitTest() {
 
-    private val cardDetailsRepo = mock<LocalCardDetailsRepository>()
+    private val cardDetailsRepo = mock<CardActionRepository>()
     private val cardFeatures = mock<Features>()
     private val card = mock<Card> {
         on { accountID } doReturn CARD_ID
@@ -51,6 +51,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     private val aptoUiSdkProtocol = mock<AptoUiSdkProtocol> {
         on { cardOptions } doReturn cardOptionsMock
     }
+    private val cardActionRepo: CardActionRepository = mock()
     private val telephonyEnabledChecker: TelephonyEnabledChecker = mock()
     private val phoneNumber = PhoneNumber("1", "111111111")
     private val iapHelper: IAPHelper = mock()
@@ -464,7 +465,7 @@ internal class CardSettingsViewModelTest : UnitTest() {
     }
 
     private fun createSut() =
-        CardSettingsViewModel(card, cardProduct, analytics, aptoPlatform, aptoUiSdkProtocol)
+        CardSettingsViewModel(card, cardProduct, analytics, aptoPlatform, aptoUiSdkProtocol, cardActionRepo)
 
     @Test
     fun `given correct sim when click on IVR then call action`() {
@@ -583,6 +584,15 @@ internal class CardSettingsViewModelTest : UnitTest() {
         sut.onTransferMoneyPressed()
 
         assertTrue(sut.action.getOrAwaitValue() is Action.TransferMoneyAction)
+    }
+
+    @Test
+    fun `when setPinPressed then SetPin action`() {
+        sut = createSut()
+
+        sut.onSetPinPressed()
+
+        assertTrue(sut.action.getOrAwaitValue() is Action.SetPin)
     }
 
     @Test

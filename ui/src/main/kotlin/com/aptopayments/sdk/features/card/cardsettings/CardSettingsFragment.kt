@@ -15,7 +15,7 @@ import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.AptoUiSdk
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCardSettingsBinding
 import com.aptopayments.sdk.features.card.CardActivity
@@ -38,7 +38,7 @@ private const val CARD_PRODUCT_KEY = "CARD_PRODUCT"
 private const val PROJECT_CONFIGURATION_KEY = "PROJECT_CONFIGURATION"
 
 internal class CardSettingsFragment :
-    BaseBindingFragment<FragmentCardSettingsBinding>(),
+    BaseDataBindingFragment<FragmentCardSettingsBinding>(),
     CardSettingsContract.View {
 
     private lateinit var card: Card
@@ -92,6 +92,7 @@ internal class CardSettingsFragment :
                     is Action.ShowAddFundsAchDisclaimer -> delegate?.showAddFundsDisclaimer(it.disclaimer)
                     is Action.OrderPhysicalCard -> delegate?.showOrderPhysicalCard()
                     is Action.TransferMoneyAction -> delegate?.transferMoney()
+                    is Action.SetPin -> delegate?.onSetPin()
                 }
             }
         }
@@ -124,7 +125,6 @@ internal class CardSettingsFragment :
     override fun setupListeners() {
         super.setupListeners()
         iv_close_button.setOnClickListenerSafe { onBackPressed() }
-        binding.rlSetPin.setOnClickListenerSafe { setPinPressed() }
         binding.cardSettingsLockSwitch.setOnCheckedChangeListener { _, value -> lockUnlockCard(value) }
         binding.cardSettingsDetailedActivitySwitch.setOnCheckedChangeListener { _, value ->
             storeDetailedCardActivityPreference(value)
@@ -156,8 +156,6 @@ internal class CardSettingsFragment :
     override fun onBackPressed() {
         delegate?.onBackFromCardSettings()
     }
-
-    private fun setPinPressed() = delegate?.onSetPin()
 
     private fun callIvr(phoneNumber: PhoneNumber) = context?.let { context ->
         val phoneDialer = PhoneDialer(context)

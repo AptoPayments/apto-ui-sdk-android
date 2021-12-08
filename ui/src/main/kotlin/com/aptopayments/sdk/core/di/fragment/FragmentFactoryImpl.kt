@@ -32,8 +32,6 @@ import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCar
 import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeFragment
 import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeFragment
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartFragment
-import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinFragment
-import com.aptopayments.sdk.features.card.setpin.SetCardPinFragment
 import com.aptopayments.sdk.features.card.statements.StatementListFragment
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListFragment
@@ -161,11 +159,6 @@ internal class FragmentFactoryImpl : FragmentFactory {
 
     override fun waitlistFragment(cardId: String, cardProduct: CardProduct, tag: String) =
         WaitlistFragment.newInstance(cardProduct, cardId).apply { this.TAG = tag }
-
-    override fun setPinFragment(tag: String) = SetCardPinFragment().apply { this.TAG = tag }
-
-    override fun confirmPinFragment(cardId: String, pin: String, tag: String) =
-        ConfirmCardPinFragment.newInstance(cardId, pin).apply { this.TAG = tag }
 
     override fun setPasscodeFragment(tag: String) = SetCardPasscodeFragment().apply { this.TAG = tag }
 

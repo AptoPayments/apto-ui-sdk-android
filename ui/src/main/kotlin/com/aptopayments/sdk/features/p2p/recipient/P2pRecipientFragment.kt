@@ -11,18 +11,17 @@ import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentP2pRecipientBinding
 import com.aptopayments.sdk.features.p2p.recipient.P2pRecipientViewModel.Action
 import com.aptopayments.sdk.features.p2p.recipient.P2pRecipientViewModel.Credential.*
 import com.aptopayments.sdk.ui.views.PhoneInputView
 import com.aptopayments.sdk.utils.FontsUtil
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class P2pRecipientFragment :
-    BaseBindingFragment<FragmentP2pRecipientBinding>(),
+    BaseDataBindingFragment<FragmentP2pRecipientBinding>(),
     P2pRecipientContract.View {
 
     override var delegate: P2pRecipientContract.Delegate? = null
@@ -77,6 +76,8 @@ internal class P2pRecipientFragment :
             binding.p2pRecipientId.setTextColor(UIConfig.textPrimaryColor)
             setFontType(binding.p2pNotFound, FontsUtil.FontType.REGULAR)
             binding.p2pNotFound.setTextColor(UIConfig.textSecondaryColor)
+            setFontType(binding.p2pSendSelf, FontsUtil.FontType.REGULAR)
+            binding.p2pSendSelf.setTextColor(UIConfig.textSecondaryColor)
         }
         setupToolBar()
         setPhoneChangedListener()
@@ -116,7 +117,7 @@ internal class P2pRecipientFragment :
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder().backButtonMode(BackButtonMode.Close()).setPrimaryColors().build()
         )

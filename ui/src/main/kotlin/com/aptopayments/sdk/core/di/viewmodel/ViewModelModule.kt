@@ -26,8 +26,6 @@ import com.aptopayments.sdk.features.card.orderphysical.success.OrderPhysicalCar
 import com.aptopayments.sdk.features.card.passcode.passcode.ConfirmCardPasscodeViewModel
 import com.aptopayments.sdk.features.card.passcode.passcode.SetCardPasscodeViewModel
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewModel
-import com.aptopayments.sdk.features.card.setpin.ConfirmCardPinViewModel
-import com.aptopayments.sdk.features.card.setpin.SetCardPinViewModel
 import com.aptopayments.sdk.features.card.statements.StatementListViewModel
 import com.aptopayments.sdk.features.card.statements.detail.StatementDetailViewModel
 import com.aptopayments.sdk.features.card.transactionlist.TransactionListConfig
@@ -57,6 +55,7 @@ import com.aptopayments.sdk.features.nonetwork.NoNetworkViewModel
 import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel
 import com.aptopayments.sdk.features.oauth.verify.OAuthVerifyViewModel
 import com.aptopayments.sdk.features.p2p.funds.SendFundsViewModel
+import com.aptopayments.sdk.features.p2p.recipient.DEBOUNCE_TIME
 import com.aptopayments.sdk.features.p2p.recipient.P2pRecipientViewModel
 import com.aptopayments.sdk.features.p2p.result.P2pResultViewModel
 import com.aptopayments.sdk.features.passcode.ChangePasscodeViewModel
@@ -80,7 +79,7 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> ManageCardViewModel(cardId, get(), get(), get(), get()) }
     viewModel { (cardId: String) -> ActivatePhysicalCardViewModel(cardId, get(), get()) }
     viewModel { ActivatePhysicalCardSuccessViewModel(get()) }
-    viewModel { (card: Card, cardProduct: CardProduct) -> CardSettingsViewModel(card, cardProduct, get(), get(), get()) }
+    viewModel { (card: Card, cardProduct: CardProduct) -> CardSettingsViewModel(card, cardProduct, get(), get(), get(), get()) }
     viewModel { (transaction: Transaction) -> TransactionDetailsViewModel(transaction, get()) }
     viewModel { (cardId: String) -> CardMonthlyStatsViewModel(cardId, get(), get(), get()) }
     viewModel { (cardId: String, date: LocalDate) -> CardTransactionsChartViewModel(cardId, date, get()) }
@@ -101,15 +100,6 @@ val viewModelModule = module {
         )
     }
     viewModel { WaitlistViewModel(get()) }
-    viewModel { SetCardPinViewModel(get()) }
-    viewModel { (cardId: String, pin: String) ->
-        ConfirmCardPinViewModel(
-            cardId = cardId,
-            previousPin = pin,
-            get(),
-            get()
-        )
-    }
     viewModel { SetCardPasscodeViewModel(get()) }
     viewModel { (cardId: String, pin: String, verificationId: String?) ->
         ConfirmCardPasscodeViewModel(
@@ -144,7 +134,7 @@ val viewModelModule = module {
     viewModel { (cardId: String) -> OrderPhysicalCardViewModel(cardId, get(), get()) }
     viewModel { (cardId: String) -> OrderPhysicalCardSuccessViewModel(cardId, get(), get()) }
     viewModel { (month: StatementMonth) -> StatementDetailViewModel(month, get(), get(), get()) }
-    viewModel { P2pRecipientViewModel(get()) }
+    viewModel { P2pRecipientViewModel(DEBOUNCE_TIME, get()) }
     viewModel { (cardId: String, recipient: CardHolderData) -> SendFundsViewModel(cardId, recipient, get()) }
     viewModel { (result: P2pTransferResponse) -> P2pResultViewModel(result) }
 }

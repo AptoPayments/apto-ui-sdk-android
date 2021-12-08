@@ -8,7 +8,7 @@ import com.aptopayments.mobile.repository.transaction.TransactionListFilters
 
 class FetchTransactionsTask(
     private val params: Params,
-    private val onComplete: ((Either<Failure, List<Transaction>>) -> Unit)
+    private var onComplete: ((Either<Failure, List<Transaction>>) -> Unit)?
 ) {
 
     data class Params(
@@ -36,6 +36,7 @@ class FetchTransactionsTask(
 
     fun cancel() {
         isCancelled = true
+        onComplete = null
     }
 
     private fun run() {
@@ -53,7 +54,7 @@ class FetchTransactionsTask(
         if (!isCancelled) {
             isExecuting = false
             isFinished = true
-            onComplete(it)
+            onComplete?.invoke(it)
         }
     }
 }

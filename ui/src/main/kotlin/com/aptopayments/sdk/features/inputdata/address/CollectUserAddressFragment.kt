@@ -14,7 +14,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserAddressBinding
 import com.aptopayments.sdk.utils.extensions.shake
@@ -30,7 +30,7 @@ private const val MAPS_DEFAULT = "replace_me"
 private const val DATAPOINT_ADDRESS = "DATAPOINT_ADDRESS"
 
 internal class CollectUserAddressFragment :
-    BaseBindingFragment<FragmentCollectUserAddressBinding>(),
+    BaseDataBindingFragment<FragmentCollectUserAddressBinding>(),
     CollectUserAddressContract.View {
 
     private var initialValue: AddressDataPoint? = null
@@ -74,7 +74,7 @@ internal class CollectUserAddressFragment :
 
     override fun setupUI() {
         applyFontsAndColors()
-        setupToolBar(binding.tbLlsdkToolbarLayout.findViewById(R.id.tb_llsdk_toolbar))
+        setupToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbar)
         setHints()
         configureSearchField()
     }

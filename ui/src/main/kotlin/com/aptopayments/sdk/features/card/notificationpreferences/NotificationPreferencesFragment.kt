@@ -13,19 +13,18 @@ import com.aptopayments.mobile.data.user.notificationpreferences.NotificationGro
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentNotificationPreferencesBinding
 import com.aptopayments.sdk.utils.extensions.setColorFilterCompat
 import kotlinx.android.synthetic.main.fragment_notification_preferences.*
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val CARD_ID_PARAMETER_KEY = "card_id"
 
 internal class NotificationPreferencesFragment :
-    BaseBindingFragment<FragmentNotificationPreferencesBinding>(),
+    BaseDataBindingFragment<FragmentNotificationPreferencesBinding>(),
     NotificationPreferencesContract.View {
 
     private val viewModel: NotificationPreferencesViewModel by viewModel()
@@ -158,7 +157,7 @@ internal class NotificationPreferencesFragment :
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))

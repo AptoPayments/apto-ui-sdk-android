@@ -3,16 +3,15 @@ package com.aptopayments.sdk.features.card.activatephysicalcard
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.voip.Action
 import com.aptopayments.mobile.exception.Failure
-import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.flow.Flow
 import com.aptopayments.sdk.core.platform.flow.FlowPresentable
 import com.aptopayments.sdk.features.card.activatephysicalcard.activate.ActivatePhysicalCardContract
 import com.aptopayments.sdk.features.card.activatephysicalcard.success.ActivatePhysicalCardSuccessContract
-import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
-import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
+import com.aptopayments.sdk.repository.CardActionRepository
+import org.koin.core.inject
 
 private const val ACTIVATE_PHYSICAL_CARD_TAG = "ActivatePhysicalCardFragment"
 private const val ACTIVATE_PHYSICAL_CARD_SUCCESS_TAG = "ActivatePhysicalCardSuccessFragment"
@@ -23,6 +22,8 @@ internal class ActivatePhysicalCardFlow(
     val onFinish: () -> Unit,
     val onPhysicalCardActivated: () -> Unit
 ) : Flow(), ActivatePhysicalCardContract.Delegate, ActivatePhysicalCardSuccessContract.Delegate {
+
+    val cardActionRepo: CardActionRepository by inject()
 
     override fun init(onInitComplete: (Either<Failure, Unit>) -> Unit) {
         val fragment = fragmentFactory.activatePhysicalCardFragment(card, ACTIVATE_PHYSICAL_CARD_TAG)
@@ -60,24 +61,8 @@ internal class ActivatePhysicalCardFlow(
     override fun onCloseFromActivatePhysicalCardSuccess() = onFinish.invoke()
 
     override fun onSetPinClicked() {
-        val flow = SetCardPinFlow(
-            cardId = card.accountID,
-            onBack = { popFlow(animated = true) },
-            onFinish = {
-                popFlow(animated = true)
-                rootActivity()?.let {
-                    notify(
-                        title = "manage_card.confirm_pin.pin_created.title".localized(),
-                        message = "manage_card.confirm_pin.pin_created.message".localized(),
-                        messageType = SnackbarMessageType.HEADS_UP
-                    )
-                }
-                onFinish.invoke()
-            }
-        )
-        flow.init { initResult ->
-            initResult.either(::handleFailure) { push(flow = flow) }
-        }
+        cardActionRepo.setPin()
+        onFinish.invoke()
     }
 
     override fun onGetPinViaVoipClicked() {

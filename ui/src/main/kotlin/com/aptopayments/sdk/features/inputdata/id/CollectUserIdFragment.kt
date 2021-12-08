@@ -12,12 +12,11 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserIdBinding
 import com.aptopayments.sdk.utils.CustomArrayAdapter
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,7 +24,7 @@ private const val CONFIGURATION_BUNDLE = "CONFIGURATION_BUNDLE"
 private const val DATAPOINT_ID = "DATAPOINT_ID"
 
 internal class CollectUserIdFragment :
-    BaseBindingFragment<FragmentCollectUserIdBinding>(),
+    BaseDataBindingFragment<FragmentCollectUserIdBinding>(),
     CollectUserIdContract.View {
 
     private lateinit var idTypeAdapter: CustomArrayAdapter<String>
@@ -53,7 +52,7 @@ internal class CollectUserIdFragment :
 
     override fun setupUI() {
         applyFontsAndColors()
-        setupToolBar(binding.tbLlsdkToolbarLayout.findViewById(R.id.tb_llsdk_toolbar))
+        setupToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbar)
 
         setTypeSpinnerChangeListener()
 
@@ -87,9 +86,11 @@ internal class CollectUserIdFragment :
     }
 
     private fun setupToolBar(toolbar: Toolbar) {
-        toolbar.setTitleTextColor(UIConfig.textTopBarPrimaryColor)
-        toolbar.setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
-        tb_llsdk_toolbar.configure(this, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        with(toolbar) {
+            setTitleTextColor(UIConfig.textTopBarPrimaryColor)
+            setBackgroundColor(UIConfig.uiNavigationPrimaryColor)
+            configure(this@CollectUserIdFragment, ToolbarConfiguration.Builder().setPrimaryColors().build())
+        }
     }
 
     override fun setupViewModel() {

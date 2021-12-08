@@ -22,4 +22,6 @@
     <color name="base_text_color">#FF202A36</color>
     <color name="button_settings_shade">#FF202A36</color>
     <color name="button_settings_background">#FF1652F0</color>
+
+    <color name="background">#FFFFFF</color>
 </resources>

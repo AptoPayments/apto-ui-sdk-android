@@ -11,19 +11,18 @@ import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observe
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentOrderPhysicalCardBinding
 import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel.Action
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.include_toolbar_two.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 private const val CARD_ID = "CARD_ID"
 
 internal class OrderPhysicalCardFragment :
-    BaseBindingFragment<FragmentOrderPhysicalCardBinding>(),
+    BaseDataBindingFragment<FragmentOrderPhysicalCardBinding>(),
     OrderPhysicalCardContract.View {
 
     private val viewModel: OrderPhysicalCardViewModel by viewModel { parametersOf(cardId) }
@@ -67,7 +66,7 @@ internal class OrderPhysicalCardFragment :
     }
 
     private fun setupToolBar() =
-        binding.tbLlsdkToolbarLayout.tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder().setSecondaryColors().build()
         )

@@ -10,7 +10,6 @@ import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.mobile.data.PhoneNumber
 import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.exception.Failure
-import com.aptopayments.mobile.exception.server.ErrorRecipientNotFound
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.sdk.utils.extensions.asLiveData
 import com.aptopayments.sdk.utils.extensions.distinctUntilChanged
@@ -21,10 +20,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlin.coroutines.resume
 
-private const val DEBOUNCE_TIME = 1000L
+const val DEBOUNCE_TIME = 1000L
 
 internal class P2pRecipientViewModel(
-    private val aptoPlatform: AptoPlatformProtocol
+    private val debounceTime: Long,
+    private val aptoPlatform: AptoPlatformProtocol,
 ) : BaseViewModel() {
 
     private var countryCode: String = ""
@@ -51,7 +51,7 @@ internal class P2pRecipientViewModel(
 
     private fun observeInputToHitApi() {
         viewModelScope.launch {
-            requestFlow.debounce(DEBOUNCE_TIME).collect {
+            requestFlow.debounce(debounceTime).collect {
                 when {
                     it.countryCode != null && it.phoneNumber != null ->
                         onValidInput(
@@ -79,7 +79,7 @@ internal class P2pRecipientViewModel(
         }
     }
 
-    fun onPhoneChanged(countryCode: String, phoneNumber: String, isValid: Boolean) {
+    private fun onPhoneChanged(countryCode: String, phoneNumber: String, isValid: Boolean) {
         if (isValid) {
             cancelJob()
             requestFlow.value = InputData(countryCode = countryCode, phoneNumber = phoneNumber)
@@ -118,24 +118,24 @@ internal class P2pRecipientViewModel(
             Credential.PHONE
         }
 
-    private fun onValidInput(phone: PhoneNumber? = null, email: String? = null) {
+    fun onValidInput(phone: PhoneNumber? = null, email: String? = null) {
         job = viewModelScope.launch {
             showLoading()
             _cardholder.postValue(null)
             getCardHolder(phone, email).either(
-                {
+                { failure ->
                     hideLoading()
-                    if (it is ErrorRecipientNotFound) {
-                        _state.value = State(showErrorNotFound = true, showContinueButton = false)
-                    } else {
-                        _state.value = State(showErrorNotFound = false, showContinueButton = false)
-                        handleFailure(it)
+                    val error: RecipientError = P2PRecipientErrorMapper().invoke(failure)
+                    if (error == RecipientError.NO_UI_ERROR) {
+                        handleFailure(failure)
                     }
+                    _state.value = State(error = error, showContinueButton = false)
                 },
                 {
                     hideLoading()
-                    _cardholder.value = CardHolder(data = it, id = email ?: "+${phone!!.countryCode} ${phone.phoneNumber}")
-                    _state.value = State(showErrorNotFound = false, showContinueButton = true)
+                    _cardholder.value =
+                        CardHolder(data = it, id = email ?: "+${phone!!.countryCode} ${phone.phoneNumber}")
+                    _state.value = State(error = RecipientError.NO_UI_ERROR, showContinueButton = true)
                 }
             )
         }
@@ -144,7 +144,7 @@ internal class P2pRecipientViewModel(
     private fun onInvalidInput() {
         cancelJob()
         _cardholder.value = null
-        _state.postValue(State(showContinueButton = false, showErrorNotFound = false))
+        _state.postValue(State(showContinueButton = false, error = RecipientError.NO_UI_ERROR))
     }
 
     private fun cancelJob() {
@@ -166,7 +166,7 @@ internal class P2pRecipientViewModel(
     }
 
     data class State(
-        val showErrorNotFound: Boolean = false,
+        val error: RecipientError = RecipientError.NO_UI_ERROR,
         val showContinueButton: Boolean = false,
     )
 

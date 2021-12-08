@@ -97,7 +97,7 @@
     <string name="email_verification_resent">A new code has been sent to your email</string>
 
     <!-- Select Country -->
-    <string name="select_card_product_select_country_title">Country of residence 🏠</string>
+    <string name="select_card_product_select_country_title">Country of residence</string>
     <string name="select_card_product_select_country_explanation">Select your country of tax residence.</string>
     <string name="select_card_product_select_country_call_to_action">Select country</string>
 
@@ -109,6 +109,7 @@
     <string name="manage_card_get_pin_nue_title">Congratulations!</string>
     <string name="manage_card_get_pin_nue_explanation">Your physical Apto Card has been enabled. We\'ve set a random PIN code for your card.</string>
     <string name="manage_card_get_pin_nue_call_to_action_title">Get my PIN</string>
+    <string name="manage_card_set_pin_nue_call_to_action_title">Set my PIN</string>
     <string name="manage_card_get_pin_nue_footer">PIN is obtained via phone call and charge may be applied by your mobile network operator.</string>
 
     <!-- Transaction details -->
@@ -531,18 +532,6 @@
     <string name="wait_list_wait_list_description_main">Very soon you\'ll be able to spend your crypto anywhere, using your contactless card.</string>
     <string name="wait_list_wait_list_description_secondary">We\'ll be in touch the moment the card launches.</string>
 
-    <!--Set PIN-->
-    <string name="manage_card_set_pin_title">Set your PIN 🔑</string>
-    <string name="manage_card_set_pin_explanation">Choose a unique, four digit PIN code for your card.</string>
-    <string name="manage_card_confirm_pin_title">Confirm your PIN 🔒</string>
-    <string name="manage_card_confirm_pin_explanation">Please re-enter your PIN code to confirm it.</string>
-    <string name="manage_card_confirm_pin_error_wrong_code_title">Error</string>
-    <string name="manage_card_confirm_pin_error_wrong_code_message">Looks like your PIN didn\'t match. Please re-enter and try again.</string>
-    <string name="manage_card_confirm_pin_pin_created_title">Congrats!</string>
-    <string name="manage_card_confirm_pin_pin_created_message">You\'ve successfully created your PIN. Your physical card is now ready to use.</string>
-    <string name="manage_card_confirm_pin_pin_updated_title">Congrats!</string>
-    <string name="manage_card_confirm_pin_pin_updated_message">You\'ve successfully changed your PIN.</string>
-
     <!--Set Card Passcode-->
     <string name="manage_card_set_passcode_start_title">Set Secure Passcode</string>
     <string name="manage_card_set_passcode_start_description">Some online transactions using your card require a secure passcode verification. This is different from your PIN used in physical card transactions. You can set your passcode here.\n\nBefore we set your passcode, we first need to verify you with a one time code.\n\nOnce your passcode is set, you can update it at any time.</string>
@@ -618,7 +607,7 @@
     <string name="collect_user_data_address_subtitle">Please enter your current address</string>
     <string name="collect_user_data_address_address_placeholder">Address</string>
     <string name="collect_user_data_address_apt_unit_placeholder">Apartment number (optional)</string>
-    <string name="collect_user_data_phone_title">Your Phone Number 📲</string>
+    <string name="collect_user_data_phone_title">Your Phone Number</string>
     <string name="collect_user_data_phone_subtitle">Please enter your phone number</string>
 
     <!-- Load Funds -->

@@ -5,7 +5,6 @@ import com.aptopayments.mobile.data.config.ContextConfiguration
 import com.aptopayments.mobile.data.content.Content
 import com.aptopayments.mobile.data.voip.Action
 import com.aptopayments.mobile.exception.Failure
-import com.aptopayments.mobile.extension.localized
 import com.aptopayments.mobile.functional.Either
 import com.aptopayments.mobile.functional.right
 import com.aptopayments.mobile.platform.AptoPlatformProtocol
@@ -17,7 +16,6 @@ import com.aptopayments.sdk.core.usecase.AcceptAchDisclaimerUseCase.Params
 import com.aptopayments.sdk.core.usecase.DeclineAchDisclaimerUseCase
 import com.aptopayments.sdk.features.card.orderphysical.OrderPhysicalFlow
 import com.aptopayments.sdk.features.card.passcode.CardPasscodeFlow
-import com.aptopayments.sdk.features.card.setpin.SetCardPinFlow
 import com.aptopayments.sdk.features.card.statements.StatementListFlow
 import com.aptopayments.sdk.features.contentpresenter.ContentPresenterContract
 import com.aptopayments.sdk.features.loadfunds.AddFundsFlow
@@ -27,7 +25,6 @@ import com.aptopayments.sdk.features.disclaimer.DisclaimerFragment
 import com.aptopayments.sdk.features.loadfunds.dialog.AddFundsSelectorDialogContract
 import com.aptopayments.sdk.features.p2p.P2pFlow
 import com.aptopayments.sdk.features.voip.VoipFlow
-import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import org.koin.core.inject
 
 private const val CARD_SETTINGS_TAG = "CardSettingsFragment"
@@ -118,23 +115,7 @@ internal class CardSettingsFlow(
     }
 
     override fun onSetPin() {
-        val flow = SetCardPinFlow(
-            cardId = cardId,
-            onBack = { popFlow(animated = true) },
-            onFinish = {
-                popFlow(animated = true)
-                rootActivity()?.let {
-                    notify(
-                        title = "manage_card.confirm_pin.pin_updated.title".localized(),
-                        message = "manage_card.confirm_pin.pin_updated.message".localized(),
-                        messageType = SnackbarMessageType.HEADS_UP
-                    )
-                }
-            }
-        )
-        flow.init { initResult ->
-            initResult.either(::handleFailure) { push(flow = flow) }
-        }
+        onClose.invoke()
     }
 
     override fun showVoip(action: Action) {

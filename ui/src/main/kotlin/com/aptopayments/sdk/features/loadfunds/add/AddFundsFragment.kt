@@ -7,12 +7,11 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddFundsBinding
 import com.aptopayments.sdk.features.loadfunds.add.AddFundsViewModel.Actions
 import com.aptopayments.sdk.ui.views.DigitsInputFilter
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -20,7 +19,7 @@ private const val CARD_ID_KEY = "CARD_ID_KEY"
 private const val MAX_INTEGER_DIGITS = 5
 private const val MAX_DECIMAL_DIGITS = 2
 
-internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>(), AddFundsContract.View {
+internal class AddFundsFragment : BaseDataBindingFragment<FragmentAddFundsBinding>(), AddFundsContract.View {
 
     override var delegate: AddFundsContract.Delegate? = null
     private val viewModel: AddFundsViewModel by viewModel { parametersOf(cardId) }
@@ -92,7 +91,7 @@ internal class AddFundsFragment : BaseBindingFragment<FragmentAddFundsBinding>()
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))

@@ -11,10 +11,9 @@ import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import com.aptopayments.sdk.repository.IAPHelper
-import com.aptopayments.sdk.repository.LocalCardDetailsRepository
-import com.aptopayments.sdk.repository.ProvisioningState
-import com.aptopayments.sdk.repository.UnableToProvisionCard
+import com.aptopayments.sdk.repository.*
+import com.aptopayments.sdk.repository.CardAction
+import com.aptopayments.sdk.repository.CardActionRepository
 import com.aptopayments.sdk.ui.views.PCIConfiguration
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.extensions.distinctUntilChanged
@@ -34,7 +33,7 @@ internal class ManageCardViewModel(
     private val aptoPlatform: AptoPlatformProtocol
 ) : BaseViewModel(), KoinComponent {
 
-    private val repo: LocalCardDetailsRepository by inject()
+    private val cardActionRepo: CardActionRepository by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(cardId) }
     private val _card: MutableLiveData<Card> = MutableLiveData()
     val card = _card.distinctUntilChanged()
@@ -43,7 +42,7 @@ internal class ManageCardViewModel(
     private val _menuState = MutableLiveData(menuInitialState())
     val menuState = _menuState as LiveData<MenuState>
 
-    val showCardDetails: LiveEvent<Boolean> = repo.getCardDetailsEvent()
+    val cardAction: LiveEvent<CardAction> = cardActionRepo.event
     val showFundingSourceDialog = LiveEvent<String>()
     val transactions = MutableLiveData(listOf<Transaction>())
     val fundingSource = MutableLiveData<Balance?>()
@@ -252,6 +251,12 @@ internal class ManageCardViewModel(
         }
     }
 
+    fun onCardTapped() {
+        if (fundingSource.value?.state != Balance.BalanceState.VALID) {
+            showFundingSourceDialog.postValue(fundingSource.value?.id)
+        }
+    }
+
     data class EmptyState(
         val showContainer: Boolean = false,
         val showNoTransactions: Boolean = false,
@@ -263,4 +268,9 @@ internal class ManageCardViewModel(
         val showStats: Boolean = false,
         val showAccountSettings: Boolean = false,
     )
+
+    override fun onCleared() {
+        super.onCleared()
+        getTransactionsQueue.cancel()
+    }
 }

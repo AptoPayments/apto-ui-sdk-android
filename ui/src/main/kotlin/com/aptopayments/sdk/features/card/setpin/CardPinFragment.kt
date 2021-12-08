@@ -7,13 +7,12 @@ import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentSetPinBinding
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.include_toolbar_two.view.*
 
-internal abstract class CardPinFragment : BaseBindingFragment<FragmentSetPinBinding>() {
+internal abstract class CardPinFragment : BaseDataBindingFragment<FragmentSetPinBinding>() {
 
     protected abstract val viewModel: CardPinViewModel
 
@@ -57,7 +56,7 @@ internal abstract class CardPinFragment : BaseBindingFragment<FragmentSetPinBind
     }
 
     private fun setupToolBar() =
-        binding.tbLlsdkToolbarLayout.tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder().setSecondaryColors().build()
         )

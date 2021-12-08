@@ -11,12 +11,11 @@ import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentP2pSendFundsBinding
 import com.aptopayments.sdk.features.p2p.funds.SendFundsViewModel.Action.*
 import com.aptopayments.sdk.ui.views.DigitsInputFilter
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -26,7 +25,7 @@ private const val CARDID_DATA = "CARDID_DATA_KEY"
 private const val MAX_INTEGER_DIGITS = 5
 private const val MAX_DECIMAL_DIGITS = 2
 
-internal class SendFundsFragment : BaseBindingFragment<FragmentP2pSendFundsBinding>(), SendFundsContract.View {
+internal class SendFundsFragment : BaseDataBindingFragment<FragmentP2pSendFundsBinding>(), SendFundsContract.View {
 
     override var delegate: SendFundsContract.Delegate? = null
     private lateinit var cardId: String
@@ -100,7 +99,7 @@ internal class SendFundsFragment : BaseBindingFragment<FragmentP2pSendFundsBindi
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Back(UIConfig.textTopBarSecondaryColor))

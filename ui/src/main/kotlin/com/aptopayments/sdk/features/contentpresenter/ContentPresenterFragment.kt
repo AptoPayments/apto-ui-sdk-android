@@ -1,26 +1,28 @@
 package com.aptopayments.sdk.features.contentpresenter
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.content.Content
-import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.platform.BaseFragment
-import kotlinx.android.synthetic.main.fragment_content_presenter.*
-import kotlinx.android.synthetic.main.include_toolbar_two.*
+import com.aptopayments.sdk.core.platform.BaseViewBindingFragment
+import com.aptopayments.sdk.databinding.FragmentContentPresenterBinding
 
 private const val CONTENT_KEY = "CONTENT"
 private const val TITLE_KEY = "TITLE"
 
-internal class ContentPresenterFragment : BaseFragment(), ContentPresenterContract.View {
+internal class ContentPresenterFragment :
+    BaseViewBindingFragment<FragmentContentPresenterBinding>(), ContentPresenterContract.View {
     private lateinit var content: Content
     private lateinit var title: String
 
     override var delegate: ContentPresenterContract.Delegate? = null
 
-    override fun layoutId(): Int = R.layout.fragment_content_presenter
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentContentPresenterBinding.inflate(inflater, container, false)
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundSecondaryColor
 
@@ -41,8 +43,10 @@ internal class ContentPresenterFragment : BaseFragment(), ContentPresenterContra
 
     private fun setupContent() {
         showLoading()
-        vw_content_presenter.delegate = this
-        vw_content_presenter.content = content
+        with(binding.vwContentPresenter) {
+            delegate = this@ContentPresenterFragment
+            this.content = this@ContentPresenterFragment.content
+        }
     }
 
     override fun onBackPressed() {
@@ -62,12 +66,12 @@ internal class ContentPresenterFragment : BaseFragment(), ContentPresenterContra
     }
 
     private fun setupTheme() {
-        vw_content_presenter.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
+        binding.vwContentPresenter.setBackgroundColor(UIConfig.uiBackgroundSecondaryColor)
         customizeSecondaryNavigationStatusBar()
     }
 
     private fun setupToolbar() {
-        tb_llsdk_toolbar.configure(
+        binding.toolbar.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Close(UIConfig.iconTertiaryColor))

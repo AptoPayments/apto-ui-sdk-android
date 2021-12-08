@@ -86,7 +86,8 @@
                         android:layout_height="@dimen/section_option_height"
                         app:optionDescription="card_settings.settings.set_pin.description"
                         app:optionTitle="card_settings.settings.set_pin.title"
-                        app:visibleIf="@{viewModel.state.showSetPin}" />
+                        app:visibleIf="@{viewModel.state.showSetPin}"
+                        app:onClickSafe="@{() -> viewModel.onSetPinPressed()}"/>
 
                     <com.aptopayments.sdk.ui.views.SectionOptionWithSubtitleView
                         android:layout_width="match_parent"

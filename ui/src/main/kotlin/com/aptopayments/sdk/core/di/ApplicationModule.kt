@@ -55,7 +55,7 @@ internal val applicationModule = module {
     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
     factory { DateProvider() }
     factory<Timer> { RealTimer() }
-    single<LocalCardDetailsRepository> { InMemoryLocalCardDetailsRepository(get()) }
+    single<CardActionRepository> { InMemoryLocalCardActionRepository(get()) }
     single { AppLifecycleObserver() }
     single { BiometricWrapper(androidContext()) }
     factory { FormatOrderProvider(androidApplication()) }

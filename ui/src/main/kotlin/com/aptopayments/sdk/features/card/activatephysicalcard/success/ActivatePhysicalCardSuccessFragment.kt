@@ -80,8 +80,9 @@ internal class ActivatePhysicalCardSuccessFragment : BaseFragment(), ActivatePhy
     override fun setupListeners() {
         super.setupListeners()
         when {
-            card.features?.setPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListenerSafe {
-                delegate?.onSetPinClicked()
+            card.features?.setPin?.status == FeatureStatus.ENABLED -> {
+                continue_button.localizedText = "manage_card_set_pin_nue_call_to_action_title"
+                continue_button.setOnClickListenerSafe { delegate?.onSetPinClicked() }
             }
             card.features?.getPin?.status == FeatureStatus.ENABLED -> continue_button.setOnClickListenerSafe {
                 card.features?.getPin?.type?.let {
@@ -90,7 +91,7 @@ internal class ActivatePhysicalCardSuccessFragment : BaseFragment(), ActivatePhy
                         is FeatureType.Ivr -> activity?.let { activity ->
                             viewModel.getPinTapped(from = activity, phoneNumber = it.ivrPhone)
                         }
-                        is FeatureType.Api -> TODO() // Not supported yet
+                        is FeatureType.Api,
                         is FeatureType.Unknown -> activity?.let {
                             notify("failure_server_error".localized())
                         }

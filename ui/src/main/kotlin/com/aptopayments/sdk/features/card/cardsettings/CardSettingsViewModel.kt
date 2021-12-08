@@ -19,7 +19,7 @@ import com.aptopayments.sdk.core.usecase.CanAskBiometricsUseCase
 import com.aptopayments.sdk.core.usecase.ShouldAuthenticateOnPCIUseCase
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
 import com.aptopayments.sdk.repository.IAPHelper
-import com.aptopayments.sdk.repository.LocalCardDetailsRepository
+import com.aptopayments.sdk.repository.CardActionRepository
 import com.aptopayments.sdk.utils.LiveEvent
 import com.aptopayments.sdk.utils.extensions.shouldShowFakeShippingStatus
 import org.koin.core.KoinComponent
@@ -32,15 +32,14 @@ internal class CardSettingsViewModel(
     private val cardProduct: CardProduct,
     private val analyticsManager: AnalyticsServiceContract,
     private val aptoPlatform: AptoPlatformProtocol,
-    private val aptoUiSdk: AptoUiSdkProtocol
+    private val aptoUiSdk: AptoUiSdkProtocol,
+    private val cardActionRepo: CardActionRepository
 ) : BaseViewModel(), KoinComponent {
 
     private val canAskBiometricsUseCase: CanAskBiometricsUseCase by inject()
     private val shouldAuthenticateWithOnPCIUseCase: ShouldAuthenticateOnPCIUseCase by inject()
     private val iapHelper: IAPHelper by inject { parametersOf(card.cardProductID) }
     private val telephonyEnabledChecker: TelephonyEnabledChecker by inject()
-
-    private val cardDetailsRepo: LocalCardDetailsRepository by inject()
 
     private val _state = MutableLiveData<State>()
     val state = _state as LiveData<State>
@@ -173,12 +172,12 @@ internal class CardSettingsViewModel(
         card.features?.inAppProvisioning?.isEnabled == true
 
     fun cardDetailsAuthenticationSuccessful() {
-        cardDetailsRepo.showCardDetails()
+        cardActionRepo.showCardDetails()
         action.postValue(Action.ShowCardDetails)
     }
 
     fun cardDetailsAuthenticationError() {
-        cardDetailsRepo.hideCardDetails()
+        cardActionRepo.hideCardDetails()
     }
 
     fun setPasscodePressed() {
@@ -231,6 +230,11 @@ internal class CardSettingsViewModel(
         action.postValue(Action.OrderPhysicalCard)
     }
 
+    fun onSetPinPressed() {
+        cardActionRepo.setPin()
+        action.postValue(Action.SetPin)
+    }
+
     fun onPresented() {
         aptoPlatform.fetchCard(card.accountID, forceRefresh = false) { result -> result.runIfRight { updateCard(it) } }
     }
@@ -251,6 +255,7 @@ internal class CardSettingsViewModel(
         class ShowAddFundsAchDisclaimer(val disclaimer: Disclaimer?) : Action()
         object OrderPhysicalCard : Action()
         object TransferMoneyAction : Action()
+        object SetPin : Action()
     }
 
     internal data class State(

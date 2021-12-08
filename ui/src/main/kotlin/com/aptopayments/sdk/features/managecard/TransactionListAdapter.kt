@@ -13,6 +13,8 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.platform.theme.themeManager
+import com.aptopayments.sdk.ui.views.PCICardView
+import com.aptopayments.sdk.repository.CardAction
 import com.aptopayments.sdk.utils.extensions.formatForTransactionList
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 import com.aptopayments.sdk.utils.extensions.toCapitalized
@@ -28,6 +30,7 @@ internal open class TransactionListAdapter(
     interface Delegate {
         fun onCardSettingsTapped()
         fun onTransactionTapped(transaction: Transaction)
+        fun onCardTapped()
     }
 
     var delegate: Delegate? = null
@@ -90,7 +93,20 @@ internal open class TransactionListAdapter(
                 with(lifecycleOwner) {
                     observeNullable(viewModel.fundingSource) { cardView.setValidFundingSource(it?.state == Balance.BalanceState.VALID) }
                     observeNullable(viewModel.card) { card -> card?.let { cardView.setCardInfo(CardInfo.fromCard(it)) } }
-                    observeNotNullable(viewModel.showCardDetails) { cardView.showCardDetails(it) }
+                    observeNotNullable(viewModel.cardAction) {
+                        when (it) {
+                            CardAction.SHOW_DETAILS -> cardView.showPciData()
+                            CardAction.HIDE_DETAILS -> cardView.hidePCIData()
+                            CardAction.SET_PIN -> cardView.setPin()
+                            CardAction.IDLE -> Unit
+                            else -> Unit
+                        }
+                    }
+                    cardView.delegate = object : PCICardView.Delegate {
+                        override fun cardViewTapped() {
+                            delegate?.onCardTapped()
+                        }
+                    }
                 }
             }
             view.card_settings_button?.let { cardSettingsButton ->

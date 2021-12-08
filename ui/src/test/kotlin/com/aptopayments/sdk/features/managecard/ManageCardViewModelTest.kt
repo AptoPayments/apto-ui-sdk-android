@@ -3,7 +3,6 @@
 package com.aptopayments.sdk.features.managecard
 
 import androidx.lifecycle.Observer
-import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.card.Card
 import com.aptopayments.mobile.data.card.Features
 import com.aptopayments.mobile.data.card.GenericFeature
@@ -21,11 +20,12 @@ import com.aptopayments.sdk.core.di.applicationModule
 import com.aptopayments.sdk.core.di.useCaseModule
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
+import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.sdk.repository.IAPHelper
 import com.aptopayments.sdk.repository.ProvisioningState
 import com.aptopayments.sdk.utils.getOrAwaitValue
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.mockito.kotlin.*
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -33,12 +33,16 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.*
 import org.threeten.bp.ZonedDateTime
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 private const val CARD_ID = "CARD_ID_1"
+private const val FUNDING_SOURCE_ID = "FS_123"
 
 @ExtendWith(InstantExecutorExtension::class)
 class ManageCardViewModelTest : UnitTest() {
@@ -69,11 +73,12 @@ class ManageCardViewModelTest : UnitTest() {
     private fun createSut(
         transactions: List<Transaction> = emptyList(),
         card: Card = TestDataProvider.provideCard(accountID = CARD_ID),
+        balance: Balance = Balance(),
         cardOptions: CardOptions = CardOptions(),
         iapState: ProvisioningState = ProvisioningState.CanNotBeAdded()
     ) {
         mockFetchCard(card)
-        mockFetchFundingSource()
+        mockFetchFundingSource(balance)
         mockLoadTransactions(transactions)
         givenCardOptions(cardOptions)
         givenIapState(iapState)
@@ -342,6 +347,30 @@ class ManageCardViewModelTest : UnitTest() {
         assertFalse(emptyState.showNoTransactions)
     }
 
+    @Test
+    internal fun `given card in Invalid state when onCardTapped then showFundingSourceDialog has correct id`() {
+        createSut(
+            balance = Balance(id = FUNDING_SOURCE_ID, state = Balance.BalanceState.INVALID)
+        )
+
+        sut.onCardTapped()
+
+        assertEquals(FUNDING_SOURCE_ID, sut.showFundingSourceDialog.getOrAwaitValue())
+    }
+
+    @Test
+    internal fun `given card in valid state when onCardTapped then showFundingSourceDialog doesn't change`() {
+        createSut(
+            balance = Balance(id = FUNDING_SOURCE_ID, state = Balance.BalanceState.VALID)
+        )
+
+        sut.onCardTapped()
+
+        assertThrows(TimeoutException::class.java) {
+            sut.showFundingSourceDialog.getOrAwaitValue(time = 1, timeUnit = TimeUnit.MILLISECONDS)
+        }
+    }
+
     private fun mockFetchCard(card: Card) {
         whenever(
             aptoPlatform.fetchCard(
@@ -356,7 +385,7 @@ class ManageCardViewModelTest : UnitTest() {
         }
     }
 
-    private fun mockFetchFundingSource() {
+    private fun mockFetchFundingSource(balance: Balance) {
         whenever(
             aptoPlatform.fetchCardFundingSource(
                 eq(CARD_ID),
@@ -364,7 +393,7 @@ class ManageCardViewModelTest : UnitTest() {
                 TestDataProvider.anyObject()
             )
         ).thenAnswer { invocation ->
-            (invocation.arguments[2] as (Either<Failure, Balance>) -> Unit).invoke(Balance().right())
+            (invocation.arguments[2] as (Either<Failure, Balance>) -> Unit).invoke(balance.right())
         }
     }
 

@@ -9,12 +9,11 @@ import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.AptoUiSdkProtocol
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAccountSettingsBinding
 import com.aptopayments.sdk.utils.SendEmailUtil
 import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
-import kotlinx.android.synthetic.main.include_custom_toolbar.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,7 +21,7 @@ private const val ACCOUNT_SETTINGS_BUNDLE = "contextConfigurationBundle"
 private const val CARD_ID = "CARD_ID"
 
 internal class AccountSettingsFragment :
-    BaseBindingFragment<FragmentAccountSettingsBinding>(),
+    BaseDataBindingFragment<FragmentAccountSettingsBinding>(),
     AccountSettingsContract.View {
 
     override var delegate: AccountSettingsContract.Delegate? = null
@@ -67,7 +66,7 @@ internal class AccountSettingsFragment :
 
     override fun setupListeners() {
         super.setupListeners()
-        binding.accountSettingsCustomToolbar.iv_close_button.setOnClickListenerSafe { onBackPressed() }
+        binding.accountSettingsCustomToolbar.ivCloseButton.setOnClickListenerSafe { onBackPressed() }
         binding.accountSettingsSignOut.setOnClickListenerSafe { showConfirmLogOutDialog() }
         binding.rlNotifications.setOnClickListenerSafe { delegate?.showNotificationPreferences() }
         binding.rlPasscode.setOnClickListenerSafe { onChangePasscodeTapped() }
@@ -86,16 +85,16 @@ internal class AccountSettingsFragment :
         activity?.window?.let {
             with(themeManager()) {
                 customizeSecondaryNavigationStatusBar(it)
-                customizeToolbarTitle(binding.accountSettingsCustomToolbar.tv_toolbar_title)
+                customizeToolbarTitle(binding.accountSettingsCustomToolbar.tvToolbarTitle)
             }
         }
     }
 
     private fun setupToolbar() {
         with(binding.accountSettingsCustomToolbar) {
-            setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
-            iv_close_button.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
-            tv_toolbar_title.localizedText = "account_settings.settings.title"
+            rootToolbar.setBackgroundColor(UIConfig.uiNavigationSecondaryColor)
+            ivCloseButton.setColorFilter(UIConfig.textTopBarSecondaryColor, PorterDuff.Mode.SRC_ATOP)
+            tvToolbarTitle.localizedText = "account_settings.settings.title"
         }
     }
 

@@ -73,4 +73,10 @@ class FetchTransactionsTaskQueue(private val aptoPlatformProtocol: AptoPlatformP
         backgroundRefreshOperation = task
         task.start()
     }
+
+    fun cancel() {
+        loadOperation?.cancel()
+        loadMoreOperation?.cancel()
+        backgroundRefreshOperation?.cancel()
+    }
 }

@@ -10,14 +10,13 @@ import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddCardPaymentSourceBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import kotlinx.android.synthetic.main.fragment_add_card_payment_source.*
-import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,7 +24,7 @@ private const val CARD_ID_KEY = "CARD_ID_KEY"
 private const val DATE_MASK = "[00]/[00]"
 
 internal class AddCardDetailsFragment :
-    BaseBindingFragment<FragmentAddCardPaymentSourceBinding>(),
+    BaseDataBindingFragment<FragmentAddCardPaymentSourceBinding>(),
     AddCardPaymentSourceContract.View {
 
     override var delegate: AddCardPaymentSourceContract.Delegate? = null
@@ -129,7 +128,7 @@ internal class AddCardDetailsFragment :
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Close(UIConfig.textTopBarSecondaryColor))

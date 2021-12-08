@@ -131,6 +131,10 @@ internal class ManageCardFragment :
         delegate?.onTransactionTapped(transaction)
     }
 
+    override fun onCardTapped() {
+        viewModel.onCardTapped()
+    }
+
     override fun setupUI() {
         setupToolbar()
         setupTheme()
@@ -224,6 +228,7 @@ internal class ManageCardFragment :
         super.onResume()
         iapHelper.registerDataChanged()
         scrollListener?.resetState()
+        swipe_refresh_container?.isRefreshing = false
     }
 
     override fun onPause() {

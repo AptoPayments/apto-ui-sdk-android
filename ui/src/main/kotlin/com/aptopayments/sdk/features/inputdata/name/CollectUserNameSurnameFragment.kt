@@ -10,7 +10,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserNameBinding
 import com.aptopayments.sdk.utils.NameInputFilter
@@ -22,7 +22,7 @@ import org.koin.core.parameter.parametersOf
 private const val DATAPOINT_NAME = "DATAPOINT_NAME"
 
 internal class CollectUserNameSurnameFragment :
-    BaseBindingFragment<FragmentCollectUserNameBinding>(),
+    BaseDataBindingFragment<FragmentCollectUserNameBinding>(),
     CollectUserNameSurnameContract.View {
 
     private var initialValue: NameDataPoint? = null
@@ -50,7 +50,7 @@ internal class CollectUserNameSurnameFragment :
 
     override fun setupUI() {
         applyFontsAndColors()
-        setupToolBar(binding.tbLlsdkToolbarLayout.findViewById(R.id.tb_llsdk_toolbar))
+        setupToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbar)
         setScrollOnFocus()
         setHints()
         setEditTextFilters()

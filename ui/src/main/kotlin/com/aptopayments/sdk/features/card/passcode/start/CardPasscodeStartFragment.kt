@@ -8,7 +8,7 @@ import com.aptopayments.sdk.core.extension.BackButtonMode
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCardPasscodeStartBinding
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewModel.Action
@@ -21,7 +21,7 @@ import org.koin.core.parameter.parametersOf
 private const val CARD_ID = "CARD_ID"
 
 internal class CardPasscodeStartFragment :
-    BaseBindingFragment<FragmentCardPasscodeStartBinding>(),
+    BaseDataBindingFragment<FragmentCardPasscodeStartBinding>(),
     CardPasscodeStartContract.View {
 
     override var delegate: CardPasscodeStartContract.Delegate? = null
@@ -67,7 +67,7 @@ internal class CardPasscodeStartFragment :
     }
 
     private fun setupToolBar() {
-        tb_llsdk_toolbar.configure(
+        binding.tbLlsdkToolbarLayout.tbLlsdkToolbar.configure(
             this,
             ToolbarConfiguration.Builder()
                 .backButtonMode(BackButtonMode.Close(UIConfig.textTopBarSecondaryColor))

@@ -10,7 +10,7 @@ import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.extension.ToolbarConfiguration
 import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.extension.observeNotNullable
-import com.aptopayments.sdk.core.platform.BaseBindingFragment
+import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserEmailBinding
 import com.google.android.material.appbar.AppBarLayout
@@ -20,7 +20,7 @@ import org.koin.core.parameter.parametersOf
 private const val DATAPOINT_EMAIL = "DATAPOINT_EMAIL"
 
 internal class CollectUserEmailFragment :
-    BaseBindingFragment<FragmentCollectUserEmailBinding>(),
+    BaseDataBindingFragment<FragmentCollectUserEmailBinding>(),
     CollectUserEmailContract.View {
 
     private var initialValue: EmailDataPoint? = null
@@ -47,7 +47,7 @@ internal class CollectUserEmailFragment :
 
     override fun setupUI() {
         applyFontsAndColors()
-        setupToolBar(binding.tbLlsdkToolbarLayout.findViewById(R.id.tb_llsdk_toolbar))
+        setupToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbar)
         setHints()
     }
 

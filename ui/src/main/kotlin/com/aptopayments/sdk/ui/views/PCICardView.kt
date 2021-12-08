@@ -9,6 +9,7 @@ import com.aptopayments.mobile.data.card.CardStyle
 import com.aptopayments.sdk.databinding.ViewPciCardBinding
 import com.aptopayments.sdk.features.managecard.CardInfo
 import com.aptopayments.sdk.pci.config.*
+import com.aptopayments.sdk.utils.extensions.setOnClickListenerSafe
 
 private const val CARD_ASPECT_RATIO = 1.586
 
@@ -24,6 +25,16 @@ class PCICardView @JvmOverloads constructor(
     private var cardState = Card.CardState.ACTIVE
 
     private var binding = ViewPciCardBinding.inflate(LayoutInflater.from(context), this, true)
+    var delegate: Delegate? = null
+
+    init {
+        binding.cardDisabledOverlay.setOnClickListenerSafe {
+            delegate?.cardViewTapped()
+        }
+        binding.cardErrorOverlay.setOnClickListenerSafe {
+            delegate?.cardViewTapped()
+        }
+    }
 
     fun setConfiguration(configuration: PCIConfiguration) {
         this.config = configuration
@@ -102,16 +113,24 @@ class PCICardView @JvmOverloads constructor(
         binding.executePendingBindings()
     }
 
-    fun showCardDetails(value: Boolean) {
-        if (value) {
-            binding.pciView.showPCIData()
-        } else {
-            binding.pciView.hidePCIData()
-        }
+    fun showPciData() {
+        binding.pciView.showPCIData()
+    }
+
+    fun hidePCIData() {
+        binding.pciView.hidePCIData()
+    }
+
+    fun setPin() {
+        binding.pciView.showSetPinForm()
     }
 
     enum class Status {
         CARD_ENABLED, INVALID_BALANCE, CARD_DISABLED
+    }
+
+    interface Delegate {
+        fun cardViewTapped()
     }
 }
 
