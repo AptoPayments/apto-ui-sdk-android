@@ -15,7 +15,6 @@ import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentOrderPhysicalCardBinding
 import com.aptopayments.sdk.features.card.orderphysical.initial.OrderPhysicalCardViewModel.Action
-import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -73,7 +72,7 @@ internal class OrderPhysicalCardFragment :
 
     private fun setupTheme() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.orderPhysicalCardTitle)
             customizeRegularTextLabel(binding.orderPhysicalCardExplanation)
             customizeSubmitButton(binding.orderPhysicalActionOrder)

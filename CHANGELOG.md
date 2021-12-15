@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+# 2021-12-15 Ui 3.17.1
+- fix(ui): ViewBinding fix on Onboarding
+
 # 2021-12-7 Mobile Version 3.17.0 Ui 3.17.0
 - feat(ui): Moved Card PIN update to PCI-SDK
 - feat(ui): Start migration to ViewBinding

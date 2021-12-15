@@ -15,7 +15,6 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserNameBinding
 import com.aptopayments.sdk.utils.NameInputFilter
 import com.aptopayments.sdk.utils.extensions.shake
-import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -85,7 +84,7 @@ internal class CollectUserNameSurnameFragment :
 
     private fun applyFontsAndColors() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.tvEmailHeader)
             customizeEditText(binding.etFirstName)
             customizeEditText(binding.etLastName)

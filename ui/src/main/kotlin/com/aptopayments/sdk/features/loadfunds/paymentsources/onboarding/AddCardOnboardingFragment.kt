@@ -12,7 +12,6 @@ import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentAddCardOnboardingBinding
 import com.aptopayments.sdk.features.loadfunds.paymentsources.onboarding.AddCardOnboardingViewModel.Actions
-import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -59,7 +58,7 @@ internal class AddCardOnboardingFragment :
     override fun setupUI() {
         themeManager().customizeSubmitButton(binding.addCardFtuContinue)
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.addCardOnboardingTitle)
             customizeFormLabel(binding.addCardOnboardingDescriptionFirst)
             customizeFormLabel(binding.addCardOnboardingDescriptionSecond)

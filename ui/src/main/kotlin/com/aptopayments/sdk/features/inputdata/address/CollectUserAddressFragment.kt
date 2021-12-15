@@ -20,7 +20,6 @@ import com.aptopayments.sdk.databinding.FragmentCollectUserAddressBinding
 import com.aptopayments.sdk.utils.extensions.shake
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.material.appbar.AppBarLayout
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -86,7 +85,7 @@ internal class CollectUserAddressFragment :
 
     private fun applyFontsAndColors() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.collectAddressTitle)
             customizeFormLabel(binding.collectAddressSubtitle)
             customizeEditText(binding.collectAddressSearchEdit)

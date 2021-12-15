@@ -13,7 +13,6 @@ import com.aptopayments.sdk.core.extension.observeNotNullable
 import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCollectUserEmailBinding
-import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -57,7 +56,7 @@ internal class CollectUserEmailFragment :
 
     private fun applyFontsAndColors() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.tvEmailHeader)
             customizeEditText(binding.etEmail)
             customizeSubmitButton(binding.continueButton)

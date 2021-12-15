@@ -10,7 +10,6 @@ import com.aptopayments.sdk.core.extension.configure
 import com.aptopayments.sdk.core.platform.BaseDataBindingFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentSetPinBinding
-import com.google.android.material.appbar.AppBarLayout
 
 internal abstract class CardPinFragment : BaseDataBindingFragment<FragmentSetPinBinding>() {
 
@@ -63,7 +62,7 @@ internal abstract class CardPinFragment : BaseDataBindingFragment<FragmentSetPin
 
     private fun setupTheme() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.tvSetPinTitle)
             customizeRegularTextLabel(binding.tvSetPinExplanation)
         }

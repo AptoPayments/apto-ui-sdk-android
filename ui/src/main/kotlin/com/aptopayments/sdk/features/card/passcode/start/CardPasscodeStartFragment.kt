@@ -13,7 +13,6 @@ import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.databinding.FragmentCardPasscodeStartBinding
 import com.aptopayments.sdk.features.card.passcode.start.CardPasscodeStartViewModel.Action
 
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -57,7 +56,7 @@ internal class CardPasscodeStartFragment :
 
     override fun setupUI() {
         with(themeManager()) {
-            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout as AppBarLayout)
+            customizeSecondaryNavigationToolBar(binding.tbLlsdkToolbarLayout.tbLlsdkToolbarLayoutInternal)
             customizeLargeTitleLabel(binding.cardPasscodeStartTitle)
             customizeFormLabel(binding.cardPasscodeStartDescription)
             customizeSubmitButton(binding.cardPasscodeStartContinue)
