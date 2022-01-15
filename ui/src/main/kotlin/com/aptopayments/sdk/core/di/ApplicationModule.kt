@@ -23,7 +23,7 @@ import com.aptopayments.sdk.features.inputdata.address.PlaceFetcher
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourceElementMapper
 import com.aptopayments.sdk.features.loadfunds.paymentsources.PaymentSourcesRepository
 import com.aptopayments.sdk.features.loadfunds.result.PaymentResultElementMapper
-import com.aptopayments.sdk.features.voip.TwilioVoipImpl
+import com.aptopayments.sdk.features.voip.DummyVoipHandler
 import com.aptopayments.sdk.features.voip.VoipContract
 import com.aptopayments.sdk.repository.*
 import com.aptopayments.sdk.ui.views.birthdate.FormatOrderGenerator
@@ -44,7 +44,7 @@ internal val applicationModule = module {
     single<AuthStateProvider> { AuthStateProviderImpl() }
     single<FragmentFactory> { FragmentFactoryImpl() }
     single<AnalyticsServiceContract> { AnalyticsManager(androidApplication()) }
-    single<VoipContract.Handler> { TwilioVoipImpl() }
+    single<VoipContract.Handler> { DummyVoipHandler() }
     single<AptoPlatformProtocol> { AptoPlatform }
     single<AptoUiSdkProtocol> { AptoUiSdk }
     factory { ExternalFileDownloader(androidContext()) }

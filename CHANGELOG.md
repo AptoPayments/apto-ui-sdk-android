@@ -1,5 +1,8 @@
 ## CHANGELOG
 
+# 2022-01-13 Mobile Version 3.17.2 Ui 3.17.2
+- feat(mobile&ui): Minor updates to improve onboarding experience.
+
 # 2021-12-15 Ui 3.17.1
 - fix(ui): ViewBinding fix on Onboarding
 

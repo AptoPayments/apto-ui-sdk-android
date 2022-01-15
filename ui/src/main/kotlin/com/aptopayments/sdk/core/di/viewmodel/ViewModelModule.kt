@@ -8,6 +8,7 @@ import com.aptopayments.mobile.data.transaction.Transaction
 import com.aptopayments.mobile.data.transfermoney.CardHolderData
 import com.aptopayments.mobile.data.transfermoney.P2pTransferResponse
 import com.aptopayments.mobile.data.user.*
+import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
 import com.aptopayments.mobile.data.workflowaction.WorkflowActionConfigurationIssueCard
 import com.aptopayments.sdk.features.auth.birthdateverification.BirthdateVerificationViewModel
 import com.aptopayments.sdk.features.auth.inputemail.InputEmailViewModel
@@ -69,7 +70,7 @@ import org.threeten.bp.LocalDate
 val viewModelModule = module {
     viewModel { InputPhoneViewModel(get(), get(), get()) }
     viewModel { InputEmailViewModel(get()) }
-    viewModel { OAuthConnectViewModel(get()) }
+    viewModel { (allowedBalanceType: AllowedBalanceType) -> OAuthConnectViewModel(allowedBalanceType, get(), get()) }
     viewModel { OAuthVerifyViewModel(get()) }
     viewModel { VerificationViewModel(get()) }
     viewModel { (verification: Verification) -> BirthdateVerificationViewModel(verification, get(), get()) }

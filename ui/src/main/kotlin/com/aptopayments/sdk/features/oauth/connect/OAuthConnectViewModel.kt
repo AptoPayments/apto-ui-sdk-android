@@ -1,48 +1,69 @@
 package com.aptopayments.sdk.features.oauth.connect
 
-import androidx.lifecycle.MutableLiveData
 import com.aptopayments.sdk.features.analytics.Event
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
+import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
-import com.aptopayments.mobile.platform.AptoPlatform
+import com.aptopayments.mobile.exception.Failure.ServerError
+import com.aptopayments.mobile.platform.AptoPlatformProtocol
 import com.aptopayments.sdk.core.platform.BaseViewModel
 import com.aptopayments.sdk.features.analytics.AnalyticsServiceContract
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import com.aptopayments.sdk.utils.LiveEvent
+import java.net.URL
 
 internal class OAuthConnectViewModel(
+    private val allowedBalanceType: AllowedBalanceType,
+    private val aptoPlatform: AptoPlatformProtocol,
     private val analyticsManager: AnalyticsServiceContract
-) : BaseViewModel(), CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default
+) : BaseViewModel() {
 
-    var oauthAttempt: MutableLiveData<OAuthAttempt> = MutableLiveData()
+    private var oauthAttempt: OAuthAttempt? = null
+    private var shouldReloadStatus = true
+
+    val action = LiveEvent<Action>()
 
     init {
         analyticsManager.track(Event.SelectBalanceStoreOauthLogin)
     }
 
-    fun startOAuthAuthentication(
-        allowedBalanceType: AllowedBalanceType,
-        callback: (oauthAttempt: OAuthAttempt) -> Unit
-    ) = launch {
+    fun startOAuthAuthentication() {
+        showLoading()
         analyticsManager.track(Event.SelectBalanceStoreLoginConnectTap)
-        AptoPlatform.startOauthAuthentication(allowedBalanceType) { result ->
+        shouldReloadStatus = true
+        aptoPlatform.startOauthAuthentication(allowedBalanceType) { result ->
+            hideLoading()
             result.either(::handleFailure) { oauthAttemptResult ->
-                oauthAttempt.value = oauthAttemptResult
-                callback(oauthAttemptResult)
+                oauthAttempt = oauthAttemptResult
+                if (oauthAttemptResult.url != null) {
+                    action.postValue(Action.StartOauth(oauthAttemptResult.url!!))
+                } else {
+                    handleFailure(ServerError(null))
+                }
             }
         }
     }
 
-    fun checkOAuthAuthentication(oauthAttempt: OAuthAttempt, callback: (oauthAttempt: OAuthAttempt) -> Unit) {
-        AptoPlatform.verifyOauthAttemptStatus(oauthAttempt) { result ->
-            result.either(::handleFailure) { oauthAttempt ->
-                this.oauthAttempt.value = oauthAttempt
-                callback(oauthAttempt)
+    fun reloadStatus() {
+        if (shouldReloadStatus && oauthAttempt != null) {
+            showLoading()
+            aptoPlatform.verifyOauthAttemptStatus(oauthAttempt!!) { result ->
+                hideLoading()
+                result.either(::handleFailure) { attemptResult ->
+                    oauthAttempt = attemptResult
+                    when (attemptResult.status) {
+                        OAuthAttemptStatus.PASSED -> action.postValue(Action.OauthPassed(attemptResult))
+                        OAuthAttemptStatus.FAILED -> action.postValue(Action.OauthFailure(attemptResult))
+                        OAuthAttemptStatus.PENDING -> action.postValue(Action.OauthPending)
+                    }
+                }
             }
         }
+    }
+
+    sealed class Action {
+        class StartOauth(val url: URL) : Action()
+        class OauthPassed(val oauthAttempt: OAuthAttempt) : Action()
+        class OauthFailure(val oauthAttempt: OAuthAttempt) : Action()
+        object OauthPending : Action()
     }
 }

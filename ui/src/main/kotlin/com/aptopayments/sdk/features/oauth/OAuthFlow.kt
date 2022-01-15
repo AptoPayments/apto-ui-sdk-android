@@ -54,7 +54,7 @@ internal class OAuthFlow(
 
     override fun onCloseWebBrowser() {
         popFragment()
-        (startFragment() as? OAuthConnectContract.View)?.reloadStatus()
+        (fragmentWithTag(OAUTH_CONNECT_TAG) as? OAuthConnectContract.View)?.reloadStatus()
     }
 
     override fun shouldStopLoadingAndClose(url: String) = url.startsWith(OAUTH_FINISHED_URL, ignoreCase = true)

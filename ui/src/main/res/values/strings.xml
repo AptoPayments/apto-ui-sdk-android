@@ -433,7 +433,7 @@
     <string name="card_settings_settings_set_pin_description">Set a new PIN code for your card</string>
     <string name="card_settings_settings_card_details_title">Card Details</string>
     <string name="card_settings_settings_order_physical_title">Order physical card</string>
-    <string name="card_settings_settings_card_details_description">Show account number, exp.date, and CVV</string>
+    <string name="card_settings_settings_card_details_description">Show account number, EXP date, and CVV</string>
     <string name="card_settings_settings_lock_card_title">Suspend Card</string>
     <string name="card_settings_settings_lock_card_description">Temporarily block all card usage</string>
     <string name="card_settings_help_title">Help and Support</string>
@@ -525,7 +525,8 @@
     <string name="external_auth_login_error_oauth_invalid_scope_message">Invalid scope</string>
     <string name="external_auth_login_error_oauth_server_error_message">Server error</string>
     <string name="external_auth_login_error_oauth_temporarily_unavailable_message">Temporarily unavailable</string>
-    <string name="external_auth_login_error_oauth_unknown_message">Unknown</string>
+    <string name="external_auth_login_error_oauth_unknown_message">Unknown Error</string>
+    <string name="external_auth_login_error_unknown_message">Unknown Error</string>
 
     <!--Waitlist-->
     <string name="wait_list_wait_list_title">You\'re on top of the waitlist!</string>

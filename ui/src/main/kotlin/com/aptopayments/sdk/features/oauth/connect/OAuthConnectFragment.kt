@@ -4,25 +4,22 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import com.aptopayments.mobile.data.config.UIConfig
 import com.aptopayments.mobile.data.oauth.OAuthAttempt
-import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus.FAILED
-import com.aptopayments.mobile.data.oauth.OAuthAttemptStatus.PASSED
 import com.aptopayments.mobile.data.workflowaction.AllowedBalanceType
 import com.aptopayments.mobile.extension.localized
 import com.aptopayments.sdk.R
-import com.aptopayments.sdk.core.extension.ToolbarConfiguration
+import com.aptopayments.sdk.core.extension.*
 import com.aptopayments.sdk.core.extension.configure
-import com.aptopayments.sdk.core.extension.observe
-import com.aptopayments.sdk.core.extension.loadFromUrl
 import com.aptopayments.sdk.core.platform.BaseFragment
 import com.aptopayments.sdk.core.platform.theme.themeManager
 import com.aptopayments.sdk.features.oauth.OAuthConfig
+import com.aptopayments.sdk.features.oauth.connect.OAuthConnectViewModel.*
 import com.aptopayments.sdk.utils.extensions.SnackbarMessageType
 import com.aptopayments.sdk.utils.extensions.parseHtmlLinks
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_oauth_connect.*
 import kotlinx.android.synthetic.main.include_toolbar_two.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.net.URL
+import org.koin.core.parameter.parametersOf
 
 private const val TITLE_KEY = "TITLE"
 private const val EXPLANATION_KEY = "EXPLANATION"
@@ -35,7 +32,7 @@ private const val ERROR_MESSAGE_KEYS_KEY = "ERROR_MESSAGE_KEYS"
 internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View {
 
     override fun layoutId() = R.layout.fragment_oauth_connect
-    private val viewModel: OAuthConnectViewModel by viewModel()
+    private val viewModel: OAuthConnectViewModel by viewModel { parametersOf(allowedBalanceType) }
     override var delegate: OAuthConnectContract.Delegate? = null
     private lateinit var title: String
     private lateinit var explanation: String
@@ -44,8 +41,6 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
     private lateinit var allowedBalanceType: AllowedBalanceType
     private var assetUrl: String? = null
     private var errorMessageKeys: List<String>? = null
-    private var oauthAttempt: OAuthAttempt? = null
-    private var shouldReloadStatus = false
 
     override fun backgroundColor(): Int = UIConfig.uiBackgroundPrimaryColor
 
@@ -62,7 +57,18 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
 
     override fun setupViewModel() {
         viewModel.apply {
-            observe(failure) { handleFailure(it) }
+            observe(failure) {
+                handleFailure(it)
+            }
+            observeNotNullable(loading) { handleLoading(it) }
+            observeNotNullable(action) {
+                when (it) {
+                    is Action.OauthFailure -> showOauthFailure(it.oauthAttempt)
+                    is Action.OauthPassed -> delegate?.onOAuthSuccess(it.oauthAttempt)
+                    is Action.StartOauth -> delegate?.show(url = it.url.toString())
+                    is Action.OauthPending -> {}
+                }
+            }
         }
     }
 
@@ -84,16 +90,7 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
 
     override fun setupListeners() {
         super.setupListeners()
-        tv_submit_bttn.setOnClickListener { _ ->
-            shouldReloadStatus = true
-            showLoading()
-            viewModel.startOAuthAuthentication(allowedBalanceType) { oauthAttempt ->
-                this.oauthAttempt = oauthAttempt
-                oauthAttempt.url?.let { url ->
-                    startOAuthAuthenticationWith(url = url)
-                }
-            }
-        }
+        tv_submit_bttn.setOnClickListener { viewModel.startOAuthAuthentication() }
     }
 
     private fun setupToolbar() {
@@ -125,36 +122,11 @@ internal class OAuthConnectFragment : BaseFragment(), OAuthConnectContract.View 
         delegate?.onBackFromOAuthConnect()
     }
 
-    private fun startOAuthAuthenticationWith(url: URL) {
-        hideLoading()
-        delegate?.show(url = url.toString())
-    }
-
     override fun reloadStatus() {
-        if (shouldReloadStatus) {
-            oauthAttempt?.let {
-                shouldReloadStatus = false
-                showLoading()
-                viewModel.checkOAuthAuthentication(it) { oauthAttempt ->
-                    hideLoading()
-                    this.oauthAttempt = oauthAttempt
-                    when (oauthAttempt.status) {
-                        PASSED -> delegate?.onOAuthSuccess(oauthAttempt)
-                        FAILED -> {
-                            showOauthFailure(oauthAttempt)
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            }
-        }
+        viewModel.reloadStatus()
     }
 
     private fun showOauthFailure(oauthAttempt: OAuthAttempt) {
-        if (oauthAttempt.status != FAILED) {
-            return
-        }
         oauthAttempt.errorMessageKeys = errorMessageKeys
         notify(message = oauthAttempt.localizedErrorMessage(), type = SnackbarMessageType.ERROR)
     }

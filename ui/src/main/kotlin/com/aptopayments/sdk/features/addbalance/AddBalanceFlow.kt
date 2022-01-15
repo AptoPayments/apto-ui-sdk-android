@@ -53,6 +53,7 @@ internal class AddBalanceFlow(
             onBack = { onBack.invoke() },
             onFinish = { oauthAttempt ->
                 val custodianType = allowedBalanceTypes.firstOrNull()?.balanceType ?: ""
+                showLoading()
                 AptoPlatform.addCardFundingSource(
                     cardId = cardID,
                     fundingSourceType = CUSTODIAN_WALLET_FUNDING_SOURCE,
@@ -60,6 +61,7 @@ internal class AddBalanceFlow(
                     credentialType = OAUTH_CREDENTIAL_TYPE,
                     tokenId = oauthAttempt.tokenId
                 ) { result ->
+                    hideLoading()
                     result.either(
                         { failure -> handleAddBalanceFailure(failure) },
                         { balance ->
