@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.functional.Either
+import com.aptopayments.mobile.platform.WebTokenFailure
 import com.aptopayments.sdk.R
 import com.aptopayments.sdk.core.di.fragment.FragmentFactory
 import com.aptopayments.sdk.core.extension.inTransaction
@@ -186,6 +187,7 @@ internal abstract class Flow : FlowPresentable, KoinComponent {
         rootActivity()?.let {
             when (failure) {
                 is Failure.ServerError -> notify(failure.errorMessage())
+                is WebTokenFailure -> notify(failure.errorMessage())
             }
         }
     }

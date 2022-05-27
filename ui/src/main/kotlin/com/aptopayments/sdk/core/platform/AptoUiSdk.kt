@@ -10,6 +10,7 @@ import com.aptopayments.mobile.exception.Failure
 import com.aptopayments.mobile.features.managecard.CardOptions
 import com.aptopayments.mobile.platform.AptoPlatform
 import com.aptopayments.mobile.platform.AptoPlatformDelegate
+import com.aptopayments.mobile.platform.AptoPlatformWebTokenProvider
 import com.aptopayments.mobile.platform.AptoSdkEnvironment
 import com.aptopayments.sdk.BuildConfig
 import com.aptopayments.sdk.R
@@ -133,6 +134,10 @@ object AptoUiSdk : AptoUiSdkProtocol {
 
     fun setDelegate(delegate: AptoPlatformDelegate) {
         AptoPlatform.delegate = delegate
+    }
+
+    fun setWebTokenProvider(provider: AptoPlatformWebTokenProvider) {
+        AptoPlatform.webTokenProvider = provider
     }
 
     override fun startCardFlow(
