@@ -40,8 +40,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:localize="load_funds_direct_deposit_instructions_description"
-                tools:text="@string/load_funds_direct_deposit_instructions_description" />
+                app:localize="load_funds_direct_deposit_footer_description"
+                tools:text="@string/load_funds_direct_deposit_footer_description" />
 
             <com.aptopayments.sdk.ui.views.AptoTextView
                 android:id="@+id/direct_deposit_instructions_name_title"
@@ -161,7 +161,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/direct_deposit_instructions_routing_container"
-                app:localize="load_funds_direct_deposit_instructions_offered_by" />
+                app:localize="load_funds_direct_deposit_footer_description" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

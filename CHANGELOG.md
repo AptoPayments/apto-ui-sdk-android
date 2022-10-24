@@ -1,5 +1,8 @@
 ## CHANGELOG
-#2022-05-27 Mobile Version 3.19.0 Ui 3.19.0
+#2022-10-24 Ui 3.20.2
+- chore(ui): Update default bank name
+
+#2022-05-27 Mobile Version 3.20.0 Ui 3.20.0
 - feat(mobile&ui): Added Origin Verification.
 - 
 # 2022-01-13 Mobile Version 3.17.2 Ui 3.17.2

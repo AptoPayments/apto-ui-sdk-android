@@ -95,6 +95,6 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:paddingBottom="38dp"
-        app:localize="load_funds_ach_account_details_dialog_offered_by" />
+        app:localize="load_funds_direct_deposit_footer_description" />
 
 </LinearLayout>
